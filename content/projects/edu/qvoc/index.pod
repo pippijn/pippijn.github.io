@@ -2,7 +2,7 @@
 
 QVoc is a simple word trainer written in C++/Qt.
 
-L<Git repository|http://xinutec.org/git/edu/qvoc.git/>
+L<Git repository|https://github.com/pippijn/gvoc>
 
 It was specifically designed for learning Chinese, because I don't need any more
 than that, at the moment.  Modifying it to support other languages and word

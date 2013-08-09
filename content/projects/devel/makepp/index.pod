@@ -2,7 +2,7 @@
 
 C<Autocomb> is a make-inspired build system that compiles to GNU Autotools.
 
-L<Git repository|http://xinutec.org/git/devel/makepp.git/>
+L<Git repository|https://github.com/pippijn/makepp>
 
 This is the future development of L<Autoproj|autoproj>. While Autoproj is a
 working piece of software, C<C<Autocomb>> is nowhere, yet. At the moment, there are

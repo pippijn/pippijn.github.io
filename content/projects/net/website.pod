@@ -2,4 +2,4 @@
 
 This website is a Catalyst application running on Apache2/mod_perl.
 
-L<Git repository|http://xinutec.org/git/net/website.git/>
+L<Git repository|https://github.com/pippijn/pippijn.github.io>

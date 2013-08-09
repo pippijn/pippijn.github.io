@@ -2,7 +2,7 @@
 
 Tiny C++ IDE with Clang integration.
 
-L<Git repository|http://xinutec.org/git/devel/clangide.git/>
+L<Git repository|https://github.com/pippijn/clangide>
 
 =head2 Code editing
 

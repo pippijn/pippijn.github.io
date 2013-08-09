@@ -1,6 +1,6 @@
 =head1 Runtime assembler
 
-L<Git repository|http://xinutec.org/git/lang/rasm.git/>
+L<Git repository|https://github.com/pippijn/rasm>
 
 This is a portable C++ runtime assembler backed by GNU Lightning. It currently
 has four CPU backends: x86, x86_64, PowerPC and Sparc. What I have right now

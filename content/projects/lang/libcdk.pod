@@ -1,3 +1,3 @@
 =head1 Compiler Development Kit
 
-L<Git repository|http://xinutec.org/git/lang/libcdk.git>
+L<Git repository|https://github.com/pippijn/libcdk>

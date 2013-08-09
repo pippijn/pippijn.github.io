@@ -4,7 +4,7 @@ The C<yaccpp> project is a preprocessor for YACC/Bison grammars.
 
 =cut
 
-L<Git repository|http://xinutec.org/git/lang/yaccpp.git/>
+L<Git repository|https://github.com/pippijn/yaccpp>
 
 =pod
 
