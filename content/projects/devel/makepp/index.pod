@@ -82,14 +82,14 @@ pages.
 
 =over
 
-=item L<project|makepp/project>
+=item L<project|project>
 
-=item L<variables|makepp/variables>
+=item L<variables|variables>
 
-=item L<targets|makepp/target>
+=item L<targets|target>
 
-=item L<template|makepp/template>
+=item L<template|template>
 
-=item L<rules|makepp/rules>
+=item L<rules|rules>
 
 =back
