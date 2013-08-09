@@ -12,6 +12,10 @@ home/%.html: content/%.pod generate $(shell find lib -type f) home/wrapper.tt
 	@mkdir -p $(@D)
 	./generate $< > $@
 
+clean:
+	rm -r home/*/
+	rm home/*.html
+
 home/%: content/%
 	@mkdir -p $(@D)
 	cp $< $@
