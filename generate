@@ -1,0 +1,50 @@
+#!/usr/bin/env perl
+
+use common::sense;
+use lib 'lib';
+
+use Date::Format;
+use Pod::POM;
+use Template;
+use View::HTML;
+use View::POD;
+use View::POD::TOC \@View::POD::toc;
+
+my $template = new Template;
+my $menubar  = do 'menu.pm';
+my $wrapper  = 'home/wrapper.tt';
+
+sub parse {
+   if (/\.pod$/) {
+      my $parser = new Pod::POM;
+      my $pom = $parser->parse_file ($_);
+      View::POD::TOC->print ($pom);
+      View::POD->print ($pom);
+   } else {
+      die "Unknown file type: $_"
+   }
+}
+
+for (@ARGV) {
+   my $content = parse;
+
+   my ($cur) = m|^content/(.+)\.\w+$|;
+   $cur =~ s/\/index$//;
+
+   my $title = $cur;
+   $title =~ s/\// \/ /g;
+   $title =~ s/\b\w/\u$&/g;
+
+   my $vars = {
+      title   => $title,
+      menubar => (View::HTML::menu "/~pippijn/home/$cur", $menubar, '/~pippijn/home/'),
+      content => $content,
+      updated => (Date::Format::time2str "%C", (stat $_)[9]),
+   };
+
+   my $output;
+   $template->process ($wrapper, $vars, \$output)
+      or die $template->error;
+
+   print $output;
+}

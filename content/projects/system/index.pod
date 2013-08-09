@@ -1,0 +1,4 @@
+=head1 Systems programming
+
+These are low level systems programming projects, such as kernels and kernel
+modules.

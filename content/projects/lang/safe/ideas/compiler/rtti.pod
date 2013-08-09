@@ -1,0 +1,119 @@
+=head1 Runtime Type Information
+
+Generate runtime type info. e.g.:
+
+=head4 namespace info
+
+=over
+
+=item pointer to parent namespace (or NULL)
+
+=item name of namespace (or "" for global namespace (defined in runtime library))
+
+=back
+
+=head4 type info
+
+=over
+
+=item pointer to containing namespace
+
+=item name of type
+
+=back
+
+=head4 struct info (inherits type info)
+
+=over
+
+=item sizeof struct
+
+=item alignof struct (optional)
+
+=item array of members
+
+=back
+
+=head4 datatype info (inherits type info)
+
+=over
+
+=item array of constructors
+
+=item extensible flag (is this useful for anything?)
+
+=back
+
+=head4 constructor info
+
+=over
+
+=item name of constructor
+
+=item array of arguments (members)
+
+=back
+
+=head4 member info
+
+=over
+
+=item name of member
+
+=item pointer to type
+
+=back
+
+All (some?) structs and datatypes will have an additional first member
+pointing to their type info structure the problem with this is that they are
+no longer compatible with C, because:
+
+=head2 alignment would always be at least alignof(pointer)
+
+Yes, this is a problem, because we can't just pass ptr + sizeof(pointer) to a
+C functions.
+
+This can be solved by doing something like
+
+=begin code CPP
+
+   struct foo { // alignment=2 (x86)
+      char a;
+      short b;
+   };
+
+=end code CPP
+
+is compiled to:
+
+=begin code CPP
+
+   struct foo_data { // alignment still 2
+      char a;
+      short b;
+   };
+   struct foo { // alignment=4 (x86)
+      type_info const *ti;
+      foo_data data;
+   };
+
+=end code CPP
+
+and passing foo* to an extern C function looks like:
+
+=begin code CPP
+
+   cfun (&foo->data);
+
+=end code CPP
+
+Similarly, a struct foo can be passed as C<cfun (foo.data)>.
+
+Special care must be taken with casts. We support casting to supertypes. This
+should retain the C<type_info> of the original struct, but if its pointee
+is copied, the C<type_info> should be updated to reflect the supertype.
+
+Luckily, there is no C<void*>, but C<`t> exists and this also needs
+special thought, because rtti is most useful for generic functions. The
+problem is that C<`t> can be non-pointer. Perhaps it is a good idea to forbid
+non-pointers or introduce some kind of autoboxing for non-pointer types.

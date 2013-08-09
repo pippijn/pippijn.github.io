@@ -1,0 +1,5 @@
+=head1 Developer tools
+
+Projects in this section are convenient tools used in software development. They
+were written with my personal needs in mind, so they may not be useful to
+anybody else. I am also unlikely to adopt ideas, but you can try, anyway.

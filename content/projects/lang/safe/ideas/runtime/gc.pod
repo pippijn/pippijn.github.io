@@ -1,0 +1,218 @@
+=head1 Garbage collection
+
+Strongly typed mostly-precise (we still need to scan the stack).
+garbage collection can be implemented using the RTTI structures. Some ideas:
+
+=over
+
+=item Global pointers are registered as roots when a module is initialised. See
+L<modules|../language/modules> for ideas on the module system.
+
+=item C<new> and C<malloc> register the allocated pointers with the GC. The GC
+can find their C<type_info> at offset 0.
+
+=item When marking, the GC first recursively marks the global roots. After that,
+the stack is scanned. The C<main()> function initialises the stack bottom.
+Stack top is known in the marking function (perhaps the address of the first
+argument of C<malloc>?).
+
+=item The GC operates on a given heap size beyond which it doesn't expand.
+
+=item In the first implementation, naive mark and sweep will be implemented.
+Later, an alternative implementation could be provided doing tri-colour marking.
+
+=item Using RTTI, the collector can recursively mark contained objects.
+
+=back
+
+This garbage collection implementation would be highly portable and probably
+a little faster than Boehm's GC (potentially a B<lot> faster when
+implemented in a smart way, but I have no clue about memory managers, so for
+the time being, I expect it to be reasonably fast).
+
+
+=head2 Problems
+
+=head3 Interior pointers
+
+In C, it is possible to have pointers to members of a struct. For example:
+
+=begin code CPP
+
+   struct buffer {
+      string_t data;
+      size_t pos;
+      size_t len;
+   };
+
+   size_t @foo (buffer @buf) {
+      return &buf->len;
+   }
+
+=end code CPP
+
+When all references to C<buf> have gone out of scope, the pointer to its
+C<len> member may still exist. In particular, that pointer is definitely
+not equal to C<buf>. Fat pointers don't have this problem, because they
+always contain the base pointer. Zero-terminated pointers may be more
+problematic (perhaps we could just get rid of them? Are there any good
+reasons to keep them?). Either way, this has to be handled, somehow.
+
+Basically, the collector needs to check whether a pointer (or, while scanning
+the stack, something that looks like a pointer) points into and not just onto
+an object. This requirement prevents a simple hash lookup.
+
+
+=head2 Scanning the stack
+
+When scanning the stack, we need to iterate over it in pointer-size steps.  If
+we manage our own heap then each such candidate pointer should first be
+checked whether it is inside that heap. If it is not, we can skip to the next
+candidate and don't need to perform a lookup. If it is, it is very likely to
+be a pointer. Anyway, we need to look up the pointer in our pointer list or
+table or whatever we store pointers in. The previously mentioned problem is
+that if we have a list of pointers to the beginning of our objects, then an
+interior pointer will cause a false negative, because it does not match any
+pointers, directly.
+
+
+=head2 Interior pointers
+
+One possible solution would be to just generally store pointers as pointer +
+offset, but that would make everything slower and more complicated and it
+would add yet another special case when interfacing with C (this last
+argument is not so severe. The C interface can be as complicated as it has to
+be).
+
+Another solution would be to simply iterate over all pointers in the system and
+check whether the candidate is I<b <= c <= b + s> where I<b> is the start of the
+pointer, I<c> is the candidate and I<s> is the size of the object pointed at as
+found in the type info structure (see L<RTTI|../compiler/rtti>). This algorithm
+is extremely slow with I<O(n*m)> with I<n> being the number of pointers in the
+system and I<m> being the number of candidates. It could be optimised by moving
+already-marked pointers off the list. This would initially leave us with the
+pointer set minus the pointers reachable from the root set and gradually leave
+us with less and less pointers as we scan the stack.
+
+How do other collectors do this? What does Boehm do? Unless we come up with
+some more intelligent ideas, we'll have to try the naive method as described
+above.
+
+
+=head2 Collection algorithm
+
+Currently, two solutions are up for debate:
+
+
+=head3 Binary search on collection
+
+This solution assumes a hash table or other kind of sparse array as pointer
+set so registering pointers on allocation and unregistering them on
+deallocation are amortised I<O(1)>.
+
+A collection would then be performed as follows:
+
+=over
+
+=item Construct a sorted array of pointers from the pointer set (I<O(n log n)>
+over the number of managed pointers). We call this array C<start_set>.
+
+=item Iterate over the initial global root set, marking all reachable objects
+(I<O(n)> over the reachable pointers). We proved at compile time that all
+non-NULL pointers point to valid objects, but not all are necessarily in the
+managed heap, as they may point at other global data.  Therefore, we need to
+check each pointer whether it points into the managed heap.
+
+=item Iterate over the stack in pointer-size steps (I<O(n)> over the current
+stack size):
+
+=over
+
+=item Check whether the current candidate is a possible pointer. The property
+held by pointers is being inside the managed heap.
+            
+=item Mark the object pointed at by the candidate.
+
+=back
+
+=item Iterate over C<start_set> and free all unmarked objects, removing them
+from the pointer set.
+
+=back
+
+We either know the heap boundaries from step 1: the start of the first object to
+the end of the last object, or because we manage our heap ourselves. This way,
+we can check whether a pointer points into the managed heap.
+
+If the heap is non-contiguous, this check may almost always yield true, in which
+case the collector will still work but be slower. In the future, we are probably
+going to manage our own heap, making sure it is in one piece.
+
+=head4 Marking algorithm
+
+In order to find the object pointed at by a given pointer, we first perform a
+hash lookup into our pointer set. In most cases where plain objects are
+involved, this will yield a result in amortised I<O(1)>. If the pointer was not
+found, we need to perform a modified binary search in the C<start_set>. It is
+modified in that we do not look for an element equal to the candidate pointer
+but rather for an element less than it. Once we find the greatest element less
+than the candidate, we check whether its value offset by the object size is
+greater than the candidate, in which case we are dealing with an interior
+pointer.
+
+The above yields either the start address of an object or nothing, in which case
+the next candidate is considered. Once we are at a start address, we can mark
+this object and repeat the above algorithm for each pointer member of the object
+(members can just as easily be interior pointers).
+
+It can occur frequently that no object was found, especially in the presence of
+region based memory management. Pointers pointing into regions will appear to be
+in the same heap as garbage collected objects and will be considered but will
+neither be found by the hash lookup nor by the binary search.
+
+Unique and reference counted pointers do not influence the GC, as they are
+allocated in the managed heap.
+
+Regions do not need to be scanned separately for pointers. Scanning global
+pointers, registers and the call stack is sufficient.
+
+
+=head3 Interval tree as pointer set
+
+Another option is to use an interval tree instead of a hash table as data
+structure for the pointer set. This would increase the cost of allocation from
+amortised I<O(1)> to I<O(log n)> (insertion into an interval tree). The cost of
+a garbage collection would be decreased from I<O(n log n)> to I<O(n)>, as it no
+longer involves sorting.
+
+However, there are likely to be many pointers to the start of an object. Using
+an interval tree as pointer set would mean that object lookups are B<always>
+I<O(log n)>, resulting in an I<O(n log n)> algorithm over the stack size instead
+of over the pointer set size.
+
+It has to be evaluated, which alternative will be faster. The current belief is
+that the first one is more efficient.
+
+
+=head2 Precise GC
+
+In order to produce a completely precise garbage collector, code needs to be
+generated that registers all local pointers as roots on function entry and
+unregisters them on function exit. There are a few problems involved with C
+interoperability.
+
+=head3 Pinning
+
+For example, passing a pointer to a managed object into C needs to make sure the
+object isn't moved in memory while the called C code still has references to it.
+Since for now there are no plans to have support for threads, the object only
+needs to be pinned (marked non-movable) if the C code will keep a pointer to it
+after the called function returns. In practice, this doesn't happen so often,
+but it does happen, so the GC needs to provide support for pinning. This will
+make the code a lot less safe.
+
+When objects are pinned, they probably need to be moved to a non-moving heap,
+first, so the compacting algorithm and later the allocator are not disturbed by
+pinned objects. Having a pinned object inside the compacted heap would mean that
+the allocator cannot simply bump the heap pointer, anymore, but needs to be
+careful to skip any pinned objects.

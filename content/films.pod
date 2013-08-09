@@ -1,0 +1,80 @@
+=head1 Films and Actors
+
+On this page, I want to present my idea of a good film, actor or actress.
+
+
+=head2 Films
+
+=head3 Seriously good films
+
+These are good films that have serious background but may be funny. Most of
+them are not, though. Some do not have any background but I just think the
+acting in them is terrific.
+
+=over
+
+=item L<The Nightmare Before Christmas (1993)|http://www.imdb.com/title/tt0107688/>
+
+=item L<Ace Ventura: Pet Detective (1994)|http://www.imdb.com/title/tt0109040/>
+
+=item L<Forrest Gump (1994)|http://www.imdb.com/title/tt0109830/>
+
+=item L<Ace Ventura: When Nature Calls (1995)|http://www.imdb.com/title/tt0112281/>
+
+=item L<Lock, Stock and Two Smoking Barrels (1998)|http://www.imdb.com/title/tt0120735/>
+
+=item L<American History X (1998)|http://www.imdb.com/title/tt0120586/>
+
+=item L<The Green Mile (1999)|http://www.imdb.com/title/tt0120689/>
+
+=item L<American Psycho (2000)|http://www.imdb.com/title/tt0144084/>
+
+=item L<Le fabuleux destin d'Amélie Poulain (2001)|http://www.imdb.com/title/tt0211915/>
+
+=item L<Catch Me If You Can (2002)|http://www.imdb.com/title/tt0264464/>
+
+=item L<The Pianist (2002)|http://www.imdb.com/title/tt0253474/>
+
+=item L<The Hours (2002)|http://www.imdb.com/title/tt0274558/>
+
+=item L<Eternal Sunshine of the Spotless Mind (2004)|http://www.imdb.com/title/tt0338013/>
+
+=item L<If Only (2004)|http://www.imdb.com/title/tt0332136/>
+
+=item L<Batman Begins (2005)|http://www.imdb.com/title/tt0372784/>
+
+=item L<Sophie Scholl - Die letzten Tage (2005)|http://www.imdb.com/title/tt0426578/>
+
+=item L<V for Vendetta (2005)|http://www.imdb.com/title/tt0434409/>
+
+=item L<Das Leben der Anderen (2006)|http://www.imdb.com/title/tt0405094/>
+
+=item L<1408 (2007)|http://www.imdb.com/title/tt0450385/>
+
+=item L<Premonition (2007)|http://www.imdb.com/title/tt0477071/>
+
+=item L<Taken (2008/I)|http://www.imdb.com/title/tt0936501/>
+
+=item L<The Dark Knight (2008)|http://www.imdb.com/title/tt0468569/>
+
+=item L<Watchmen (2009)|http://www.imdb.com/title/tt0409459/>
+
+=back
+
+
+=head3 Worthwhile movies
+
+These are not necessary very valuable but funny or otherwise worth watching.
+
+=over
+
+=item L<The Man Who Knew Too Little (1997)|http://www.imdb.com/title/tt0120483/>
+
+=back
+
+
+=head2 Actors/Actresses
+
+=over
+
+=back

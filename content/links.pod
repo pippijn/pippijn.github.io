@@ -1,0 +1,100 @@
+=head1 Links
+
+
+=head2 Programming
+
+=over
+
+=item L<Beej's Guide to Network Programming|http://beej.us/guide/bgnet/output/html/multipage/index.html>
+
+=item L<Comparison of C/POSIX standard library implementations for Linux|http://www.etalabs.net/compare_libcs.html>
+
+=item L<Computational Geometry Algorithms Library for C++|http://www.cgal.org/>
+
+=item L<If programming languages were religions...|http://www.aegisub.net/2008/12/if-programming-languages-were-religions.html>
+
+=item L<JavaScript InfoVis Toolkit|http://thejit.org/>
+
+=item L<jqPlot Charts and Graphs for jQuery|http://www.jqplot.com/index.php>
+
+=item L<Notes on the CLR Garbage Collector|http://www.vineetgupta.com/2007/01/notes-on-the-clr-garbage-collector/>
+
+=item L<On generics and (some of) the associated overheads|http://www.bluebytesoftware.com/blog/PermaLink,guid,2d01b5eb-7f19-4a4c-a3b3-1cecb1e3dc75.aspx>
+
+=item L<Recursive Make Considered Harmful|http://miller.emu.id.au/pmiller/books/rmch/>
+
+=item L<SECD machine|http://en.wikipedia.org/wiki/SECD_machine>
+
+=item L<Sending XHTML as text/html Considered Harmful|http://hixie.ch/advocacy/xhtml>
+
+=item L<Smoothsort Demystified|http://www.keithschwarz.com/smoothsort/>
+
+=item L<Threading in C#|http://www.albahari.com/threading/>
+
+=item L<Ultimate CSS Gradient Generator|http://www.colorzilla.com/gradient-editor/>
+
+=item L<Writing Faster Managed Code: Know What Things Cost|http://msdn.microsoft.com/library/ms973852.aspx>
+
+=back
+
+
+=head2 Film/Photography
+
+=over
+
+=item L<Opacity - Abandoned Photography and Urban Exploration|http://www.opacity.us/>
+
+=item L<ROME - "3 Dreams of Black"|http://www.ro.me/>
+
+=back
+
+
+=head2 Language/Literature
+
+=over
+
+=item L<English faux pas|http://www.ruberg.no/fun/English_faux_pas.txt>
+
+=item L<The Chaos|http://www.ruberg.no/fun/the_chaos.txt>
+
+=item L<The Awful German Language by Mark Twain|http://how-to-learn-any-language.com/e/languages/german/the-awful-german-language.html>
+
+=item L<The Best of British - The American's guide to speaking British...|http://www.effingpot.com/slang.shtml>
+
+=back
+
+
+=head2 Miscellaneous
+
+=over
+
+=item L<Coat of Arms (Scandinavia and the World)|http://satwcomic.com/coat-of-arms>
+
+=item L<Jewelry made of natural stones|http://natursteinschmuckshop.de>
+
+=item L<Algebraist|http://algebraist.origo.ethz.ch/>
+
+Algebraist is a parallel development site for Aldor.
+
+=item L<The Perfect Info-Tech Workplace|http://www.shlomifish.org/philosophy/computers/software-management/perfect-workplace/>
+
+=item L<Postfix, IMAP, SpamAssassin, Roundcube|http://gentoo-wiki.com/Howto_Postfix_virtual_mail_server_with_IMAP_POP3_SpamAssassin_Virus_Scanner_and_Roundcube_webmail>
+
+=item L<The Ultimate Rejection Letter|http://www.chaosmatrix.org/library/humor/reject.html>
+
+=item L<Top 10 Crazy Facts About Kim Jong Il|http://listverse.com/2010/05/30/top-10-crazy-facts-about-kim-jong-il/>
+
+=item L<Gm guitar chord|http://www.8notes.com/guitar_chord_chart/Gm.asp>
+
+This one is really difficult for me.
+
+=back
+
+
+=head2 German
+
+=over
+
+=item L<Sprachzerstörung aus Konzilianz|http://www.bruehlmeier.info/sprachfeminismus.htm>
+
+=back

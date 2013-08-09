@@ -1,0 +1,184 @@
+=head1 C++ speed
+
+=begin small
+
+This article assumes you know the C and C++ syntax.
+
+=end small
+
+In the past, many people have either asked me whether C is faster than C++ or
+explicitly told me that C is in fact faster than C++. Other people have said,
+C++ is faster than C and pointed at templates. In this article, I will try to
+evaluate the truth of both opinions. In order to do this, I will present a few
+C++ features and possible implementations of them in C.
+
+
+=head2 Inheritance
+
+In C++, there is the possibility of <acronym title="Classes are user defined
+ types defined with the 'class' or 'struct' keyword">class</acronym>es
+inheriting members from other classes. A simple example of this in C++ would
+be:
+
+=begin code CPP toggle
+
+  struct Base
+  {
+    int a;
+  };
+
+  struct Derived : Base
+  {
+    int b;
+  };
+
+  // Now, we can have an object of type Derived and modify its data members
+  // a and b directly.
+  Derived d;
+  d.a = 3;
+  d.b = 4;
+  // This object can be implicitly converted to a Base reference
+  Base &b = d;
+
+=end code CPP toggle
+
+How is this done in C? For inheritance, there are basically two possibilities
+of which one has two variations. The first possibility is to give C<Derived>
+an object of type C<Base> as its first member. This has the advantage of less
+code duplication and the disadvantage of having to know more about the class'
+layout in client code. The second possibility is to simply include all data
+members of C<Base> in C<Derived>, either by copy-pasting them or by defining
+the body of C<Base> in a header file and including that inside C<Derived>.
+
+
+=head4 Possibility 1
+
+=begin code CPP toggle
+
+  struct Base
+  {
+    int a;
+  };
+
+  struct Derived
+  {
+    struct Base base;
+    int b;
+  };
+
+  // Define an object of type Derived
+  struct Derived d;
+  d.base.a = 3; // or: ((struct Base *)&d)->a = 3;
+  d.b = 4;
+  // We can either explicitly convert a pointer to this object to Base
+  struct Base *b = (struct Base *)&d;
+  // or take the address of the base object
+  struct Base *b = &d.base;
+
+=end code CPP toggle
+
+
+=head4 Possibility 2
+
+=begin code CPP toggle
+
+  struct Base
+  {
+    int a;
+  };
+
+  struct Derived
+  {
+    int a;
+    int b;
+  };
+
+  // Or:
+  struct Base
+  {
+  #include "Base_body.h"
+  };
+
+  struct Derived
+  {
+  #include "Base_body.h"
+  #include "Derived_body.h"
+  };
+
+  // Define an object of type Derived
+  struct Derived d;
+  d.a = 3;
+  d.b = 4;
+  // We can explicitly convert a pointer to this object to Base
+  struct Base *b = (struct Base *)&d;
+
+=end code CPP toggle
+
+Multiple inheritance can be achieved in C, but not by C<#include>ing the
+multiple bases' bodies. That would break casts to those bases. It is possible
+to C<#include> the first base, but the others need to be included as objects
+like in the first possibility. That of course makes the client code ugly,
+because it has to know intimate details about the class layout or use accessor
+and mutator functions all the time.
+
+
+=head2 Member functions
+
+C++ has the notion of (non-static) member functions, which are like normal
+functions except they are called "on" an object. By calling a non-static
+member function on an object, you in fact pass a pointer to the object as
+argument to the invisible first parameter called C<this>. You can do that in
+C, too, except that the syntax looks a bit different:
+
+=begin code CPP toggle
+
+  // C++
+  struct Base
+  {
+    int a;
+    void foo () { a = 3; }
+  };
+
+  struct Derived : Base
+  {
+    int b;
+  };
+
+  Derived d;
+  d.foo ();
+  Base &b = d;
+  b.foo ();
+
+  // C:
+  struct Base
+  {
+    int a;
+  };
+
+  static void Base_foo (struct Base *this) { this->a = 3; }
+
+  struct Derived
+  {
+    int a;
+    int b;
+  };
+
+  struct Derived d;
+  Base_foo ((struct Base *)&d);
+  struct Base *b = &d;
+  Base_foo (b);
+
+=end code CPP toggle
+
+If you want to override C<foo()> in C<Derived>, in C++ you simply mention
+C<void foo()> in C<Derived>'s class definition. In C, you need to modify all
+callers, as well as adding a C<Derived_foo()>. The problems arise when virtual
+function calls are used.
+
+
+=head2 Virtual function calls
+
+Until now, the C and C++ implementation have been reasonably equal in both
+development time and execution time. With compiler optimisation, both generate
+almost equal code (note that in this special case, the compiler will likely
+optimise away everything and C<main()> will become a C<return 0> statement.

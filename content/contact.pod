@@ -1,0 +1,10 @@
+=head1 Contact
+
+You can write me an email to my google mail account (the domain is I<gmail.com>,
+the username is I<pip88nl>) or to my xinutec account, which is my name
+I<pippijn> at the domain this website is hosted on (I<xinutec.org>). The latter
+is also my jabber ID.
+
+My nickname on freenode is I<pippijn> and I use the same on the Xinutec IRC
+Network reachable at I<irc.xinutec.org> port 6667 or via SSL on port 7776. Feel
+free to look by in the I<#linux> channel, in which I am usually idle.

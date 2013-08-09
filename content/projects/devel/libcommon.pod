@@ -1,0 +1,7 @@
+=head1 libcommon
+
+A collection of utilities that don't fit anywhere else or are too small to be
+put in a library of their own. Also contains work in progress code that may
+evolve into its own library.
+
+L<Git repository|http://xinutec.org/git/devel/libcommon.git/>

@@ -1,0 +1,132 @@
+=head1 Module system
+
+We need a better module system for several features to become much easier to
+handle, such as:
+
+=over
+
+=item RTTI
+
+=item strongly typed precise garbage collection
+
+=item serialisation
+
+=item global non-constant initialisation
+
+=back
+
+
+The already implemented strong static typing means only little work is needed
+to implement this.
+
+
+=head2 Initialisation
+
+In order to register global pointers as GC roots (see L<GC|../runtime/gc>), each
+file linked into the final application needs an initialisation function. This
+initialisation must be performed conservatively. That means, every module must
+call the initialisation function of every module it uses.
+
+The initialisation function will be emitted in the primary implementation file.
+
+
+=head2 Primary implementation file
+
+The idea is that a programmer can write something like:
+
+=begin code CPP
+
+   // buffer.h
+   namespace Buffer {
+      extern struct t;
+      typedef struct t @T;
+
+      // constructor
+      extern T create (size_t n);
+
+      // accessors
+      extern mstring_t data (T self);
+      extern size_t length (T self);
+
+      // mutators
+      extern void clear (T self);
+      extern void add_char (T self, char c);
+      extern void add_str (T self, string_t s);
+   }
+
+=end code CPP
+
+and have multiple implementation files, each implementing a semantically
+associated subset of the above functions.
+
+The internal file exposing the buffer's structure:
+
+=begin code CPP
+
+   // buffer-internal.h
+   #include <buffer.h>
+   namespace Buffer {
+      abstract struct t {
+         mstring_t buffer;
+         size_t pos;
+         size_t len;
+      };
+   }
+
+=end code CPP
+
+Implementation of constructors:
+
+=begin code CPP
+
+   // buffer-ctors.c
+   #include "buffer-internal.h"
+   namespace Buffer;
+
+   T create (size_t n) { ... }
+
+=end code CPP
+
+Implementation of accessors and mutators each go into their separate files.
+Now, if we generate more information about the structures, we need a primary
+implementation file. Currently, we have C<extern> datatypes that don't
+emit their tags. Maybe we want to keep this, but a slightly more explicit
+module system might be a better solution.
+
+Care should be taken not to deviate from C too much, because porting existing
+C code would become much more work. Perhaps the compiler could support both
+ways, dealing with non-module code as it does now and handle module code with
+all the extras provided by the module system.
+
+Now, about the primary implementation file, we need a syntax to mark that
+file. I currently don't have a good idea on this, but we could abuse any
+keyword for it (or add a new one).
+
+=begin code CPP
+
+   // buffer-ctors.c
+   #include "buffer-internal.h"
+   register namespace Buffer; // primary implementation file
+
+   T create (size_t n) { ... }
+
+=end code CPP
+
+It could be C<do>, C<let> or anything else, but I think
+C<register> fits the idea quite well. Also, it actually does emit a
+function registering GC roots.
+
+
+=head2 Initialisation function
+
+The initialisation function does the following:
+
+=over
+
+=item Register global pointers (and structures containing pointers) with the GC as roots.
+
+=item Call initialisation functions for global non-constantly initialised data (like global constructors in C++ and C<static { }> in Java).
+
+=item Register C<type_info> structures with the RTTI subsystem (see L<RTTI|../runtime/rtti>).
+
+=back

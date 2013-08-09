@@ -1,0 +1,347 @@
+=head1 Autoproj
+
+Autoproj is a small layer on top of C<GNU Automake> and C<GNU Autoconf>.
+
+L<Git repository|http://xinutec.org/git/devel/autoproj.git/>
+
+I started this project, because I found that I was doing the same things over
+and over for each new project. I copied the C<configure.ac> and C<Makefile.am>
+from a recent project and modified it to my needs. Since I gain knowledge while
+working on a project, the result was that newer projects had more advanced and
+simpler setups, while old projects were hack- and kludge-ridden. Updating an old
+project to use my new ideas often means a complete or almost complete rewrite.
+Autoproj is a small collection of ideas in the form of preprocessors, macros and
+Automake include files.
+
+=head2 autogen
+
+This shell script calls all the preprocessors and compilers in a sequence. The
+result is a working build system with a C<configure> script and a
+C<Makefile.in>.
+
+=over
+
+=item It will call C<autoproj> and maybe C<jmlmake> in every directory
+containing a C<.project> file or directory.
+
+=item If C<.project> is a file and executable, it is executed in the containing
+directory.
+
+=item If it is a directory, then C<.project/autogen> is executed if present and
+executable.
+
+=item C<jmlmake> is called in the directory, if C<.project> is a directory.
+
+=item C<jmlconf> is then called to produce a C<configure.ac>. At this point, all
+autotools inputs have been generated.
+
+=item Next, the sequence (C<libtool>?, C<aclocal>, C<autoheader>, C<automake>,
+C<autoconf>) is called. C<libtool> is not called if C<configure.jml> has
+disabled it.
+
+=back
+
+
+=head2 jmlconf
+
+This is a L<JML|../lang/jmlc>/L<SLAX|http://code.google.com/p/libslax/> based
+C<configure.ac> generator. Two examples can be viewed in the repository: the
+L<simplest|/git/devel/autoproj.git/tree/template/configure.jml> script and a
+L<more advanced|/git/devel/autoproj.git/tree/template/parser/configure.jml> one
+that disables C<libtool> and uses C<lex> and C<yacc>. Many of my other projects
+also use C<jmlconf>, so real world examples can be found, there.
+
+TODO: jmlconf specification (it is very much in flux, because it is still very
+young).
+
+
+=head2 jmlmake
+
+The C<jmlmake> utility is also JML based, but is written in Perl and is
+extensible through Perl, as well. It is basically the same as Automake, except
+for the syntax and some additions. Currently, custom rules written in JML are
+not supported, but they are planned. Rule extensions are searched in
+C<.project/Makefile/lang/*.pm> and are Perl modules. A simple example is the
+L<bison|http://xinutec.org/git/devel/autoproj.git/tree/transform/Makefile/lang/bsn.pm>
+rule emitter.
+
+Chaining is also possible as shown in the Aldor rule emitter for
+L<zacc|http://xinutec.org/git/aldor/compiler.git/tree/.project/Makefile/lang/z.pm>.
+By forwarding to another type, you can make sure that if you generate input for
+another generator, the appropriate rules that compile your product are also
+generated. This is not very elegant and in the future, such things will be
+handled, automatically.
+
+Linking against libraries built within the project itself is still
+L<buggy|http://lists.gnu.org/archive/html/automake/2004-07/msg00125.html> in
+Automake. C<jmlmake> fixes this by topologically sorting the built libraries and
+emitting rules for them in reverse sort order. This guarantees that, unless the
+dependency graph is cyclic, the error known from Automake can not occur.
+
+Some examples of C<jmlmake> source files can be found in the Aldor build system:
+The L<aldor|http://xinutec.org/git/aldor/compiler.git/tree/src/aldor/Rules.jml>
+program is linked against the internal libraries C<toplevel>, which is in fact
+C<libtoplevel.la>, and C<port_opsys>, using the C<li> function. It is an error
+to link against non-existent internal libraries. External libraries can be
+linked against using the C<ex> function.
+
+C<li> in C<sources> means that the directory containing the current C<Rules.jml>
+is prepended to the filename. C<ex> leaves the filename as-is.
+
+The result of C<jmlmake> is an Automake input file stored in
+C<.project/rules.am>. The actual C<Rules.am> can then include this generated file.
+
+
+=head2 autoproj
+
+This was the first utility, so it is historically called C<autoproj>. This is a
+Makefile preprocessor that resolves C<include>s and does some other smart
+things. It starts at the file C<Rules.am>. C<include>s are resolved in the
+following order:
+
+=over
+
+=item In the current directory
+
+=item In the toplevel source directory
+
+=item In the Autoproj install path
+
+=back
+
+The Autoproj install path contains some Makefile fragments such as rules for
+Perl XSUB compilation. It also provides common rules such as rules calling
+components of C<Autoproj> to update the build system when source files are
+changed. Since Automake no longer knows about included files, these now need to
+be handled by Autoproj itself.
+
+
+=head2 autoclean
+
+This small utility removes all generated files for the build system. That
+includes files generated by GNU autotools.
+
+
+=head2 m4 macros
+
+A substantial part of the Autoproj distribution consists of C<m4> macros that
+can be used in C<configure.jml>. The following macros are available:
+
+=over
+
+=item AP_C_TRY_FLAGS($flags, $cachevar, $target)
+
+Try compiling a simple C or C++ program with the passed C<flags>. If successful,
+the flags are added to the C<target> variable. The result is cached in
+C<cachevar>.
+
+=item AP_FLOAT_FORMAT
+
+Check for floating-point format and double precision word order. Just as for
+integers, the bytes in a word can be small of big endian. It defines one or two
+of the following symbols to 1:
+
+=over
+
+=item FLOAT_FORMAT_VAX
+
+VAX floating-point format if set.
+
+=item FLOAT_FORMAT_IBM_HEX
+
+IBM HEX floating-point format if set (s390?).
+
+=item FLOAT_FORMAT_IEEE754
+
+IEEE754 floating-point format. Memory layout is defined by macros
+IEEE754_BIG_ENDIAN_BYTE_ORDER and IEEE754_BIG_ENDIAN_WORD_ORDER.
+
+=item IEEE754_BIG_ENDIAN_BYTE_ORDER
+
+Bytes in IEEE fp word are in big-endian order if set, little-endian if not. Only
+relevant when FLOAT_FORMAT_IEEE754 is defined.
+
+=item IEEE754_BIG_ENDIAN_WORD_ORDER
+
+The two words in a double precision variable are in big-endian order if set,
+little-endian if not. Do NOT assume this is the same as the byte order! Only
+relevant when FLOAT_FORMAT_IEEE754 is defined.
+
+=back
+
+=item AP_CHECK_LIB($library, $symbol, $header, [$message-if-unavailable])
+
+An extended C<AC_CHECK_LIB> in that it checks whether a symbol is defined in a
+header as well as in a library. This is useful for libraries such as GMP, where
+the actual symbol name is prepended with C<__>. It is also the only way to write
+successful checks on the Microsoft Windows platform, because that may encode the
+argument stack size in the symbol name. It can also be used for C++ symbols so
+that name mangling does not matter.
+
+The library is added to C<LIBS>.
+
+=item AP_PROG_MAKE
+
+Does some checks on the C<make(1)> implementation.
+
+=over
+
+=item whether make supports GNU-style pattern rules
+
+Defines C<@IF_PATRULES@> to "#" unless pattern rules (C<%.o: %.c>) are
+available.
+
+=item whether make sets ${RM}
+
+If C<make> does not set the variable C<RM>, C<@SET_RM@> will do so.
+
+=item what make calls the .ALLSRC variable
+
+Some makes (such as GNU make) calls it C<$+>, BSD make calls it C<< $> >> or
+C<$.ALLSRC>. The configure variable C<@ALLSRC@> is set to the C<.ALLSRC>
+variable name supported by the make implementation used. To use it, you still
+need to prepend C<$>.
+
+=back
+
+=item AP_CHECK_MUDFLAP
+
+Checks whether mudflap is available and requested with C<--enable-mudflap>. If
+so, it adds the appropriate flags to C<CFLAGS> (usually C<-fmudflap>. It does
+not add them to C<CXXFLAGS>, because mudflap is known not to work well, there.
+
+=item AP_ADD_FLAGS($flags, $var)
+
+This macro simply does: C<$var="${$var} $flags"> to add flags to a variable.
+
+=item AP_ARG_ENABLE($var, [$msg], [$action], [$define], [$default])
+
+The same as AC_ARG_ENABLE, but it adds an C<AM_CONDITIONAL> with C<$var>
+uppercased. It also adds an C<AC_SUBST> and an C<AC_DEFINE>, so you can use the
+choice at any stage in the build.
+
+=item AP_ARG_FORCE($var, $value)
+
+Forces all stages of a variable to a certain value ("yes" or "no") and
+translates it to the appropriate values for each stage ("#" for config.status,
+1/0 for C).
+
+=item AP_PROG_PERL
+
+Looks for a Perl implementation and sets C<PERL> to the path. This prefers the
+newest Perl version and falls back to normal C<perl>.
+
+=item AP_LIB_PERL
+
+Looks for a C<libperl> that can be used for embedding. This creates the
+following C<make> variables:
+
+=over
+
+=item PERLLIB
+
+The C<LDFLAGS> for embedding perl.
+
+=item PERLFLAGS
+
+The C<CFLAGS> for embedding perl.
+
+=item PERLPRIVLIBEXP
+
+The Perl core modules and typemap location.
+
+=back
+
+=item AP_PERL_MODS($mods)
+
+Used as follows:
+
+   AP_PERL_MODS("common::sense 3.0" "AnyEvent 5.2")
+
+Fails if the module is not available or not at least the required version.
+
+=item AP_PKG_CHECK($package, $modversion)
+
+Checks for a C<pkg-config> package with at least the passed C<modversion>.
+
+=item AP_STATUS($message)
+
+Emits a status message that looks like this:
+
+   ---------------------------------------------
+    => Checks for $message
+   ---------------------------------------------
+
+=item AP_STDINT_H
+
+Tests for C<stdint.h> types and constructs them if not available. These are then
+added to C<config.h>.
+
+=item AP_STRICT_C
+
+Adds as many warnings to C<CFLAGS> as possible. If you want I<real> pedantism
+(much more than C<-pedantic>), try this macro.
+
+=item AP_SUMMARY_START
+
+Emits the summary header underlined with dashes (-).
+
+=item AP_SUMMARY_LIST
+
+Emits a summary section. Used as follows:
+
+   AP_SUMMARY_LIST([
+      [$strict_c_enabled, [debug: Enable strict C compiler warnings]],
+      [$debug_bigint_enabled, [debug: Enable big integer debugging]],
+      [$mudflap_enabled, [debug: Enable mudflap pointer debugging]],
+      [$coverage_enabled, [debug: Enable test coverage instrumentation]],
+   ])
+
+Looks like this:
+
+      debug: Enable strict C compiler warnings                    yes
+      debug: Enable big integer debugging                         no
+      debug: Enable mudflap pointer debugging                     yes
+      debug: Enable test coverage instrumentation                 no
+
+=item AP_SUMMARY_END
+
+Writes a line of dashes (-) to end the summary.
+
+=item AP_CHECK_CHARSET
+
+Defines C<HAVE_EBCDIC> if the character set is EBCDIC, does nothing if the
+character set is ASCII, fails if it can't detect the character set.
+
+=item AP_CHECK_ENUM_FWDECL
+
+Check for ability to typedef enums before definition. Defines
+C<HAVE_ENUM_FWDECL> to 1 if so.
+
+=item AP_C_VARIADIC_TEMPLATES
+
+Check whether the C++ compiler supports C++0x lambdas. Defines C<HAVE_LAMBDA> to
+1 if so.
+
+=item AP_CHECK_LATE_EXPANSION
+
+Check whether the preprocessor supports ANSI conforming late macro expansion.
+Defines C<HAVE_LATE_EXPANSION> to 1 if so.
+
+=item AP_CHECK_STMT_EXPRS
+
+Checks whether the C compiler supports the GNU extension of brace-expressions:
+C<({ code; })>. Defines C<HAVE_STMT_EXPRS> to 1 if the compiler supports braced
+statements within expressions.
+
+=item AP_CHECK_TOKEN_PASTE
+
+Checks if the preprocessor implements ANSI-style token pasting (with C<##>).
+Defines C<HAVE_ANSI_PASTE> to 1 if so.
+
+=item AP_C_VARIADIC_TEMPLATES
+
+Check whether the C++ compiler supports C++0x variadic templates. Defines
+C<HAVE_VARIADIC_TEMPLATES> to 1 if so.
+
+=back

@@ -1,0 +1,4 @@
+=head1 Network Applications
+
+Network projects are projects whose core functionality is communication. They
+may be network servers, clients or both.

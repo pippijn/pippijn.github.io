@@ -1,0 +1,54 @@
+=head1 Runtime Type Information (Reflection)
+
+The RTTI system will benefit from runtime support in addition to the generated
+structures. Ideas for some runtime library functionality:
+
+=over
+
+=item On module initialisation, type information from that module is registered
+(see L<modules|../language/modules>).
+
+=item Registration can construct additional cached links between structures such
+as backlinks from members to their parents and construction of other mappings
+from string to RTTI structures.
+
+=item Lookup of type info by name (using abovementioned mappings). E.g. the
+lookup of C<"Core::Buffer::t"> would yield the C<type_info> structure for that
+type (even if it is private).
+
+=item Allocate an object from a C<type_info>. It will simply call C<malloc> with
+the appropriate size as found in the info. What to do with its members?
+
+=over
+
+=item Uninitialised: Dangerous!
+
+=item C<bzero>'d (using memset): Has the problem that the representation of NULL
+may not actually be all bits zero, thus causes potential undefined behaviour on
+platforms where it's not.
+
+=item Iterate over its members and initialise appropriately: More effort and
+slower, but safe and portable. Perhaps some information could be cached about
+the type, whether it is data-only or contains pointers. Data-only structs can be
+C<memset> as an optional optimisation.
+
+=back
+
+=item Set members of an object. I'm not sure how to do this properly, as there
+is no standard way to uniformly treat all kinds of data. Perhaps an C<inject>
+could help handling this (similar to C<printf>).  Runtime type checking should
+be performed by this function.
+
+=item Read members of an object. This has similar issues as the above. It could
+just return the same C<datatype> as the member-set function and the callee must
+examine it (probably the best way).
+
+=item Provide iterators (see L<iterators|../language/iterators>) for members,
+namespace children and contained structs, etc.
+
+=back
+
+The runtime library would also contain predefined type info structures for
+built-in types.
+
+This would be so much fun!

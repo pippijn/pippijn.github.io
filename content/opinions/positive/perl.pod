@@ -1,0 +1,79 @@
+=head1 Why to use Perl
+
+Despite the many anti-Perl rants, I believe it is a valid choice for certain
+jobs.
+
+=over
+
+=item CPAN
+
+The Comprehensive Perl Archive Network is one of the world's largest free code
+bases. Almost anything you can think of has been solved in one way or another.
+
+=item Easy FFI
+
+It is very easy to interface Perl to other languages like C, C++ and Java. C
+and C++ are interfaced using the easy-to-use XS interface. Using JPL, it is
+possible to call Java from Perl and Perl from Java. To make a C function
+callable from Perl, all you have to do is:
+
+=begin code XS
+
+   #include <EXTERN.h>
+   #include <perl.h>
+   #include <XSUB.h>
+   
+   // declare a function
+   extern int sub (int, int);
+   
+   // define the interface from Perl
+   MODULE = MyModule    PACKAGE = MyModule
+   
+   int
+   add (int a, int b)
+       CODE:
+       RETVAL = a + b; // We can define the function in-line
+       OUTPUT:
+       RETVAL
+   
+   int
+   sub (int a, int b);
+
+=end code XS
+
+=item Very portable
+
+Java is available for download on Linux/x86, Linux/x64, Solaris/Sparc,
+Solaris/x86, Solaris/x64, Windows/x86, Windows/x64. Perl has currently been
+ported to L<over 100 platforms|http://www.cpan.org/ports/>.
+
+=item Generalised data interface
+
+With L<DBI|http://dbi.perl.org/>, Perl provides an interface to various
+databases including Microsoft ADO, CSV, MySQL, SQLite and many more. With its
+C<AnyData>, it provides seamless interfacing of Perl objects and data
+structures with persistent storage including XML, passwd-files, ini-files and
+weblogs.
+
+=item C<mod_perl>
+
+The Apache web server contains a Perl module that allows high performance web
+applications to be written in Perl. That gives Apache full access to the
+entire CPAN repository and it gives Perl full access to the Apache internals.
+This website is built on Apache/mod_perl with HTML::Mason.
+
+=item Good support
+
+In contrast to Java, which keeps the same VM and provides backwards
+compatibility, Perl does not have any problems with throwing away old code and
+reworking the language to some extent. But instead of really throwing it away,
+teams are working on Perl 5.6, 5.8 and 5.10 at the same time.
+
+=item Scoped resource management
+
+Like C++, Perl has scoped resource management and therefore supports RAII.
+That means you do not need to close file handles you no longer use, just let
+them go out of scope. In addition to the lexical scope, Perl has the concept
+of L<dynamic scope|http://perl.plover.com/local.html#5_Dynamic_Scope>.
+
+=back

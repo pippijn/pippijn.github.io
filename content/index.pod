@@ -1,0 +1,29 @@
+=head1 Home
+
+Welcome to my homepage. The initial version of this was produced as part of a
+first semester task at the University for Applied Sciences in Karlsruhe, where I
+did my bachelor's and am currently pursuing a master's degree. Since then, it
+has received some major and several minor overhauls, but I don't spend a lot of
+time documenting my activities the way others do in their blogs and other online
+presences. At some point, I documented some of my projects, but since then, new
+ones have been started that are not represented on this site. They will be added
+when I am having another documentation spree.
+
+This site is now the home of some of my projects, articles (some of which I have
+been asked to write and some of which are no longer accessible via the menu,
+because they are severely out of date or no longer reflect my opinions). On the
+page you are reading now, I will try to say a few words about who I am and what
+I do.
+
+My passion is computer science. My main fields of interest are programming
+languages, compilers and the formalisms and implementations behind them. I enjoy
+thinking about how to express ideas in understandable and semantically rich ways
+and like to design domain specific languages that enable one to do that.
+
+I am also forced to think about build system design, as I have been unable to
+find a build system that meets my needs, but it is not my main academic
+interest.
+
+At the moment, my languages of choice for most tasks are OCaml, C++ and Perl.
+Knowledge of OCaml is my most recent acquisition and is not very deep, yet, but
+some of my projects are written in it and I plan on using it more.

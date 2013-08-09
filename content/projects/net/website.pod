@@ -1,0 +1,5 @@
+=head1 This Website
+
+This website is a Catalyst application running on Apache2/mod_perl.
+
+L<Git repository|http://xinutec.org/git/net/website.git/>

@@ -1,0 +1,6 @@
+=head1 Serialisation
+
+Serialisation/deserialisation of AST (json? xml? sexp?) we have a sexp library
+in libcyc which could be used.
+
+Serialisation/deserialisation of all datatypes and structs.

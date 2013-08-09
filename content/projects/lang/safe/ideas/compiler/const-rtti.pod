@@ -1,0 +1,4 @@
+=head1 Const RTTI
+
+Make tags of C<@extensible> datatypes const (maybe pointers to rodata strings?).
+Also, future RTTI extensions should all be hard-const (rodata).

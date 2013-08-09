@@ -1,0 +1,3 @@
+=head1 Overloading
+
+Implement name overloading (functions, perhaps constants).

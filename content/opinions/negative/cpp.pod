@@ -1,0 +1,414 @@
+=head1 Why not to use C++
+
+C++ is a powerful object oriented and usually compiled language with a large set
+of features. This large set is hard to understand and you need to understand
+most of it to be able to use even a subset of it.
+
+=over
+
+=item No defined ABI (@abi)
+
+This is a huge issue with C++. It is rarely possible to compile code with one
+compiler and use the linked machine code library with another. Even compiler
+versions make different ABIs. GCC broke its ABI between 2.9x and 3.x. The GCC
+name mangling is completely different from Microsoft's compiler. Name mangling
+is not the only issue with Application Binary Interfaces. Different exception
+handling mechanisms, different ways of storing member function pointers,
+different virtual call tables, different class layout of polymorphic types and
+more.
+
+=item Low performance memory allocation (@malloc)
+
+By default, new allocations in C++ need operating system calls. Usually, the
+memory allocator (C<malloc> and C<operator new>) do memory pooling and
+subsequently speed up allocations that occur after deallocations of larger size.
+Another commonly used way to speed up allocations is using slice or slab
+allocation. The Microsoft CLR and OCaml have comparatively very fast allocators.
+
+=begin small
+
+Note that this is not strictly related to C++, rather to specific C++ compilers
+and runtimes. There are runtime libraries that have very fast allocators and
+the new C++ standard is heading towards traceable pointers that could support a
+bump allocator providing allocation speeds near that of the system stack.
+
+=end small
+
+=item Everything has to be done manually (@manual)
+
+C++ as a language can't do much. Pointers have no idea how large the memory
+chunk is they point at. As soon as arrays decay into pointers, there is no way
+of knowing how many elements the array can hold. If you want your pointers to
+know the size of their memory block, you have to implement memory management
+yourself and store the block size before the returned memory chunk. This is what
+C<malloc(3)> already does in most cases, so it would be redundant.
+
+=item Unable to modify compiled code (@modify)
+
+In C++, it is not possible to modify the compiled code at runtime. In standard
+C++, it is not even possible to generate machine code and execute that at
+runtime.
+
+=item Template metaprogramming is complicated (@templates)
+
+Templates are a different language with a different syntax than the rest of C++.
+The verbose and different syntax make template metaprogramming cumbersome.  If
+you want, for example, compile-time evaluation of a simple function such as
+fibonacci, you have to write code like this:
+
+=begin code CPP
+
+   // Define generic fibonacci algorithm
+   template<int N>
+   struct fibonacci
+   {
+     static int const value = fibonacci<N - 1>::value + fibonacci<N - 2>::value;
+   }
+   // Specialise it for N == 0
+   template<>
+   struct fibonacci<0>
+   {
+     static int const value = 1;
+   }
+   // Specialise it for N == 1
+   template<>
+   struct fibonacci<1>
+   {
+     static int const value = 1;
+   }
+   // USe it like this:
+   static int const fib4 = fibonacci<4>::value;
+
+=end code CPP
+
+In languages such as Lisp and D, which have compile-time code execution built
+in, writing such an expression is equal to writing normal code:
+
+=begin code Lisp
+
+   ; Macro to calculate fibonacci numbers
+   (defmacro fib (n)
+     (labels ((fib (n)
+                (if (<= n 1)
+                  n
+                  (+ (fib (- n 1)) (fib (- n 2))))))
+       (fib n)))
+   ; Use it like this:
+   (print (fib 4))
+
+=end code Lisp
+
+The macro is expanded at compile-time. The D programming language has static
+evaluation of complex constant functions. The new C++ standard allows for these,
+but in a severely limited form.
+
+=item Compiler diagnostics are often unreadable (@diag)
+
+=begin code CPP toggle
+
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl<TraitsT>
+   ::node* adt::detail::hash_table_impl<TraitsT>::node::next() [with TraitsT = adt::detail::choose_traits<DEFAULT, std::pa
+   ir, adt::hash_policy, adt::detail::fill_in<DEFAULT, std::pair, adt::hash_policy>::type>::type<int, int>]’:
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:647:   instantiated from ‘adt::detail::hash_table_impl<Tra
+   itsT>::node* adt::detail::hash_table_impl<TraitsT>::create_node_uniq(const typename TraitsT::pair_type&, bool&) [with T
+   raitsT = adt::detail::choose_traits<DEFAULT, std::pair, adt::hash_policy, adt::detail::fill_in<DEFAULT, std::pair, adt:
+   :hash_policy>::type>::type<int, int>]’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:1248:   instantiated from ‘typename adt::detail::choose_tr
+   aits<Policy, PairT, FullTraitsT, TraitsT>::type<KeyT, ValueT>::value_type& adt::hash_table<KeyT, ValueT, Policy, PairT,
+    FullTraitsT, TraitsT>::operator[](const typename adt::detail::choose_traits<Policy, PairT, FullTraitsT, TraitsT>::type
+   <KeyT, ValueT>::key_type&) [with KeyT = int, ValueT = int, adt::rp::resize_policy Policy = DEFAULT, PairT = std::pair, 
+   FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fill_in<DEFAULT, std::pair, adt::hash_policy>::type]’
+   /home/pippijn/rona/devel/librona/run.cc:20:   instantiated from here
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:251: error: invalid conversion from ‘adt::detail::node_bas
+   e*’ to ‘adt::detail::hash_table_impl<adt::detail::choose_traits<DEFAULT, std::pair, adt::hash_policy, adt::detail::fill
+   _in<DEFAULT, std::pair, adt::hash_policy>::type>::type<int, int> >::node*’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl<TraitsT>
+   ::node* adt::detail::hash_table_impl<TraitsT>::node::next() [with TraitsT = adt::detail::choose_traits<DEFAULT, std::pa
+   ir, adt::hash_policy, adt::detail::fill_in<DEFAULT, std::pair, adt::hash_policy>::type>::type<long int, long int>]’:
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:647:   instantiated from ‘adt::detail::hash_table_impl<Tra
+   itsT>::node* adt::detail::hash_table_impl<TraitsT>::create_node_uniq(const typename TraitsT::pair_type&, bool&) [with T
+   raitsT = adt::detail::choose_traits<DEFAULT, std::pair, adt::hash_policy, adt::detail::fill_in<DEFAULT, std::pair, adt:
+   :hash_policy>::type>::type<long int, long int>]’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:1248:   instantiated from ‘typename adt::detail::choose_tr
+   aits<Policy, PairT, FullTraitsT, TraitsT>::type<KeyT, ValueT>::value_type& adt::hash_table<KeyT, ValueT, Policy, PairT,
+    FullTraitsT, TraitsT>::operator[](const typename adt::detail::choose_traits<Policy, PairT, FullTraitsT, TraitsT>::type
+   <KeyT, ValueT>::key_type&) [with KeyT = long int, ValueT = long int, adt::rp::resize_policy Policy = DEFAULT, PairT = s
+   td::pair, FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fill_in<DEFAULT, std::pair, adt::hash_policy>::type]’
+   /home/pippijn/rona/devel/librona/run.cc:127:   instantiated from here
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:251: error: invalid conversion from ‘adt::detail::node_bas
+   e*’ to ‘adt::detail::hash_table_impl<adt::detail::choose_traits<DEFAULT, std::pair, adt::hash_policy, adt::detail::fill
+   _in<DEFAULT, std::pair, adt::hash_policy>::type>::type<long int, long int> >::node*’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl<TraitsT>
+   ::node* adt::detail::hash_table_impl<TraitsT>::node::next() [with TraitsT = adt::detail::choose_traits<DEFAULT, std::pa
+   ir, adt::hash_policy, adt::detail::fill_in<DEFAULT, std::pair, adt::hash_policy>::type>::type<adt::scalar, adt::scalar>
+   ]’:
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:647:   instantiated from ‘adt::detail::hash_table_impl<Tra
+   itsT>::node* adt::detail::hash_table_impl<TraitsT>::create_node_uniq(const typename TraitsT::pair_type&, bool&) [with T
+   raitsT = adt::detail::choose_traits<DEFAULT, std::pair, adt::hash_policy, adt::detail::fill_in<DEFAULT, std::pair, adt:
+   :hash_policy>::type>::type<adt::scalar, adt::scalar>]’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:1248:   instantiated from ‘typename adt::detail::choose_tr
+   aits<Policy, PairT, FullTraitsT, TraitsT>::type<KeyT, ValueT>::value_type& adt::hash_table<KeyT, ValueT, Policy, PairT,
+    FullTraitsT, TraitsT>::operator[](const typename adt::detail::choose_traits<Policy, PairT, FullTraitsT, TraitsT>::type
+   <KeyT, ValueT>::key_type&) [with KeyT = adt::scalar, ValueT = adt::scalar, adt::rp::resize_policy Policy = DEFAULT, Pai
+   rT = std::pair, FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fill_in<DEFAULT, std::pair, adt::hash_policy>::t
+   ype]’
+   /home/pippijn/rona/devel/librona/run.cc:130:   instantiated from here
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:251: error: invalid conversion from ‘adt::detail::node_bas
+   e*’ to ‘adt::detail::hash_table_impl<adt::detail::choose_traits<DEFAULT, std::pair, adt::hash_policy, adt::detail::fill
+   _in<DEFAULT, std::pair, adt::hash_policy>::type>::type<adt::scalar, adt::scalar> >::node*’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl<TraitsT>
+   ::node* adt::detail::hash_table_impl<TraitsT>::node::next() [with TraitsT = adt::detail::choose_traits<DEFAULT, std::pa
+   ir, adt::hash_policy, adt::detail::fill_in<DEFAULT, std::pair, adt::hash_policy>::type>::type<std::basic_string<char, s
+   td::char_traits<char>, std::allocator<char> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > >
+   ]’:
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:647:   instantiated from ‘adt::detail::hash_table_impl<Tra
+   itsT>::node* adt::detail::hash_table_impl<TraitsT>::create_node_uniq(const typename TraitsT::pair_type&, bool&) [with T
+   raitsT = adt::detail::choose_traits<DEFAULT, std::pair, adt::hash_policy, adt::detail::fill_in<DEFAULT, std::pair, adt:
+   :hash_policy>::type>::type<std::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::basic_string<ch
+   ar, std::char_traits<char>, std::allocator<char> > >]’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:1310:   instantiated from ‘PairT<typename adt::detail::has
+   h_table_impl<typename adt::detail::choose_traits<Policy, PairT, FullTraitsT, TraitsT>::type<KeyT, ValueT> >::iterator, 
+   bool> adt::hash_table<KeyT, ValueT, Policy, PairT, FullTraitsT, TraitsT>::insert(const typename adt::detail::choose_tra
+   its<Policy, PairT, FullTraitsT, TraitsT>::type<KeyT, ValueT>::pair_type&) [with KeyT = std::basic_string<char, std::cha
+   r_traits<char>, std::allocator<char> >, ValueT = std::basic_string<char, std::char_traits<char>, std::allocator<char> >
+   , adt::rp::resize_policy Policy = DEFAULT, PairT = std::pair, FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fi
+   ll_in<DEFAULT, std::pair, adt::hash_policy>::type]’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:1456:   instantiated from ‘void hash_table<KeyT, ValueT>::
+   put(KeyT, ValueT) [with KeyT = std::basic_string<char, std::char_traits<char>, std::allocator<char> >, ValueT = std::ba
+   sic_string<char, std::char_traits<char>, std::allocator<char> >]’
+   /home/pippijn/rona/devel/librona/run.cc:133:   instantiated from here
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:251: error: invalid conversion from ‘adt::detail::node_bas
+   e*’ to ‘adt::detail::hash_table_impl<adt::detail::choose_traits<DEFAULT, std::pair, adt::hash_policy, adt::detail::fill
+   _in<DEFAULT, std::pair, adt::hash_policy>::type>::type<std::basic_string<char, std::char_traits<char>, std::allocator<c
+   har> >, std::basic_string<char, std::char_traits<char>, std::allocator<char> > > >::node*’
+
+=end code CPP toggle
+
+The error here is that I was trying to convert a C<node_base> pointer to a
+derived C<node> pointer without a cast.
+
+=item Bad support for data hiding (@datahiding)
+
+The C++ programming language requires you to provide the complete class
+description, including private members, in the interface file. In C, you can
+pass around opaque pointers to an object, in Java you don't even need the source
+file in order to use a class. The C<private> modifier in C++ is mostly used as
+documentation, saying "you should not modify this yourself". If you really want
+to, you can still do it:
+
+=begin code CPP
+
+   // Class with private members
+   class point
+   {
+   private:
+     int const x_;
+     int const y_;
+   public:
+     point (int x, int y) : x_ (x), y_ (y) { }
+     int x () { return x_; }
+     int y () { return y_; }
+   };
+
+=end code CPP
+
+Now we can just define the exact same class but with the C<public> keyword moved
+up two lines, get rid of the C<const> keyword and use C<reinterpret_cast> to
+cast the object to our own class and happily modify x and y even though they
+were private and constant. If we felt hacky, we could C<#define private public>
+in this case. That, however, does not work if C<private> is omitted. Of course,
+all of this violates the C++ standard, but safe languages such as Java (and
+OCaml without the Obj interface) don't even provide you with the ability to
+violate it.
+
+In C++, a workaround for this exists and it is called the
+L<pimpl idiom|http://en.wikipedia.org/wiki/Opaque_pointer#C.2B.2B>.
+
+=item Undefined behaviour (@ub)
+
+C++ has a set of lowlevel features such as pointer arithmetics and memory
+functions (C<memcpy> and friends). With these features, it is very easy to
+induce undefined behaviour. Some examples of undefined behaviour are:
+
+=over
+
+=item Dereferencing a C<NULL>-pointer
+
+=item Accessing an out-of-range element in an C<std::vector>
+
+=item Modifying a value twice between two sequence points
+
+An example for this would be the famous C<p++ + ++p>. This does not strictly
+fall under undefined behaviour but rather under unspecified behaviour.
+
+=item Using an invalid pointer
+
+An example for an invalid pointer is a pointer whose pointee has been destroyed
+already. Using such a pointer includes assigning it to another pointer and
+passing it to functions.
+
+=item Using the C<delete> keyword on pointers of incomplete type when the type has a nontrivial destructor.
+
+=item Casting negative values to an unsigned integral type
+
+=item Modifying a C<const>-qualified value by means of C<const_cast>
+
+=item Calling a function with arguments that are function calls
+
+It is not defined in which order C<g> and C<h> are called in C<f(g(), h())>.
+
+=back
+
+This is just a short list of actions leading to undefined or unspecified
+behaviour. ISO/IEC 14882:1998 documents more than 100 of these. If a programmer
+is insufficiently skilled, these actions may cause serious astonishment.
+Astonishment is something Java tries to avoid by following the "Principle of
+Least Astonishment".
+
+=item In production, only usable with skilled programmers (@skills)
+
+Languages such as Java also allow mediumly skilled programmers to join a
+development team. C++ programmers, in contrast, require a high level of
+proficiency in the language in order to write usable code. Skills required for
+writing good C++ code include:
+
+=over
+
+=item Good understanding of object-orientation
+
+Without such knowledge, you can end up writing procedural code that has nothing
+to do with object oriented design. On a related note, the fact that C++ allows
+its member functions to be non-virtual (in other words: not to be overridden)
+but does not prevent subclasses from actually overriding them results in errors
+that may be hard to trace.
+
+=item Knowledge of memory layout
+
+Memory management in C++ has to be done manually. It is possible to use a
+garbage collector using libraries supplying such, but it is also possible and
+even easy to trick such a library (for example by casting the pointers to
+integers, C<XOR>ing them with a value, storing them somewhere and C<XOR>ing them
+back to the original value, casting them back to pointers and expecting them to
+be valid). Memory leaks can be prevented by using reference counting smart
+pointers but those suffer from the common reference counting issues such as
+circular references. In this case, weak references help.
+
+=back
+
+You are allowed to return a reference or pointer to a stack-allocated object.
+You are allowed to overflow memory buffers. You are allowed to access out of
+range indices. All of that makes the language a dangerous tool. As a Java
+programmer once told me: "C++ is useful only for cases where your programmers
+ALL KICK ASS".
+
+=item Verbose "lambda expression" (@verbose)
+
+In order to emulate lambda expressions in C++, you have to write verbose code
+like this:
+
+=begin code CPP
+
+   struct equality_predicate
+   {
+     equality_predicate (char const *key) : key_ (key) { }
+     bool operator () (char const *key)
+     {
+       return !strcmp (key, key_);
+     }
+   private:
+     char const *key_;
+   };
+   std::find (c.begin (), c.end (), equality_predicate (key)); // c is a linear container
+
+=end code CPP
+
+In Java, this code becomes a little less verbose, if the Collection was sorted:
+
+=begin code Java
+
+   Collections.binarySearch(c, key, new Comparator<String>() {
+       public int compare(String a, String b) {
+           return a.compareTo(b);
+       }
+   });
+
+=end code Java
+
+Or, in languages with functional elements such as Perl:
+
+=begin code Perl
+
+   $c->find ($key, sub {
+      $_[0] eq $_[1]
+   });
+
+=end code Perl
+
+=item Operator overloading can make code complicated (@overload)
+
+In C++, almost every operator can be overloaded. This includes C<operator||> and
+C<operator,>. Overloading them can lead to confusion. There are a few rules of
+"good practice". As such, overloading a comparison operator to have side-effects
+is bad practice. Overloading the sequential evaluation operator is bad practice.
+Overloading C<operator&amp;&amp;> and C<operator||> are bad practice. Compilers
+will unlikely warn about it, though.
+
+=item Very idiomatic (@idiom)
+
+Writing solid C++ code requires mastery of almost the whole language and many of
+its idioms.
+
+=item Complex grammar (@grammar)
+
+C++ can not be expressed in an LR(1) grammar. It is context-dependent and as
+such requires considerable effort from both the machine parser and the human eye
+to be understood.
+
+=item Impossible to chain constructors (@chained_ctor)
+
+Where in Java one could write
+
+=begin code Java
+
+   class Point
+   {
+       int x, y;
+       Point(int x, int y)
+       {
+           this.x = x;
+           this.y = y;
+       }
+       Point(int xAndY)
+       {
+           this(xAndY, xAndY);
+       }
+   }
+
+=end code Java
+
+this is not possible at all in C++. One can not chain constructors (this has
+been fixed in C++11). Trying it like this:
+
+=begin code CPP
+
+   class Point
+   {
+       int x, y;
+       Point (int x, int y)
+       {
+           this->x = x;
+           this->y = y;
+       }
+       Point (int xAndY)
+       {
+           Point (xAndY, xAndY); // The other constructor is indeed called, but not for 'this'
+       }
+   };
+
+=end code CPP
+
+does call the other constructor but creates an anonymous C<Point> on the stack
+and discards it right away. Trying to copy the Java syntax C<this()> results in
+a compile-time error.
+
+=back

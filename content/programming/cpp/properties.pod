@@ -1,0 +1,618 @@
+=head1 Properties in C++
+
+In object oriented programming languages, encapsulation is present in
+different ways. The Java and C++ approach is to write accessor and mutator
+(getter and setter) methods for every variable that needs to be accessed or
+mutated outside the set of class methods.
+
+In C++, one can return a C<const> reference to a data member from an accessor
+to prevent benign client code from corrupting the data. Java, not having
+C<const>, can not prevent this at compile time, but can enforce access control
+at runtime through further mutators. For any given data member C<x>, one can
+define an accessor C<getX> and a mutator C<setX>, to control the value to
+which C<x> may be set. This method breaks transparency without adding value to
+object oriented design. C++ programmers tend not to use the prefixes C<get>
+and C<set>, but rather name their data member something different such as
+C<x_> or C<m_x>. This keeps the name C<x> free for the accessor (C<T x ()>)
+and the mutator (C<void x (T)>). Still, this does not help transparency very
+much. Consider the following code:
+
+=begin code CPP
+
+  // Public data members
+  struct point
+  {
+    int x;
+    int y;
+  };
+
+  point p = { 1, 2 };
+  p.x += 20;
+
+  // Private data members with accessor/mutator functions
+  struct point
+  {
+    int x () const { return x_; }
+    int y () const { return x_; }
+    void x (int v) { x_ = v; }
+    void y (int v) { y_ = v; }
+
+    // Needs a constructor, due to the private data members
+    point (int xv, int yv) : x_ (xv), y_ (yv) { }
+
+    // Private data members make the class non-standard layout,
+    // disabling many optimisations and making the class a whole
+    // lot less useful (for example, offsetof won't work, the
+    // objects cannot be passed through `...', the objects cannot
+    // be cast to a reference to their first data member's type, etc.
+  private:
+    int x_;
+    int y_;
+  };
+
+  // aggregate initialisers won't work anymore
+  point p (1, 2);
+  p.x (p.x () + 20); // more code to be written for the same effect
+
+=end code CPP
+
+
+=head2 Properties
+
+Many modern programming languages provide a syntactic construct known as
+L<properties|http://en.wikipedia.org/wiki/Property_(programming)>. Different
+languages have different ways of expressing the same idea: publicly accessible
+class data members with code attached that controls and validates input from
+client code. One may also attach code that calculates the actual value
+returned to the user. For instance, you might want to store the value in a
+database and transparently handle database queries using properties.
+
+
+=head3 Previous attempts
+
+Many have attempted to implement properties in C++. The common approach is to
+use a nested class. Emad Barsoum has L<implemented|http://www.codeproject.com/KB/cpp/cppproperties.aspx>
+properties using a class template in which he stores the C<this> pointer of the
+containing object and member function pointers to the C<get> and C<set>
+functions. This approach and implementation has several serious flaws:
+
+=over
+
+=item Member function pointers
+
+These are in fact L<small structs|http://www.codeproject.com/KB/cpp/FastDelegate.aspx>
+containing things like vtable offset and the actual function's address.
+Dereferencing member function pointers therefore is a very inefficient
+process.
+
+=item operator ValueType
+
+This is an implementation issue. Consider a property of type C<bitmap>, which
+consists of a 64KB matrix. C<operator ValueType> copies the entire C<bitmap>
+and its data every time it is used.
+
+=item operator =
+
+The assignment operator is not enough. To have a fully functional property,
+all operators have to be supported. This is a minor flaw, as these can be
+added later.
+
+=item Storage of pointers
+
+The property class stores two member function pointers that may be NULL and a
+C<this> pointer that may also be NULL. On a 32 bit platform, this means 20
+bytes of storage per property: 8 bytes per member function pointer and 4 bytes
+for the C<this> pointer. On 64 bit platforms using the LP64, ILP64 or LLP64
+data models, the size of that property is 40 bytes.
+
+=item High overhead
+
+Due to the use of member function pointers and C<this> pointers, it is
+impossible for a compiler to inline the calls. The property's pointers may
+even change after they were initialised, so even the best optimising compiler
+in the theoretic world can not inline a thing. This means high overhead when
+dereferencing the pointers and even more overhead when calling the functions.
+
+=item Need to initialise
+
+The property requires the containing class' constructor to initialise it. If a
+class has many properties, the constructor becomes one big mess. The
+implementation does not even use constructor initialiser lists, so in the
+worst case, initialising the properties will be two times six full machine
+word copies (in the best case, it's six). If you forget to initialise a
+property, your program will die with an assertion error in a getter or setter.
+
+=item Read/write semantics
+
+Whether or not client code is allowed to call an accessor or mutator is
+checked at runtime. An assertion failure is the result of invalid access.
+
+=back
+
+Another approach is one of those which require compiler support and are
+therefore not acceptable as generic solution:
+L<The MSVC hack|http://blogs.msdn.com/ericflee/archive/2008/04/17/how-to-do-object-properties-in-c.aspx>
+or L<Another MSVC hack|http://msdn.microsoft.com/en-us/library/z974bes2(VS.71).aspx>.
+
+
+=head3 The new approach
+
+I present a zero-overhead approach which even has the very convenient benefit
+of being a trivial standard layout class, also known as Plain Old Data (or
+POD). These properties do not, by themselves, use any memory. Value properties
+use the memory required to store their value, non-value properties use the
+mandatory byte of memory that every empty struct is required to have. (This
+is, by the way, required in order to be able to take its address).
+
+
+=head4 The prop class template
+
+The C<prop> class template is parametrised by the container type, the value
+type, the accessor and mutator functions and an offset function. As you can
+see, I did not use member function pointers anywhere. Instead, the object is
+passed as first argument to a free (namespace scope) or static member
+function. The reason for this is, plainly put, speed. Current C++ compiler do
+a pretty bad job at optimising dereferences of member function pointers, but a
+terrific job when it comes to static functions.
+
+=begin code CPP
+
+  template<
+    typename Class,
+    typename T,
+    T const & (get) (Class const &),
+    void (set) (Class &, T const &),
+    size_t (offset) ()
+  >
+  struct prop
+  {
+
+=end code CPP
+
+You may be wondering what the C<offset> function is for. As I said earlier,
+this property has zero overhead, so it can't store the C<this> pointer of its
+container. That is where the C<offset> function comes in. We use it to
+calculate the location of the container's C<this> in memory.
+
+=begin small
+
+It is very important that this is a function, as we will see later.
+
+=end small
+
+The following two functions calculate the C<this> pointer and return a
+reference to the parent object. Due to C<offset> being a function and its
+location being known at compile time, it can easily be inlined.
+
+=begin code CPP
+
+    Class &self ()
+    {
+      return *reinterpret_cast<Class *> (reinterpret_cast<char *> (this) - offset ());
+    }
+
+    Class const &self () const
+    {
+      return *reinterpret_cast<Class const *> (reinterpret_cast<char const *> (this) - offset ());
+    }
+
+=end code CPP
+
+We need all assignment operators (=, +=, -=, *=, /=, %=, ^=, |=, &amp;=,
+&lt;&lt;= and &gt;&gt;=). We can define them all, because C<prop> is a class
+template and ISO/IEC 14882:2003(E), paragraph 14.7.1, clause 1 states that
+I<"not the definitions or default arguments, of the class member functions,
+[...] [are implicitly instantiated when a class template is implicitly
+instantiated]">. In other words, class templates are instantiated lazily,
+on demand.
+
+=begin code CPP
+
+    prop &operator   = (T const &rhs) { set (self (), rhs); return *this; }
+    prop &operator  += (T const &rhs) { set (self (), get (self ())  + rhs); return *this; }
+    // Analogous for the other operators
+
+=end code CPP
+
+These operators define all we need for the mutator, but not for the accessor.
+Instead of defining all operators (unary +, unary -, binary +, binary *, etc.),
+we can define C<operator T const &amp;> and the C++ compiler will take care of
+required conversions:
+
+=begin code CPP
+
+    operator T const & () const
+    {
+      return get (self ());
+    }
+
+=end code CPP
+
+Now, all we need is a way to access members of the property. Then we are done:
+
+=begin code CPP
+
+    T *operator -> ()
+    {
+      return &const_cast<T &> (get (self ()));
+    }
+
+    T const *operator -> () const
+    {
+      return &get (self ());
+    }
+  };
+
+=end code CPP
+
+The C<const_cast> is strictly considered undefined behaviour, but if the
+property itself is non-const, we know the value is non-const, as well. This is
+a dire hack, but I don't see a better way to solve it. One way would be to
+pass a non-const accessor function as additional template argument, but that
+would probably cause more code bloat than it is worth.
+
+
+=head4 Value properties
+
+The above class template provides support for properties that do not store
+their own value. Often, we want the value to be stored, though, and we do not
+want the overhead of storing it in the containing class (remember: empty
+classes still need one byte of storage). Therefore, we introduce another class
+template, called C<value_prop>, with different accessor and mutator function
+types:
+
+=begin code CPP
+
+  template<
+    typename Class,
+    typename T,
+    T const & (get) (Class const &, T const &),
+    void (set) (Class &, T &, T const &),
+    size_t (offset) ()
+  >
+  struct value_prop
+  {
+
+=end code CPP
+
+Now, in addition to the container's C<this> pointer, the accessor C<get> and
+mutator C<set> also receive a reference to the value stored in the
+instantiated property class template. C<get> receives a const reference.
+Now, the operator definitions look slightly different:
+
+=begin code CPP
+
+    value_prop &operator   = (T const &rhs) { set (self (), value, rhs); return *this; }
+    value_prop &operator  += (T const &rhs) { set (self (), value, get (self (), value)  + rhs);
+                                              return *this; }
+
+=end code CPP
+
+and the class has a public member variable called C<value>. I decided to make
+it public so the instantiated class template would remain POD. This means one
+can, by directly accessing C<value>, corrupt the class state, but benign
+client code will not do that.
+
+
+=head4 Using properties
+
+To use a property in a class, we need four things: the property object, the
+accessor, the mutator and very importantly, the C<offset> function.
+
+=begin code CPP
+
+  struct point
+  {
+    // The X-coordinate
+    value_prop<point, int, get_x, set_x, offset_x> x;
+    static int const &get_x (point const &self, int const &property) { return property; }
+    static void set_x (point &self, int &property, int const &value) { property = value; }
+    static size_t offset_x () { return offsettof (point, x); }
+    // The Y-coordinate
+    int y_;
+    prop<point, int, get_y, set_y, offset_y> y;
+    static int const &get_y (point const &self) { return self.y_; }
+    static void set_y (point &self, int const &value) { self.y_ = value; }
+    static size_t offset_y () { return offsettof (point, y); }
+  };
+
+=end code CPP
+
+The offset returned by the C<offset_*> functions is the number of bytes
+between the location of the property object and the C<this> pointer of the
+enclosing class. We use that in the C<prop> class template to calculate the
+memory location of C<*this>. The reason this is a function is simple: We need
+to pass the offset to the property class template somehow. The first
+possibility that comes to mind is storing it in a static class member or a
+global variable and passing a pointer to that. This makes the declaration of a
+property more messy and forgetting to actually define the global variable
+gives annoying undefined reference errors. We cannot make the value an
+integral constant, because the class we are invoking C<offsetof> on is
+incomplete when we want to do it inside the class. If it has to be a variable,
+it has to have external linkage so the template accepts it. A function is the
+best solution I could come up with: it can be inlined completely, it does not
+have extra declaration or definition overhead and it can be passed as template
+argument.
+
+The practiced reader will notice the use of C<offsetof> and think "Hey, that
+will only work for POD C<struct>s". This is true, but as I mentioned earlier,
+both C<prop> and C<value_prop> are POD C<struct>s. This is 100% standard
+compliant.
+
+=begin small
+
+ISO/IEC 14882:2003(E): 18.1 Types, clause 5:
+
+The macro offsetof accepts a restricted set of type arguments in this
+International Standard. type shall be a POD structure or a POD union (clause 9).
+
+=end small
+
+=begin small
+
+ISO/IEC 14882:2003(E): 9.4 Classes, clause 4:
+
+A POD-struct is an aggregate class that has no non-static data members of
+type non-POD-struct, non-POD-union (or array of such types) or reference,
+and has no user-defined copy assignment operator and no user-defined
+destructor.
+
+=end small
+
+=begin small
+
+The above does not mean POD structs may not have member functions.
+
+=end small
+
+
+=head4 Using macros
+
+The above class definition is repetetive and error prone, so we use the
+following macros:
+
+=begin code CPP
+
+  #define def_prop(T, Class, name, get, set)                                      \
+    static size_t offset_ ## name () { return offsetof (Class, name); }           \
+    static T const &get_ ## name (Class const &self) get                          \
+    static void set_ ## name (Class &self, T const &value) set                    \
+    ::prop<Class, T, get_ ## name, set_ ## name, offset_ ## name> name
+
+  #define def_value_prop(T, Class, name, get, set)                                \
+    static size_t offset_ ## name () { return offsetof (Class, name); }           \
+    static T const &get_ ## name (Class const &self, T const &property) get       \
+    static void set_ ## name (Class &self, T &property, T const &value) set       \
+    ::value_prop<Class, T, get_ ## name, set_ ## name, offset_ ## name> name
+
+=end code CPP
+
+Now, we can rewrite the class definition of C<point> as follows:
+
+=begin code CPP
+
+  struct point
+  {
+    def_value_prop (int, point, x,
+      {
+        return property;
+      },
+      {
+        property = value;
+      }
+    );
+  
+    int y_;
+  
+    def_prop (int, point, y,
+      { 
+        return self.y_;
+      },
+      { 
+        self.y_ = value;
+      }
+    );
+  };
+
+=end code CPP
+
+We use value properties as well as normal properties here. Extra caution has
+to be taken with aggregate initialisers when doing this. It will generally not
+be an issue, since classes with non-value properties are unlikely to get
+aggregate initialisation.
+
+The usage of C<def_prop> and C<def_value_prop> are as follows:
+
+  def_prop (type, type of parent, name, accessor code, mutator code);
+  def_value_prop (type, type of parent, name, accessor code, mutator code);
+
+The problem with this macro is that it does not support code like this:
+C<{ int a, b, c; }>, because the commas would be interpreted as macro argument
+delimiters. One solution would be to use GCC's variadic macros to implement an
+C<UNPAREN> macro:
+
+=begin code CPP
+
+  #define UNPAREN_(x...) x
+  #define UNPAREN(x) UNPAREN_ x
+
+=end code CPP
+
+The gained advantage is that commas can be used outside parentheses inside
+accessor and mutator code, the disadvantage is that all code needs to be
+enclosed in parentheses, making the other code plain ugly (uglier than it
+already is).
+
+
+=head4 A larger example
+
+=begin code CPP
+
+  struct point
+  {
+    def_value_prop (int, point, x,
+      {
+        puts (__PRETTY_FUNCTION__);
+        return property;
+      },
+      {
+        puts (__PRETTY_FUNCTION__);
+        property = value;
+      }
+    );
+  
+    int y_;
+  
+    def_prop (int, point, y,
+      {
+        puts (__PRETTY_FUNCTION__);
+        return self.y_;
+      },
+      {
+        puts (__PRETTY_FUNCTION__);
+        self.y_ = value;
+      }
+    );
+  };
+  
+  struct coordinate
+  {
+    def_value_prop (point, coordinate, x,
+      { 
+        puts (__PRETTY_FUNCTION__);
+        return property;
+      },
+      { 
+        puts (__PRETTY_FUNCTION__);
+        property = value;
+      }
+    );
+    
+    point y_;
+    
+    def_prop (point, coordinate, y,
+      { 
+        puts (__PRETTY_FUNCTION__);
+        return self.y_;
+      },
+      { 
+        puts (__PRETTY_FUNCTION__);
+        self.y_ = value;
+      }
+    );
+  };
+  
+  int
+  main ()
+  {
+    // Aggregate initialisers work as expected, even with classes
+    // containing (classes containing properties) as properties
+    // (parentheses added for disambiguation).
+    coordinate p = { { 2, 3 }, { 4, 5 } };
+    printf ("p.x->x == %d\n", (int) p.x->x); // Accessor and mutator called
+    printf ("p.x->y == %d\n", (int) p.x->y);
+    printf ("p.y->x == %d\n", (int) p.y->x);
+    printf ("p.y->y == %d\n", (int) p.y->y);
+  }
+
+=end code CPP
+
+The output would look something like this:
+
+  static const point& coordinate::get_x(const coordinate&, const point&)
+  static const int& point::get_x(const point&, const int&)
+  p.x->x = 2
+  static const point& coordinate::get_x(const coordinate&, const point&)
+  static const int& point::get_y(const point&)
+  p.x->y = 3
+  static const point& coordinate::get_y(const coordinate&)
+  static const int& point::get_x(const point&, const int&)
+  p.y->x = 4
+  static const point& coordinate::get_y(const coordinate&)
+  static const int& point::get_y(const point&)
+  p.y->y = 5
+
+Note that you need GCC for C<__PRETTY_FUNCTION__> to work.
+
+
+=head4 Performance
+
+As I mentioned in the introduction, I chose to use static member functions for
+efficiency reasons. Just to give you an idea of how efficient this zero
+overhead property template is, here is the assembler code for the following
+simple example:
+
+C++ code:
+
+=begin code CPP
+
+  int
+  main ()
+  {
+    coordinate p = { { 2, 3 }, { 4, 5 } };
+    volatile int x = p.x->x;
+  }
+
+=end code CPP
+
+And the assembler output:
+
+  main:
+          xorl    %eax, %eax    ' set return value to 0
+          movl    $2, -4(%rsp)  ' set the variable 'x' to 2
+          ret                   ' return
+
+You can see, how the compiler completely inlined the calls to the accessors
+and then constant folded the expression, simply copying an immediate integer
+value to a memory location on the stack.
+
+=head3 Non-POD classes
+
+The more interesting classes are all non-POD ones. I have tested the property
+class template with the strangest configurations I could think of. The only
+configuration where C<offsetof> fails is this:
+
+=begin code CPP
+
+  struct A
+  {
+    virtual ~A () { }
+  };
+  struct B1 : virtual A
+  {
+    int i;
+  };
+  struct B2 : virtual A
+  {
+  };
+  struct D : virtual B1, virtual B2
+  {
+  };
+
+  size_t offset = offsetof (D, i);  // This fails
+  size_t offset = offsetof (B1, i); // This succeeds and is correct
+
+=end code CPP
+
+so in fact, the property class never fails. However, I have only tested it on
+the GNU C++ compiler. Other compilers might mess up, but one thing is for
+certain: C<prop> being POD allows for 100% standard compliant properties.
+(Note that C<cfront>, the first C++ compiler, would have done it right, so I
+don't really see any reason why any compiler could mess it up.)
+
+
+=head2 Links
+
+=over
+
+=item L<Properties on Wikipedia|http://en.wikipedia.org/wiki/Property_(programming)>
+
+=item L<Properties in C++|http://www.codeproject.com/KB/cpp/cppproperties.aspx>
+
+=item L<FastDelegate|http://www.codeproject.com/KB/cpp/FastDelegate.aspx>
+
+=item L<The MSVC properties hack|http://blogs.msdn.com/ericflee/archive/2008/04/17/how-to-do-object-properties-in-c.aspx>
+
+=item L<Another MSVC properties hack|http://msdn.microsoft.com/en-us/library/z974bes2(VS.71).aspx>
+
+=back

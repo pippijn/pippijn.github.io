@@ -1,0 +1,9 @@
+=head1 Bison
+
+Look into making a modern bison code template.
+
+This would enable us to benefit from future bison optimisations and GLR parsing
+amongst other things.
+
+Our own version of bison was modified quite a lot, it seems. are those
+modifications needed/useful? do we need to add those features to the new bison?

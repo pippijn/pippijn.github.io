@@ -1,0 +1,4 @@
+=head1 Negative opinions
+
+On these pages, I want to describe some of the negative experience I made with
+several things, both related and unrelated to programming.

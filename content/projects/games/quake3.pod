@@ -1,0 +1,123 @@
+=head1 Quake 3
+
+L<Git repository|http://xinutec.org/git/games/ioquake3.git/>
+
+I've started hacking on the L<ioquake3|http://ioquake3.org/> sources, adding
+a L<Perl|http://www.perl.org/> interface to a small number of C functions and
+a few callbacks from C/QVM to Perl functions. This allowed me to add an IRC
+logging backend and a client hack for weapon selection.
+
+
+=head2 IRC Logging
+
+The IRC logging captures game events and produces a message to be sent to IRC.
+The current implementation uses Net::IRC3 but this is soon going to change to
+AnyEvent::IRC.
+
+The PerlQuake3 server is running on C<q3a.xinutec.org> and events are written
+to the channel C<#q3a> on C<irc.xinutec.org>.
+
+The following events are transferred to IRC:
+
+=over
+
+=item Player connected
+
+  12:49 < q3a> Jules_Vernes connected
+
+=item Player disconnected
+
+  13:20 < q3a> Jules_Vernes disconnected
+
+=item Player was killed
+
+  12:54 < q3a> Jules_Vernes was squished
+  13:00 < q3a> LucY was railed by Jules_Vernes
+  13:18 < q3a> Jules_Vernes was in the wrong place
+
+=item Round finished
+
+  22:16 < q3a> Round finished:
+  22:16 < q3a> 1. LucY score: 20  ping 33
+  22:16 < q3a> 2. peter lustich score: 3  ping 61
+  22:16 < q3a> 3. Jules_Vernes score: -2  ping 91
+
+=item Player said something
+
+  22:17 < q3a> <peter lustich> lol
+
+=back
+
+IRC users can chat back into the game and it will look like it origined from
+C<irc/user> where C<user> is the nickname of the person on IRC. Quake colours
+are converted to IRC colours and vice versa.
+
+Furthermore, the IRC bot has the following commands:
+
+=over
+
+=item !clients
+
+Show all players currently in the game.
+
+=item !verbosity [level]
+
+If no C<level> is given, this shows the current IRC verbosity. Currently,
+there are four verbosity bits that can be set: C<CHAT>, C<KILL>, C<JOIN> and
+C<STAT>. If C<level> is given in the form C<!verbosity +chat -kill +join>,
+the respective bits are set or unset.
+
+=item !help [command]
+
+Shows help on C<command> or a list of commands if C<command> is omitted.
+
+=item !reload
+
+Reloads all C<Quake3::> modules except for the C<Quake3> module itself.
+
+=back
+
+
+=head2 Client-Perl
+
+The Quake 3 client has been enhanced to allow for prioritising weapon
+selection on pickup. That means, if C<cg_autoswitch> is on, weapons are only
+selected if their priority is higher or equal to the priority of the current
+weapon.
+
+Currently, these priorities are not user-definable, but that will soon be
+implemented. The code for this is absolutely trivial and can be found in
+F<Quake3.pm>:
+
+=begin code Perl
+
+  my %prefs = (
+     Quake3::WP_GRAPPLING_HOOK    => 0,
+     Quake3::WP_NONE              => 0,
+  
+     Quake3::WP_GAUNTLET          => 0,
+     Quake3::WP_GRENADE_LAUNCHER  => 0,
+     Quake3::WP_MACHINEGUN        => 1,
+     Quake3::WP_RAILGUN           => 1,
+     Quake3::WP_SHOTGUN           => 2,
+     Quake3::WP_LIGHTNING         => 2,
+     Quake3::WP_PLASMAGUN         => 2,
+     Quake3::WP_ROCKET_LAUNCHER   => 3,
+     Quake3::WP_BFG               => 4,
+  );
+  
+  sub item_pickup {
+     my ($curweap, $newweap) = @_;
+     $prefs{$newweap} >= $prefs{$curweap} ? 1 : 0
+  }
+
+=end code Perl
+
+
+=head2 Future
+
+The current implementation and API design is below all standards (except for
+maybe the irssiperl one) and requires some real thinking. This interface was
+written in a few minutes (after needing an hour to figure out how the QVM and
+callbacks to C work). In the future, the API will undergo some serious changes
+and probably be rewritten entirely from scratch.

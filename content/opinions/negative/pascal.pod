@@ -1,0 +1,7 @@
+=head1 Why not to use Pascal
+
+Pascal is a language which was originally designed as
+"teaching-programming-language" and not for serious programming. So why are
+some people trying to use it for this purpose?
+
+Here is a list of some strange aspects of Pascal.

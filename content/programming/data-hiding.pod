@@ -1,0 +1,326 @@
+=head1 Information hiding
+
+This text is about the principle known as I<information hiding>, I<data hiding>
+or (not entirely correctly) I<encapsulation>. In our examples, we use the C
+programming language, because it fits the principle best of all. This is a bit
+ironic, because C of all languages widely used today is, assembly language not
+counted, said to be the least object oriented language.
+
+=head2 Introduction
+
+=over
+
+=item Client code
+
+is all the code that uses the data types and operations defined on them but
+does not operate on the internal structures of those types.
+
+=item Information hiding
+
+is a principle of hiding implementation details from client code. This is
+achieved by writing accessor functions as required.
+
+=back
+
+A simple example of information hiding would be a string object:
+
+=begin code CPP
+
+  struct string
+  {
+    char *rep;
+    size_t len;
+    size_t capacity.
+  };
+
+=end code CPP
+
+This C<struct> knows its length and has a data pointer pointing at the
+in-memory string representation. It also knows its maximum capacity, so it can
+allocate more memory on demand. In order to avoid corruption of the internal
+state (in this case, the len member), we write accessor functions, for
+example:
+
+=begin code CPP
+
+  size_t strLength (struct string const *str);
+  char const *strToCStr (struct string const *str);
+  char strCharAt (struct string const *str, size_t pos);
+  void strSetCharAt (struct string *str, size_t pos, char c);
+  void strAddChars (struct string *str, char const *chars);
+
+=end code CPP
+
+These functions operate on the data structure declared above. Functions
+that take a pointer-to-const promise not to modify the structure.
+
+Information hiding means to hide as much knowledge as possible. As part
+of this, we could define new type aliases to hide the fact that a string
+is represented by a pointer to a string structure:
+
+=begin code CPP
+
+  typedef struct string *String;
+  typedef struct string const *ConstString; // Immutable string
+
+=end code CPP
+
+By doing this, we allow the representation to change at any time. For
+example, we could choose to represent String objects by a simple data
+pointer not knowing its size or a data pointer prepended by its size.
+
+=begin small
+
+See <a href="http://xinutec.org/~pippijn/en/programming_c_strings.xhtml">C
+string representations</a> if you are interested in other string representations.
+
+=end small
+
+Now, our accessor functions look like this:
+
+=begin code CPP
+
+  size_t strLength (ConstString str);
+  char const *strToCStr (ConstString str);
+  char strCharAt (ConstString str, size_t pos);
+  void strSetCharAt (String str, size_t pos, char c);
+  void strAddChars (String str, char const *chars);
+
+=end code CPP
+
+We did not only abstract away some knowledge, we also reduced our required
+typing.
+
+
+=head2 Violations of the principle
+
+There are various more or less obvious ways to violate the principle of
+information hiding. An obvious example would be directly accessing the
+structure's members:
+
+=begin code CPP
+
+  // Wrong:
+  void
+  OnAdded (String str)
+  {
+    strncat (str->rep, " has been added", str->capacity - str->len);
+    str->len = strlen (str->rep);
+  }
+  // Right:
+  void
+  OnAdded (String str)
+  {
+    strAddChars (str, " has been added");
+  }
+
+=end code CPP
+
+The function C<strAddChars> hides the knowledge about C<String>'s internal
+structure and abstracts away the logic needed to add characters to the string.
+The resulting code is more descriptive and less error prone. Instead of
+kludging our own string concatenation operation every time, we write a single
+testable function that does it for us. Our own version in "Wrong" truncates
+the string, if it does not have enough room for the added text.
+
+A less obvious violation of information hiding would be pointer operations on
+String objects. Consider our String to be defined as C<char*>. This type
+allows several operations that are built into C:
+
+=begin code CPP
+
+  typedef char *String;
+  typedef char const *ConstString;
+
+  void
+  someFunc (String str)
+  {
+    printf ("The second character is `%d'\n", str[1]); // Index
+    str += 20; // Addition
+    printf ("The twenty-second character is `%d'\n", str[1]); // Index
+    printf ("The twenty-first character is `%d'\n", *str); // Dereference
+    String newStr = str - 10; // Subtracting integer
+    printf ("The difference between newStr and str is %d\n", newStr - str); // Pointer difference
+  }
+
+=end code CPP
+
+All these operations are defined on C<char*>, and therefore also on C<String>.
+This does not have to be the case, though. If C<String> was defined as the
+C<struct string*> earlier, all of these operations would cause a compilation
+error. Using these operations requires knowledge about the internal
+representation of C<String> and is therefore in violation of the information
+hiding principle.
+
+
+=head2 Enforcing encapsulation in C
+
+C provides a very good way to enforce information hiding. We call this
+I<opaque pointers>. Opaque in this sense means, we cannot touch or even I<see>
+the internal structure. C allows us to I<forward declare> structures and pass
+around pointers to them:
+
+=begin code CPP
+
+  struct string;
+  typedef struct string *String;
+  typedef struct string const *ConstString;
+  // All of the above accessor functions still work
+  // The OnAdded function marked with "Right" also still works, but the one
+  //   marked "Wrong" will cause a compilation error
+
+=end code CPP
+
+C<String> is now what we call a I<pointer to an incomplete type>. Incomplete
+means that it does exist as a type, but its representation is not known to the
+compiler. Using opaque pointers is a good way of preventing direct member
+access in client code.
+
+
+=head2 Advantages
+
+There are definite advantages of information hiding and those are good reasons
+to apply it to your code.
+
+=over
+
+=item Less changes in client code
+
+If we change a name in a structure, for example if we wanted to rename our
+C<len> to C<length>, because we think it is more descriptive, and client code
+depended on the variable being called C<len>, we will have to modify all that
+code. Automatic refactoring tools help, but none of them are perfect. If no
+client code depended on this fact, there is a lot less to modify with such a
+change. We inofficially call renamings like this I<API breakage>.
+
+=item Faster recompilation and incremental builds
+
+If you use a compiler cache such as L<ccache|http://ccache.samba.org/> or if
+you use incremental build tools such as L<make|http://www.gnu.org/software/make/>,
+you will have noticable speedups when using opaque pointers.
+
+=item Better binary compatibility
+
+If you decide to add another member to the string structure containing
+information about the number of reallocations, because you want to find the
+optimum initial string size for a certain application, you can do so, but if
+client code directly accessed the size and offset information of the
+structure, all such code needs to be recompiled. This is inofficially called
+I<ABI breakage>.
+
+=back
+
+
+=head2 Disadvantages
+
+This all sounds great and we may ask ourselves, why doesn't everybody
+encapsulate everything. There are also disadvantages to be considered when
+designing software.
+
+=over
+
+=item Speed
+
+This is probably the most considered and least important disadvantage. I say
+most considered, because people often tend to ignore good practice and
+prematurely optimise their code by not encapsulating data properly. Consider
+the code required to access a member of a structure directly and the code
+required to call a function doing the same thing. A member access is a full
+word addition and a dereference on x86 platforms. A function call is at least
+a full word decrement, four unconditional moves, two stack pushes, a
+dereference, an addition, an increment, two stack pops, an unconditional jump
+and a call return. A lot more to do for our poor little Pentium with 3 GHz.
+
+But our poor little Pentium with 3 GHz will do all that within 70 clock
+cycles, which is about 10 cycles more than a C<nop> instruction. This is why I
+say, it is the least important disadvantage. If you are writing speed
+critical, embedded software or real-time applications, you will ignore this,
+but then you will also ignore any other principles known to be good practice.
+
+=item Code bloat
+
+The above argument indirectly contains the code bloat argument. All those
+instructions needed to call a function returning or setting the member's value
+exist in object code after compilation. If you have a large structure with
+accessors for each member, you will substantially increase code size. Modern
+computers will gladly handle large binaries, so this is an argument for
+embedded developers only.
+
+=item Dynamic allocation
+
+In the case of opaque pointers, all objects need to be allocated on the free
+store (using C<malloc>), There are situations in which this is not viable, for
+example in embedded systems such as mp3 players, In certain environments, the
+use of C<malloc> is either prohibited due to its nondeterministic nature with
+regards to operation time or simply not implemented. In this case, the
+structure needs to be visible in all locations where it is allocated, so a
+macro such as the following might help:
+
+  #define MEW_LOCAL(TYPE, NAME) TYPE NAME##_; TYPE *NAME = NAME##_
+
+Or one could just declare the variable locally and pass its address to its
+operations,
+
+In addition to that, one could name all members "C<membername_>" (trailing
+underscore) in order to be able to easily spot violations of the principle,
+visually. It also makes the author of client code think twice.
+
+=back
+
+
+=head2 The compromise
+
+In C, there are a few ways to speed up and shrink the code without violating
+information hiding. One of these is the use of macros. Instead of defining a
+function:
+
+  size_t strLength (ConstString str);
+
+we define a macro doing the same:
+
+  #define strLength(s)  (s)->len
+
+This has disadvantages, as well. Now, you cannot use opaque pointers anymore,
+no longer avoiding ABI breakages and speeding up incremental builds. It is no
+longer type-safe, as you could pass any structure with a C<len> member to this
+macro. It still avoids API breakages, though. This way, you can have some form
+of encapsulation even in speed critical applications.
+
+
+=head2 Information hiding in other languages
+
+I chose C, as I said, because it is most suitable as example for
+encapsulation. This does not mean that other languages do not have equally
+good or even better ways to encapsulate data.
+
+=over
+
+=item C++
+
+has the I<pimpl> idiom. This idiom is basically the same as using opaque
+pointers in C, except that the accessor functions are wrapped in a class,
+making the code look more object oriented.
+
+=item Java
+
+tends to make all variables private and provide getters and setters for each
+of them. C has no notion of private, protected or public. These modifiers make
+the code look even more object oriented. Due to the fact that Java has no
+references in the C++ sense, accessors cannot be made as natural as in C# or
+C++.
+
+=item C#
+
+has properties, which syntactically behave exactly like public member
+variables, but in fact execute small (or large) portions of code to validate
+input or invoke events on modification.
+
+=item Perl
+
+Perl's objects are references C<bless>ed into a package. This means that all
+methods called on the object are looked up in that package. Most common
+references are hash references, allowing named data members.
+C<< $ob->{member} >> is a way to access this data, but it is discouraged.
+Instead, methods are used: C<< $ob->method >>.
+
+=back

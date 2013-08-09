@@ -1,0 +1,579 @@
+=head1 Why not to use Java
+
+Java is a fast byte-code compiled language with garbage collection and a simple
+syntax. Its simplicity, though, leads to many inelegancies, some of which I will
+describe here.
+
+=over
+
+=item No undefined behaviour? (@ub)
+
+Actually, there is. If you create objects of a class with finalisers that create
+objects with finalisers and call C<System.runFinalizersOnExit(true)> before
+exiting, the behaviour is undefined. Will the JVM exit? Will it keep on creating
+objects and destroying them right away due to the JVM exiting? The JLS (Java
+Language Specification) does not specify this.
+
+=item Overuse of inheritance (@inheritance)
+
+Due to Java's lack of proper generics or templates, programmers are forced to
+use inheritance for everything. Where in C++, one could write
+
+=begin code CPP
+
+   template<typename CollectionT, typename T>
+   void add_item (CollectionT collection, T element)
+   {
+     collection.add (element);
+   }
+
+=end code CPP
+
+and it would work for all types that provide a member function called C<add(T)>,
+in Java, we have to inherit from C<java.util.Collection&lt;T&gt;> and write
+
+=begin code Java
+
+   public <T> void addItem(Collection<T> collection, T element)
+   {
+       collection.add(element);
+   }
+
+=end code Java
+
+=item No proper generics (@generics)
+
+Apart from the issue explained in the point above, generics in Java are pretty
+useless. The only thing they add to the language is some sort of type-safety.
+Type-safety is pretty much overrated, in my opinion, but that's not relevant
+now. In the Java runtime, generics do not exist. This simple fact limits their
+use enormously. Think about the following simple factory function:
+
+=begin code Java
+
+   public <T> T create() {
+       return new T();
+   }
+
+=end code Java
+
+This code does not compile, because T can not be instantiated. The reason for
+this is explained in 4.6 of the JLS. Types are erased. They do not exist at
+runtime. Therefore, it is not possible to create new objects or arrays of them.
+The Java solution is to pass in a non-generic factory class that instantiates
+the object. What this factory function was supposed to deliver, though, was a
+generic factory class. A factory class you can pass in could be Class&lt;T&gt;.
+The code could be written like this:
+
+=begin code Java
+
+   public <T> T create(Class<T> cls) {
+       return cls.newInstance();
+   }
+   // Or, for arrays:
+   public <T> T[] createArray(Class<T[]> arraytype, int size) {
+       return arraytype.cast(Array.newInstance(arraytype.getComponentType(), size));
+   }
+
+=end code Java
+
+Note that you can not create arrays of primitive types this way, only of the
+boxed versions. Another issue with Java generics is that due to type erasure,
+only class or interface types may be used inside a generic. The effect of this
+is that collections such as C<Vector&lt;Integer&gt;> do not hold the integer
+values in a contiguous chunk of memory, encouraging fragmentation of memory.o
+The C<Integer>s are allocated in various places on the heap.
+
+It is also not possible to write code like this:
+
+=begin code Java
+
+   public <T> void func(T o) {
+       o.method();
+   }
+
+=end code Java
+
+While using C++ templates, this would be possible for all types T that define a
+member function C<method()>. In Java, the solution to this is:
+
+=begin code Java
+
+   public <T extends TypeWithMethod> void func(T o) {
+       o.method();
+   }
+
+=end code Java
+
+This pretty much repeats the point above, but emphasises more on the generics
+part of the issue whereas the other point emphasises on the inheritance part.
+
+=item Garbage collection (@gc)
+
+Garbage collection is often used as the killer argument for modern imperative
+languages such as Java and C#. In such languages, programmers tend to think that
+they don't need to take care of memory. This is not true. You still need to be
+careful with object allocation. For one, it is expensive to create an object. It
+involves a call to the C<new> instruction for allocation and then multiple calls
+to virtual methods (the constructor chain). More importantly, though, is the
+fact that objects are not reused. Java does not put its locally used objects on
+the stack, so this space is not reused. Consider the following code:
+
+=begin code Java
+
+   for (Collection<Item> c : collections) {
+      Vector<Item> v = new Vector<Item>();
+      for (Item i : c) {
+         v.add(i);
+      }
+      doSomething(v);
+   }
+
+=end code Java
+
+In this code, a new C<Vector&lt;Item&gt;> object is created every time and
+discarded for the next outer loop iteration. This code could be rewritten as
+
+=begin code Java
+
+   Vector<Item> v = new Vector<Item>();
+   for (Collection<Item> c : collections) {
+      for (Item i : c) {
+         v.add(i);
+      }
+      doSomething(v);
+      v.clear();
+   }
+
+=end code Java
+
+This is not by itself bad about Java but it shows a problem many don't
+acknowledge: Even with a GC'd language, you need to take care of memory
+allocations.
+
+Another issue with garbage collection is the non-determinism of your runtime.
+There is no way to know when the garbage collector will next run. It may happen
+during a speed-critical part of your application. Imagine running a game server.
+When a player is switching maps, it is fine to free objects no longer used
+because they were on the previous map. During a fight, however, it would be
+rather annoying if the server paused due to a GC run. Because of this, I don't
+consider GC'd languages to be real-world ready. At least, it is extremely
+difficult to write real-time software.
+
+You can of course call C<Runtime.getRuntime().gc()>, but this is entirely
+non-deterministic, as well. The C<gc()> call may or may not free memory. The
+decision is still up to the collector.
+
+To be usable in real-time applications such as the described game server, being
+able to suspend the GC temporarily in speed-critical moments would help.  Java
+does not supply this kind of control over the GC. The D programming language
+does and is therefore more usable for such applications.
+
+Also see the point on RAII later on why garbage collection is bad.
+
+=item Object orientation (@oop)
+
+A language like Java is supposed to propagate object-oriented design. What it
+really does it make people think that when you write buzzwords like C<class>,
+C<extends> and C<new> or use a dot ('.') as method and field access operator,
+you are writing object-oriented code. It is my strong opinion that all of these
+do not have much to do with object-orientation.
+
+People seem to think that when a language such as Java enforces this kind of
+object-orientation, the produced code is automatically object-oriented. They may
+have forgot the keyword C<static>.
+
+Why does Java have primitive types? For speed? What are optimisers for? If it
+really wants to be so object-oriented, then why are C<int>s no objects. Why
+can't I do C<i.toString()>? I have to do C<Integer.valueOf(i).toString()> or
+C<Integer.toString(i)>. So much for consistency in the language. I thought
+everything had a C<toString()>. No, primitives don't.
+
+=item Slow (@slow)
+
+I once had a discussion with a Java advocate on Java's speed. He said, Java can
+lock and unlock a mutex much faster than pthreads. Funny thing, since Java's
+native threads implementation (hpi) on linux actually uses pthreads.  What he
+meant was Java's green threads. Green threads, however, gain nothing but
+asynchronic execution of code. They are comparable to coroutines and
+continuations in Python or Perl.
+
+A few numbers from local tests with Sun's JDK 1.6.0_06:
+
+=over
+
+=item A method call is 7 times slower than direct access.
+
+=item A C<synchronized> call is 8 times slower than a normal method call.
+
+=item A C<final> call is 10% faster than a normal method call.
+
+=back
+
+Note that Java L<can be fast|why-use_java.xhtml#jvm>.
+
+=item "Fail-Safe" (@failsafe)
+
+It is impossible to disable a method or code block by adding a C<return> or
+C<continue> statement due to I<14.21 Unreachable Statements>: "It is a
+compile-time error if a statement cannot be executed because it is unreachable."
+
+On the other hand, Java is not fail-safe at all.
+
+=over
+
+=item Floating point comparison
+
+The primitive types C<float> and C<double> have C<operator==> defined but it is
+entirely useless. Floating point numbers should never be compared using the
+equality operator. Why does Java, the so-much-checked language allow this?
+
+=item No C<const>
+
+The lack of a C<const> keyword in Java leaves many possiblities to error. While
+Java is always trying to be as fail-safe as possible, it fails to prevent
+modifying a value that is supposed to remain constant. The C<final> keyword
+works like the top-level C<const> in C. A C<final> method, however, has nothing
+to do with constness. It means it can not be overridden (I consider this an
+inconsistency). C can prevent a function from modifying its argument or a caller
+from modifying a return value. C++ can prevent non-C<const> member functions
+from being called on a C<const> object.
+
+=begin small
+
+Note that "top-level" const in C means "Object* const x". The pointer itself can
+not be modified, but the pointee (the object being pointed at) can.
+
+=end small
+
+=begin small
+
+Also note that even though "final" is <em>like</em> "const", it is not exactly
+the same. In Java, you can leave a final variable uninitialised on declaration
+and assign it <em>once</em> later. For example, a static final field can be
+assigned once in a static { } block but then it works like C's top-level const.
+
+=end small
+
+=back
+
+Also, consider the following code snippet:
+
+=begin code Java
+
+    public static void main (String[] argv) {
+        int i;
+        if (argv.length >= 0) {
+            i = 5;
+        }
+        System.out.println(i);
+    }
+
+=end code Java
+
+The compiler errors out, saying that i "may not have been initialised". Is that
+so? Array lengths can never be less than 0. If our compiler is smart enough to
+prevent compilation of this code, it should be smart enough to know that C<i> is
+actually always initialised. So, what we have to do is zero-initialise the
+variable manually. That leads to another question: why are locals not
+zero-initialised? Is that for speed? Class fields are zero-initialised. Why is
+that? Isn't speed just as important there as it is with locals? I call that an
+inconsistency, which leads us to the next point.
+
+=begin small
+
+Admittedly, this is a rather useless condition for setting i, but there are
+real-world examples where this imposes a really annoying issue. Java programmers
+will know.
+
+=end small
+
+=item It compiles? Ship it!
+
+The above mentioned "fail-safety" makes programmers think that if their compiler
+does not complain (and even Eclipse shuts up), their code is correct.  This may
+be true from a syntax point of view, even some semantic checks may have been
+performed, but the code may still not do what they expected. Even a seemingly
+fail-safe language such as Java is not a mind-reader.
+
+=item Inconsistent (@inconsistent)
+
+Java has several inconsistencies in its design. Whether to call them
+inconsistencies, inelegancies or features is up to the reader. I consider these
+to be inconsistencies.
+
+=over
+
+=item C<synchronized> methods
+
+Java does not support multiple inheritance, because it is "bad". Java does not
+support default method arguments because they are "bad". C<synchronized> methods
+are "bad", too, so why do they exist?
+
+=item Java Language Specification 4.3.1: "An object is a class instance or an array."
+
+Why are arrays objects? They have a C<length> field and are passed by reference,
+but they are not class instances. You can not inherit from arrays but you can
+put them into a Collection. Array types are classes, arrays are instances of the
+array type class. Why does 4.3.1 special-case the object definition?
+
+Note that arrays are indeed classes as can be seen from their C<.getClass()>
+method, which returns something like "[I" for C<int[]>. They inherit directly
+from C<java.lang.Object> and implement C<java.lang.Cloneable> and
+C<java.io.Serializable>.
+
+=item C<finally> is always executed
+
+This is not inconsistent with the specification, but inconsistent with common
+belief. The C<finally> block is executed when the C<try> block exits. This means
+if it does not exit, for instance due to a call to C<System.exit()>, C<finally>
+is not executed.
+
+=item Always use getters and setters
+
+Java wants data hiding by using getters and setters? The C<java.awt.Point> class
+allows direct access of the public fields C<x> and C<y>. Arrays have a C<public
+final int length> that can be directly accessed (but obviously not modified due
+to it being final).
+
+=item No operator overloading
+
+..except for arrays, C<String>. Arrays and C<String> define C<operator[]>.
+C<String> defines C<operator+> and C<operator+=>. C<Long>, C<Integer>, C<Short>,
+C<Byte> and C<Character> define all arithmetic operators except arithmetic
+assignment (such as +=). In order to execute operators where one operand is of
+primitive type, the class is unboxed, which means the value is extracted and
+used as operand to the operation. This does not happen if both operands are of
+class type. In other words, C<Integer += int> works, C<int += Integer> works but
+C<Integer += Integer> does not work. C<Integer &lt; Integer>, however, works and
+so do C<Integer + Integer> and all other arithmetic operations. The C<Boolean>
+class overloads C<operator!>.
+
+=item Unreachable code is not allowed (14.21)
+
+Except in C<if (false) { }> statements, which is Java's attempt to emulate
+compile-time conditionals such as the ones provided by a preprocessor. This
+exception does not hold for C<while (false) { }>.  Consider code like this:
+
+=begin code Java
+
+   while (true) return;
+   System.out.println("Unreachable"); // this statement is unreachable and an error
+   // but
+   if (true) return;
+   System.out.println("Unreachable"); // this statement is unreachable but not an error
+
+=end code Java
+
+Note that this behaviour is specified by the JLS. I do think, though, that this
+is inconsistent.
+
+=back
+
+=item No RAII possible (@raii)
+
+An important pattern in languages such as Perl and C++ is RAII, which stands for
+"Resource Acquisition Is Initialisation". It basically means that objects
+acquire resources in their constructor and release it in their destructor. A
+good example of this is lock acquisition and release:
+
+=begin code CPP
+
+   void function (int i)
+   {
+     mutex::locker mlock (this->mtx);
+     check (i);
+     this->number += i;
+   }
+
+=end code CPP
+
+This code locks a mutex and unlocks it whenever the function returns. This may
+happen on exceptions or on normal return. The C<check> function may throw an
+exception if C<i> is wrong. We don't have to care about that here. In Java, we
+do:
+
+=begin code Java
+
+  void function(int i) throws Exception
+  {
+      this.mtx.lock ();
+      try {
+          check(i);
+      } finally {
+          this.mtx.unlock();
+      }
+      this.number += i;
+  }
+
+=end code Java
+
+In the code above, the issue is not that apparent, but when you start playing
+with file I/O, you may need a cascade of up to three C<try>'s and C<catch>es in
+order to catch all exceptions thrown. Opening, writing and closing may throw. A
+lot of typing work that could have been saved by RAII.
+
+=item No proper compiler diagnostics (@diag)
+
+The default Java compiler's diagnostics are pretty sparse. You have to ask for
+specific warnings using -Xlint:(unchecked|path|serial|finally|fallthrough).
+Even this set of additional warnings is not very complete. It does not, for
+instance, warn about unused fields in a class. It does not warn about an enum
+possibility not being cased in a switch. Even with the warnings on, it is often
+unclear what exaclty needs to be done to fix the warning. "unchecked call to
+add(E) as a member of the raw type java.util.ArrayList". If you want decent
+diagnostics, you need to use something like the Eclipse compiler.
+
+=item Almost enforced writing of documentation (@javadoc)
+
+This may by itself not sound bad, but it leads to comments such as these:
+
+=begin code Java
+
+   /**
+    * Returns the X coordinate of this <code>Point2D</code> in
+    * <code>double</code> precision.
+    * @return the X coordinate of this <code>Point2D</code>.
+    * @since 1.2
+    */
+   public abstract double getX();
+
+=end code Java
+
+Breaking up the description:
+
+=over
+
+=item It returns the X coordinate
+
+Who would have thought that? Saying that C<getX()> returns the X coordinate is
+really enlightening, isn't it?
+
+=item The X coordinate it returns belongs to the class C<Point2D>
+
+Right, the fact that we are looking at the documentation of C<Point2D> might
+have been ignored or we could have missed that when searching for the
+documentation.
+
+=item It returns those in C<double> precision
+
+Is this for people who don't see the C<double> part of the method signature?
+
+=item It returns the X coordinate of this C<Point2D>
+
+Oh, really?
+
+=item The method exists since Java 1.2
+
+Okay, that's fair, it means I can't use it with a pre-1.2 Java compiler and
+development kit.
+
+=back
+
+Enforced documentation writing leads to a lot of text saying next to nothing.
+The only piece of information that might be of value to us is the @since
+directive. The rest is 100% redundant. Why didn't they say it was C<abstract>?
+That's I<really> important, since we can't read method signatures, right?
+
+=item "Write once, run everywhere" (@wore)
+
+This is not true at all, especially when using JNI. Even without JNI, Java code
+behaves differently on different platforms. Most notably is the GUI with AWT
+where closing a window on Linux needs different code than for Windows.  Right
+clicking elements in a Swing GUI also behaves differently on Linux than on
+Windows.
+
+=item No auto-expanding heap (@heap)
+
+Unlike applications on POSIX systems (and possibly on Windows, as well), the
+amount of memory granted to the application is limited and not auto-expanding.
+This may not be a bad idea for server applications where memory has to be shared
+by multiple processes, but when using the Eclipse platform with certain plugins,
+you need to manually raise the maximum amount of memory granted using the
+C<-Xmx> option.
+
+In theory, the application may never require more than the default 256MB of
+heap, but due to Java being a garbage collected language, it often does.
+
+=begin small
+
+Note: starting with Sun HotSpot Java 1.4, it is possible to enabled
+auto-expanding heap using the <span class="code">-XX:+AggressiveHeap</span>
+option on startup.
+
+=end small
+
+=item No "rethrow" (@rethrow)
+
+In Java, it is not possible to throw the same exception, preserving the stack
+trace. In C++, we could do:
+
+=begin code CPP
+
+   try {
+     function ();
+   } catch (exception const &e) {
+     do_some_cleanups ();
+     throw;
+   }
+
+=end code CPP
+
+In Java, we have to create a new C<Exception> object and pass the old one as
+argument:
+
+=begin code Java
+
+   try {
+       method();
+   } catch (Exception e) {
+       doSomeCleanups();
+       throw new Exception(e);
+   }
+
+=end code Java
+
+=item Everything passed by value (@pass_by_value)
+
+This means you cannot pass an C<int> and expect it to be modified. Neither can
+you pass a reference to an object and expect it to be modified. Returning an
+object is in fact returning a reference to this object by value. This means it
+is impossible to write an overloaded C<increment> method that takes an argument
+and increments it. You can of course work around this by letting the increment
+function return the value incremented. This, however, creates a new object each
+time, making it unfeasible to use.
+
+=item Backwards compatibility limits innovation (@compat)
+
+Due to the fact that Java needs to be binary compatible with at least JDK 1.1.x,
+new technologies are often braked down. Generics cannot be properly implemented
+the way they are in .NET. Generics need to be implemented with type erasure in
+order to preserve backwards compatibility. The reflection API must remain
+compatible with 1.1.x. Classes from Java 1.4 need to be able to load classes
+from Java 7.
+
+=item C<javac> optimises poorly (@opt)
+
+The Java compiler has a very poor optimiser. It leaves all heavy optimisation to
+the runtime environment, which does peep-hole optimisation on bytecode and code
+inlining.
+
+=item Programcode is not a data structure (@codestruct)
+
+In Java, it is not possible to modify the code on the fly, for example by
+changing the AST at runtime as it is possible in languages such as Lisp. This is
+a problem with many curly-bracket languages.
+
+=back
+
+=head2 Links
+
+=over
+
+=item L<The Perils of JavaSchools|http://www.joelonsoftware.com/articles/ThePerilsofJavaSchools.html>
+
+=item L<The Java Hall of Shame|http://www.cs.arizona.edu/projects/sumatra/hallofshame/>
+
+=item L<The Java Language Specification, Third Edition|http://java.sun.com/docs/books/jls/third_edition/html/j3TOC.html>
+
+=back

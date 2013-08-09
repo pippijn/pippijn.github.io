@@ -1,0 +1,139 @@
+=head1 Why to use C++
+
+These are a few arguments why to use C++.
+
+=over
+
+=item High performance (@performance)
+
+C++ can be very fast. It can be very lightweight and execute code with very
+high performance. Also, modern compilers do an excellent job on optimising
+code. They can generate assembler code specific to a processor and optimise
+for specific branch predictors or even models of branch predictors.
+
+=item Little magic (@nomagic)
+
+The only things magical in C++ are the operators on built-in types. The
+operators on strings such as less-than comparison, equality comparison and
+assignment are all well-defined in the C++ standard library. They can be
+inspected and modified at will. It would be even nicer if it were possible to
+override the operators for built-in types within certain classes or namespaces.
+
+=item Pragmatic (@pragmatic)
+
+Being a multi-paradigm language, C++ adapts to real-world problems with fairly
+little effort. Functional programming can be achieved with function pointers,
+upcoming lambda expressions (which are currently emulated with function-local
+classes). Object oriented is built in using classes and full inheritance.
+Procedural programming is done with functions.
+
+=item Flexible (@flexible)
+
+With sufficient effort, it can be made to do almost anything any other
+language can do. This effort may be enormous, but it is possible.
+
+=item Unrestrictive (@unrestrictive)
+
+Many see this as a negative aspect of a language, but in C++ you are able to
+force your machine into doing exactly what you want. You are not limited by
+the language, only by your skill and imagination. Even though you may only
+abuse the language in a very small area (my C<hash_table> implementation
+abuses C++ in exactly one line), this small amount of abuse may be essential
+for performance (that single line makes the code much more efficient).
+
+=item Easy to interface with other languages (@interop)
+
+=item Templates (@templates)
+
+The C++ C<template> system is a very powerful code generator.
+
+=item Choices (@choices)
+
+Instead of enforcing checks, C++ allows optional checking for runtime errors
+such as invalid array accesses, buffer overflows, invalid pointer dereferences
+and more. These checks slow down the program in the same way automatically
+checked languages like Java are slowed down. The difference is that in C++
+you have the choice.
+
+This is one of the main strengths of C++: it leaves many things open to the
+programmer. They can choose to use automatic memory management or to manually
+free all used memory. They can decide where to store the created objects.
+Choices include the stack, the heap and a specialised object allocator.
+
+=item Standard library is to the point (@stdlib)
+
+The C++ standard library is much more limited than the Java class library, but
+it is much more to the point. It provides tools that are used in almost any
+program. Features include data structures, algorithms, streams and simple
+template metaprogramming tools. The GNU C++ library is 7MB which is tiny compared
+to the 105MB of the Java class library. This limited set of features make C++
+much more portable than Java. C++ can be implemented on platforms that provide
+no graphical user interface. While the Java core language can be implemented
+on such platforms, the class library can't.
+
+=item Operator overloading (@operators)
+
+This is a very important feature and is used to create algorithms that operate
+on pointers and primitive arrays as well as classes. It also allows us to
+create used defined datatypes that act like built-in types. With C++, it is
+possible to define a C<rational> class that has all mathematical operators
+defined and can be used just like a normal floating point number.
+
+=item Multiple inheritance (@mi)
+
+Although arguably a bad feature, multiple inheritance makes many things a lot
+easier. It can be abused, but it can also be used right. An example I can give
+here is inheritance to gain memory allocation semantics. For instance, if you
+write a high performance slice allocator that defines C<operator new> and
+C<delete>, inheriting from it will make the class automatically and
+transparently allocated using this slice allocator:
+
+=begin code CPP
+
+   template<typename T>
+   struct slice_allocated
+   {
+     void *operator new (size_t);
+     void operator delete (void *);
+   };
+   struct node : node_base, slice_allocated<node>
+   {
+     // some code here
+   };
+
+=end code CPP
+
+Here, multiple inheritance is required to inherit the code from the allocator
+as well as the code from C<node_base>. Things like that would not be possible
+with single inheritance.
+
+=item Scoped resource management (@raii)
+
+This allows for the RAII design pattern. It acquires a resource when
+initialising an object and releases it when destroying the object. See the
+L<Why not to use Java|why-not-use_java.xhtml#raii> page for an example.
+
+=item C<const>-correctness
+
+C++ can, using the C<const> keyword, help the programmer prevent modification
+to unwritable objects. This can prevent accidental modification of actual
+read-only data such as string literals but also indicate what a programmer may
+do with an object. As always, there are ways to work around the constness of
+an object using C<const_cast> but that is rarely a good idea and may result in
+L<undefined behaviour|why-not-use_cpp.xhtml#ub>. Member functions marked
+C<const> indicate that those functions do not modify the data structure they
+operate on. This is both documenting and error preventing. Using top-level
+C<const> on function parameters prevents assignment of such (and therefore
+works like Java's C<final> keyword).
+
+The C<const> keyword helps the design-by-contract strategy.
+
+=back
+
+=head2 Links
+
+=over
+
+=item L<The Java (not really) Faster than C++ Benchmark|http://bruscy.republika.pl/pages/przemek/java_not_really_faster_than_cpp.html>
+
+=back

@@ -1,0 +1,132 @@
+=head1 Marriage in China
+
+This is supposed to be a short introduction to Chinese wedding customs from my
+personal (Dutch male) point of view and it is certainly not a universal truth.
+I also don't want to go into detail of the actual wedding, but rather explain
+all the things before and after getting married. When I write in present tense,
+I am talking about customs, whereas past tense indicates personal experience.
+
+=head2 Asking for her hand
+
+In traditional European families, it used to be customary for the man to ask
+the woman's father for her hand. Her father would decide on grounds of wealth
+and future prospects, whether that man is suitable for his daughter. In China,
+this is still customary, but slightly different.
+
+When a couple is serious about their relationship, the man will invite the
+woman's parents for dinner. On the first encounter, the man should offer a
+cigarette to both parents, father first. Before that, the man should greet both
+parents separately, shake hands with both and of course, smile. On parting, he
+should give the parents a present. In my case, this was a big box of cigarettes
+(250 CNY or $38) for her father, because he really likes to smoke. If you don't
+know anything, fruits are always nice. If you decide to buy fruits, buy a
+B<lot>. At least one full bag of different fruits.
+
+The dinner should take place in a restaurant. It should not be too cheap but
+also not too expensive (Chinese norms). Your girlfriend will know what is
+appropriate. I paid around 150 CNY (about $23 and thus much cheaper than the
+cigarettes I bought as a present) for a rich dinner out with five people: my
+girlfriend, her sister, her parents and me.
+
+When the waiter brings the menu, let her father choose a wine. In my case, he
+didn't want any wine, so we ordered a bottle of sprite. The restaurant served
+tea. I strongly recommend going to the restaurant you are planning to take her
+parents to beforehand. That way, you can find out what kind of food they serve
+and what is likely to be their taste. This will prevent awkward situations in
+which you have no idea what the food you are ordering really is. You might be
+ordering fish brains (the most disgusting thing I ever ate in my life). Many
+restaurants offer menus with photographs, making the decision easier. By the
+way, if you are offered the head of a fish, B<eat it>, no matter how disgusting
+it is. It is a great honour to eat it.
+
+During dinner, her parents will ask many questions about what you are planning
+to do with their daughter. Do you want to marry her? Where do you want to live?
+Obviously, they will want both of you to live in their hometown. I expected
+them to ask me about my job and study and financial status, but they never
+(even until now), they never asked. Perhaps they assume that the equation
+C<foreign = rich> always holds.
+
+Apparently, it is common for her parents to visit your apartment after dinner,
+to discuss some more. My girlfriend had expected this and moved all her
+personal belongings into bags under my bed, before we went out. I didn't know
+what they were talking about in my room, but it took a long time and I had a
+hard time looking interested while they were discussing.
+
+At the end, her parents left with a handshake.
+
+=head2 Engagement
+
+This is an area where I haven't been, yet. This is a collection of explanations
+from my girlfriend, her sister and her parents.
+
+Engagement in China is very important. It is even more important than the
+wedding itself. Basically, when a couple is engaged, it means they B<will> get
+married. The wedding itself is just a formality and a dinner involving a
+wedding dress and a lot of gan bei (cheers). Expect to be drunk.
+
+When a man wants to get engaged with a woman, he needs to give a lot of money
+to her parents, at least 10K or 20K CNY ($3,000) and that will probably come
+from his parents, as no young Chinese man has that kind of liquid funds. This
+money will be used to buy things for the wedding, such as the wedding dress.
+Don't think, however, that the woman's parents will take care of everything.
+No, they will just use the man's money to organise the woman's side of the
+wedding. The man still needs to pay for his own stuff, as well.
+
+Traditionally, her parents will also need to visit your hometown for
+inspection. In my case, being a foreigner, this part is likely to be scratched
+from the TODO list (we can't expect her parents to make the trip to Germany,
+can we?). However, even as a foreigner, the man has one huge obligation: he
+needs to provide a house. A rented apartment won't do, he needs to own one. I
+was told the amount of money I should expect to spend on this was 300K CNY
+(around $46,000). In China, this house is paid for by the man's parents.
+
+=head2 Marriage
+
+After getting married, the couple will move to their new house, but probably
+just live in it for about 2 to 4 weeks per year, during the spring festival.
+The rest of the time, someone else lives in it, to take care of reparations,
+cleaning, etc. Who this someone is, is unclear. Most of the time, someone in
+the family is willing to move there, but they need to move out when the couple
+has children.
+
+Having children is an interesting subject. When the couple has children, these
+children will live in their house, while the couple lives somewhere else (in a
+big city, to earn money). The man's parents will take care of the offspring.
+Naturally, the question arises, who will live in the man's parents' old
+house? Usually, this means his parents will separate (not officially, but they
+will live in separate houses). His mother will live in the man's house and his
+father will stay behind in their own house (possibly together with B<his>
+parents).
+
+=head2 Summary and calculations
+
+=over
+
+=item The man's family needs to pay for the wedding (20K).
+
+=item The man's family needs to buy a house (300K).
+
+=item The man's family will live with the couple.
+
+Thus, the couple needs to earn enough money to provide for themselves and his
+parents.
+
+=item The woman's family doesn't need to pay for anything, but needs the money.
+for when they are old.
+
+=item The average income per person in China is 12K CNY per year.
+
+Thus, saving for a house will take at least 25 years of saving B<every penny>.
+
+=back
+
+Now, I see one big flaw in the system. Think about what happens if a man has a
+son? First, the man's family will need to pay for the house the man will live
+in. Then, the man will need to provide for himself, his wife and his parents.
+Then, when the couple has a son, the man needs to pay for his son's education.
+And here comes the doozie: the man has to buy a house for his son. How on earth
+is he supposed to do that while providing for two families? I don't have an
+answer to that, yet. Bottom line: if you are a man and have a son, you're
+fucked.
+
+I'm curious to see what will come on my path.

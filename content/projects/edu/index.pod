@@ -1,0 +1,4 @@
+=head1 Educational Software
+
+Projects in this category help humans learning new things and revising existing
+knowledge.

@@ -1,0 +1,4 @@
+=head1 Robotics
+
+These are some projects related to robotics. At this time, I am mostly
+interested in autonomous navigation of wheeled robots.

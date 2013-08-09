@@ -1,0 +1,17 @@
+=head1 Integer types
+
+Fix the type of C<sizeof>:
+
+sizeof is currently typed unsigned int but should be C<size_t>, which is
+platform dependent and should be handled as such in the compiler probably by
+adding an internal type representation similar to that of unsigned int
+(C<uint_type>) called C<size_type> which will be C<uint_type> or C<ulong_type>
+depending on what platform it compiles for.
+
+The compiler is currently full of assumptions.  Those assumptions should be
+factored out into platform configuration files.
+
+Maybe add a box type for C<intptr_t>-style boxes. Currently this is long, but
+long isn't required to be able to hold pointers. C<intptr_t> is also not
+required to exist, but for generics to work the way they currenty do, we need
+int -> ptr at the C level.

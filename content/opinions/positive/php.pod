@@ -1,0 +1,11 @@
+=head1 Why to use PHP
+
+=over
+
+=item Easy to learn
+
+=item Web oriented
+
+=item Supported by web space providers
+
+=back

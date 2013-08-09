@@ -1,0 +1,33 @@
+=head1 Projects
+
+These pages contain some information on my personal projects. Not all my
+projects also have a page here. For all public projects, visit
+L<the git repositories|http://xinutec.org/git>.
+
+=over
+
+=item L<Developer tools|devel>
+
+Tools for software development. Highly specialised to my needs.
+
+=item L<Games|games>
+
+Computer games I play or used to play and now write stuff for.
+
+=item L<Languages|lang>
+
+Programming languages and natural languages.
+
+=item L<Network applications|net>
+
+Projects about communicating software.
+
+=item L<Robotics|robotics>
+
+Autonomous systems projects.
+
+=item L<Systems programming|system>
+
+Low level kernel projects.
+
+=back

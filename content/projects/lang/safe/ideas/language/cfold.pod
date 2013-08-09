@@ -1,0 +1,4 @@
+=head1 Constant folding
+
+Implement static folding of integral constants so they can be used in constant
+expressions.

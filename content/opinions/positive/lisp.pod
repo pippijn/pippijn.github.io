@@ -1,0 +1,9 @@
+=head1 Why to use Lisp
+
+=head2 Links
+
+=over
+
+=item L<Lisp as an Alternative to Java|http://www.flownet.com/ron/papers/lisp-java/lisp-java.pdf>
+
+=back

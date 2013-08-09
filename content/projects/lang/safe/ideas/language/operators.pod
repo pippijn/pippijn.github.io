@@ -1,0 +1,17 @@
+=head1 Operators
+
+Pass operators to functions, for example (pseudo-code):
+
+=begin code CPP
+
+    apply ((+), 2, 3) == 5;
+  where
+    long operator+ (long, long);
+    long apply (long (@f)(long, long), long v1, long v2)
+    { return f (v1, v2); }
+
+=end code CPP
+
+For this, operator stubs need to be generated.
+
+Parse things like C<< a-&gt;[3] >> into C<(*a)[3]>.

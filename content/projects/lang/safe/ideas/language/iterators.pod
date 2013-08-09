@@ -1,0 +1,31 @@
+=head1 Iterators
+
+Add built-in support for iterators. We could use C++-style iterators:
+
+=begin code CPP
+
+   let i = string_iterator ("hello");
+   while (i) {       // conversion to bool acts like hasNext
+      putchar (*i);  // * operator yields the current item
+      ++i;           // perhaps, similar to C++ iterators,
+                     // skips to the next element
+      i += 2;        // skips 2 elements
+   }
+
+=end code CPP
+
+The decrement and subtraction operators can be implemented analogically.
+
+Or we could take some ideas from the Sather programming language.
+
+=begin code CPP
+
+   while {
+      let c = string_iterator! ("hello");
+      putchar (c);
+   }
+
+=end code CPP
+
+In this example, incrementing or decrementing the iterator is not possible.
+Maybe we don't need that. How to do this in Sather? This needs some thought.

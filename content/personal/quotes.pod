@@ -1,0 +1,4 @@
+=head1 Interesting Quotes
+
+"You cannot do a kindness too soon because you never know how soon it will be too late."
+-- Ralph Waldo Emerson

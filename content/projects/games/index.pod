@@ -1,0 +1,4 @@
+=head1 Games
+
+This section contains projects related to games. They may be entire games, just
+clients for games or add-ons to games.
