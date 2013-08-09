@@ -37,7 +37,7 @@ for (@ARGV) {
 
    my $vars = {
       title   => $title,
-      menubar => (View::HTML::menu "/~pippijn/home/$cur", $menubar, '/~pippijn/home/'),
+      menubar => (View::HTML::menu "/home/$cur", $menubar, '/home/'),
       content => $content,
       updated => (Date::Format::time2str "%C", (stat $_)[9]),
    };
