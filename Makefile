@@ -8,7 +8,7 @@ build: $(OUTPUTS)
 upload: build
 	rsync -avP --delete static home ra:public_html/
 
-home/%.html: content/%.pod generate $(shell find lib -type f)
+home/%.html: content/%.pod generate $(shell find lib -type f) home/wrapper.tt
 	@mkdir -p $(@D)
 	./generate $< > $@
 
