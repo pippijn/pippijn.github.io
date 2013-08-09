@@ -12,14 +12,16 @@ use View::POD::TOC \@View::POD::toc;
 
 my $template = new Template;
 my $menubar  = do 'menu.pm';
-my $wrapper  = 'home/wrapper.tt';
+my $wrapper  = 'lib/wrapper.tt';
 
 sub parse {
    if (/\.pod$/) {
       my $parser = new Pod::POM;
       my $pom = $parser->parse_file ($_);
+
+      undef @View::POD::toc;
       View::POD::TOC->print ($pom);
-      View::POD->print ($pom);
+      return View::POD->print ($pom);
    } else {
       die "Unknown file type: $_"
    }
@@ -28,7 +30,9 @@ sub parse {
 for (@ARGV) {
    my $content = parse;
 
-   my ($cur) = m|^content/(.+)\.\w+$|;
+   my ($page) = m|^content/(.+)\.\w+$|;
+
+   my $cur = $page;
    $cur =~ s/\/index$//;
 
    my $title = $cur;
@@ -46,5 +50,7 @@ for (@ARGV) {
    $template->process ($wrapper, $vars, \$output)
       or die $template->error;
 
-   print $output;
+   open my $fh, '>', "home/$page.html"
+      or die "home/$page.html: $!";
+   print $fh $output;
 }

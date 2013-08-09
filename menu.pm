@@ -1,5 +1,5 @@
 [
-	[index => "Home"],
+	["Home"],
 	[projects => "Projects", [
 		[devel => "Developer tools", [
 			[autoproj => "Autoproj"],

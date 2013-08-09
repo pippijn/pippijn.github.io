@@ -1,21 +1,30 @@
+# All content files.
 INPUTS	:= $(shell find content -type f)
-OUTPUTS	:= $(patsubst content/%,home/%,$(INPUTS:.pod=.html))
+# POD files.
+PODS	:= $(filter %.pod,$(INPUTS))
+# HTML outputs.
+HTML	:= $(patsubst content/%,home/%,$(PODS:.pod=.html))
+# Additional non-preprocessed content.
+DATA	:= $(patsubst content/%,home/%,$(filter-out %.pod,$(INPUTS)))
 
-build: $(OUTPUTS)
-	find static home -type f -exec chmod 0644 {} ';'
-	find static home -type d -exec chmod 0755 {} ';'
+# Generator script and its dependencies.
+DEPEND	:= generate $(shell find lib -type f) lib/wrapper.tt
+
+build: $(PODS) $(DATA)
+	mkdir -p $(dir $(HTML))
+	./generate $(filter %.pod,$(PODS))
+	find home -type f -exec chmod 0644 {} ';'
+	find home -type d -exec chmod 0755 {} ';'
 
 upload: build
-	rsync -avP --delete static home ra:public_html/
+	@sed -i -e 's|"/home/|"/~pippijn/home/|g' $(HTML)
+	rsync -avP --delete home ra:public_html/
+	@sed -i -e 's|"/~pippijn/home/|"/home/|g' $(HTML)
 
-home/%.html: content/%.pod generate $(shell find lib -type f) home/wrapper.tt
-	@mkdir -p $(@D)
-	./generate $< > $@
-
-clean:
-	rm -r home/*/
-	rm home/*.html
-
+$(DATA): clean
 home/%: content/%
 	@mkdir -p $(@D)
 	cp $< $@
+
+clean:
+	rm -r home

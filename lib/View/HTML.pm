@@ -8,10 +8,19 @@ sub menu {
    my $retval = "<ul>\n";
    for my $submenu (@$data) {
       $retval .= "<li>\n";
-      if ($cur eq $path . $submenu->[0]) {
-         $retval .= "<a id=\"actmenu\">$submenu->[1]";
+      if (@$submenu == 1) {
+         # This branch is only here for the root index.
+         if ($cur eq ${path} . "index") {
+            $retval .= "<a id=\"actmenu\">$submenu->[0]";
+         } else {
+            $retval .= "<a href=\"$path\">$submenu->[0]";
+         }
       } else {
-         $retval .= "<a href=\"$path$submenu->[0]\">$submenu->[1]";
+         if ($cur eq $path . $submenu->[0]) {
+            $retval .= "<a id=\"actmenu\">$submenu->[1]";
+         } else {
+            $retval .= "<a href=\"$path$submenu->[0]\">$submenu->[1]";
+         }
       }
       if (@$submenu >= 3) {
          if (0 or $cur =~ /$submenu->[0]$/ 

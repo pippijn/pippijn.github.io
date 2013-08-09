@@ -69,7 +69,7 @@ excellent Integrated Development Environments such as Eclipse. Even
 implementing code completion in editors such as VIM becomes nearly trivial
 using the reflective features of the language:
 
-=for img /~pippijn/files/img/javavim.png
+=for img javavim.png
 
 =item Good support for concurrency (@concurrency)
 
