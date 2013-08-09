@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Lang / Safe / Ideas / Language / Modules</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Language / Modules"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/aldor">Aldor <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/jmlc">JML</a></li><li>
+<a href="/~pippijn/home/projects/lang/libcdk">CDK library</a></li><li>
+<a href="/~pippijn/home/projects/lang/rasm">Runtime assembler</a></li><li>
+<a href="/~pippijn/home/projects/lang/reflect">Reflect</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe">Safe C <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas">Future ideas <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler">Compiler <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language">Language <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/cfold">Constant folding</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/common-data">Inheritance</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/iterators">Iterators</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/lambda">Lambda</a></li><li>
+<a id="actmenu">Modules</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/operators">Operators</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/overload">Overloading</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/runtime">Runtime <span class="small">[+]</span></a></li></ul></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/xul">XUL Projects</a></li><li>
+<a href="/~pippijn/home/projects/lang/yaccpp">YACC Preprocessor</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Module system</h2>
+<ul><li><a href='#h1'>Initialisation</a></li>
+<li><a href='#h2'>Primary implementation file</a></li>
+<li><a href='#h3'>Initialisation function</a></li></ul><p>
+We need a better module system for several features to become much easier to
+handle, such as:</p>
+<ul>
+<li>
+RTTI</li>
+<li>
+strongly typed precise garbage collection</li>
+<li>
+serialisation</li>
+<li>
+global non-constant initialisation</li>
+</ul>
+<p>
+The already implemented strong static typing means only little work is needed
+to implement this.</p>
+<h3>
+<a id='h1'>Initialisation</a></h3>
+<p>
+In order to register global pointers as GC roots (see <a href='../runtime/gc'>GC</a>), each
+file linked into the final application needs an initialisation function. This
+initialisation must be performed conservatively. That means, every module must
+call the initialisation function of every module it uses.</p>
+<p>
+The initialisation function will be emitted in the primary implementation file.</p>
+<h3>
+<a id='h2'>Primary implementation file</a></h3>
+<p>
+The idea is that a programmer can write something like:</p>
+<pre class="code-block">   <span class="comment">// buffer.h</span>
+   <span class="key1">namespace</span> Buffer {
+      <span class="key3">extern</span> <span class="key3">struct</span> t;
+      <span class="key3">typedef</span> <span class="key3">struct</span> t @T;
+
+      <span class="comment">// constructor</span>
+      <span class="key3">extern</span> T create (<span class="key3">size_t</span> n);
+
+      <span class="comment">// accessors</span>
+      <span class="key3">extern</span> mstring_t data (T self);
+      <span class="key3">extern</span> <span class="key3">size_t</span> length (T self);
+
+      <span class="comment">// mutators</span>
+      <span class="key3">extern</span> <span class="key3">void</span> clear (T self);
+      <span class="key3">extern</span> <span class="key3">void</span> add_char (T self, <span class="key3">char</span> c);
+      <span class="key3">extern</span> <span class="key3">void</span> add_str (T self, string_t s);
+   }
+
+</pre><p>
+and have multiple implementation files, each implementing a semantically
+associated subset of the above functions.</p>
+<p>
+The internal file exposing the buffer's structure:</p>
+<pre class="code-block">   <span class="comment">// buffer-internal.h</span>
+   #<span class="key2">include</span> &lt;buffer.h&gt;
+   <span class="key1">namespace</span> Buffer {
+      abstract <span class="key3">struct</span> t {
+         mstring_t buffer;
+         <span class="key3">size_t</span> pos;
+         <span class="key3">size_t</span> len;
+      };
+   }
+
+</pre><p>
+Implementation of constructors:</p>
+<pre class="code-block">   <span class="comment">// buffer-ctors.c</span>
+   #<span class="key2">include</span> <span class="string">"buffer-internal.h"</span>
+   <span class="key1">namespace</span> Buffer;
+
+   T create (<span class="key3">size_t</span> n) { ... }
+
+</pre><p>
+Implementation of accessors and mutators each go into their separate files.
+Now, if we generate more information about the structures, we need a primary
+implementation file. Currently, we have <span class='code'>extern</span> datatypes that don't
+emit their tags. Maybe we want to keep this, but a slightly more explicit
+module system might be a better solution.</p>
+<p>
+Care should be taken not to deviate from C too much, because porting existing
+C code would become much more work. Perhaps the compiler could support both
+ways, dealing with non-module code as it does now and handle module code with
+all the extras provided by the module system.</p>
+<p>
+Now, about the primary implementation file, we need a syntax to mark that
+file. I currently don't have a good idea on this, but we could abuse any
+keyword for it (or add a new one).</p>
+<pre class="code-block">   <span class="comment">// buffer-ctors.c</span>
+   #<span class="key2">include</span> <span class="string">"buffer-internal.h"</span>
+   <span class="key3">register</span> <span class="key1">namespace</span> Buffer; <span class="comment">// primary implementation file</span>
+
+   T create (<span class="key3">size_t</span> n) { ... }
+
+</pre><p>
+It could be <span class='code'>do</span>, <span class='code'>let</span> or anything else, but I think
+<span class='code'>register</span> fits the idea quite well. Also, it actually does emit a
+function registering GC roots.</p>
+<h3>
+<a id='h3'>Initialisation function</a></h3>
+<p>
+The initialisation function does the following:</p>
+<ul>
+<li>
+Register global pointers (and structures containing pointers) with the GC as roots.</li>
+<li>
+Call initialisation functions for global non-constantly initialised data (like global constructors in C++ and <span class='code'>static { }</span> in Java).</li>
+<li>
+Register <span class='code'>type_info</span> structures with the RTTI subsystem (see <a href='../runtime/rtti'>RTTI</a>).</li>
+</ul>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Tue Jul  5 00:39:33 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

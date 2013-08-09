@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Lang / Safe / Ideas / Runtime / Rtti</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Runtime / Rtti"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/aldor">Aldor <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/jmlc">JML</a></li><li>
+<a href="/~pippijn/home/projects/lang/libcdk">CDK library</a></li><li>
+<a href="/~pippijn/home/projects/lang/rasm">Runtime assembler</a></li><li>
+<a href="/~pippijn/home/projects/lang/reflect">Reflect</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe">Safe C <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas">Future ideas <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler">Compiler <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language">Language <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/runtime">Runtime <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/runtime/gc">Garbage collection</a></li><li>
+<a id="actmenu">Reflection</a></li></ul></li></ul></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/xul">XUL Projects</a></li><li>
+<a href="/~pippijn/home/projects/lang/yaccpp">YACC Preprocessor</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Runtime Type Information (Reflection)</h2>
+<ul></ul><p>
+The RTTI system will benefit from runtime support in addition to the generated
+structures. Ideas for some runtime library functionality:</p>
+<ul>
+<li>
+On module initialisation, type information from that module is registered
+(see <a href='../language/modules'>modules</a>).</li>
+<li>
+Registration can construct additional cached links between structures such
+as backlinks from members to their parents and construction of other mappings
+from string to RTTI structures.</li>
+<li>
+Lookup of type info by name (using abovementioned mappings). E.g. the
+lookup of <span class='code'>"Core::Buffer::t"</span> would yield the <span class='code'>type_info</span> structure for that
+type (even if it is private).</li>
+<li>
+Allocate an object from a <span class='code'>type_info</span>. It will simply call <span class='code'>malloc</span> with
+the appropriate size as found in the info. What to do with its members?<ul>
+<li>
+Uninitialised: Dangerous!</li>
+<li>
+<span class='code'>bzero</span>'d (using memset): Has the problem that the representation of NULL
+may not actually be all bits zero, thus causes potential undefined behaviour on
+platforms where it's not.</li>
+<li>
+Iterate over its members and initialise appropriately: More effort and
+slower, but safe and portable. Perhaps some information could be cached about
+the type, whether it is data-only or contains pointers. Data-only structs can be
+<span class='code'>memset</span> as an optional optimisation.</li>
+</ul>
+</li>
+<li>
+Set members of an object. I'm not sure how to do this properly, as there
+is no standard way to uniformly treat all kinds of data. Perhaps an <span class='code'>inject</span>
+could help handling this (similar to <span class='code'>printf</span>).  Runtime type checking should
+be performed by this function.</li>
+<li>
+Read members of an object. This has similar issues as the above. It could
+just return the same <span class='code'>datatype</span> as the member-set function and the callee must
+examine it (probably the best way).</li>
+<li>
+Provide iterators (see <a href='../language/iterators'>iterators</a>) for members,
+namespace children and contained structs, etc.</li>
+</ul>
+<p>
+The runtime library would also contain predefined type info structures for
+built-in types.</p>
+<p>
+This would be so much fun!</p>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Mon Jul  4 23:43:53 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Opinions / Positive / Perl</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Opinions / Positive / Perl"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Why to use Perl</h2>
+<ul></ul><p>
+Despite the many anti-Perl rants, I believe it is a valid choice for certain
+jobs.</p>
+<ul>
+<li>
+CPAN<p>
+The Comprehensive Perl Archive Network is one of the world's largest free code
+bases. Almost anything you can think of has been solved in one way or another.</p>
+</li>
+<li>
+Easy FFI<p>
+It is very easy to interface Perl to other languages like C, C++ and Java. C
+and C++ are interfaced using the easy-to-use XS interface. Using JPL, it is
+possible to call Java from Perl and Perl from Java. To make a C function
+callable from Perl, all you have to do is:</p>
+<pre class="code-block">   #<span class="key2">include</span> &lt;EXTERN.h&gt;
+   #<span class="key2">include</span> &lt;perl.h&gt;
+   #<span class="key2">include</span> &lt;XSUB.h&gt;
+   
+   <span class="comment">// declare a function</span>
+   <span class="key3">extern</span> <span class="key3">int</span> sub (<span class="key3">int</span>, <span class="key3">int</span>);
+   
+   <span class="comment">// define the interface from Perl</span>
+   <span class="key1">MODULE</span> = MyModule    <span class="key1">PACKAGE</span> = MyModule
+   
+   <span class="key3">int</span>
+   add (<span class="key3">int</span> a, <span class="key3">int</span> b)
+       <span class="key1">CODE</span>:
+       <span class="key2">RETVAL</span> = a + b; <span class="comment">// We can define the function in-line</span>
+       <span class="key1">OUTPUT</span>:
+       <span class="key2">RETVAL</span>
+   
+   <span class="key3">int</span>
+   sub (<span class="key3">int</span> a, <span class="key3">int</span> b);
+
+</pre></li>
+<li>
+Very portable<p>
+Java is available for download on Linux/x86, Linux/x64, Solaris/Sparc,
+Solaris/x86, Solaris/x64, Windows/x86, Windows/x64. Perl has currently been
+ported to <a href='http://www.cpan.org/ports/'>over 100 platforms</a>.</p>
+</li>
+<li>
+Generalised data interface<p>
+With <a href='http://dbi.perl.org/'>DBI</a>, Perl provides an interface to various
+databases including Microsoft ADO, CSV, MySQL, SQLite and many more. With its
+<span class='code'>AnyData</span>, it provides seamless interfacing of Perl objects and data
+structures with persistent storage including XML, passwd-files, ini-files and
+weblogs.</p>
+</li>
+<li>
+<span class='code'>mod_perl</span><p>
+The Apache web server contains a Perl module that allows high performance web
+applications to be written in Perl. That gives Apache full access to the
+entire CPAN repository and it gives Perl full access to the Apache internals.
+This website is built on Apache/mod_perl with HTML::Mason.</p>
+</li>
+<li>
+Good support<p>
+In contrast to Java, which keeps the same VM and provides backwards
+compatibility, Perl does not have any problems with throwing away old code and
+reworking the language to some extent. But instead of really throwing it away,
+teams are working on Perl 5.6, 5.8 and 5.10 at the same time.</p>
+</li>
+<li>
+Scoped resource management<p>
+Like C++, Perl has scoped resource management and therefore supports RAII.
+That means you do not need to close file handles you no longer use, just let
+them go out of scope. In addition to the lexical scope, Perl has the concept
+of <a href='http://perl.plover.com/local.html#5_Dynamic_Scope'>dynamic scope</a>.</p>
+</li>
+</ul>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Thu May 26 20:36:20 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

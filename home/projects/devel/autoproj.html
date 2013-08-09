@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Devel / Autoproj</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Devel / Autoproj"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[-]</span></a><ul>
+<li>
+<a id="actmenu">Autoproj</a></li><li>
+<a href="/~pippijn/home/projects/devel/clangide">Clang IDE</a></li><li>
+<a href="/~pippijn/home/projects/devel/libcommon">libcommon</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp">Autocomb <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Autoproj</h2>
+<ul><li><a href='#h1'>autogen</a></li>
+<li><a href='#h2'>jmlconf</a></li>
+<li><a href='#h3'>jmlmake</a></li>
+<li><a href='#h4'>autoproj</a></li>
+<li><a href='#h5'>autoclean</a></li>
+<li><a href='#h6'>m4 macros</a></li></ul><p>
+Autoproj is a small layer on top of <span class='code'>GNU Automake</span> and <span class='code'>GNU Autoconf</span>.</p>
+<p>
+<a href='http://xinutec.org/git/devel/autoproj.git/'>Git repository</a></p>
+<p>
+I started this project, because I found that I was doing the same things over
+and over for each new project. I copied the <span class='code'>configure.ac</span> and <span class='code'>Makefile.am</span>
+from a recent project and modified it to my needs. Since I gain knowledge while
+working on a project, the result was that newer projects had more advanced and
+simpler setups, while old projects were hack- and kludge-ridden. Updating an old
+project to use my new ideas often means a complete or almost complete rewrite.
+Autoproj is a small collection of ideas in the form of preprocessors, macros and
+Automake include files.</p>
+<h3>
+<a id='h1'>autogen</a></h3>
+<p>
+This shell script calls all the preprocessors and compilers in a sequence. The
+result is a working build system with a <span class='code'>configure</span> script and a
+<span class='code'>Makefile.in</span>.</p>
+<ul>
+<li>
+It will call <span class='code'>autoproj</span> and maybe <span class='code'>jmlmake</span> in every directory
+containing a <span class='code'>.project</span> file or directory.</li>
+<li>
+If <span class='code'>.project</span> is a file and executable, it is executed in the containing
+directory.</li>
+<li>
+If it is a directory, then <span class='code'>.project/autogen</span> is executed if present and
+executable.</li>
+<li>
+<span class='code'>jmlmake</span> is called in the directory, if <span class='code'>.project</span> is a directory.</li>
+<li>
+<span class='code'>jmlconf</span> is then called to produce a <span class='code'>configure.ac</span>. At this point, all
+autotools inputs have been generated.</li>
+<li>
+Next, the sequence (<span class='code'>libtool</span>?, <span class='code'>aclocal</span>, <span class='code'>autoheader</span>, <span class='code'>automake</span>,
+<span class='code'>autoconf</span>) is called. <span class='code'>libtool</span> is not called if <span class='code'>configure.jml</span> has
+disabled it.</li>
+</ul>
+<h3>
+<a id='h2'>jmlconf</a></h3>
+<p>
+This is a <a href='../lang/jmlc'>JML</a>/<a href='http://code.google.com/p/libslax/'>SLAX</a> based
+<span class='code'>configure.ac</span> generator. Two examples can be viewed in the repository: the
+<a href='/git/devel/autoproj.git/tree/template/configure.jml'>simplest</a> script and a
+<a href='/git/devel/autoproj.git/tree/template/parser/configure.jml'>more advanced</a> one
+that disables <span class='code'>libtool</span> and uses <span class='code'>lex</span> and <span class='code'>yacc</span>. Many of my other projects
+also use <span class='code'>jmlconf</span>, so real world examples can be found, there.</p>
+<p>
+TODO: jmlconf specification (it is very much in flux, because it is still very
+young).</p>
+<h3>
+<a id='h3'>jmlmake</a></h3>
+<p>
+The <span class='code'>jmlmake</span> utility is also JML based, but is written in Perl and is
+extensible through Perl, as well. It is basically the same as Automake, except
+for the syntax and some additions. Currently, custom rules written in JML are
+not supported, but they are planned. Rule extensions are searched in
+<span class='code'>.project/Makefile/lang/*.pm</span> and are Perl modules. A simple example is the
+<a href='http://xinutec.org/git/devel/autoproj.git/tree/transform/Makefile/lang/bsn.pm'>bison</a>
+rule emitter.</p>
+<p>
+Chaining is also possible as shown in the Aldor rule emitter for
+<a href='http://xinutec.org/git/aldor/compiler.git/tree/.project/Makefile/lang/z.pm'>zacc</a>.
+By forwarding to another type, you can make sure that if you generate input for
+another generator, the appropriate rules that compile your product are also
+generated. This is not very elegant and in the future, such things will be
+handled, automatically.</p>
+<p>
+Linking against libraries built within the project itself is still
+<a href='http://lists.gnu.org/archive/html/automake/2004-07/msg00125.html'>buggy</a> in
+Automake. <span class='code'>jmlmake</span> fixes this by topologically sorting the built libraries and
+emitting rules for them in reverse sort order. This guarantees that, unless the
+dependency graph is cyclic, the error known from Automake can not occur.</p>
+<p>
+Some examples of <span class='code'>jmlmake</span> source files can be found in the Aldor build system:
+The <a href='http://xinutec.org/git/aldor/compiler.git/tree/src/aldor/Rules.jml'>aldor</a>
+program is linked against the internal libraries <span class='code'>toplevel</span>, which is in fact
+<span class='code'>libtoplevel.la</span>, and <span class='code'>port_opsys</span>, using the <span class='code'>li</span> function. It is an error
+to link against non-existent internal libraries. External libraries can be
+linked against using the <span class='code'>ex</span> function.</p>
+<p>
+<span class='code'>li</span> in <span class='code'>sources</span> means that the directory containing the current <span class='code'>Rules.jml</span>
+is prepended to the filename. <span class='code'>ex</span> leaves the filename as-is.</p>
+<p>
+The result of <span class='code'>jmlmake</span> is an Automake input file stored in
+<span class='code'>.project/rules.am</span>. The actual <span class='code'>Rules.am</span> can then include this generated file.</p>
+<h3>
+<a id='h4'>autoproj</a></h3>
+<p>
+This was the first utility, so it is historically called <span class='code'>autoproj</span>. This is a
+Makefile preprocessor that resolves <span class='code'>include</span>s and does some other smart
+things. It starts at the file <span class='code'>Rules.am</span>. <span class='code'>include</span>s are resolved in the
+following order:</p>
+<ul>
+<li>
+In the current directory</li>
+<li>
+In the toplevel source directory</li>
+<li>
+In the Autoproj install path</li>
+</ul>
+<p>
+The Autoproj install path contains some Makefile fragments such as rules for
+Perl XSUB compilation. It also provides common rules such as rules calling
+components of <span class='code'>Autoproj</span> to update the build system when source files are
+changed. Since Automake no longer knows about included files, these now need to
+be handled by Autoproj itself.</p>
+<h3>
+<a id='h5'>autoclean</a></h3>
+<p>
+This small utility removes all generated files for the build system. That
+includes files generated by GNU autotools.</p>
+<h3>
+<a id='h6'>m4 macros</a></h3>
+<p>
+A substantial part of the Autoproj distribution consists of <span class='code'>m4</span> macros that
+can be used in <span class='code'>configure.jml</span>. The following macros are available:</p>
+<ul>
+<li>
+AP_C_TRY_FLAGS($flags, $cachevar, $target)<p>
+Try compiling a simple C or C++ program with the passed <span class='code'>flags</span>. If successful,
+the flags are added to the <span class='code'>target</span> variable. The result is cached in
+<span class='code'>cachevar</span>.</p>
+</li>
+<li>
+AP_FLOAT_FORMAT<p>
+Check for floating-point format and double precision word order. Just as for
+integers, the bytes in a word can be small of big endian. It defines one or two
+of the following symbols to 1:</p>
+<ul>
+<li>
+FLOAT_FORMAT_VAX<p>
+VAX floating-point format if set.</p>
+</li>
+<li>
+FLOAT_FORMAT_IBM_HEX<p>
+IBM HEX floating-point format if set (s390?).</p>
+</li>
+<li>
+FLOAT_FORMAT_IEEE754<p>
+IEEE754 floating-point format. Memory layout is defined by macros
+IEEE754_BIG_ENDIAN_BYTE_ORDER and IEEE754_BIG_ENDIAN_WORD_ORDER.</p>
+</li>
+<li>
+IEEE754_BIG_ENDIAN_BYTE_ORDER<p>
+Bytes in IEEE fp word are in big-endian order if set, little-endian if not. Only
+relevant when FLOAT_FORMAT_IEEE754 is defined.</p>
+</li>
+<li>
+IEEE754_BIG_ENDIAN_WORD_ORDER<p>
+The two words in a double precision variable are in big-endian order if set,
+little-endian if not. Do NOT assume this is the same as the byte order! Only
+relevant when FLOAT_FORMAT_IEEE754 is defined.</p>
+</li>
+</ul>
+</li>
+<li>
+AP_CHECK_LIB($library, $symbol, $header, [$message-if-unavailable])<p>
+An extended <span class='code'>AC_CHECK_LIB</span> in that it checks whether a symbol is defined in a
+header as well as in a library. This is useful for libraries such as GMP, where
+the actual symbol name is prepended with <span class='code'>__</span>. It is also the only way to write
+successful checks on the Microsoft Windows platform, because that may encode the
+argument stack size in the symbol name. It can also be used for C++ symbols so
+that name mangling does not matter.</p>
+<p>
+The library is added to <span class='code'>LIBS</span>.</p>
+</li>
+<li>
+AP_PROG_MAKE<p>
+Does some checks on the <span class='code'>make(1)</span> implementation.</p>
+<ul>
+<li>
+whether make supports GNU-style pattern rules<p>
+Defines <span class='code'>@IF_PATRULES@</span> to "#" unless pattern rules (<span class='code'>%.o: %.c</span>) are
+available.</p>
+</li>
+<li>
+whether make sets ${RM}<p>
+If <span class='code'>make</span> does not set the variable <span class='code'>RM</span>, <span class='code'>@SET_RM@</span> will do so.</p>
+</li>
+<li>
+what make calls the .ALLSRC variable<p>
+Some makes (such as GNU make) calls it <span class='code'>$+</span>, BSD make calls it <span class='code'>$></span> or
+<span class='code'>$.ALLSRC</span>. The configure variable <span class='code'>@ALLSRC@</span> is set to the <span class='code'>.ALLSRC</span>
+variable name supported by the make implementation used. To use it, you still
+need to prepend <span class='code'>$</span>.</p>
+</li>
+</ul>
+</li>
+<li>
+AP_CHECK_MUDFLAP<p>
+Checks whether mudflap is available and requested with <span class='code'>--enable-mudflap</span>. If
+so, it adds the appropriate flags to <span class='code'>CFLAGS</span> (usually <span class='code'>-fmudflap</span>. It does
+not add them to <span class='code'>CXXFLAGS</span>, because mudflap is known not to work well, there.</p>
+</li>
+<li>
+AP_ADD_FLAGS($flags, $var)<p>
+This macro simply does: <span class='code'>$var="${$var} $flags"</span> to add flags to a variable.</p>
+</li>
+<li>
+AP_ARG_ENABLE($var, [$msg], [$action], [$define], [$default])<p>
+The same as AC_ARG_ENABLE, but it adds an <span class='code'>AM_CONDITIONAL</span> with <span class='code'>$var</span>
+uppercased. It also adds an <span class='code'>AC_SUBST</span> and an <span class='code'>AC_DEFINE</span>, so you can use the
+choice at any stage in the build.</p>
+</li>
+<li>
+AP_ARG_FORCE($var, $value)<p>
+Forces all stages of a variable to a certain value ("yes" or "no") and
+translates it to the appropriate values for each stage ("#" for config.status,
+1/0 for C).</p>
+</li>
+<li>
+AP_PROG_PERL<p>
+Looks for a Perl implementation and sets <span class='code'>PERL</span> to the path. This prefers the
+newest Perl version and falls back to normal <span class='code'>perl</span>.</p>
+</li>
+<li>
+AP_LIB_PERL<p>
+Looks for a <span class='code'>libperl</span> that can be used for embedding. This creates the
+following <span class='code'>make</span> variables:</p>
+<ul>
+<li>
+PERLLIB<p>
+The <span class='code'>LDFLAGS</span> for embedding perl.</p>
+</li>
+<li>
+PERLFLAGS<p>
+The <span class='code'>CFLAGS</span> for embedding perl.</p>
+</li>
+<li>
+PERLPRIVLIBEXP<p>
+The Perl core modules and typemap location.</p>
+</li>
+</ul>
+</li>
+<li>
+AP_PERL_MODS($mods)<p>
+Used as follows:</p>
+<pre>
+   AP_PERL_MODS("common::sense 3.0" "AnyEvent 5.2")</pre><p>
+Fails if the module is not available or not at least the required version.</p>
+</li>
+<li>
+AP_PKG_CHECK($package, $modversion)<p>
+Checks for a <span class='code'>pkg-config</span> package with at least the passed <span class='code'>modversion</span>.</p>
+</li>
+<li>
+AP_STATUS($message)<p>
+Emits a status message that looks like this:</p>
+<pre>
+   ---------------------------------------------
+    =&gt; Checks for $message
+   ---------------------------------------------</pre></li>
+<li>
+AP_STDINT_H<p>
+Tests for <span class='code'>stdint.h</span> types and constructs them if not available. These are then
+added to <span class='code'>config.h</span>.</p>
+</li>
+<li>
+AP_STRICT_C<p>
+Adds as many warnings to <span class='code'>CFLAGS</span> as possible. If you want <em>real</em> pedantism
+(much more than <span class='code'>-pedantic</span>), try this macro.</p>
+</li>
+<li>
+AP_SUMMARY_START<p>
+Emits the summary header underlined with dashes (-).</p>
+</li>
+<li>
+AP_SUMMARY_LIST<p>
+Emits a summary section. Used as follows:</p>
+<pre>
+   AP_SUMMARY_LIST([
+      [$strict_c_enabled, [debug: Enable strict C compiler warnings]],
+      [$debug_bigint_enabled, [debug: Enable big integer debugging]],
+      [$mudflap_enabled, [debug: Enable mudflap pointer debugging]],
+      [$coverage_enabled, [debug: Enable test coverage instrumentation]],
+   ])</pre><p>
+Looks like this:</p>
+<pre>
+      debug: Enable strict C compiler warnings                    yes
+      debug: Enable big integer debugging                         no
+      debug: Enable mudflap pointer debugging                     yes
+      debug: Enable test coverage instrumentation                 no</pre></li>
+<li>
+AP_SUMMARY_END<p>
+Writes a line of dashes (-) to end the summary.</p>
+</li>
+<li>
+AP_CHECK_CHARSET<p>
+Defines <span class='code'>HAVE_EBCDIC</span> if the character set is EBCDIC, does nothing if the
+character set is ASCII, fails if it can't detect the character set.</p>
+</li>
+<li>
+AP_CHECK_ENUM_FWDECL<p>
+Check for ability to typedef enums before definition. Defines
+<span class='code'>HAVE_ENUM_FWDECL</span> to 1 if so.</p>
+</li>
+<li>
+AP_C_VARIADIC_TEMPLATES<p>
+Check whether the C++ compiler supports C++0x lambdas. Defines <span class='code'>HAVE_LAMBDA</span> to
+1 if so.</p>
+</li>
+<li>
+AP_CHECK_LATE_EXPANSION<p>
+Check whether the preprocessor supports ANSI conforming late macro expansion.
+Defines <span class='code'>HAVE_LATE_EXPANSION</span> to 1 if so.</p>
+</li>
+<li>
+AP_CHECK_STMT_EXPRS<p>
+Checks whether the C compiler supports the GNU extension of brace-expressions:
+<span class='code'>({ code; })</span>. Defines <span class='code'>HAVE_STMT_EXPRS</span> to 1 if the compiler supports braced
+statements within expressions.</p>
+</li>
+<li>
+AP_CHECK_TOKEN_PASTE<p>
+Checks if the preprocessor implements ANSI-style token pasting (with <span class='code'>##</span>).
+Defines <span class='code'>HAVE_ANSI_PASTE</span> to 1 if so.</p>
+</li>
+<li>
+AP_C_VARIADIC_TEMPLATES<p>
+Check whether the C++ compiler supports C++0x variadic templates. Defines
+<span class='code'>HAVE_VARIADIC_TEMPLATES</span> to 1 if so.</p>
+</li>
+</ul>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Tue Jun 14 02:42:51 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

@@ -1,0 +1,573 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Programming / Cpp / Properties</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Programming / Cpp / Properties"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/programming/data-hiding">Data hiding</a></li><li>
+<a href="/~pippijn/home/programming/c">C <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/programming/cpp">C++ <span class="small">[-]</span></a><ul>
+<li>
+<a id="actmenu">Properties</a></li></ul></li></ul></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Properties in C++</h2>
+<ul><li><a href='#h1'>Properties</a></li>
+<li><a href='#h2'>Links</a></li></ul><p>
+In object oriented programming languages, encapsulation is present in
+different ways. The Java and C++ approach is to write accessor and mutator
+(getter and setter) methods for every variable that needs to be accessed or
+mutated outside the set of class methods.</p>
+<p>
+In C++, one can return a <span class='code'>const</span> reference to a data member from an accessor
+to prevent benign client code from corrupting the data. Java, not having
+<span class='code'>const</span>, can not prevent this at compile time, but can enforce access control
+at runtime through further mutators. For any given data member <span class='code'>x</span>, one can
+define an accessor <span class='code'>getX</span> and a mutator <span class='code'>setX</span>, to control the value to
+which <span class='code'>x</span> may be set. This method breaks transparency without adding value to
+object oriented design. C++ programmers tend not to use the prefixes <span class='code'>get</span>
+and <span class='code'>set</span>, but rather name their data member something different such as
+<span class='code'>x_</span> or <span class='code'>m_x</span>. This keeps the name <span class='code'>x</span> free for the accessor (<span class='code'>T x ()</span>)
+and the mutator (<span class='code'>void x (T)</span>). Still, this does not help transparency very
+much. Consider the following code:</p>
+<pre class="code-block">  <span class="comment">// Public data members</span>
+  <span class="key3">struct</span> point
+  {
+    <span class="key3">int</span> x;
+    <span class="key3">int</span> y;
+  };
+
+  point p = { <span class="number">1</span>, <span class="number">2</span> };
+  p.x += <span class="number">20</span>;
+
+  <span class="comment">// Private data members with accessor/mutator functions</span>
+  <span class="key3">struct</span> point
+  {
+    <span class="key3">int</span> x () <span class="key3">const</span> { <span class="key1">return</span> x_; }
+    <span class="key3">int</span> y () <span class="key3">const</span> { <span class="key1">return</span> x_; }
+    <span class="key3">void</span> x (<span class="key3">int</span> v) { x_ = v; }
+    <span class="key3">void</span> y (<span class="key3">int</span> v) { y_ = v; }
+
+    <span class="comment">// Needs a constructor, due to the private data members</span>
+    point (<span class="key3">int</span> xv, <span class="key3">int</span> yv) : x_ (xv), y_ (yv) { }
+
+    <span class="comment">// Private data members make the class non-standard layout,</span>
+    <span class="comment">// disabling many optimisations and making the class a whole</span>
+    <span class="comment">// lot less useful (for example, offsetof won't work, the</span>
+    <span class="comment">// objects cannot be passed through `...', the objects cannot</span>
+    <span class="comment">// be cast to a reference to their first data member's type, etc.</span>
+  <span class="key1">private</span>:
+    <span class="key3">int</span> x_;
+    <span class="key3">int</span> y_;
+  };
+
+  <span class="comment">// aggregate initialisers won't work anymore</span>
+  point p (<span class="number">1</span>, <span class="number">2</span>);
+  p.x (p.x () + <span class="number">20</span>); <span class="comment">// more code to be written for the same effect</span>
+
+</pre><h3>
+<a id='h1'>Properties</a></h3>
+<p>
+Many modern programming languages provide a syntactic construct known as
+<a href='http://en.wikipedia.org/wiki/Property_(programming)'>properties</a>. Different
+languages have different ways of expressing the same idea: publicly accessible
+class data members with code attached that controls and validates input from
+client code. One may also attach code that calculates the actual value
+returned to the user. For instance, you might want to store the value in a
+database and transparently handle database queries using properties.</p>
+<h4>
+Previous attempts</h4>
+<p>
+Many have attempted to implement properties in C++. The common approach is to
+use a nested class. Emad Barsoum has <a href='http://www.codeproject.com/KB/cpp/cppproperties.aspx'>implemented</a>
+properties using a class template in which he stores the <span class='code'>this</span> pointer of the
+containing object and member function pointers to the <span class='code'>get</span> and <span class='code'>set</span>
+functions. This approach and implementation has several serious flaws:</p>
+<ul>
+<li>
+Member function pointers<p>
+These are in fact <a href='http://www.codeproject.com/KB/cpp/FastDelegate.aspx'>small structs</a>
+containing things like vtable offset and the actual function's address.
+Dereferencing member function pointers therefore is a very inefficient
+process.</p>
+</li>
+<li>
+operator ValueType<p>
+This is an implementation issue. Consider a property of type <span class='code'>bitmap</span>, which
+consists of a 64KB matrix. <span class='code'>operator ValueType</span> copies the entire <span class='code'>bitmap</span>
+and its data every time it is used.</p>
+</li>
+<li>
+operator =<p>
+The assignment operator is not enough. To have a fully functional property,
+all operators have to be supported. This is a minor flaw, as these can be
+added later.</p>
+</li>
+<li>
+Storage of pointers<p>
+The property class stores two member function pointers that may be NULL and a
+<span class='code'>this</span> pointer that may also be NULL. On a 32 bit platform, this means 20
+bytes of storage per property: 8 bytes per member function pointer and 4 bytes
+for the <span class='code'>this</span> pointer. On 64 bit platforms using the LP64, ILP64 or LLP64
+data models, the size of that property is 40 bytes.</p>
+</li>
+<li>
+High overhead<p>
+Due to the use of member function pointers and <span class='code'>this</span> pointers, it is
+impossible for a compiler to inline the calls. The property's pointers may
+even change after they were initialised, so even the best optimising compiler
+in the theoretic world can not inline a thing. This means high overhead when
+dereferencing the pointers and even more overhead when calling the functions.</p>
+</li>
+<li>
+Need to initialise<p>
+The property requires the containing class' constructor to initialise it. If a
+class has many properties, the constructor becomes one big mess. The
+implementation does not even use constructor initialiser lists, so in the
+worst case, initialising the properties will be two times six full machine
+word copies (in the best case, it's six). If you forget to initialise a
+property, your program will die with an assertion error in a getter or setter.</p>
+</li>
+<li>
+Read/write semantics<p>
+Whether or not client code is allowed to call an accessor or mutator is
+checked at runtime. An assertion failure is the result of invalid access.</p>
+</li>
+</ul>
+<p>
+Another approach is one of those which require compiler support and are
+therefore not acceptable as generic solution:
+<a href='http://blogs.msdn.com/ericflee/archive/2008/04/17/how-to-do-object-properties-in-c.aspx'>The MSVC hack</a>
+or <a href='http://msdn.microsoft.com/en-us/library/z974bes2(VS.71).aspx'>Another MSVC hack</a>.</p>
+<h4>
+The new approach</h4>
+<p>
+I present a zero-overhead approach which even has the very convenient benefit
+of being a trivial standard layout class, also known as Plain Old Data (or
+POD). These properties do not, by themselves, use any memory. Value properties
+use the memory required to store their value, non-value properties use the
+mandatory byte of memory that every empty struct is required to have. (This
+is, by the way, required in order to be able to take its address).</p>
+<h5>
+The prop class template</h5>
+<p>
+The <span class='code'>prop</span> class template is parametrised by the container type, the value
+type, the accessor and mutator functions and an offset function. As you can
+see, I did not use member function pointers anywhere. Instead, the object is
+passed as first argument to a free (namespace scope) or static member
+function. The reason for this is, plainly put, speed. Current C++ compiler do
+a pretty bad job at optimising dereferences of member function pointers, but a
+terrific job when it comes to static functions.</p>
+<pre class="code-block">  <span class="key3">template</span>&lt;
+    <span class="key3">typename</span> Class,
+    <span class="key3">typename</span> T,
+    T <span class="key3">const</span> &amp; (get) (Class <span class="key3">const</span> &amp;),
+    <span class="key3">void</span> (set) (Class &amp;, T <span class="key3">const</span> &amp;),
+    <span class="key3">size_t</span> (offset) ()
+  &gt;
+  <span class="key3">struct</span> prop
+  {
+
+</pre><p>
+You may be wondering what the <span class='code'>offset</span> function is for. As I said earlier,
+this property has zero overhead, so it can't store the <span class='code'>this</span> pointer of its
+container. That is where the <span class='code'>offset</span> function comes in. We use it to
+calculate the location of the container's <span class='code'>this</span> in memory.</p>
+<p class='small'>It is very important that this is a function, as we will see later.
+
+</p><p>
+The following two functions calculate the <span class='code'>this</span> pointer and return a
+reference to the parent object. Due to <span class='code'>offset</span> being a function and its
+location being known at compile time, it can easily be inlined.</p>
+<pre class="code-block">    Class &amp;self ()
+    {
+      <span class="key1">return</span> *<span class="key1">reinterpret_cast</span>&lt;Class *&gt; (<span class="key1">reinterpret_cast</span>&lt;<span class="key3">char</span> *&gt; (<span class="key1">this</span>) - offset ());
+    }
+
+    Class <span class="key3">const</span> &amp;self () <span class="key3">const</span>
+    {
+      <span class="key1">return</span> *<span class="key1">reinterpret_cast</span>&lt;Class <span class="key3">const</span> *&gt; (<span class="key1">reinterpret_cast</span>&lt;<span class="key3">char</span> <span class="key3">const</span> *&gt; (<span class="key1">this</span>) - offset ());
+    }
+
+</pre><p>
+We need all assignment operators (=, +=, -=, *=, /=, %=, ^=, |=, &amp;=,
+&lt;&lt;= and &gt;&gt;=). We can define them all, because <span class='code'>prop</span> is a class
+template and ISO/IEC 14882:2003(E), paragraph 14.7.1, clause 1 states that
+<em>"not the definitions or default arguments, of the class member functions,
+[...] [are implicitly instantiated when a class template is implicitly
+instantiated]"</em>. In other words, class templates are instantiated lazily,
+on demand.</p>
+<pre class="code-block">    prop &amp;<span class="key1">operator</span>   = (T <span class="key3">const</span> &amp;rhs) { set (self (), rhs); <span class="key1">return</span> *<span class="key1">this</span>; }
+    prop &amp;<span class="key1">operator</span>  += (T <span class="key3">const</span> &amp;rhs) { set (self (), get (self ())  + rhs); <span class="key1">return</span> *<span class="key1">this</span>; }
+    <span class="comment">// Analogous for the other operators</span>
+
+</pre><p>
+These operators define all we need for the mutator, but not for the accessor.
+Instead of defining all operators (unary +, unary -, binary +, binary *, etc.),
+we can define <span class='code'>operator T const &amp;</span> and the C++ compiler will take care of
+required conversions:</p>
+<pre class="code-block">    <span class="key1">operator</span> T <span class="key3">const</span> &amp; () <span class="key3">const</span>
+    {
+      <span class="key1">return</span> get (self ());
+    }
+
+</pre><p>
+Now, all we need is a way to access members of the property. Then we are done:</p>
+<pre class="code-block">    T *<span class="key1">operator</span> -&gt; ()
+    {
+      <span class="key1">return</span> &amp;<span class="key1">const_cast</span>&lt;T &amp;&gt; (get (self ()));
+    }
+
+    T <span class="key3">const</span> *<span class="key1">operator</span> -&gt; () <span class="key3">const</span>
+    {
+      <span class="key1">return</span> &amp;get (self ());
+    }
+  };
+
+</pre><p>
+The <span class='code'>const_cast</span> is strictly considered undefined behaviour, but if the
+property itself is non-const, we know the value is non-const, as well. This is
+a dire hack, but I don't see a better way to solve it. One way would be to
+pass a non-const accessor function as additional template argument, but that
+would probably cause more code bloat than it is worth.</p>
+<h5>
+Value properties</h5>
+<p>
+The above class template provides support for properties that do not store
+their own value. Often, we want the value to be stored, though, and we do not
+want the overhead of storing it in the containing class (remember: empty
+classes still need one byte of storage). Therefore, we introduce another class
+template, called <span class='code'>value_prop</span>, with different accessor and mutator function
+types:</p>
+<pre class="code-block">  <span class="key3">template</span>&lt;
+    <span class="key3">typename</span> Class,
+    <span class="key3">typename</span> T,
+    T <span class="key3">const</span> &amp; (get) (Class <span class="key3">const</span> &amp;, T <span class="key3">const</span> &amp;),
+    <span class="key3">void</span> (set) (Class &amp;, T &amp;, T <span class="key3">const</span> &amp;),
+    <span class="key3">size_t</span> (offset) ()
+  &gt;
+  <span class="key3">struct</span> value_prop
+  {
+
+</pre><p>
+Now, in addition to the container's <span class='code'>this</span> pointer, the accessor <span class='code'>get</span> and
+mutator <span class='code'>set</span> also receive a reference to the value stored in the
+instantiated property class template. <span class='code'>get</span> receives a const reference.
+Now, the operator definitions look slightly different:</p>
+<pre class="code-block">    value_prop &amp;<span class="key1">operator</span>   = (T <span class="key3">const</span> &amp;rhs) { set (self (), value, rhs); <span class="key1">return</span> *<span class="key1">this</span>; }
+    value_prop &amp;<span class="key1">operator</span>  += (T <span class="key3">const</span> &amp;rhs) { set (self (), value, get (self (), value)  + rhs);
+                                              <span class="key1">return</span> *<span class="key1">this</span>; }
+
+</pre><p>
+and the class has a public member variable called <span class='code'>value</span>. I decided to make
+it public so the instantiated class template would remain POD. This means one
+can, by directly accessing <span class='code'>value</span>, corrupt the class state, but benign
+client code will not do that.</p>
+<h5>
+Using properties</h5>
+<p>
+To use a property in a class, we need four things: the property object, the
+accessor, the mutator and very importantly, the <span class='code'>offset</span> function.</p>
+<pre class="code-block">  <span class="key3">struct</span> point
+  {
+    <span class="comment">// The X-coordinate</span>
+    value_prop&lt;point, <span class="key3">int</span>, get_x, set_x, offset_x&gt; x;
+    <span class="key3">static</span> <span class="key3">int</span> <span class="key3">const</span> &amp;get_x (point <span class="key3">const</span> &amp;self, <span class="key3">int</span> <span class="key3">const</span> &amp;property) { <span class="key1">return</span> property; }
+    <span class="key3">static</span> <span class="key3">void</span> set_x (point &amp;self, <span class="key3">int</span> &amp;property, <span class="key3">int</span> <span class="key3">const</span> &amp;value) { property = value; }
+    <span class="key3">static</span> <span class="key3">size_t</span> offset_x () { <span class="key1">return</span> offsettof (point, x); }
+    <span class="comment">// The Y-coordinate</span>
+    <span class="key3">int</span> y_;
+    prop&lt;point, <span class="key3">int</span>, get_y, set_y, offset_y&gt; y;
+    <span class="key3">static</span> <span class="key3">int</span> <span class="key3">const</span> &amp;get_y (point <span class="key3">const</span> &amp;self) { <span class="key1">return</span> self.y_; }
+    <span class="key3">static</span> <span class="key3">void</span> set_y (point &amp;self, <span class="key3">int</span> <span class="key3">const</span> &amp;value) { self.y_ = value; }
+    <span class="key3">static</span> <span class="key3">size_t</span> offset_y () { <span class="key1">return</span> offsettof (point, y); }
+  };
+
+</pre><p>
+The offset returned by the <span class='code'>offset_*</span> functions is the number of bytes
+between the location of the property object and the <span class='code'>this</span> pointer of the
+enclosing class. We use that in the <span class='code'>prop</span> class template to calculate the
+memory location of <span class='code'>*this</span>. The reason this is a function is simple: We need
+to pass the offset to the property class template somehow. The first
+possibility that comes to mind is storing it in a static class member or a
+global variable and passing a pointer to that. This makes the declaration of a
+property more messy and forgetting to actually define the global variable
+gives annoying undefined reference errors. We cannot make the value an
+integral constant, because the class we are invoking <span class='code'>offsetof</span> on is
+incomplete when we want to do it inside the class. If it has to be a variable,
+it has to have external linkage so the template accepts it. A function is the
+best solution I could come up with: it can be inlined completely, it does not
+have extra declaration or definition overhead and it can be passed as template
+argument.</p>
+<p>
+The practiced reader will notice the use of <span class='code'>offsetof</span> and think "Hey, that
+will only work for POD <span class='code'>struct</span>s". This is true, but as I mentioned earlier,
+both <span class='code'>prop</span> and <span class='code'>value_prop</span> are POD <span class='code'>struct</span>s. This is 100% standard
+compliant.</p>
+<p class='small'>ISO/IEC 14882:2003(E): 18.1 Types, clause 5:
+
+The macro offsetof accepts a restricted set of type arguments in this
+International Standard. type shall be a POD structure or a POD union (clause 9).
+
+</p><p class='small'>ISO/IEC 14882:2003(E): 9.4 Classes, clause 4:
+
+A POD-struct is an aggregate class that has no non-static data members of
+type non-POD-struct, non-POD-union (or array of such types) or reference,
+and has no user-defined copy assignment operator and no user-defined
+destructor.
+
+</p><p class='small'>The above does not mean POD structs may not have member functions.
+
+</p><h5>
+Using macros</h5>
+<p>
+The above class definition is repetetive and error prone, so we use the
+following macros:</p>
+<pre class="code-block">  #<span class="key2">define</span> def_prop(T, Class, name, get, set)                                      \
+    <span class="key3">static</span> <span class="key3">size_t</span> offset_ ## name () { <span class="key1">return</span> offsetof (Class, name); }           \
+    <span class="key3">static</span> T <span class="key3">const</span> &amp;get_ ## name (Class <span class="key3">const</span> &amp;self) get                          \
+    <span class="key3">static</span> <span class="key3">void</span> set_ ## name (Class &amp;self, T <span class="key3">const</span> &amp;value) set                    \
+    ::prop&lt;Class, T, get_ ## name, set_ ## name, offset_ ## name&gt; name
+
+  #<span class="key2">define</span> def_value_prop(T, Class, name, get, set)                                \
+    <span class="key3">static</span> <span class="key3">size_t</span> offset_ ## name () { <span class="key1">return</span> offsetof (Class, name); }           \
+    <span class="key3">static</span> T <span class="key3">const</span> &amp;get_ ## name (Class <span class="key3">const</span> &amp;self, T <span class="key3">const</span> &amp;property) get       \
+    <span class="key3">static</span> <span class="key3">void</span> set_ ## name (Class &amp;self, T &amp;property, T <span class="key3">const</span> &amp;value) set       \
+    ::value_prop&lt;Class, T, get_ ## name, set_ ## name, offset_ ## name&gt; name
+
+</pre><p>
+Now, we can rewrite the class definition of <span class='code'>point</span> as follows:</p>
+<pre class="code-block">  <span class="key3">struct</span> point
+  {
+    def_value_prop (<span class="key3">int</span>, point, x,
+      {
+        <span class="key1">return</span> property;
+      },
+      {
+        property = value;
+      }
+    );
+  
+    <span class="key3">int</span> y_;
+  
+    def_prop (<span class="key3">int</span>, point, y,
+      { 
+        <span class="key1">return</span> self.y_;
+      },
+      { 
+        self.y_ = value;
+      }
+    );
+  };
+
+</pre><p>
+We use value properties as well as normal properties here. Extra caution has
+to be taken with aggregate initialisers when doing this. It will generally not
+be an issue, since classes with non-value properties are unlikely to get
+aggregate initialisation.</p>
+<p>
+The usage of <span class='code'>def_prop</span> and <span class='code'>def_value_prop</span> are as follows:</p>
+<pre>
+  def_prop (type, type of parent, name, accessor code, mutator code);
+  def_value_prop (type, type of parent, name, accessor code, mutator code);</pre><p>
+The problem with this macro is that it does not support code like this:
+<span class='code'>{ int a, b, c; }</span>, because the commas would be interpreted as macro argument
+delimiters. One solution would be to use GCC's variadic macros to implement an
+<span class='code'>UNPAREN</span> macro:</p>
+<pre class="code-block">  #<span class="key2">define</span> UNPAREN_(x...) x
+  #<span class="key2">define</span> UNPAREN(x) UNPAREN_ x
+
+</pre><p>
+The gained advantage is that commas can be used outside parentheses inside
+accessor and mutator code, the disadvantage is that all code needs to be
+enclosed in parentheses, making the other code plain ugly (uglier than it
+already is).</p>
+<h5>
+A larger example</h5>
+<pre class="code-block">  <span class="key3">struct</span> point
+  {
+    def_value_prop (<span class="key3">int</span>, point, x,
+      {
+        puts (__PRETTY_FUNCTION__);
+        <span class="key1">return</span> property;
+      },
+      {
+        puts (__PRETTY_FUNCTION__);
+        property = value;
+      }
+    );
+  
+    <span class="key3">int</span> y_;
+  
+    def_prop (<span class="key3">int</span>, point, y,
+      {
+        puts (__PRETTY_FUNCTION__);
+        <span class="key1">return</span> self.y_;
+      },
+      {
+        puts (__PRETTY_FUNCTION__);
+        self.y_ = value;
+      }
+    );
+  };
+  
+  <span class="key3">struct</span> coordinate
+  {
+    def_value_prop (point, coordinate, x,
+      { 
+        puts (__PRETTY_FUNCTION__);
+        <span class="key1">return</span> property;
+      },
+      { 
+        puts (__PRETTY_FUNCTION__);
+        property = value;
+      }
+    );
+    
+    point y_;
+    
+    def_prop (point, coordinate, y,
+      { 
+        puts (__PRETTY_FUNCTION__);
+        <span class="key1">return</span> self.y_;
+      },
+      { 
+        puts (__PRETTY_FUNCTION__);
+        self.y_ = value;
+      }
+    );
+  };
+  
+  <span class="key3">int</span>
+  main ()
+  {
+    <span class="comment">// Aggregate initialisers work as expected, even with classes</span>
+    <span class="comment">// containing (classes containing properties) as properties</span>
+    <span class="comment">// (parentheses added for disambiguation).</span>
+    coordinate p = { { <span class="number">2</span>, <span class="number">3</span> }, { <span class="number">4</span>, <span class="number">5</span> } };
+    printf (<span class="string">"p.x-&gt;x == %d\n"</span>, (<span class="key3">int</span>) p.x-&gt;x); <span class="comment">// Accessor and mutator called</span>
+    printf (<span class="string">"p.x-&gt;y == %d\n"</span>, (<span class="key3">int</span>) p.x-&gt;y);
+    printf (<span class="string">"p.y-&gt;x == %d\n"</span>, (<span class="key3">int</span>) p.y-&gt;x);
+    printf (<span class="string">"p.y-&gt;y == %d\n"</span>, (<span class="key3">int</span>) p.y-&gt;y);
+  }
+
+</pre><p>
+The output would look something like this:</p>
+<pre>
+  static const point&amp; coordinate::get_x(const coordinate&amp;, const point&amp;)
+  static const int&amp; point::get_x(const point&amp;, const int&amp;)
+  p.x-&gt;x = 2
+  static const point&amp; coordinate::get_x(const coordinate&amp;, const point&amp;)
+  static const int&amp; point::get_y(const point&amp;)
+  p.x-&gt;y = 3
+  static const point&amp; coordinate::get_y(const coordinate&amp;)
+  static const int&amp; point::get_x(const point&amp;, const int&amp;)
+  p.y-&gt;x = 4
+  static const point&amp; coordinate::get_y(const coordinate&amp;)
+  static const int&amp; point::get_y(const point&amp;)
+  p.y-&gt;y = 5</pre><p>
+Note that you need GCC for <span class='code'>__PRETTY_FUNCTION__</span> to work.</p>
+<h5>
+Performance</h5>
+<p>
+As I mentioned in the introduction, I chose to use static member functions for
+efficiency reasons. Just to give you an idea of how efficient this zero
+overhead property template is, here is the assembler code for the following
+simple example:</p>
+<p>
+C++ code:</p>
+<pre class="code-block">  <span class="key3">int</span>
+  main ()
+  {
+    coordinate p = { { <span class="number">2</span>, <span class="number">3</span> }, { <span class="number">4</span>, <span class="number">5</span> } };
+    <span class="key3">volatile</span> <span class="key3">int</span> x = p.x-&gt;x;
+  }
+
+</pre><p>
+And the assembler output:</p>
+<pre>
+  main:
+          xorl    %eax, %eax    ' set return value to 0
+          movl    $2, -4(%rsp)  ' set the variable 'x' to 2
+          ret                   ' return</pre><p>
+You can see, how the compiler completely inlined the calls to the accessors
+and then constant folded the expression, simply copying an immediate integer
+value to a memory location on the stack.</p>
+<h4>
+Non-POD classes</h4>
+<p>
+The more interesting classes are all non-POD ones. I have tested the property
+class template with the strangest configurations I could think of. The only
+configuration where <span class='code'>offsetof</span> fails is this:</p>
+<pre class="code-block">  <span class="key3">struct</span> A
+  {
+    <span class="key3">virtual</span> ~A () { }
+  };
+  <span class="key3">struct</span> B1 : <span class="key3">virtual</span> A
+  {
+    <span class="key3">int</span> i;
+  };
+  <span class="key3">struct</span> B2 : <span class="key3">virtual</span> A
+  {
+  };
+  <span class="key3">struct</span> D : <span class="key3">virtual</span> B1, <span class="key3">virtual</span> B2
+  {
+  };
+
+  <span class="key3">size_t</span> offset = offsetof (D, i);  <span class="comment">// This fails</span>
+  <span class="key3">size_t</span> offset = offsetof (B1, i); <span class="comment">// This succeeds and is correct</span>
+
+</pre><p>
+so in fact, the property class never fails. However, I have only tested it on
+the GNU C++ compiler. Other compilers might mess up, but one thing is for
+certain: <span class='code'>prop</span> being POD allows for 100% standard compliant properties.
+(Note that <span class='code'>cfront</span>, the first C++ compiler, would have done it right, so I
+don't really see any reason why any compiler could mess it up.)</p>
+<h3>
+<a id='h2'>Links</a></h3>
+<ul>
+<li>
+<a href='http://en.wikipedia.org/wiki/Property_(programming)'>Properties on Wikipedia</a></li>
+<li>
+<a href='http://www.codeproject.com/KB/cpp/cppproperties.aspx'>Properties in C++</a></li>
+<li>
+<a href='http://www.codeproject.com/KB/cpp/FastDelegate.aspx'>FastDelegate</a></li>
+<li>
+<a href='http://blogs.msdn.com/ericflee/archive/2008/04/17/how-to-do-object-properties-in-c.aspx'>The MSVC properties hack</a></li>
+<li>
+<a href='http://msdn.microsoft.com/en-us/library/z974bes2(VS.71).aspx'>Another MSVC properties hack</a></li>
+</ul>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Sat May 28 11:00:51 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

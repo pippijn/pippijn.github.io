@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Lang / Aldor / Changes</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Aldor / Changes"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/aldor">Aldor <span class="small">[-]</span></a><ul>
+<li>
+<a id="actmenu">Changes</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/jmlc">JML</a></li><li>
+<a href="/~pippijn/home/projects/lang/libcdk">CDK library</a></li><li>
+<a href="/~pippijn/home/projects/lang/rasm">Runtime assembler</a></li><li>
+<a href="/~pippijn/home/projects/lang/reflect">Reflect</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe">Safe C <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/xul">XUL Projects</a></li><li>
+<a href="/~pippijn/home/projects/lang/yaccpp">YACC Preprocessor</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Changes against the original release</h2>
+<ul></ul><p>
+The Aldor compiler was written a long time ago, when compilers were stupid and
+C was unportable. Nowadays, many operating system interfaces have been unified
+and C compilers have gained massive improvements. Computers are also much faster
+than in the old days.</p>
+<p>
+This project aims to modernise and clean up the Aldor compiler. The following is
+a non-exhaustive list of changes. For a full list. see the git log.</p>
+<ul>
+<li>
+Removed garbage collector<p>
+The compiler itself no longer uses garbage collection. A precise GC is planned
+for Aldor code, but for now, the option to use Boehm's GC exists.</p>
+</li>
+<li>
+Replaced macros with functions<p>
+The code is fast enough so we don't need macros everywhere. Many macros have
+been replaced with out-of-line functions. That way, profiling and error checking
+gets easier.</p>
+</li>
+<li>
+Removed untestable OS support<p>
+The original compiler supports operating systems that we cannot test. Such
+systems include DOS, VMS, CMS and MacOS 7. These have been removed. In addition,
+the operating system dependent layer has been reduced and certain functions that
+can be implemented in pure C have been implemented thusly.</p>
+</li>
+<li>
+Split up the compiler into many small libraries<p>
+The "generic" layer containing utilities and non-specific data structures (list,
+hash table, tree, buffer, ...) has been split into 30 smaller libraries. This is
+an ongoing effort, because proper splitting is not entirely possible in struct
+and phases. These layers have several issues, including the fact that struct
+depends on phases.</p>
+</li>
+<li>
+Removed edit levels<p>
+All edit levels have been removed, one at a time. This history has been
+preserved in the git log. One edit level was kept and turned into a <span class='code'>configure</span>
+option (the new hash code algorithm).</p>
+</li>
+<li>
+Privatised data structures<p>
+Data hiding principles have been applied in several places (Foam, AbSyn,
+Buffer, ...). All accesses now go through get and set functions.</p>
+</li>
+<li>
+Runtime type checking<p>
+Aldor uses two major polymorphic data types: AbSyn and Foam. Casting between
+instance types of this data type is undefined in the general case. There are
+some valid casts, though. Runtime checks have been implemented to ensure that
+the casts are valid. A few potential bugs have been fixed this way.</p>
+</li>
+<li>
+Fixed bug in constant folding<p>
+There were some bugs in constant folding that caused 2 + 4 to equal 4, because
+argument 1 was added to argument 1.</p>
+</li>
+<li>
+Removed SSA<p>
+The original compiler contains an unfinished implementation of a Foam to SSA
+pass, which doesn't even compile. There is enough existing code to work with, so
+this code was removed.</p>
+</li>
+<li>
+Added unit tests<p>
+Unit tests and regression tests have been automated. We developed a continuous
+integration system for the Aldor compiler, so we can validate changes on several
+different platforms.</p>
+</li>
+<li>
+Use the GNU build system<p>
+Instead of handwritten makefiles, we now use automake, autoconf and libtool.</p>
+</li>
+<li>
+Generate more code<p>
+We want to move towards writing less code and achieving more. Domain specific
+languages were developed to aid in code generation, reducing redundancy and
+error-proneness.</p>
+</li>
+<li>
+Stub out C library calls<p>
+No part of the compiler calls the C library directly, anymore (except the parts
+that do <span class='code'>setjmp</span>/<span class='code'>longjmp</span>). All calls go through a C stub library, which can
+do additional argument checking and modification. It can supplement the C
+library with non-existent functions and reduce the dependency on a full <span class='code'>libc</span>
+implementation, thereby increasing portability to embedded platforms.</p>
+</li>
+<li>
+Reduced knowledge<p>
+The files <span class='code'>cconfig.h</span> and <span class='code'>compiler.h</span> contained a lot of compiler specific
+knowledge. This has mostly been removed and we now use behaviour checks provided
+by autoconf, instead. Also, the dependency on endianness has mostly been lifted.
+We now use a possibly slower but more portable way. The performance hit is not
+noticable.</p>
+</li>
+</ul>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Tue Jul  5 00:31:31 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

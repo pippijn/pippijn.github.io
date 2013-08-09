@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Lang / Safe / Ideas / Language / Operators</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Language / Operators"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/aldor">Aldor <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/jmlc">JML</a></li><li>
+<a href="/~pippijn/home/projects/lang/libcdk">CDK library</a></li><li>
+<a href="/~pippijn/home/projects/lang/rasm">Runtime assembler</a></li><li>
+<a href="/~pippijn/home/projects/lang/reflect">Reflect</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe">Safe C <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas">Future ideas <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler">Compiler <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language">Language <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/cfold">Constant folding</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/common-data">Inheritance</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/iterators">Iterators</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/lambda">Lambda</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/modules">Modules</a></li><li>
+<a id="actmenu">Operators</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/overload">Overloading</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/runtime">Runtime <span class="small">[+]</span></a></li></ul></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/xul">XUL Projects</a></li><li>
+<a href="/~pippijn/home/projects/lang/yaccpp">YACC Preprocessor</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Operators</h2>
+<ul></ul><p>
+Pass operators to functions, for example (pseudo-code):</p>
+<pre class="code-block">    apply ((+), <span class="number">2</span>, <span class="number">3</span>) == <span class="number">5</span>;
+  where
+    <span class="key3">long</span> <span class="key1">operator</span>+ (<span class="key3">long</span>, <span class="key3">long</span>);
+    <span class="key3">long</span> apply (<span class="key3">long</span> (@f)(<span class="key3">long</span>, <span class="key3">long</span>), <span class="key3">long</span> v1, <span class="key3">long</span> v2)
+    { <span class="key1">return</span> f (v1, v2); }
+
+</pre><p>
+For this, operator stubs need to be generated.</p>
+<p>
+Parse things like <span class='code'>a-&gt;[3]</span> into <span class='code'>(*a)[3]</span>.</p>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Mon Jul  4 23:58:35 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

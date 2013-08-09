@@ -1,0 +1,328 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Programming / Data-Hiding</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Programming / Data-Hiding"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[-]</span></a><ul>
+<li>
+<a id="actmenu">Data hiding</a></li><li>
+<a href="/~pippijn/home/programming/c">C <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/programming/cpp">C++ <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Information hiding</h2>
+<ul><li><a href='#h1'>Introduction</a></li>
+<li><a href='#h2'>Violations of the principle</a></li>
+<li><a href='#h3'>Enforcing encapsulation in C</a></li>
+<li><a href='#h4'>Advantages</a></li>
+<li><a href='#h5'>Disadvantages</a></li>
+<li><a href='#h6'>The compromise</a></li>
+<li><a href='#h7'>Information hiding in other languages</a></li></ul><p>
+This text is about the principle known as <em>information hiding</em>, <em>data hiding</em>
+or (not entirely correctly) <em>encapsulation</em>. In our examples, we use the C
+programming language, because it fits the principle best of all. This is a bit
+ironic, because C of all languages widely used today is, assembly language not
+counted, said to be the least object oriented language.</p>
+<h3>
+<a id='h1'>Introduction</a></h3>
+<ul>
+<li>
+Client code<p>
+is all the code that uses the data types and operations defined on them but
+does not operate on the internal structures of those types.</p>
+</li>
+<li>
+Information hiding<p>
+is a principle of hiding implementation details from client code. This is
+achieved by writing accessor functions as required.</p>
+</li>
+</ul>
+<p>
+A simple example of information hiding would be a string object:</p>
+<pre class="code-block">  <span class="key3">struct</span> string
+  {
+    <span class="key3">char</span> *rep;
+    <span class="key3">size_t</span> len;
+    <span class="key3">size_t</span> capacity.
+  };
+
+</pre><p>
+This <span class='code'>struct</span> knows its length and has a data pointer pointing at the
+in-memory string representation. It also knows its maximum capacity, so it can
+allocate more memory on demand. In order to avoid corruption of the internal
+state (in this case, the len member), we write accessor functions, for
+example:</p>
+<pre class="code-block">  <span class="key3">size_t</span> strLength (<span class="key3">struct</span> string <span class="key3">const</span> *str);
+  <span class="key3">char</span> <span class="key3">const</span> *strToCStr (<span class="key3">struct</span> string <span class="key3">const</span> *str);
+  <span class="key3">char</span> strCharAt (<span class="key3">struct</span> string <span class="key3">const</span> *str, <span class="key3">size_t</span> pos);
+  <span class="key3">void</span> strSetCharAt (<span class="key3">struct</span> string *str, <span class="key3">size_t</span> pos, <span class="key3">char</span> c);
+  <span class="key3">void</span> strAddChars (<span class="key3">struct</span> string *str, <span class="key3">char</span> <span class="key3">const</span> *chars);
+
+</pre><p>
+These functions operate on the data structure declared above. Functions
+that take a pointer-to-const promise not to modify the structure.</p>
+<p>
+Information hiding means to hide as much knowledge as possible. As part
+of this, we could define new type aliases to hide the fact that a string
+is represented by a pointer to a string structure:</p>
+<pre class="code-block">  <span class="key3">typedef</span> <span class="key3">struct</span> string *String;
+  <span class="key3">typedef</span> <span class="key3">struct</span> string <span class="key3">const</span> *ConstString; <span class="comment">// Immutable string</span>
+
+</pre><p>
+By doing this, we allow the representation to change at any time. For
+example, we could choose to represent String objects by a simple data
+pointer not knowing its size or a data pointer prepended by its size.</p>
+<p class='small'>See <a href="http://xinutec.org/~pippijn/en/programming_c_strings.xhtml">C
+string representations</a> if you are interested in other string representations.
+
+</p><p>
+Now, our accessor functions look like this:</p>
+<pre class="code-block">  <span class="key3">size_t</span> strLength (ConstString str);
+  <span class="key3">char</span> <span class="key3">const</span> *strToCStr (ConstString str);
+  <span class="key3">char</span> strCharAt (ConstString str, <span class="key3">size_t</span> pos);
+  <span class="key3">void</span> strSetCharAt (String str, <span class="key3">size_t</span> pos, <span class="key3">char</span> c);
+  <span class="key3">void</span> strAddChars (String str, <span class="key3">char</span> <span class="key3">const</span> *chars);
+
+</pre><p>
+We did not only abstract away some knowledge, we also reduced our required
+typing.</p>
+<h3>
+<a id='h2'>Violations of the principle</a></h3>
+<p>
+There are various more or less obvious ways to violate the principle of
+information hiding. An obvious example would be directly accessing the
+structure's members:</p>
+<pre class="code-block">  <span class="comment">// Wrong:</span>
+  <span class="key3">void</span>
+  OnAdded (String str)
+  {
+    strncat (str-&gt;rep, <span class="string">" has been added"</span>, str-&gt;capacity - str-&gt;len);
+    str-&gt;len = strlen (str-&gt;rep);
+  }
+  <span class="comment">// Right:</span>
+  <span class="key3">void</span>
+  OnAdded (String str)
+  {
+    strAddChars (str, <span class="string">" has been added"</span>);
+  }
+
+</pre><p>
+The function <span class='code'>strAddChars</span> hides the knowledge about <span class='code'>String</span>'s internal
+structure and abstracts away the logic needed to add characters to the string.
+The resulting code is more descriptive and less error prone. Instead of
+kludging our own string concatenation operation every time, we write a single
+testable function that does it for us. Our own version in "Wrong" truncates
+the string, if it does not have enough room for the added text.</p>
+<p>
+A less obvious violation of information hiding would be pointer operations on
+String objects. Consider our String to be defined as <span class='code'>char*</span>. This type
+allows several operations that are built into C:</p>
+<pre class="code-block">  <span class="key3">typedef</span> <span class="key3">char</span> *String;
+  <span class="key3">typedef</span> <span class="key3">char</span> <span class="key3">const</span> *ConstString;
+
+  <span class="key3">void</span>
+  someFunc (String str)
+  {
+    printf (<span class="string">"The second character is `%d'\n"</span>, str[<span class="number">1</span>]); <span class="comment">// Index</span>
+    str += <span class="number">20</span>; <span class="comment">// Addition</span>
+    printf (<span class="string">"The twenty-second character is `%d'\n"</span>, str[<span class="number">1</span>]); <span class="comment">// Index</span>
+    printf (<span class="string">"The twenty-first character is `%d'\n"</span>, *str); <span class="comment">// Dereference</span>
+    String newStr = str - <span class="number">10</span>; <span class="comment">// Subtracting integer</span>
+    printf (<span class="string">"The difference between newStr and str is %d\n"</span>, newStr - str); <span class="comment">// Pointer difference</span>
+  }
+
+</pre><p>
+All these operations are defined on <span class='code'>char*</span>, and therefore also on <span class='code'>String</span>.
+This does not have to be the case, though. If <span class='code'>String</span> was defined as the
+<span class='code'>struct string*</span> earlier, all of these operations would cause a compilation
+error. Using these operations requires knowledge about the internal
+representation of <span class='code'>String</span> and is therefore in violation of the information
+hiding principle.</p>
+<h3>
+<a id='h3'>Enforcing encapsulation in C</a></h3>
+<p>
+C provides a very good way to enforce information hiding. We call this
+<em>opaque pointers</em>. Opaque in this sense means, we cannot touch or even <em>see</em>
+the internal structure. C allows us to <em>forward declare</em> structures and pass
+around pointers to them:</p>
+<pre class="code-block">  <span class="key3">struct</span> string;
+  <span class="key3">typedef</span> <span class="key3">struct</span> string *String;
+  <span class="key3">typedef</span> <span class="key3">struct</span> string <span class="key3">const</span> *ConstString;
+  <span class="comment">// All of the above accessor functions still work</span>
+  <span class="comment">// The OnAdded function marked with "Right" also still works, but the one</span>
+  <span class="comment">//   marked "Wrong" will cause a compilation error</span>
+
+</pre><p>
+<span class='code'>String</span> is now what we call a <em>pointer to an incomplete type</em>. Incomplete
+means that it does exist as a type, but its representation is not known to the
+compiler. Using opaque pointers is a good way of preventing direct member
+access in client code.</p>
+<h3>
+<a id='h4'>Advantages</a></h3>
+<p>
+There are definite advantages of information hiding and those are good reasons
+to apply it to your code.</p>
+<ul>
+<li>
+Less changes in client code<p>
+If we change a name in a structure, for example if we wanted to rename our
+<span class='code'>len</span> to <span class='code'>length</span>, because we think it is more descriptive, and client code
+depended on the variable being called <span class='code'>len</span>, we will have to modify all that
+code. Automatic refactoring tools help, but none of them are perfect. If no
+client code depended on this fact, there is a lot less to modify with such a
+change. We inofficially call renamings like this <em>API breakage</em>.</p>
+</li>
+<li>
+Faster recompilation and incremental builds<p>
+If you use a compiler cache such as <a href='http://ccache.samba.org/'>ccache</a> or if
+you use incremental build tools such as <a href='http://www.gnu.org/software/make/'>make</a>,
+you will have noticable speedups when using opaque pointers.</p>
+</li>
+<li>
+Better binary compatibility<p>
+If you decide to add another member to the string structure containing
+information about the number of reallocations, because you want to find the
+optimum initial string size for a certain application, you can do so, but if
+client code directly accessed the size and offset information of the
+structure, all such code needs to be recompiled. This is inofficially called
+<em>ABI breakage</em>.</p>
+</li>
+</ul>
+<h3>
+<a id='h5'>Disadvantages</a></h3>
+<p>
+This all sounds great and we may ask ourselves, why doesn't everybody
+encapsulate everything. There are also disadvantages to be considered when
+designing software.</p>
+<ul>
+<li>
+Speed<p>
+This is probably the most considered and least important disadvantage. I say
+most considered, because people often tend to ignore good practice and
+prematurely optimise their code by not encapsulating data properly. Consider
+the code required to access a member of a structure directly and the code
+required to call a function doing the same thing. A member access is a full
+word addition and a dereference on x86 platforms. A function call is at least
+a full word decrement, four unconditional moves, two stack pushes, a
+dereference, an addition, an increment, two stack pops, an unconditional jump
+and a call return. A lot more to do for our poor little Pentium with 3 GHz.</p>
+<p>
+But our poor little Pentium with 3 GHz will do all that within 70 clock
+cycles, which is about 10 cycles more than a <span class='code'>nop</span> instruction. This is why I
+say, it is the least important disadvantage. If you are writing speed
+critical, embedded software or real-time applications, you will ignore this,
+but then you will also ignore any other principles known to be good practice.</p>
+</li>
+<li>
+Code bloat<p>
+The above argument indirectly contains the code bloat argument. All those
+instructions needed to call a function returning or setting the member's value
+exist in object code after compilation. If you have a large structure with
+accessors for each member, you will substantially increase code size. Modern
+computers will gladly handle large binaries, so this is an argument for
+embedded developers only.</p>
+</li>
+<li>
+Dynamic allocation<p>
+In the case of opaque pointers, all objects need to be allocated on the free
+store (using <span class='code'>malloc</span>), There are situations in which this is not viable, for
+example in embedded systems such as mp3 players, In certain environments, the
+use of <span class='code'>malloc</span> is either prohibited due to its nondeterministic nature with
+regards to operation time or simply not implemented. In this case, the
+structure needs to be visible in all locations where it is allocated, so a
+macro such as the following might help:</p>
+<pre>
+  #define MEW_LOCAL(TYPE, NAME) TYPE NAME##_; TYPE *NAME = NAME##_</pre><p>
+Or one could just declare the variable locally and pass its address to its
+operations,</p>
+<p>
+In addition to that, one could name all members "<span class='code'>membername_</span>" (trailing
+underscore) in order to be able to easily spot violations of the principle,
+visually. It also makes the author of client code think twice.</p>
+</li>
+</ul>
+<h3>
+<a id='h6'>The compromise</a></h3>
+<p>
+In C, there are a few ways to speed up and shrink the code without violating
+information hiding. One of these is the use of macros. Instead of defining a
+function:</p>
+<pre>
+  size_t strLength (ConstString str);</pre><p>
+we define a macro doing the same:</p>
+<pre>
+  #define strLength(s)  (s)-&gt;len</pre><p>
+This has disadvantages, as well. Now, you cannot use opaque pointers anymore,
+no longer avoiding ABI breakages and speeding up incremental builds. It is no
+longer type-safe, as you could pass any structure with a <span class='code'>len</span> member to this
+macro. It still avoids API breakages, though. This way, you can have some form
+of encapsulation even in speed critical applications.</p>
+<h3>
+<a id='h7'>Information hiding in other languages</a></h3>
+<p>
+I chose C, as I said, because it is most suitable as example for
+encapsulation. This does not mean that other languages do not have equally
+good or even better ways to encapsulate data.</p>
+<ul>
+<li>
+C++<p>
+has the <em>pimpl</em> idiom. This idiom is basically the same as using opaque
+pointers in C, except that the accessor functions are wrapped in a class,
+making the code look more object oriented.</p>
+</li>
+<li>
+Java<p>
+tends to make all variables private and provide getters and setters for each
+of them. C has no notion of private, protected or public. These modifiers make
+the code look even more object oriented. Due to the fact that Java has no
+references in the C++ sense, accessors cannot be made as natural as in C# or
+C++.</p>
+</li>
+<li>
+C#<p>
+has properties, which syntactically behave exactly like public member
+variables, but in fact execute small (or large) portions of code to validate
+input or invoke events on modification.</p>
+</li>
+<li>
+Perl<p>
+Perl's objects are references <span class='code'>bless</span>ed into a package. This means that all
+methods called on the object are looked up in that package. Most common
+references are hash references, allowing named data members.
+<span class='code'>$ob->{member}</span> is a way to access this data, but it is discouraged.
+Instead, methods are used: <span class='code'>$ob->method</span>.</p>
+</li>
+</ul>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Thu May 26 20:36:23 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

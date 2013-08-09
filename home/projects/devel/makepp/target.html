@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Devel / Makepp / Target</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Devel / Makepp / Target"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel/autoproj">Autoproj</a></li><li>
+<a href="/~pippijn/home/projects/devel/clangide">Clang IDE</a></li><li>
+<a href="/~pippijn/home/projects/devel/libcommon">libcommon</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp">Autocomb <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel/makepp/project">Project</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp/variables">Variables</a></li><li>
+<a id="actmenu">Targets</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp/template">Templates</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp/rules">Rules</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp/examples">Examples</a></li></ul></li></ul></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Targets (programs/libraries)</h2>
+<ul><li><a href='#h1'>Sections</a></li>
+<li><a href='#h2'>Conditions</a></li>
+<li><a href='#h3'>Install targets</a></li></ul><p>
+Target descriptions are declaratively defined in rule files. They share the
+syntax with project descriptions, but the order of these files is irrelevant.
+The order of declarations within a file is also irrelevant. Moreover, the
+translator sorts the input files lexically before starting to parse them. This
+is to guarantee the same parse order on every system, so that errors appear in
+the same order and comparisons are easier.</p>
+<p>
+Currently supported targets are programs and libraries. The simplest possible
+target is a program with a single source file.</p>
+<pre class="code-block">   <span class="key1">program</span> make {
+      <span class="key1">sources</span> {
+         make.c
+      }
+   }
+
+</pre><p>
+If you wanted to build a library called <span class='code'>libmake.la</span>, instead, you would
+substitute <span class='code'>library</span> for <span class='code'>program</span>. Programs and libraries are exactly the
+same, except that libraries may be linked against by other programs and
+libraries and programs may not.</p>
+<h3>
+<a id='h1'>Sections</a></h3>
+<p>
+A target contains at least one section and optionally a description string. You
+can add a description to a target. This is used in the configure summary and, in
+case of libraries, generated pkg-config files.</p>
+<h4>
+sources</h4>
+<p>
+The <span class='code'>sources</span> directive is used to list the sources for a target. This
+directive supports wildcards and group matches.</p>
+<p>
+The semantics of <span class='code'>*</span> and <span class='code'>?</span> are equal to their semantics in POSIX shell. An
+additional <span class='code'>**</span> wildcard matches recursively. Furthermore, <span class='code'>{a b c}</span> group
+matches may be used in wildcards.</p>
+<p>
+Unlike pattern rules, these wildcards only match on the actual file system, more
+specifically the source directory. It does not match built files. If you want to
+distribute built sources, you need to list them, explicitly.</p>
+<pre class="code-block">   <span class="key1">sources</span> {
+      <span class="comment"># All .c files in the current directory and descendants</span>
+      **.c
+      <span class="comment"># Match ac.cc ad.cc bc.cc bd.cc</span>
+      {a b}{c d}.cc
+      <span class="comment"># Explicit source</span>
+      main.cpp
+   }
+
+</pre><p>
+Explicitly listed sources must either exist in the file system or be buildable
+via an explicit or pattern rule. Filenames can either be specified relative to
+the currently processed rules file or relative to the source root.</p>
+<p>
+We recommend <em>not</em> to use wildcards too much for several
+<a href='http://www.gnu.org/s/hello/manual/automake/Wildcards.html'>reasons</a>. You may
+freely mix wildcard matches and explicit sources. The <span class='code'>-Wwildcard-match</span> flag
+warns for every file matched by a wildcard that was not explicitly listed. This
+way, you can be notified if you create a new file without adding it to the
+sources list.</p>
+<p>
+Sources from other targets can be imported via a <span class='code'>sources</span> directive within the
+sources list. Optionally, an <span class='code'>exclude</span> directive can prevent one or more
+sources from being imported. Excluded files can either be specified in full or
+just with the base name.</p>
+<pre class="code-block">   <span class="comment"># sources for the math lib with emulated SSE</span>
+   <span class="key1">sources</span> {
+      <span class="key1">sources</span> (mathlib)
+      <span class="key1">exclude</span> {
+         <span class="comment"># do not import the SSE implementation</span>
+         math_sse.c
+      }
+      <span class="comment"># we have an emulation</span>
+      math_see_emu.c
+   }
+
+</pre><p>
+A warning is issued if the imported set is empty after exclusions. It is an
+error to list the same file twice or to list a file that was already imported.
+It is, in fact, even an error to list two different files that ultimately target
+the same object file.</p>
+<h4>
+nodist_sources</h4>
+<p>
+All files listed in <span class='code'>sources</span> are shipped with the distribution. That includes
+sources built from other sources or by rules. The <span class='code'>nodist_sources</span> section lets
+you build sources without shipping them.</p>
+<h4>
+extra_dist</h4>
+<p>
+These files are added to the distribution produced by <span class='code'>make dist</span>. They are not
+scoped and the files are also added, if the target containing them is not built.
+This directive may also appear outside a target description.</p>
+<pre class="code-block">   <span class="comment"># include/Rules</span>
+   <span class="key1">extra_dist</span> {
+      <span class="comment"># Distribute all header files (recursively matched)</span>
+      **.h
+   }
+
+</pre><h4>
+link</h4>
+<p>
+In the <span class='code'>link</span> section of a target, you may refer to libraries built within this
+project. The installation order of libraries is calculated using the dependency
+information (libraries are topologically sorted and installed in inverse sort
+order). It is an error to refer to a non-existent internal library.</p>
+<p>
+In order to link against external libraries, you must add the <span class='code'>"-l"</span> prefix.
+Libraries linked like this are automatically checked in configure. If you also
+want to check whether certain symbols are defined in the library, you need to
+add those checks, manually.</p>
+<pre class="code-block">   <span class="key1">link</span> {
+      <span class="comment"># Link against the locally built libmylib.la</span>
+      mylib
+
+      <span class="comment"># Also link against GMP</span>
+      -lgmp
+   }
+
+</pre><p>
+You may import <span class='code'>link</span> sections the same way as sources can be imported. Global
+<span class='code'>link</span> sections apply to all targets without a <span class='code'>link</span> section. They are not
+imported by default, if a <span class='code'>link</span> section is present. In order to import the
+global link section, the <span class='code'>link ()</span> directive must be present in the target's
+link section.</p>
+<pre class="code-block">   <span class="key1">link</span> {
+      <span class="comment"># Import global libraries</span>
+      <span class="key1">link</span> ()
+      <span class="comment"># But don't link against GMP</span>
+      <span class="key1">exclude</span> {
+         -lgmp
+      }
+   }
+
+</pre><p>
+If the global link section links against a locally built library, that library
+excludes itself, automatically. Care must be taken with locally built libraries
+in the global link section. It is very easy to introduce dependency cycles, this
+way.</p>
+<h4>
+cppflags</h4>
+<p>
+If inside a target, these are target-specific <span class='code'>CPPFLAGS</span>. If you define
+target-specific <span class='code'>cppflags</span>, the global <span class='code'>cppflags</span> are overridden. You may
+import global <span class='code'>cppflags</span> as with link and sources.</p>
+<pre class="code-block">   <span class="key1">cppflags</span> {
+      <span class="comment"># Import global CPPFLAGS</span>
+      <span class="key1">cppflags</span> ()
+      <span class="comment"># Add target-specific CPPFLAGS</span>
+      -D_GNU_SOURCE
+   }
+
+</pre><h3>
+<a id='h2'>Conditions</a></h3>
+<p>
+All sections in a target description may be conditionalised. The condition must
+be explicitly (via <span class='code'>arg_enable</span>) or implicitly (e.g. via <span class='code'>library</span>) defined by
+the <span class='code'>project</span> section.</p>
+<pre class="code-block">   <span class="comment"># Add these sources iff GMP is available and enabled</span>
+   <span class="key1">sources</span> <span class="key4">if</span> GMP {
+      gmp_math.c
+   }
+
+</pre><p>
+You may even conditionalise the entire target. Then all sections inside the
+target, except <span class='code'>extra_dist</span>, are implicitly conditionalised.</p>
+<pre class="code-block">   <span class="key1">program</span> pcregrep <span class="key4">if</span> PCRE {
+      ...
+   }
+
+</pre><h3>
+<a id='h3'>Install targets</a></h3>
+<p>
+By default, programs are installed into <span class='code'>$bindir</span> and libraries are installed
+into <span class='code'>$libdir</span>. You can change this by using the arrow operator.</p>
+<pre class="code-block">   <span class="comment"># install to $pkglibexecdir</span>
+   <span class="key1">program</span> cc1plus <span class="key3">-&gt;</span> pkglibexec {
+      ...
+   }
+
+</pre><p>
+TODO: There is no way to define custom install directories, for now.</p>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Fri Jul  8 03:52:45 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

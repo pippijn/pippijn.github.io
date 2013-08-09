@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Lang / Rasm</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Rasm"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/aldor">Aldor <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/jmlc">JML</a></li><li>
+<a href="/~pippijn/home/projects/lang/libcdk">CDK library</a></li><li>
+<a id="actmenu">Runtime assembler</a></li><li>
+<a href="/~pippijn/home/projects/lang/reflect">Reflect</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe">Safe C <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/xul">XUL Projects</a></li><li>
+<a href="/~pippijn/home/projects/lang/yaccpp">YACC Preprocessor</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Runtime assembler</h2>
+<ul><li><a href='#h1'>Type checking</a></li>
+<li><a href='#h2'>Implementation</a></li>
+<li><a href='#h3'>Byte-code</a></li></ul><p>
+<a href='http://xinutec.org/git/lang/rasm.git/'>Git repository</a></p>
+<p>
+This is a portable C++ runtime assembler backed by GNU Lightning. It currently
+has four CPU backends: x86, x86_64, PowerPC and Sparc. What I have right now
+is a working parser and assembler for things like this:</p>
+<pre class="code-block">  <span class="comment"># mnemonic    op1             op2             op3     ret</span>
+  <span class="key1">prolog</span>        <span class="number">1</span>
+  <span class="key1">arg</span>                                                   <span class="key3">=&gt;</span> $in
+  <span class="key1">getarg</span>        <span class="key4">%v0</span>             $in                                   <span class="comment"># V0 = n</span>
+  <span class="key1">blt</span>           <span class="key2">!forward</span>        <span class="key4">%v0</span>             <span class="number">2</span>       <span class="key3">=&gt;</span> @ref
+  <span class="key1">sub</span>           <span class="key4">%v1</span>             <span class="key4">%v0</span>             <span class="number">1</span>                     <span class="comment"># V1 = n - 1</span>
+  <span class="key1">sub</span>           <span class="key4">%v2</span>             <span class="key4">%v0</span>             <span class="number">2</span>                     <span class="comment"># V2 = n - 2</span>
+  <span class="key1">prepare</span>       <span class="number">1</span>                                                     <span class="comment"># Prepare for a call with</span>
+                                                                      <span class="comment"># one argument</span>
+  <span class="key1">pusharg</span>       <span class="key4">%v1</span>                                                   <span class="comment"># Push the argument</span>
+  <span class="key1">finish</span>        <span class="key5">@self</span>         <span class="comment"># The self-pointer is a pointer to the</span>
+                              <span class="comment"># beginning of the code block (entry point).</span>
+                              <span class="comment"># This instruction jumps to the beginning of the</span>
+                              <span class="comment"># code, causing recursion</span>
+
+  <span class="key1">retval</span>        <span class="key4">%v1</span>                                   <span class="comment"># Store the result in V1</span>
+  <span class="key1">prepare</span>       <span class="number">1</span>                                     <span class="comment"># Another</span>
+  <span class="key1">pusharg</span>       <span class="key4">%v2</span>                                   <span class="comment"># recursive</span>
+  <span class="key1">finish</span>        <span class="key5">@self</span>                                 <span class="comment"># call</span>
+  <span class="key1">retval</span>        <span class="key4">%v2</span>                                   <span class="comment"># Store the result in V2</span>
+  <span class="key1">add</span>           <span class="key4">%v1</span>             <span class="key4">%v1</span>             <span class="number">1</span>     <span class="comment"># V1++</span>
+  <span class="key1">add</span>           <span class="key4">%ret</span>            <span class="key4">%v1</span>             <span class="key4">%v2</span>   <span class="comment"># RET = V1 + V2</span>
+  <span class="key1">ret</span>                                                 <span class="comment"># Return</span>
+  
+  <span class="key1">patch</span>         @ref                                  <span class="comment"># Patch jump</span>
+  <span class="key1">mov</span>           <span class="key4">%ret</span>            <span class="number">1</span>                     <span class="comment"># RET = 1</span>
+  <span class="key1">ret</span>                                                 <span class="comment"># Return</span>
+
+</pre><p>
+This example is a function that takes one integer argument <span class='code'>N</span> and calculates
+the <span class='code'>N</span>-th Fibonacci number.</p>
+<h3>
+<a id='h1'>Type checking</a></h3>
+<p>
+It has a limited form of type checking. Basically just whether you are passing
+<span class='code'>imm</span>, <span class='code'>reg</span> or <span class='code'>insn</span>. I do not yet have differently sized types.
+Everything that is an immediate is passed as <span class='code'>int32_t</span>. This might cause
+breakage on 64 bit platforms but I don't know how to do the differently sized
+types, yet.</p>
+<h3>
+<a id='h2'>Implementation</a></h3>
+<p>
+For each mnemonic, the assembler uses a C++ member function. The system
+provides a dynamic dispatching mechanism which allows any type of member
+function to be called from the assembly code.</p>
+<h3>
+<a id='h3'>Byte-code</a></h3>
+<p>
+The software can also store the parsed assembly code in a platform independent
+bytecode format. Numbers are stored in Big Endian byte order. The parser does
+not check whether the instruction exists. It just assumes it does. Only when
+the code is actually assembled into machine code or stored to bytecode, these
+checks are performed. The bytecode is very simple. Each instruction consists
+of a 4-byte header, 0, 1, 2 or 3 argument blocks and an optional return value
+block. The header looks like this:</p>
+<pre>
+  Bytes         Content
+  1             Whether or not the instruction returns a value
+  1             Argument count (0, 1, 2 or 3)
+  2             Opcode</pre><p>
+Each argument block starts with a 1-byte type-code which may be one of <span class='code'>var</span>,
+<span class='code'>label</span>, <span class='code'>call</span>, <span class='code'>reg_r</span>, <span class='code'>reg_v</span>, <span class='code'>reg_fp</span>, <span class='code'>reg_ret</span>, <span class='code'>imm</span>. After
+that, it depends on whether the operand is a string or an integer. String
+operands are currently only <span class='code'>var</span>, <span class='code'>label</span> and <span class='code'>call</span>. Strings are stored
+with a 2-byte length indicator and then the string content. Integers are stored
+as 4-byte blocks. The optional return block is just a string with its 2-byte
+length. It refers to the variable or label name in which the return value is
+stored.</p>
+<p>
+The type-codes have the following meaning:</p>
+<ul>
+<li>
+var<p>
+A variable holding an integer (immediate value).</p>
+</li>
+<li>
+label<p>
+A variable holding either an instruction pointer for local jumps or a pointer
+to a function or other location for non-local jumps.</p>
+</li>
+<li>
+call<p>
+These are no real function calls. <span class='code'>call</span>-type operands are the <span class='code'>!forward</span>
+kind of operands. They are called at assembly-time and must return a value.</p>
+</li>
+<li>
+reg_r</li>
+<li>
+reg_v<p>
+These are general-purpose registers client code can store values in. They are
+not destroyed by the CPU.</p>
+</li>
+<li>
+reg_fp<p>
+General purpose floating point registers.</p>
+</li>
+<li>
+reg_ret<p>
+Special return-value register. On x86, this is <span class='code'>EAX</span>.</p>
+</li>
+<li>
+imm<p>
+An immediate (integer) value.</p>
+</li>
+</ul>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Fri Jul  8 15:01:40 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

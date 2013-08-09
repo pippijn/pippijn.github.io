@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Programming / C / Strings</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Programming / C / Strings"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/programming/data-hiding">Data hiding</a></li><li>
+<a href="/~pippijn/home/programming/c">C <span class="small">[-]</span></a><ul>
+<li>
+<a id="actmenu">Strings</a></li></ul></li><li>
+<a href="/~pippijn/home/programming/cpp">C++ <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+String representations in C</h2>
+<ul><li><a href='#h1'>What is a string?</a></li>
+<li><a href='#h2'>Different representations</a></li></ul><h3>
+<a id='h1'>What is a string?</a></h3>
+<p>
+That is a very important question. Most programmers think that strings
+represent text. This is not the real meaning of the word 'string'. Text is
+usually represented by a <em>byte string</em>, but does not have to be. It may as
+well be represented by an octet string or a 32 bit integer string.</p>
+<h3>
+<a id='h2'>Different representations</a></h3>
+<h4>
+NUL terminated</h4>
+<p>
+This is the representation most commonly used in the C programming language.
+All string literals are NUL terminated. C has two kinds of string literals:
+character and wide character string literals. The latter is written
+<span class='code'>L"text"</span> and is of type <span class='code'>wchar_t const*</span>. The representation in memory of
+<span class='code'>"text"</span> would be equivalent to:</p>
+<pre>
+  { 't', 'e', 'x', 't', 0 }
+  // In ASCII values:
+  { 0x74, 0x65, 0x78, 0x74, 0 }
+  // In EBCDIC values:
+  { 0xa3, 0x85, 0xa7, 0xa3, 0 }</pre><p>
+<span class='code'>L"text"</span>'s representation is even more platform dependent and could be:</p>
+<pre>
+  { L't', L'e', L'x', L't', 0 }
+  // In ASCII values:
+  { 0x0074, 0x0065, 0x0078, 0x0074, 0 }</pre><p>
+This is not surprising. More surprising would be the representation of
+<span class='code'>"&#x263a;"</span> and <span class='code'>L"&#x263a;"</span>:</p>
+<pre>
+  C&lt;"☺"&gt;
+  { 0x3f, 0x98, 0xba, 0 }
+  C&lt;L"☺"&gt;
+  { 0x263a, 0 }</pre><p>
+The former is the UTF-8 octet-representation of the smiley face, the latter is
+the Unicode code point in a <span class='code'>wchar_t</span> string. This is all highly platform
+dependent and could be all different for you. This text, however, is not about
+platform dependentness of string literals. It is about how strings can be
+represented in memory.</p>
+<h5>
+Advantages</h5>
+<ul>
+<li>
+Low memory consumption<p>
+There is no need to store the length of a string anywhere, because that can be
+found easily by iterating over the characters and increment a counter until a
+NUL character is found.</p>
+</li>
+<li>
+C standard library compatible<p>
+The C standard library functions operate on such NUL terminated strings, so
+conversion is not required.</p>
+</li>
+</ul>
+<h5>
+Disadvantages</h5>
+<ul>
+<li>
+Cannot hold NUL characters<p>
+Due to this string depending on the special NUL character denoting its end, it
+cannot contain NUL characters itself. A string like <span class='code'>"Hello\0World"</span> would be
+interpreted as <span class='code'>"Hello"</span>.</p>
+</li>
+</ul>
+<h4>
+struct string</h4>
+<p>
+A more sophisticated string representation is the following struct, frequently
+used by C++'s <span class='code'>std::string</span> implementations:</p>
+<pre class="code-block">  <span class="key3">struct</span> string
+  {
+    <span class="key3">char</span> *rep;
+    <span class="key3">size_t</span> len;
+    <span class="key3">size_t</span> max;
+  };
+
+</pre><p>
+<span class='code'>string.rep</span> is the internal representation of the string, which is just a
+data pointer and not necessarily a NUL terminated C string. <span class='code'>len</span> holds the
+current length and <span class='code'>max</span> is the number of bytes this string can hold before
+it needs a reallocation.</p>
+<h5>
+Advantages</h5>
+<ul>
+<li>
+Can hold any binary data<p>
+This string does not depend on special characters marking its end, so it can
+hold such characters without any problem.</p>
+</li>
+<li>
+Constant time strlen<p>
+The <span class='code'>strlen</span> equivalent for this string runs in constant time, because the
+string maintains a variable holding the length.</p>
+</li>
+</ul>
+<h5>
+Disadvantages</h5>
+<ul>
+<li>
+Not standard library compatible<p>
+In order to use C standard library functions such as <span class='code'>strcat</span> or <span class='code'>printf</span>,
+this string needs to be converted to a NUL terminated C string. That can be
+done either by copying the string and omitting NUL characters or by making
+sure the string is at least NUL terminated and ignoring inner NUL characters.
+C++'s <span class='code'>std::string</span> chose to do the latter.</p>
+</li>
+</ul>
+<h4>
+Netstring</h4>
+<p>
+<a href='http://cr.yp.to/proto/netstrings.txt'>Netstrings</a> are strings in the form</p>
+<pre>
+  [length]":"[string]","</pre><p>
+They are stored in octet strings.</p>
+<h5>
+Advantages</h5>
+<ul>
+<li>
+Can hold any binary data<p>
+Just like the <span class='code'>struct string</span> above, this string stores its size along with
+the data.</p>
+</li>
+<li>
+Almost constant time strlen<p>
+Finding the length of a Netstring is as easy as finding the ':' in the string
+and converting the text before it to an integer.</p>
+</li>
+<li>
+Can be sent over network without conversions<p>
+This string does not use byte order dependent data, so it can be sent and
+received verbatim over network.</p>
+</li>
+</ul>
+<h5>
+Disadvantages</h5>
+<ul>
+<li>
+High memory consumption<p>
+This string stores the string representation of the length, which may need up
+to 11 bytes of memory in addition to the ':' and ',', so up to 13 bytes are
+spent on the length only.</p>
+</li>
+</ul>
+<h4>
+String with size prepended</h4>
+<p>
+This is a <span class='code'>char*</span> object that looks just like any normal C string, except
+that it has a hidden size prepended to it. In memory, a "Hello" string would
+look like this:</p>
+<pre>
+  // Big endian ASCII
+  0x00, 0x05, 0x48, 0x65, 0x6c, 0x6c, 0x6f
+  // Little endian ASCII
+  0x05, 0x00, 0x48, 0x65, 0x6c, 0x6c, 0x6f</pre><p>
+The pointer actually points at the third character, so the length is hidden
+from normal functions and only the special functions that destructively
+operate on the string's representation know about its existence.</p>
+<h5>
+Advantages</h5>
+<ul>
+<li>
+Low memory consumption<p>
+This string type only takes 2 extra octets of memory to be able to represent
+any string up to a length of 65535 characters.</p>
+</li>
+<li>
+Can hold any binary data<p>
+Like the Netstring, this string prepends its length to its actual data, which
+allows the string to hold any string of characters, including NUL.</p>
+</li>
+<li>
+Constant time strlen<p>
+The length is known and already in host integer representation, so finding the
+length is a constant time operation.</p>
+</li>
+<li>
+Standard library compatible<p>
+As long as no NUL characters exist within the string, it can be passed to
+standard library functions such as strcmp, making many operations on this type
+of string trivial.</p>
+</li>
+</ul>
+<h5>
+Disadvantages</h5>
+<ul>
+<li>
+Length stored in host byte order<p>
+If you want to send this string over a network channel, the size needs to be
+converted to network byte order, unless the host is big endian. The string is
+therefore slightly harder to handle.</p>
+</li>
+</ul>
+<p>
+Note that you can prepend anything to the actual string data, as long as you
+remember the offset. This technique is commonly used in hashed strings that
+contain their own hash code, making getting the hash value a constant time
+operation.</p>
+<p>
+If you do it smartly, you can minimise storage overhead by storing up to 0x7f
+in the last byte and look at the previous byte if it is greater than 0x7f. If
+the previous byte is also greater than 0x7f, proceed with the next previous
+byte, and so on. For further details, see the wikipedia article on
+<a href='http://en.wikipedia.org/wiki/Basic_Encoding_Rules'>BER</a>.</p>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Wed Jun 29 12:31:33 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

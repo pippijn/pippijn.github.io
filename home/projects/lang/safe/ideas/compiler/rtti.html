@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Lang / Safe / Ideas / Compiler / Rtti</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Compiler / Rtti"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/aldor">Aldor <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/jmlc">JML</a></li><li>
+<a href="/~pippijn/home/projects/lang/libcdk">CDK library</a></li><li>
+<a href="/~pippijn/home/projects/lang/rasm">Runtime assembler</a></li><li>
+<a href="/~pippijn/home/projects/lang/reflect">Reflect</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe">Safe C <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas">Future ideas <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler">Compiler <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler/bison">Bison</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler/colour">Colours</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler/const-rtti">Const RTTI</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler/inttypes">Integer types</a></li><li>
+<a id="actmenu">RTTI</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler/s11n">Serialisation</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler/warnings">Warnings</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language">Language <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/runtime">Runtime <span class="small">[+]</span></a></li></ul></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/xul">XUL Projects</a></li><li>
+<a href="/~pippijn/home/projects/lang/yaccpp">YACC Preprocessor</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Runtime Type Information</h2>
+<ul><li><a href='#h1'>alignment would always be at least alignof(pointer)</a></li></ul><p>
+Generate runtime type info. e.g.:</p>
+<h5>
+namespace info</h5>
+<ul>
+<li>
+pointer to parent namespace (or NULL)</li>
+<li>
+name of namespace (or "" for global namespace (defined in runtime library))</li>
+</ul>
+<h5>
+type info</h5>
+<ul>
+<li>
+pointer to containing namespace</li>
+<li>
+name of type</li>
+</ul>
+<h5>
+struct info (inherits type info)</h5>
+<ul>
+<li>
+sizeof struct</li>
+<li>
+alignof struct (optional)</li>
+<li>
+array of members</li>
+</ul>
+<h5>
+datatype info (inherits type info)</h5>
+<ul>
+<li>
+array of constructors</li>
+<li>
+extensible flag (is this useful for anything?)</li>
+</ul>
+<h5>
+constructor info</h5>
+<ul>
+<li>
+name of constructor</li>
+<li>
+array of arguments (members)</li>
+</ul>
+<h5>
+member info</h5>
+<ul>
+<li>
+name of member</li>
+<li>
+pointer to type</li>
+</ul>
+<p>
+All (some?) structs and datatypes will have an additional first member
+pointing to their type info structure the problem with this is that they are
+no longer compatible with C, because:</p>
+<h3>
+<a id='h1'>alignment would always be at least alignof(pointer)</a></h3>
+<p>
+Yes, this is a problem, because we can't just pass ptr + sizeof(pointer) to a
+C functions.</p>
+<p>
+This can be solved by doing something like</p>
+<pre class="code-block">   <span class="key3">struct</span> foo { <span class="comment">// alignment=2 (x86)</span>
+      <span class="key3">char</span> a;
+      <span class="key3">short</span> b;
+   };
+
+</pre><p>
+is compiled to:</p>
+<pre class="code-block">   <span class="key3">struct</span> foo_data { <span class="comment">// alignment still 2</span>
+      <span class="key3">char</span> a;
+      <span class="key3">short</span> b;
+   };
+   <span class="key3">struct</span> foo { <span class="comment">// alignment=4 (x86)</span>
+      type_info <span class="key3">const</span> *ti;
+      foo_data data;
+   };
+
+</pre><p>
+and passing foo* to an extern C function looks like:</p>
+<pre class="code-block">   cfun (&amp;foo-&gt;data);
+
+</pre><p>
+Similarly, a struct foo can be passed as <span class='code'>cfun (foo.data)</span>.</p>
+<p>
+Special care must be taken with casts. We support casting to supertypes. This
+should retain the <span class='code'>type_info</span> of the original struct, but if its pointee
+is copied, the <span class='code'>type_info</span> should be updated to reflect the supertype.</p>
+<p>
+Luckily, there is no <span class='code'>void*</span>, but <span class='code'>`t</span> exists and this also needs
+special thought, because rtti is most useful for generic functions. The
+problem is that <span class='code'>`t</span> can be non-pointer. Perhaps it is a good idea to forbid
+non-pointers or introduce some kind of autoboxing for non-pointer types.</p>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Mon Jul  4 23:54:09 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

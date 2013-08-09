@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Games / Quake3</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Games / Quake3"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[-]</span></a><ul>
+<li>
+<a id="actmenu">Quake 3</a></li><li>
+<a href="/~pippijn/home/projects/games/dclient">Deliantra</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Quake 3</h2>
+<ul><li><a href='#h1'>IRC Logging</a></li>
+<li><a href='#h2'>Client-Perl</a></li>
+<li><a href='#h3'>Future</a></li></ul><p>
+<a href='http://xinutec.org/git/games/ioquake3.git/'>Git repository</a></p>
+<p>
+I've started hacking on the <a href='http://ioquake3.org/'>ioquake3</a> sources, adding
+a <a href='http://www.perl.org/'>Perl</a> interface to a small number of C functions and
+a few callbacks from C/QVM to Perl functions. This allowed me to add an IRC
+logging backend and a client hack for weapon selection.</p>
+<h3>
+<a id='h1'>IRC Logging</a></h3>
+<p>
+The IRC logging captures game events and produces a message to be sent to IRC.
+The current implementation uses Net::IRC3 but this is soon going to change to
+AnyEvent::IRC.</p>
+<p>
+The PerlQuake3 server is running on <span class='code'>q3a.xinutec.org</span> and events are written
+to the channel <span class='code'>#q3a</span> on <span class='code'>irc.xinutec.org</span>.</p>
+<p>
+The following events are transferred to IRC:</p>
+<ul>
+<li>
+Player connected<pre>
+  12:49 &lt; q3a&gt; Jules_Vernes connected</pre></li>
+<li>
+Player disconnected<pre>
+  13:20 &lt; q3a&gt; Jules_Vernes disconnected</pre></li>
+<li>
+Player was killed<pre>
+  12:54 &lt; q3a&gt; Jules_Vernes was squished
+  13:00 &lt; q3a&gt; LucY was railed by Jules_Vernes
+  13:18 &lt; q3a&gt; Jules_Vernes was in the wrong place</pre></li>
+<li>
+Round finished<pre>
+  22:16 &lt; q3a&gt; Round finished:
+  22:16 &lt; q3a&gt; 1. LucY score: 20  ping 33
+  22:16 &lt; q3a&gt; 2. peter lustich score: 3  ping 61
+  22:16 &lt; q3a&gt; 3. Jules_Vernes score: -2  ping 91</pre></li>
+<li>
+Player said something<pre>
+  22:17 &lt; q3a&gt; &lt;peter lustich&gt; lol</pre></li>
+</ul>
+<p>
+IRC users can chat back into the game and it will look like it origined from
+<span class='code'>irc/user</span> where <span class='code'>user</span> is the nickname of the person on IRC. Quake colours
+are converted to IRC colours and vice versa.</p>
+<p>
+Furthermore, the IRC bot has the following commands:</p>
+<ul>
+<li>
+!clients<p>
+Show all players currently in the game.</p>
+</li>
+<li>
+!verbosity [level]<p>
+If no <span class='code'>level</span> is given, this shows the current IRC verbosity. Currently,
+there are four verbosity bits that can be set: <span class='code'>CHAT</span>, <span class='code'>KILL</span>, <span class='code'>JOIN</span> and
+<span class='code'>STAT</span>. If <span class='code'>level</span> is given in the form <span class='code'>!verbosity +chat -kill +join</span>,
+the respective bits are set or unset.</p>
+</li>
+<li>
+!help [command]<p>
+Shows help on <span class='code'>command</span> or a list of commands if <span class='code'>command</span> is omitted.</p>
+</li>
+<li>
+!reload<p>
+Reloads all <span class='code'>Quake3::</span> modules except for the <span class='code'>Quake3</span> module itself.</p>
+</li>
+</ul>
+<h3>
+<a id='h2'>Client-Perl</a></h3>
+<p>
+The Quake 3 client has been enhanced to allow for prioritising weapon
+selection on pickup. That means, if <span class='code'>cg_autoswitch</span> is on, weapons are only
+selected if their priority is higher or equal to the priority of the current
+weapon.</p>
+<p>
+Currently, these priorities are not user-definable, but that will soon be
+implemented. The code for this is absolutely trivial and can be found in
+<span class='filename'>Quake3.pm</span>:</p>
+<pre class="code-block">  <span class="key1">my</span> %prefs = (
+     Quake3::WP_GRAPPLING_HOOK    =&gt; <span class="number">0</span>,
+     Quake3::WP_NONE              =&gt; <span class="number">0</span>,
+  
+     Quake3::WP_GAUNTLET          =&gt; <span class="number">0</span>,
+     Quake3::WP_GRENADE_LAUNCHER  =&gt; <span class="number">0</span>,
+     Quake3::WP_MACHINEGUN        =&gt; <span class="number">1</span>,
+     Quake3::WP_RAILGUN           =&gt; <span class="number">1</span>,
+     Quake3::WP_SHOTGUN           =&gt; <span class="number">2</span>,
+     Quake3::WP_LIGHTNING         =&gt; <span class="number">2</span>,
+     Quake3::WP_PLASMAGUN         =&gt; <span class="number">2</span>,
+     Quake3::WP_ROCKET_LAUNCHER   =&gt; <span class="number">3</span>,
+     Quake3::WP_BFG               =&gt; <span class="number">4</span>,
+  );
+  
+  <span class="key1">sub</span> item_pickup {
+     <span class="key1">my</span> ($curweap, $newweap) = @_;
+     $prefs{$newweap} &gt;= $prefs{$curweap} ? <span class="number">1</span> : <span class="number">0</span>
+  }
+
+</pre><h3>
+<a id='h3'>Future</a></h3>
+<p>
+The current implementation and API design is below all standards (except for
+maybe the irssiperl one) and requires some real thinking. This interface was
+written in a few minutes (after needing an hour to figure out how the QVM and
+callbacks to C work). In the future, the API will undergo some serious changes
+and probably be rewritten entirely from scratch.</p>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Wed Jun  8 12:10:42 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

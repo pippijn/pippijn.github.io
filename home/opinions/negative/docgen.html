@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Opinions / Negative / Docgen</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Opinions / Negative / Docgen"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Why not to use documentation generators</h2>
+<ul></ul><p>
+The Java programming language has a specification for code documentation called
+"JavaDoc". Many C and C++ programmers use tools such as
+<a href='http://www.stack.nl/~dimitri/doxygen/'>Doxygen</a> to automatically generate code
+documentation with inheritance- and callgraphs. These tools are often praised
+and are said to force programmers to write useful documentation. This is a
+document on why such tools are overrated and overused.</p>
+<ul>
+<li>
+Annoying<p>
+I think that often, documentation tools force programmers to get annoyed at the
+tools due to them expecting documentation for self-explaining functions.  See
+<a href='why-not-use_java.xhtml#javadoc'>Why not to use Java</a> for a good example of
+useless documentation. Java's CheckStyle utility requires you to write such
+silly comments. "double getX() returns the X coordinate of a point in double
+precision. It also returns the X coordinate of a point". Just the fact that
+CheckStyle requires you to write a description and an <span class='code'>@returns</span> directive
+causes these redundant comments.</p>
+</li>
+<li>
+Bloated documentation<p>
+The tools generate large HTML pages with fancy links and graphs all over the
+place, hiding the bits and pieces of valuable code documentation. In order to
+still be visible, programmers tend to write even larger amounts of useless
+chatter just to have a bit of content on those pages of wasted space. Good
+examples of such chatter can be found in nearly every project that uses Doxygen.
+Code samples, usage notes and every possible (even if obvious) situation is
+explained in greatest detail. You might think this is a good thing, but what
+happens is that the valuable pieces of information you might need are hidden
+somewhere in a novel of code documentation.</p>
+</li>
+<li>
+Lazy<p>
+Documentation generators, if they do not get the programmers to write
+documentation for their code, makes those lazy. It may make them think they can
+get away with writing no documentation and letting an automated tool generate
+the docs for them. As a result, the produced documentation is entirely useless.
+Everything such a tool can do can more or less easily be seen in the code
+itself.</p>
+</li>
+<li>
+Bad presentation<p>
+Even if the idea of doclets in code is not that bad, the presentation of written
+documentation is often very bad. As mentioned in the point on bloated
+documentation, the HTML pages are huge and the documentation is barely visible.
+This is a problem with the presentation of information.</p>
+</li>
+</ul>
+<p>
+Overall, I do not think that documentation systems such as JavaDoc or Doxygen
+add to the value of code documentation. I have yet to see a library that I can
+call well-documented by means of JavaDoc.</p>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Fri May 27 22:07:56 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

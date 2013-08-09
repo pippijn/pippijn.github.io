@@ -1,0 +1,316 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Devel / Makepp / Project</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Devel / Makepp / Project"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel/autoproj">Autoproj</a></li><li>
+<a href="/~pippijn/home/projects/devel/clangide">Clang IDE</a></li><li>
+<a href="/~pippijn/home/projects/devel/libcommon">libcommon</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp">Autocomb <span class="small">[-]</span></a><ul>
+<li>
+<a id="actmenu">Project</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp/variables">Variables</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp/target">Targets</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp/template">Templates</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp/rules">Rules</a></li><li>
+<a href="/~pippijn/home/projects/devel/makepp/examples">Examples</a></li></ul></li></ul></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Project description</h2>
+<ul></ul><p>
+The <span class='code'>project</span> block defines global properties and requirements for the project.
+Unlike rule files, this block is not purely declarative and there may only be
+one. While the rule translator is free to move around declarations, the project
+block defines an order in which requirements are tested. This order is honoured
+by the translator.</p>
+<pre class="code-block">   <span class="key1">project</span> <span class="string">'MakePP'</span> {
+      <span class="key5">version:</span> <span class="string">'0.1'</span>
+      <span class="key5">contact:</span> <span class="string">'makepp@xinutec.org'</span>
+
+      <span class="key5">config_header:</span> config.h
+
+      <span class="key1">section</span> <span class="string">'some checks'</span> {
+         ...
+      }
+   }
+
+</pre><h4>
+section</h4>
+<p>
+Configure time checks are grouped in sections for better readability. Each
+section is introduced with a message in the configure script output.</p>
+<h4>
+library</h4>
+<p>
+In a <span class='code'>project</span> context, <span class='code'>library</span> checks whether a library is installed and a
+program can be linked against it.</p>
+<pre class="code-block">   <span class="comment"># GNU Multiprecision Library, can be disabled with --without-gmp,</span>
+   <span class="comment"># if all targets defined in Rules files that link to it are optional.</span>
+   <span class="key1">library</span> gmp {
+      <span class="key5">symbol:</span> mpz_init
+      <span class="key5">header:</span> gmp.h
+      <span class="comment"># You may optionally add a description to each check. This will cause it</span>
+      <span class="comment"># to appear in the summary at the end of a configure run.</span>
+      <span class="string">'Build with GNU Multiprecision Library support'</span>
+   }
+
+</pre><p>
+The above <span class='code'>library</span> directive defines the following variables:</p>
+<ul>
+<li>
+$gmp_available<p>
+A shell variable is defined in the configure script with the value <span class='code'>"yes"</span> or
+<span class='code'>"no"</span>. The variable name is normalised, i.e. any character that is not a valid
+shell identifier (such as '-') is transliterated to '_'.</p>
+</li>
+<li>
+GMP<p>
+An uppercased and normalised version of the library name is provided as an
+<span class='code'>automake</span> conditional. It can therefore be used in rules files in conditional
+contexts or in included <span class='code'>automake</span> rule files.</p>
+</li>
+<li>
+GMP_AVAILABLE<p>
+An uppercased and normalised version suffixed with <span class='code'>_AVAILABLE</span> is provided in
+the config header, so that C code can conditionally compile parts based on
+library availability. This macro is defined to 0 or 1.</p>
+</li>
+</ul>
+<h4>
+headers/functions</h4>
+<p>
+The <span class='code'>headers</span> section can be used to check for additional headers. <span class='code'>functions</span>
+checks whether a list of functions is available.</p>
+<pre class="code-block">   <span class="key1">headers</span> {
+      <span class="comment"># Valgrind runtime support</span>
+      valgrind/valgrind.h
+   }
+   <span class="key1">functions</span> {
+      <span class="comment"># New POSIX signal handling</span>
+      sigaction
+   }
+
+</pre><p>
+This directive only defines <span class='code'>HAVE_</span> variables in the config header.</p>
+<h4>
+arg_enable</h4>
+<p>
+This directive adds an option to the resulting configure script. The content of
+this directive is a descriptive string that is shown when configure is passed
+<span class='code'>--help</span>, followed by more directives that are evaluated if the argument is
+<span class='code'>yes</span>. A default may be given. This default may be <span class='code'>yes</span> or <span class='code'>no</span> or a
+backtick-string, which is evaluated at configure time. Thus, the following two
+are equivalent:</p>
+<pre class="code-block">   <span class="key1">arg_enable</span> my-sub-package <span class="key3">=</span> yes { <span class="string">'Also build sub-package'</span> }
+   <span class="key1">arg_enable</span> my-sub-package <span class="key3">=</span> `echo yes` { <span class="string">'Also build sub-package'</span> }
+
+</pre><p>
+This adds the option <span class='code'>--enable-my-sub-package</span> and defines the following
+variables:</p>
+<ul>
+<li>
+$my_sub_package_enabled<p>
+A normalised version of the argument name is set to the passed value. This
+variable is added to the configure script.</p>
+</li>
+<li>
+MY_SUB_PACKAGE<p>
+An automake conditional is created, as well. This means that a previously
+asserted condition, e.g. the existence of a library, can be explicitly disabled
+by the user. Thus, by adding <span class='code'>arg_enable gmp</span>, you can let the user decide
+explicitly that even though GMP is available, he does not want to build any
+component that uses it.</p>
+</li>
+<li>
+MY_SUB_PACKAGE_ENABLED<p>
+Analogously to the config header macro set by the <span class='code'>library</span> directive, the
+<span class='code'>arg_enable</span> directive sets a macro with an normalised and uppercased name to 0
+or 1, depending on the user's choice.</p>
+</li>
+</ul>
+<h5>
+options</h5>
+<p>
+Instead of a yes/no, you can define your own options.</p>
+<pre class="code-block">   <span class="key1">arg_enable</span> app <span class="key3">=</span> iphone {
+      <span class="string">'Build an app for this software. Only one app can be chosen'</span>
+      <span class="key1">options</span> {
+         android <span class="key3">=&gt;</span> {
+            <span class="comment"># check for additional libraries</span>
+         }
+         iphone <span class="key3">=&gt;</span> {
+            warning <span class="string">'Support for iPhones is unstable.'</span>
+         }
+         no <span class="key3">=&gt;</span> {
+            <span class="comment"># no app is being built</span>
+         }
+         <span class="comment"># optional catch-all option</span>
+         _ <span class="key3">=&gt;</span> {
+            error <span class="string">'No support for the $app phone planned.'</span>
+         }
+      }
+   }
+
+</pre><p>
+The defined variables and macros are the same as with the normal yes/no
+<span class='code'>arg_enable</span>, except that the config header gets one macro per option, which is
+defined to 1 if that option is selected. Thus, <span class='code'>--enable-app=android</span> will
+define <span class='code'>APP_ANDROID</span> to 1.</p>
+<h4>
+cflags</h4>
+<p>
+The <span class='code'>cflags</span> directive tries to compile a simple program with the passed flags
+and adds them to the named variable or <span class='code'>CFLAGS</span> by default.</p>
+<pre class="code-block">   <span class="comment"># Adds to CFLAGS</span>
+   <span class="key1">cflags</span> {
+      -pipe
+      -ggdb3
+      -pedantic
+      -ansi
+   }
+   <span class="comment"># Adds to HIDDEN_CFLAGS</span>
+   <span class="key1">cflags</span> HIDDEN_CFLAGS {
+      -fvisibility=hidden
+   }
+
+</pre><p>
+Each of the flags is tested separately in the order listed. The set added to the
+variable is the subset of flags that work together.</p>
+<h4>
+Additional checks</h4>
+<p>
+These are checks from autoconf. They translate to <span class='code'>AC_</span> followed by the check
+name, uppercased.</p>
+<ul>
+<li>
+c_bigendian</li>
+<li>
+c_typeof</li>
+<li>
+alignof<p>
+Translates to <span class='code'>AC_CHECK_ALIGNOF</span>.</p>
+</li>
+<li>
+sizeof<p>
+Translates to <span class='code'>AC_CHECK_SIZEOF</span>.</p>
+</li>
+</ul>
+<p>
+The following are new:</p>
+<ul>
+<li>
+c_charset<p>
+Defines <span class='code'>HAVE_EBCDIC</span> if the character set is EBCDIC, does nothing if the
+character set is ASCII, fails if it can't detect the character set.</p>
+</li>
+<li>
+c_enum_fwdecl<p>
+Check for ability to typedef enums before definition. Defines
+<span class='code'>HAVE_ENUM_FWDECL</span> to 1 if so.</p>
+</li>
+<li>
+c_variadic_templates<p>
+Check whether the C++ compiler supports C++0x lambdas. Defines <span class='code'>HAVE_LAMBDA</span> to
+1 if so.</p>
+</li>
+<li>
+c_late_expansion<p>
+Check whether the preprocessor supports ANSI conforming late macro expansion.
+Defines the C preprocessor macro <span class='code'>HAVE_LATE_EXPANSION</span> to 1 if so.</p>
+</li>
+<li>
+c_stmt_exprs<p>
+Checks whether the C compiler supports the GNU extension of brace-expressions:
+<span class='code'>({ code; })</span>. Defines <span class='code'>HAVE_STMT_EXPRS</span> to 1 if the compiler supports braced
+statements within expressions.</p>
+</li>
+<li>
+c_token_paste<p>
+Checks if the preprocessor implements ANSI-style token pasting (with <span class='code'>##</span>).
+Defines the C preprocessor macro <span class='code'>HAVE_ANSI_PASTE</span> to 1 if so.</p>
+</li>
+<li>
+c_variadic_templates<p>
+Check whether the C++ compiler supports C++0x variadic templates. Defines the
+C preprocessor macro <span class='code'>HAVE_VARIADIC_TEMPLATES</span> to 1 if so.</p>
+</li>
+<li>
+c_stdint_h<p>
+Checks for the existence of <span class='code'>stdint.h</span> types and defines appropriate types in
+case of absence. As a side effect, this also checks for the size of every
+built-in integer type and <span class='code'>void *</span>. This directive will enforce that
+<span class='code'>sizeof(char) == 1</span>. This should be the case for standard conforming
+implementations. The following types are asserted:</p>
+<ul>
+<li>
+size_t</li>
+<li>
+uint8_t</li>
+<li>
+uint16_t</li>
+<li>
+uint32_t</li>
+<li>
+uint64_t</li>
+<li>
+uintmax_t</li>
+<li>
+uintptr_t</li>
+<li>
+int8_t</li>
+<li>
+int16_t</li>
+<li>
+int32_t</li>
+<li>
+int64_t</li>
+<li>
+intmax_t</li>
+<li>
+intptr_t</li>
+</ul>
+</li>
+</ul>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Thu Jul  7 04:31:04 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

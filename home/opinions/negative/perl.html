@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Opinions / Negative / Perl</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Opinions / Negative / Perl"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Why not to use Perl</h2>
+<ul></ul><p>
+Perl is a highly dynamic language in which complex tasks can be solved within
+a few lines of elegant code. It has downsides, however, and I will elaborate
+on a few of them here.</p>
+<ul>
+<li>
+Errors caught at runtime<p>
+Since Perl is a dynamic language, it has no type checking aside from the
+syntax errors that result from incorrectly using scalars, arrays or hashes.
+This means that errors in code can only be caught at runtime.</p>
+<p>
+Unless you explicitly ask for it using <span class='code'>strict</span>, things can go wrong and they
+may not at all be obvious. For instance, without the <span class='code'>strict</span> pragma, Perl
+allows programmers to use "bare words" as string literals. You can write
+<span class='code'>$a = hello; print $a;</span> and it writes "hello" to <span class='code'>stdout</span>.</p>
+<p>
+When changing an existing program erroneously, the error may not be caught
+right away and may cause problems in areas where none are expected.</p>
+</li>
+<li>
+<span class='code'>eval</span>-blocks catch <em>all</em> errors<p>
+In Perl, exceptions are caught with <span class='code'>eval</span> blocks. These catch all errors, so
+if you want to catch only a few, you need to catch all, find out whether your
+type of exception was the one thrown and rethrow the exception if not:</p>
+<pre class="code-block">   <span class="key2">eval</span> {
+      function_that_throws_exception $arg1, $arg2
+   };
+   <span class="key1">if</span> ($@) {
+      <span class="key1">if</span> (<span class="key2">ref</span> $@ <span class="key3">eq</span> <span class="string">"My::Exception"</span>) {
+         handle_error
+      }
+      <span class="key2">die</span>; <span class="comment"># rethrow</span>
+   }
+
+</pre><p>
+This does not even work when <span class='code'>ref $@</span> is an empty string, meaning <span class='code'>$@</span> was
+a plain scalar. In that case, you have to compare the error strings, which may
+be localised, making it even harder to catch exactly the error you need.</p>
+<p>
+By the way, <span class='code'>eval</span> is not only an exception handling keyword, it is also a
+string evaluation keyword. This may cause confusion to beginners.</p>
+</li>
+<li>
+Easy to write bad code<p>
+Perl makes it very easy to write code and APIs. Where strictly object oriented
+languages such as Java enforce a certain paradigm, Perl allows one to design
+APIs like the Irssi scripting API. There is an awful lot of crappy Perl code
+out there, people tend to call "line noise". While it is possible to write
+crappy code with Java, it is much harder to do so than in Perl.</p>
+</li>
+<li>
+Many pitfalls<p>
+There are many areas in the language that can bite you if you don't know about
+them.</p>
+</li>
+<li>
+Features built into the language<p>
+Perl has many more or less known features that are built into the language.
+One of them is <a href='http://perldoc.perl.org/perlform.html'>formats</a>. The problem
+with this is that there is no easy way of replacing or enhancing the
+functionality provided by them. Perl formats cannot be returned from functions
+nor can they be manipulated after their creation.</p>
+</li>
+<li>
+Arrays or array references<p>
+Arrays of arrays do not exist in Perl and an attempt to create one yields a
+flattened array such that <span class='code'>((1, 2, 3), 2, 3)</span> becomes <span class='code'>(1, 2, 3, 2, 3)</span>.
+In order to create an array of arrays, you need to create an array of
+references to arrays like this: <span class='code'>([1, 2, 3], 2, 3)</span>. But then getting the
+array back out of the reference, it is necessary to dereference it, so that
+where in Lisp one can do:</p>
+<pre class="code-block">   (<span class="key1">setq</span> array '((<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="number">2</span>, <span class="number">3</span>))
+   (<span class="key1">first</span> array) <span class="comment">; Yields (1, 2, 3)</span>
+
+</pre><p>
+But in Perl, the same code requires:</p>
+<pre class="code-block">   <span class="key1">my</span> @array = ([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="number">2</span>, <span class="number">3</span>);
+   $array[<span class="number">0</span>]; <span class="comment"># Yields "ARRAY(0xdeadbeef)" or similar</span>
+   @{ $array[<span class="number">0</span>] }; <span class="comment"># Dereferencing it yields our array (1, 2, 3)</span>
+
+</pre><p>
+The reason for this is that it makes it possible to <span class='code'>push</span> a list of items
+onto an array.</p>
+</li>
+<li>
+Implicit behaviour<p>
+Simple, machine oriented languages such as C contain very little magic. Perl
+does. An example is the ability to assign an array to a hash:
+<span class='code'>my %hash = (1, 2, 3, 4)</span>. The resulting hash contains:
+<span class='code'>(1 => 2, 3 => 4)</span>. The language is full of implicit behaviour, which I
+call "magic".</p>
+</li>
+<li>
+Functions interfaces<p>
+In Perl, functions do not need to provide prototypes and a lot of code indeed
+does not. If it does, <span class='code'>perl</span> can check whether the provided number of
+arguments is correct, but the callee still has to manually decode the argument
+list from <span class='code'>@_</span>, the argument stack. The usual way is to do this as the first
+thing in a function like: <span class='code'>my ($a, $b, $c) = @_;</span>. This is not required,
+though, and it is not rare that code uses <span class='code'>@_</span> directly with subscript
+access. That makes the code unreadable.</p>
+</li>
+<li>
+Circular references<p>
+Perl has no cycle breaking system in its reference counting. This means you
+can introduce memory leaks with circular references. For this, Perl provides
+<span class='code'>Scalar::Util::weaken</span>, but you still have to do it.</p>
+</li>
+</ul>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Thu May 26 20:36:21 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 

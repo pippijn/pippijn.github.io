@@ -1,0 +1,324 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Lang / Safe / Ideas / Language / Lambda</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Language / Lambda"/> 
+		<link rel="stylesheet" href="/~pippijn/static/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/~pippijn/static/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+<li>
+<a href="/~pippijn/home/index">Home</a></li><li>
+<a href="/~pippijn/home/projects">Projects <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/devel">Developer tools <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/games">Games <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/net">Network <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang">Languages <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/aldor">Aldor <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/jmlc">JML</a></li><li>
+<a href="/~pippijn/home/projects/lang/libcdk">CDK library</a></li><li>
+<a href="/~pippijn/home/projects/lang/rasm">Runtime assembler</a></li><li>
+<a href="/~pippijn/home/projects/lang/reflect">Reflect</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe">Safe C <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas">Future ideas <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/compiler">Compiler <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language">Language <span class="small">[-]</span></a><ul>
+<li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/cfold">Constant folding</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/common-data">Inheritance</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/iterators">Iterators</a></li><li>
+<a id="actmenu">Lambda</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/modules">Modules</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/operators">Operators</a></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/language/overload">Overloading</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/safe/ideas/runtime">Runtime <span class="small">[+]</span></a></li></ul></li></ul></li><li>
+<a href="/~pippijn/home/projects/lang/xul">XUL Projects</a></li><li>
+<a href="/~pippijn/home/projects/lang/yaccpp">YACC Preprocessor</a></li></ul></li><li>
+<a href="/~pippijn/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/~pippijn/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/~pippijn/home/links">Links</a></li><li>
+<a href="/~pippijn/home/contact">Contact</a></li></ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>
+Lambda and closures</h2>
+<ul><li><a href='#h1'>Closures</a></li>
+<li><a href='#h2'>Passing closures to C</a></li>
+<li><a href='#h3'>Lambda expressions</a></li></ul><p>
+Syntactically, nested functions are supported, but they are emitted as such
+and thus depend on the C compiler supporting them. I would like to lift local
+functions to the global scope and construct closures if necessary. These
+closures cannot be passed as function pointers to C, but a helper function
+could be implemented that calls the C function with the closure as environment
+and a stub invoking the closure as function.</p>
+<h3>
+<a id='h1'>Closures</a></h3>
+<p>
+Normal code calculating the sum of the numbers between <span class='code'>from</span> and
+<span class='code'>to</span>, each multiplied by <span class='code'>num</span>, thus requiring a closure:</p>
+<pre class="code-block">   <span class="key3">int</span> sum (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> (@func) (<span class="key3">int</span> i)) {
+      <span class="key3">int</span> result = <span class="number">0</span>;
+      <span class="key3">int</span> inc = from &gt; to ? <span class="number">1</span> : -<span class="number">1</span>;
+      <span class="key1">while</span> (from != to) {
+         result += func (from);
+         from += inc;
+      }
+      <span class="key1">return</span> result;
+   }
+
+   <span class="key3">int</span> sum_of_muls (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> num) {
+      <span class="key3">int</span> mul (<span class="key3">int</span> i) { <span class="key1">return</span> i * num; }
+      <span class="key1">return</span> sum (from, to, mul);
+   }
+
+</pre><p>
+Would roughly (the names would be mangled somehow) be compiled to:</p>
+<pre class="code-block">   <span class="key3">struct</span> sum_clos1 {
+      <span class="key3">void</span> *env;
+      <span class="key3">int</span> (*func) (<span class="key3">void</span> *env, <span class="key3">int</span> i);
+   };
+   <span class="key3">int</span> sum (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">struct</span> sum_clos1 func) {
+      <span class="key3">int</span> result = <span class="number">0</span>;
+      <span class="key3">int</span> inc = from &lt; to ? <span class="number">1</span> : -<span class="number">1</span>;
+      <span class="key1">while</span> (from != to) {
+         result += func.func (func.env, from);
+         from += inc;
+      }
+      <span class="key1">return</span> result;
+   }
+
+   <span class="key3">struct</span> mul_env {
+      <span class="key3">int</span> num;
+   };
+   <span class="key3">int</span> mul (<span class="key3">void</span> *venv, <span class="key3">int</span> i) {
+      <span class="key3">struct</span> mul_env *env = venv;
+      <span class="key1">return</span> i * env-&gt;num;
+   }
+
+   <span class="key3">int</span> sum_of_muls (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> num) {
+      <span class="key3">struct</span> mul_env env;
+      <span class="key3">struct</span> sum_clos1 clos;
+
+      <span class="comment">/* initialise the environment for the function */</span>
+      env.num = num;
+
+      <span class="comment">/* initialise the closure */</span>
+      clos.env = &amp;env;
+      clos.func = mul;
+
+      <span class="key1">return</span> sum (from, to, clos);
+   }
+
+</pre><p>
+This must be done even for simple, non-capturing and global functions, as the
+called function (in this case <span class='code'>sum</span>) cannot know whether it gets a
+closure or a normal function. It is, however, unfeasible to add a parameter
+<span class='code'>void *env</span> to every function, so passing normal functions as function
+pointer requires the generation of stubs:</p>
+<pre class="code-block">   <span class="key3">int</span> identity (<span class="key3">int</span> i) { <span class="key1">return</span> i; }
+   <span class="key3">int</span> identity_sum (<span class="key3">int</span> from, <span class="key3">int</span> to) {
+      <span class="key1">return</span> sum (from, to, identity);
+   }
+
+</pre><p>
+Has to be translated to:</p>
+<pre class="code-block">   <span class="key3">int</span> identity (<span class="key3">int</span> i) { <span class="key1">return</span> i; }
+   <span class="key3">int</span> identity_stub (<span class="key3">void</span> *env, <span class="key3">int</span> i) { <span class="key1">return</span> identity (i); }
+   <span class="key3">int</span> identity_sum (<span class="key3">int</span> from, <span class="key3">int</span> to) {
+      <span class="key3">struct</span> sum_clos1 clos;
+
+      clos.env = <span class="key4">NULL</span>; <span class="comment">// could be left out, since it is provably unused</span>
+      clos.func = identity_stub;
+
+      <span class="key1">return</span> sum (from, to, clos);
+   }
+
+</pre><p>
+This will cause a performance hit, but has to be done for uniform handling of
+global and nested functions.</p>
+<h3>
+<a id='h2'>Passing closures to C</a></h3>
+<p>
+Another problem is that we can no longer trivially pass functions to C.</p>
+<h4>
+Use libffi</h4>
+<p>
+The <em>libffi</em> library provides a relatively portable way to create
+dynamically allocated closures. In order to pass a closure to C, we would need
+to generate a libffi closure wrapper.</p>
+<pre class="code-block">   <span class="comment">// Same as above, but somewhere else, implemented in regular C</span>
+   <span class="key3">extern</span> <span class="string">"C"</span> <span class="key3">int</span> sum (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> (@func) (<span class="key3">int</span> i));
+
+   <span class="key3">int</span> sum_of_muls (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> num) {
+      <span class="key3">int</span> mul (<span class="key3">int</span> i) { <span class="key1">return</span> i * num; }
+      <span class="key1">return</span> sum (from, to, {mul}); <span class="comment">// or some other syntax</span>
+   }
+
+</pre><p>
+The above code would be compiled to the following:</p>
+<pre class="code-block">   #<span class="key2">include</span> &lt;ffi.h&gt;
+   #<span class="key2">include</span> &lt;sys/mman.h&gt;
+
+   <span class="key3">extern</span> <span class="key3">int</span> sum (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> (*func) (<span class="key3">int</span> i));
+
+   <span class="key3">struct</span> mul_env {
+      <span class="key3">int</span> num;
+   };
+   <span class="key3">int</span> mul (<span class="key3">void</span> *venv, <span class="key3">int</span> i) {
+      <span class="key3">struct</span> mul_env *env = venv;
+      <span class="key1">return</span> i * env-&gt;num;
+   }
+
+   <span class="key3">static</span> <span class="key3">void</span>
+   mul_closure_wrapper (ffi_cif *cif, <span class="key3">void</span> *rval,
+                        <span class="key3">void</span> **avals, <span class="key3">void</span> *data) {
+      *(ffi_arg *)rval = mul (data
+         , *(<span class="key3">int</span> *)avals[<span class="number">0</span>]
+      );
+   }
+
+   <span class="key3">int</span> sum_of_muls (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> num) {
+      <span class="key3">struct</span> mul_env env;
+
+      <span class="comment">/* initialise the environment for the function */</span>
+      env.num = num;
+
+      <span class="comment">/* initialise closure */</span>
+      {
+         ffi_cif cif;
+         <span class="key3">union</span> {
+            ffi_closure *cl;
+            <span class="key3">int</span> (*fn) (<span class="key3">int</span>);
+         } clos;
+
+         <span class="comment">/* argument types of the generated function */</span>
+         ffi_type *arg_types[<span class="number">2</span>] = {
+            &amp;ffi_type_sint,
+            <span class="key4">NULL</span>,
+         };
+
+         <span class="comment">/* return type of the generated function */</span>
+         ffi_type *ret_type = &amp;ffi_type_sint;
+
+         <span class="comment">/* allocate executable memory for the closure */</span>
+         clos.cl = ffi_closure_alloc ();
+
+         <span class="key1">if</span> (ffi_prep_cif (&amp;cif, FFI_DEFAULT_ABI,
+                           <span class="key1">sizeof</span> arg_types / <span class="key1">sizeof</span> *arg_types - <span class="number">1</span>,
+                           ret_type, arg_types) != FFI_OK)
+            perror (<span class="string">"ffi_prep_cif"</span>);
+         <span class="key1">if</span> (ffi_prep_closure (clos.cl, &amp;cif, mul_closure_wrapper, &amp;env)
+             != FFI_OK)
+            perror (<span class="string">"ffi_prep_closure"</span>);
+
+         <span class="key1">return</span> sum (from, to, clos.fn);
+      }
+   }
+
+</pre><p>
+All the complexity is handled by libffi. However, the memory allocated by
+libffi would leak by default, so the garbage collector needs to be aware of
+that memory and free it using <span class='code'>ffi_closure_free</span>. Alternatively, the
+closure could be placed on the stack on platforms where the stack can be made
+executable. That way, however, it would become impossible to return closures
+from functions, which would be quite a substantial loss. On systems where
+global data is executable, the closure could be put there, but this would make
+the function non-reentrant (inacceptable) and calling the function would
+invalidate previously generated closures. The best way to solve this is
+probably to place closures on the stack and heap-allocate returned closures.
+This would limit portability to platforms where the stack can be marked
+executable. The implications of this need to be evaluated.</p>
+<p>
+The question is, do we want to generate FFI closures only for external C
+interoperability or also for all our own functions. It's probably best to do
+the latter, as it would immensely simplify C interop (think of passing
+pointers to functions taking pointers to functions to C). For normal functions
+and non-capturing lambda expressions, no closures need to be generated, so
+there is no performance hit for those.</p>
+<h4>
+Expect calling convention from the C API</h4>
+<p>
+The problem can also be solved by changing the calling convention from
+closures to plain function pointers when calling C. When we want to pass
+actual closures to C, it is a little more complicated. The idea presented only
+works with C functions that take both an environment and a callback. Most sane
+C APIs luckily do this.  Basically, the idea is to just pass the real function
+along with a generated <span class='code'>env</span> pointer.</p>
+<pre class="code-block">   <span class="comment">// Expect C API to allow for user data to be passed.</span>
+   <span class="key3">extern</span> <span class="string">"C"</span> <span class="key3">int</span> sum (<span class="key3">int</span> from, <span class="key3">int</span> to, `t env,
+                       <span class="key3">int</span> (@func) (`t env, <span class="key3">int</span> i));
+
+   <span class="key3">int</span> sum_of_muls (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> num) {
+      <span class="key3">int</span> mul (<span class="key3">int</span> i) { <span class="key1">return</span> i * num; }
+      <span class="key1">return</span> sum (from, to, mul);
+   }
+
+</pre><p>
+Passing the <span class='code'>mul</span> function would expand to two arguments: the env and the
+function pointer. It would thus be compiled to:</p>
+<pre class="code-block">   <span class="key3">extern</span> <span class="key3">int</span> sum (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">void</span> *env,
+                   <span class="key3">int</span> (*func) (<span class="key3">void</span> *env, <span class="key3">int</span> i));
+
+   <span class="comment">/* compile to mul_env + mul like in the first example */</span>
+   [...]
+
+   <span class="key3">int</span> sum_of_muls (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> num) {
+      <span class="comment">/* construct env like in the first example */</span>
+      [...]
+      <span class="key1">return</span> sum (from, to, &amp;env, mul);
+   }
+
+</pre><h3>
+<a id='h3'>Lambda expressions</a></h3>
+<p>
+I really don't like the syntax of C++ lambda expressions. I much prefer the
+C# way, providing type inference and a prettier syntax. Also, why would we
+have to tell it what variables we're going to use? Oh yeah, because C++ has
+references.  Well, we don't and we're not going to have them, so the proposed
+syntax is very similar to the C# syntax.</p>
+<pre class="code-block">   <span class="key3">int</span> sum_of_muls (<span class="key3">int</span> from, <span class="key3">int</span> to, <span class="key3">int</span> num) {
+      <span class="comment">// syntax 1:</span>
+      <span class="key1">return</span> sum (from, to, i =&gt; i * num);
+      <span class="comment">// syntax 2 (works for multiple arguments):</span>
+      <span class="key1">return</span> sum (from, to, (i) =&gt; i * num;);
+      <span class="comment">// syntax 3:</span>
+      <span class="key1">return</span> sum (from, to, i =&gt; { <span class="key1">return</span> i * num; });
+      <span class="comment">// syntax 4 (also for multiple arguments):</span>
+      <span class="key1">return</span> sum (from, to, (i) =&gt; { <span class="key1">return</span> i * num; });
+   }
+
+</pre><p>
+The type of <span class='code'>i</span> can easily be inferred with the already implemented type
+inference engine. The expression is first compiled to a nested function and
+then handled the same way as regular nested functions are. So basically, they
+are just syntax sugar, but I think the brevity really worth the extra effort
+in the implementation.</p>
+
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/~pippijn/home/contact">Copyright &copy; 2007-2011 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Mon Jul  4 23:55:15 MEST 2011</div> 
+		</div> 
+	</body> 
+</html> 
