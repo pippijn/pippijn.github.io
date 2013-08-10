@@ -1,7 +1,5 @@
 =head1 Quake 3
 
-L<Git repository|http://xinutec.org/git/games/ioquake3.git/>
-
 I've started hacking on the L<ioquake3|http://ioquake3.org/> sources, adding
 a L<Perl|http://www.perl.org/> interface to a small number of C functions and
 a few callbacks from C/QVM to Perl functions. This allowed me to add an IRC

@@ -11,13 +11,13 @@
 
 =item L<Computational Geometry Algorithms Library for C++|http://www.cgal.org/>
 
-=item L<If programming languages were religions...|http://www.aegisub.net/2008/12/if-programming-languages-were-religions.html>
+=item L<If programming languages were religions...|http://blog.aegisub.org/2008/12/if-programming-languages-were-religions.html>
 
 =item L<JavaScript InfoVis Toolkit|http://thejit.org/>
 
 =item L<jqPlot Charts and Graphs for jQuery|http://www.jqplot.com/index.php>
 
-=item L<Notes on the CLR Garbage Collector|http://www.vineetgupta.com/2007/01/notes-on-the-clr-garbage-collector/>
+=item L<Notes on the CLR Garbage Collector|http://vineetgupta.com/blog/notes-on-the-clr-garbage-collector>
 
 =item L<On generics and (some of) the associated overheads|http://www.bluebytesoftware.com/blog/PermaLink,guid,2d01b5eb-7f19-4a4c-a3b3-1cecb1e3dc75.aspx>
 
@@ -72,21 +72,11 @@
 
 =item L<Jewelry made of natural stones|http://natursteinschmuckshop.de>
 
-=item L<Algebraist|http://algebraist.origo.ethz.ch/>
-
-Algebraist is a parallel development site for Aldor.
-
 =item L<The Perfect Info-Tech Workplace|http://www.shlomifish.org/philosophy/computers/software-management/perfect-workplace/>
-
-=item L<Postfix, IMAP, SpamAssassin, Roundcube|http://gentoo-wiki.com/Howto_Postfix_virtual_mail_server_with_IMAP_POP3_SpamAssassin_Virus_Scanner_and_Roundcube_webmail>
-
-=item L<The Ultimate Rejection Letter|http://www.chaosmatrix.org/library/humor/reject.html>
 
 =item L<Top 10 Crazy Facts About Kim Jong Il|http://listverse.com/2010/05/30/top-10-crazy-facts-about-kim-jong-il/>
 
 =item L<Gm guitar chord|http://www.8notes.com/guitar_chord_chart/Gm.asp>
-
-This one is really difficult for me.
 
 =back
 

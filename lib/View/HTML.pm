@@ -19,12 +19,17 @@ sub menu {
          if ($cur eq $path . $submenu->[0]) {
             $retval .= "<a id=\"actmenu\">$submenu->[1]";
          } else {
-            $retval .= "<a href=\"$path$submenu->[0]\">$submenu->[1]";
+            if (@$submenu >= 3) {
+               # Has a submenu.
+               $retval .= "<a href=\"$path$submenu->[0]/\">$submenu->[1]";
+            } else {
+               $retval .= "<a href=\"$path$submenu->[0]\">$submenu->[1]";
+            }
          }
       }
       if (@$submenu >= 3) {
-         if (0 or $cur =~ /$submenu->[0]$/ 
-               or $cur =~ /$submenu->[0]\//) {
+         if (   $cur =~ /$submenu->[0]$/ 
+             or $cur =~ /$submenu->[0]\//) {
             $retval .= " <span class=\"small\">[-]</span></a>";
             $retval .= menu ($cur, $submenu->[2], "$path$submenu->[0]/");
          } else {

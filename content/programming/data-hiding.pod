@@ -71,8 +71,8 @@ pointer not knowing its size or a data pointer prepended by its size.
 
 =begin small
 
-See <a href="http://xinutec.org/~pippijn/en/programming_c_strings.xhtml">C
-string representations</a> if you are interested in other string representations.
+See <a href="c/strings">C string representations</a> if you are interested in
+other string representations.
 
 =end small
 

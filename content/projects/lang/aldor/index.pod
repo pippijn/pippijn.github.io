@@ -1,6 +1,6 @@
 =head1 Aldor Programming Language
 
-L<Git repository|http://xinutec.org/git/aldor/compiler.git/>
+L<Git repository|https://github.com/pippijn/aldor>
 
 =begin code Aldor
 

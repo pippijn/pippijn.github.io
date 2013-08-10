@@ -2,16 +2,16 @@
 	["Home"],
 	[projects => "Projects", [
 		[devel => "Developer tools", [
-			[autoproj => "Autoproj"],
+			#[autoproj => "Autoproj"],
 			[clangide => "Clang IDE"],
-			[libcommon => "libcommon"],
-			[makepp => "Autocomb", [
+			#[libcommon => "libcommon"],
+			[makequick => "MakeQuick", [
 				[project => "Project"],
 				[variables => "Variables"],
 				[target => "Targets"],
 				[template => "Templates"],
 				[rules => "Rules"],
-				[examples => "Examples"],
+				#[examples => "Examples"],
 			]],
 		]],
 		[edu => "Education", [
@@ -38,7 +38,7 @@
 			[jmlc => "JML"],
 			[libcdk => "CDK library"],
 			[rasm => "Runtime assembler"],
-			[reflect => "Reflect"],
+			#[reflect => "Reflect"],
 			[safe => "Safe C", [
 				[ideas => "Future ideas", [
 					[compiler => "Compiler", [

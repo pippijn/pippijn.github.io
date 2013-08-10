@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
 	<head> 
-		<title>Pippijn - Projects / Devel / Makepp</title> 
+		<title>Pippijn - Projects / Devel / Makequick</title> 
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
 		<meta http-equiv="content-style-type" content="text/css"/> 
-		<meta name="description" content="Pippijn van Steenhoven - Projects / Devel / Makepp"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Devel / Makequick"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
 		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
@@ -21,28 +21,25 @@
 				<ul>
 <li>
 <a href="/home/">Home</a></li><li>
-<a href="/home/projects">Projects <span class="small">[-]</span></a><ul>
+<a href="/home/projects/">Projects <span class="small">[-]</span></a><ul>
 <li>
-<a href="/home/projects/devel">Developer tools <span class="small">[-]</span></a><ul>
+<a href="/home/projects/devel/">Developer tools <span class="small">[-]</span></a><ul>
 <li>
-<a href="/home/projects/devel/autoproj">Autoproj</a></li><li>
 <a href="/home/projects/devel/clangide">Clang IDE</a></li><li>
-<a href="/home/projects/devel/libcommon">libcommon</a></li><li>
-<a id="actmenu">Autocomb <span class="small">[-]</span></a><ul>
+<a id="actmenu">MakeQuick <span class="small">[-]</span></a><ul>
 <li>
-<a href="/home/projects/devel/makepp/project">Project</a></li><li>
-<a href="/home/projects/devel/makepp/variables">Variables</a></li><li>
-<a href="/home/projects/devel/makepp/target">Targets</a></li><li>
-<a href="/home/projects/devel/makepp/template">Templates</a></li><li>
-<a href="/home/projects/devel/makepp/rules">Rules</a></li><li>
-<a href="/home/projects/devel/makepp/examples">Examples</a></li></ul></li></ul></li><li>
-<a href="/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/games">Games <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/net">Network <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/lang">Languages <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
-<a href="/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/devel/makequick/project">Project</a></li><li>
+<a href="/home/projects/devel/makequick/variables">Variables</a></li><li>
+<a href="/home/projects/devel/makequick/target">Targets</a></li><li>
+<a href="/home/projects/devel/makequick/template">Templates</a></li><li>
+<a href="/home/projects/devel/makequick/rules">Rules</a></li></ul></li></ul></li><li>
+<a href="/home/projects/edu/">Education <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/games/">Games <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/net/">Network <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/lang/">Languages <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/robotics/">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/system/">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/home/programming/">Programming <span class="small">[+]</span></a></li><li>
 <a href="/home/links">Links</a></li><li>
 <a href="/home/contact">Contact</a></li></ul>
 			</div> 
@@ -50,21 +47,16 @@
 
 		<div id="content">
 			<h2>
-Autocomb</h2>
+MakeQuick</h2>
 <ul><li><a href='#h1'>Introduction</a></li>
 <li><a href='#h2'>Documentation</a></li></ul><p>
-<span class='code'>Autocomb</span> is a make-inspired build system that compiles to GNU Autotools.</p>
+<span class='code'>MakeQuick</span> is a make-inspired build system that compiles to GNU Autotools.</p>
 <p>
 <a href='https://github.com/pippijn/makequick'>Git repository</a></p>
-<p>
-This is the future development of <a href='autoproj'>Autoproj</a>. While Autoproj is a
-working piece of software, <span class='code'><span class='code'>Autocomb</span></span> is nowhere, yet. At the moment, there are
-only ideas, but not much code. The ideas are also very much in flux, so don't
-expect much stability.</p>
 <h3>
 <a id='h1'>Introduction</a></h3>
 <p>
-<span class='code'>Autocomb</span> compiles a purely declarative build definition to POSIX-compliant and
+<span class='code'>MakeQuick</span> compiles a purely declarative build definition to POSIX-compliant and
 thus fairly portable <a href='http://www.gnu.org/software/automake/'>automake</a> input. It
 solves a few problems with automake, such as the fact that libraries must appear
 in topological order with respect to internal dependencies. This is still a
@@ -74,7 +66,7 @@ during installation:</p>
    lib_LTLIBRARIES = liba.la libb.la
    liba_la_LIBADD = libb.la</pre><p>
 <span class='code'>lib_LTLIBRARIES</span> must list the libraries in topological order, so that a
-definition as <span class='code'>libb.la liba.la</span> would work. <span class='code'>Autocomb</span> solves this problem by
+definition as <span class='code'>libb.la liba.la</span> would work. <span class='code'>MakeQuick</span> solves this problem by
 topologically sorting the libraries and emitting a properly sorted
 <span class='code'>lib_LTLIBRARIES</span>.</p>
 <p>
@@ -86,30 +78,30 @@ sources, you will want to add this to the dependency list for the resulting
 sources. With inference rules, this is not possible, so you need to write one
 rule per source file. With many source files, this is a very tedious task and
 there are two solutions: use GNU Make with pattern rules or generate the rules
-with a script. Pattern rules can get very <a href='http://xinutec.org/git/aldor/compiler.git/tree/src/aldor/Rules.am?id=5f356e51ca7d642d8ef157404004b42e36ea9012'>complex</a>
-if you want to support target-specific flags for your tool. Generating rules is
-always ad-hoc and each type of rules needs its own script.</p>
+with a script. Pattern rules can get very complex if you want to support
+target-specific flags for your tool. Generating rules is always ad-hoc and each
+type of rules needs its own script.</p>
 <p>
 Yet another issue is the lack of wildcards. While wildcards have several
 disadvantages, they also have many advantages and it is the author's opinion
 that a good programmer should not suffer, because bad programmers might abuse a
 feature. The same holds for build systems. Advanced features should not be
-withheld from advanced users. <span class='code'>Autocomb</span> supports but discourages the use of
+withheld from advanced users. <span class='code'>MakeQuick</span> supports but discourages the use of
 wildcards.</p>
 <h4>
 Autotools integration</h4>
 <p>
-<span class='code'>Autocomb</span> input is translated to one or more <span class='code'>Makefile.am</span>s and a single
+<span class='code'>MakeQuick</span> input is translated to one or more <span class='code'>Makefile.am</span>s and a single
 <span class='code'>configure.ac</span>. The unification of automake and autoconf was done, because a
 lot of knowledge from automake input has to be duplicated in the autoconf input.
 Things such as which libraries to check for at configure time so that they may
 be linked against in the Makefile or submodule dependencies are present in both
-formats. <span class='code'>Autocomb</span> attempts to unify these formats in a new format based on QML and
+formats. <span class='code'>MakeQuick</span> attempts to unify these formats in a new format based on QML and
 GNU Make.</p>
 <h4>
 Flexibility</h4>
 <p>
-<span class='code'>Autocomb</span> is, by design, much less flexible than automake and autoconf. It is also
+<span class='code'>MakeQuick</span> is, by design, much less flexible than automake and autoconf. It is also
 much stricter. It gives the user some additional tools the author has been
 missing in the GNU build system.</p>
 <p>
@@ -117,14 +109,14 @@ Source files are looked for in the entire source tree. Files are not explicitly
 included by other files. Autoconf scripts may be included in the <span class='code'>project</span>
 block. Additional automake rules may be included in rule files. This gives you
 all the flexibility back at the expense of the included files being essentially
-a black box to <span class='code'>Autocomb</span>, thus defeating its static analysis features. <span class='code'>Autocomb</span>
+a black box to <span class='code'>MakeQuick</span>, thus defeating its static analysis features. <span class='code'>MakeQuick</span>
 guarantees that pure projects, i.e. without external Autotools input, do not
 cause errors at a lower level. This can no longer be guaranteed in the presence
 of such black boxes.</p>
 <h4>
 Unsupported features</h4>
 <p>
-<span class='code'>Autocomb</span> does not plan on supporting percentages, because the author does not
+<span class='code'>MakeQuick</span> does not plan on supporting percentages, because the author does not
 believe in those. <span class='code'>cmake</span> is a build system that supports such comfort.</p>
 <h3>
 <a id='h2'>Documentation</a></h3>
@@ -148,7 +140,7 @@ pages.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sat Aug 10 01:46:31 MEST 2013</div> 
+			<div id="updated">Last updated Sat Aug 10 02:15:02 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

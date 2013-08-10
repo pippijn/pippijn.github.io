@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
 	<head> 
-		<title>Pippijn - Projects / Devel / Makepp / Rules</title> 
+		<title>Pippijn - Projects / Devel / Makequick / Rules</title> 
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
 		<meta http-equiv="content-style-type" content="text/css"/> 
-		<meta name="description" content="Pippijn van Steenhoven - Projects / Devel / Makepp / Rules"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Devel / Makequick / Rules"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
 		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
@@ -21,28 +21,25 @@
 				<ul>
 <li>
 <a href="/home/">Home</a></li><li>
-<a href="/home/projects">Projects <span class="small">[-]</span></a><ul>
+<a href="/home/projects/">Projects <span class="small">[-]</span></a><ul>
 <li>
-<a href="/home/projects/devel">Developer tools <span class="small">[-]</span></a><ul>
+<a href="/home/projects/devel/">Developer tools <span class="small">[-]</span></a><ul>
 <li>
-<a href="/home/projects/devel/autoproj">Autoproj</a></li><li>
 <a href="/home/projects/devel/clangide">Clang IDE</a></li><li>
-<a href="/home/projects/devel/libcommon">libcommon</a></li><li>
-<a href="/home/projects/devel/makepp">Autocomb <span class="small">[-]</span></a><ul>
+<a href="/home/projects/devel/makequick/">MakeQuick <span class="small">[-]</span></a><ul>
 <li>
-<a href="/home/projects/devel/makepp/project">Project</a></li><li>
-<a href="/home/projects/devel/makepp/variables">Variables</a></li><li>
-<a href="/home/projects/devel/makepp/target">Targets</a></li><li>
-<a href="/home/projects/devel/makepp/template">Templates</a></li><li>
-<a id="actmenu">Rules</a></li><li>
-<a href="/home/projects/devel/makepp/examples">Examples</a></li></ul></li></ul></li><li>
-<a href="/home/projects/edu">Education <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/games">Games <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/net">Network <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/lang">Languages <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/robotics">Robotics <span class="small">[+]</span></a></li><li>
-<a href="/home/projects/system">Systems <span class="small">[+]</span></a></li></ul></li><li>
-<a href="/home/programming">Programming <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/devel/makequick/project">Project</a></li><li>
+<a href="/home/projects/devel/makequick/variables">Variables</a></li><li>
+<a href="/home/projects/devel/makequick/target">Targets</a></li><li>
+<a href="/home/projects/devel/makequick/template">Templates</a></li><li>
+<a id="actmenu">Rules</a></li></ul></li></ul></li><li>
+<a href="/home/projects/edu/">Education <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/games/">Games <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/net/">Network <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/lang/">Languages <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/robotics/">Robotics <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/system/">Systems <span class="small">[+]</span></a></li></ul></li><li>
+<a href="/home/programming/">Programming <span class="small">[+]</span></a></li><li>
 <a href="/home/links">Links</a></li><li>
 <a href="/home/contact">Contact</a></li></ul>
 			</div> 
@@ -59,9 +56,9 @@ Rules</h2>
 <li><a href='#h6'>Silencing rules</a></li>
 <li><a href='#h7'>External rules</a></li>
 <li><a href='#h8'>Replacing automake rules</a></li></ul><p>
-<span class='code'>Autocomb</span> defines a few rules itself and has knowledge about automake-defined
+<span class='code'>MakeQuick</span> defines a few rules itself and has knowledge about automake-defined
 rules, so that e.g. rules for compiling C sources are not emitted again. The
-rules feature in <span class='code'>Autocomb</span> is the reason this project was actually started. The
+rules feature in <span class='code'>MakeQuick</span> is the reason this project was actually started. The
 syntax is basically the same as GNU Make pattern rules with some extensions, but
 the way they are expanded makes them much more useful.</p>
 <pre class="code-block">   %.o: %.c {
@@ -94,7 +91,7 @@ time.</p>
 <h3>
 <a id='h1'>Pattern matching</a></h3>
 <p>
-The introductory example is already a pattern rule. Patterns in <span class='code'>Autocomb</span> are
+The introductory example is already a pattern rule. Patterns in <span class='code'>MakeQuick</span> are
 slightly more advanced than in GNU Make. There is a set of rules defining which
 pattern is matched. Simply speaking, the most special pattern is matched.</p>
 <pre class="code-block">   %.c: %.y {
@@ -231,7 +228,7 @@ current directory.</p>
 <a id='h6'>Silencing rules</a></h3>
 <p>
 Similar to <span class='code'>make</span>, lines of a recipe may be silenced by prepending them with
-<span class='code'>@</span>. <span class='code'>Autocomb</span> extends this to automake <span class='code'>silent-rules</span>.</p>
+<span class='code'>@</span>. <span class='code'>MakeQuick</span> extends this to automake <span class='code'>silent-rules</span>.</p>
 <pre class="code-block">   %.c: %.y {
       @echo Calling bison
       @(YACC)bison <span class="key2">$&lt;</span> -o <span class="key2">$@</span>
@@ -244,7 +241,7 @@ print the actual command instead of the single-line message.</p>
 <h3>
 <a id='h7'>External rules</a></h3>
 <p>
-If <span class='code'>Autocomb</span> is not flexible enough for the use case, external rules may be
+If <span class='code'>MakeQuick</span> is not flexible enough for the use case, external rules may be
 imported using the <span class='code'>extern</span> keyword. You may optionally add rule stubs
 declaring patterns or explicit graph edges that may be assumed as being
 implemented. Note that these rules are not special and more exact rules can
@@ -268,18 +265,18 @@ object files from C sources can be written as follows:</p>
 
 </pre><p>
 Automake still provides many useful tools, such as its <span class='code'>distcheck</span> and
-<span class='code'>parallel-tests</span> facilities. These tools are the reason <span class='code'>Autocomb</span> targets automake
+<span class='code'>parallel-tests</span> facilities. These tools are the reason <span class='code'>MakeQuick</span> targets automake
 and not make, directly.</p>
 <p>
 Also note that it's not useful to actually rewrite the automake rules, as the
 resulting Makefile will not be any shorter. Automake may do optimisations at a
-lower level than <span class='code'>Autocomb</span>, so it is not advisable to override many of its rules.</p>
+lower level than <span class='code'>MakeQuick</span>, so it is not advisable to override many of its rules.</p>
 
 		</div> 
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Mon Jul 18 01:16:23 MEST 2011</div> 
+			<div id="updated">Last updated Sat Aug 10 02:13:57 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 
