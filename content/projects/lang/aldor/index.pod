@@ -2,6 +2,8 @@
 
 L<Git repository|https://github.com/pippijn/aldor>
 
+L<Main website|http://pippijn.github.io/aldor/>
+
 =begin code Aldor
 
    #include "aldor"
