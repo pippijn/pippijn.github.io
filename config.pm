@@ -20,7 +20,7 @@
 				]],
 			]],
 			[edu => "Education", [
-				[qvoc => "QVoc"],
+				[gvoc => "GVoc"],
 			]],
 			[games => "Games", [
 				[quake3 => "Quake 3"],
