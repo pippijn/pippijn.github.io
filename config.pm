@@ -7,16 +7,13 @@
 		["Home"],
 		[projects => "Projects", [
 			[devel => "Developer tools", [
-				#[autoproj => "Autoproj"],
 				[clangide => "Clang IDE"],
-				#[libcommon => "libcommon"],
 				[makequick => "MakeQuick", [
 					[project => "Project"],
 					[variables => "Variables"],
 					[target => "Targets"],
 					[template => "Templates"],
 					[rules => "Rules"],
-					#[examples => "Examples"],
 				]],
 			]],
 			[edu => "Education", [

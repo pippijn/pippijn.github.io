@@ -75,12 +75,13 @@ Yacc allows <span class='code'>/* */</span> comments. Yaccpp also allows C99-sty
 <h3>
 <a id='h2'>Generate foreign language actions</a></h3>
 <p>
-If a foreign language such as <a href='aldor/'>Aldor</a> or Perl includes a C FFI, Yaccpp
-can generate calls into this language, so that actions can be written in a non-C
-language while keeping the parser implementation in C. This way, new languages
-can get a well-tested parser generator without having to write their own Bison
-template. A Perl module or Aldor domain will be generated to encapsulate the
-action code. This feature can be controlled using the <span class='code'>%action-lang</span> directive.</p>
+If a foreign language such as <a href='../aldor/'>Aldor</a> or Perl includes a C FFI,
+Yaccpp can generate calls into this language, so that actions can be written in
+a non-C language while keeping the parser implementation in C. This way, new
+languages can get a well-tested parser generator without having to write their
+own Bison template. A Perl module or Aldor domain will be generated to
+encapsulate the action code. This feature can be controlled using the
+<span class='code'>%action-lang</span> directive.</p>
 <pre class="code-block">   %action-lang <span class="string">"Aldor"</span> MyLanguageParserDom
    <span class="comment">// or:</span>
    %action-lang <span class="string">"Perl"</span> Parse::MyLanguage
@@ -411,7 +412,7 @@ extract additional information from the grammar.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sat Aug 10 02:12:15 MEST 2013</div> 
+			<div id="updated">Last updated Sun Aug 11 23:25:16 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 
