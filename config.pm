@@ -24,7 +24,7 @@
 			]],
 			[games => "Games", [
 				[quake3 => "Quake 3"],
-				[dclient => "Deliantra"],
+				[deliantra => "Deliantra"],
 			]],
 			[net => "Network", [
 				[groovy => "Grooveshark"],

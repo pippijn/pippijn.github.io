@@ -1,3 +1,0 @@
-=head1 Deliantra Client
-
-L<Git repository|https://github.com/pippijn/deliantra>
