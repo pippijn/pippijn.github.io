@@ -76,27 +76,9 @@
 			[kernel => "Microkernel"],
 		]],
 	]],
-	#[opinions => "Opinions",
-		#[
-			#["negative" => "Negative",
-				#[
-					#[cpp => "C++"],
-					#[java => "Java"],
-					#[php => "PHP"],
-					#[perl => "Perl"],
-					#[docgen => "Doc-generators"],
-				#],
-			#],
-			#["positive" => "Positive",
-				#[
-					#[cpp => "C++"],
-					#[java => "Java"],
-					#[php => "PHP"],
-					#[perl => "Perl"],
-				#],
-			#],
-		#],
-	#],
+	[opinions => "Opinions", [
+		[buildsys => "Build systems"],
+	]],
 	["programming" => "Programming", [
 		['data-hiding' => "Data hiding"],
 		[c => "C", [

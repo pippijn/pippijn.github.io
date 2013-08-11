@@ -1,5 +1,7 @@
 =head1 Home
 
+=head2 Welcome
+
 Welcome to my homepage. The initial version of this was produced as part of a
 first semester task at the University for Applied Sciences in Karlsruhe, where I
 did my bachelor's and am currently pursuing a master's degree. Since then, it
@@ -15,6 +17,8 @@ because they are severely out of date or no longer reflect my opinions). On the
 page you are reading now, I will try to say a few words about who I am and what
 I do.
 
+=head2 Programming
+
 My passion is computer science. My main fields of interest are programming
 languages, compilers and the formalisms and implementations behind them. I enjoy
 thinking about how to express ideas in understandable and semantically rich ways
@@ -22,8 +26,16 @@ and like to design domain specific languages that enable one to do that.
 
 I am also forced to think about build system design, as I have been unable to
 find a build system that meets my needs, but it is not my main academic
-interest.
+interest. Recently, I have started working on a build system
+L<prototype|https://github.com/pippijn/obuild> built on OMake. After its feature
+set and syntax stabilise, I may start generating recipes for other build
+systems, such as the GNU autotools, from the OMake build descriptions.
 
 At the moment, my languages of choice for most tasks are OCaml, C++ and Perl.
 Knowledge of OCaml is my most recent acquisition and is not very deep, yet, but
 some of my projects are written in it and I plan on using it more.
+
+I have recently moved most of my code to the open source repository hosting
+platform L<github|https://github.com/pippijn>. A mirror of this website is also
+hosted there. Some of my code is still hosted by Xinutec, but those are projects
+I no longer work on or that have been suspended.

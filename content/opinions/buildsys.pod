@@ -1,0 +1,19 @@
+=head1 Build systems
+
+Stuff about build systems.
+
+=head2 Requirements
+
+What should a build system provide?
+
+=head2 Existing tools
+
+What do existing build systems provide?
+
+=head2 MakeQuick
+
+What can MakeQuick do?
+
+=head2 OBuild
+
+What can OBuild do?

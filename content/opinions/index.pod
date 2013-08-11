@@ -1,5 +1,5 @@
 =head1 Opinions
 
 These pages are about my opinions on several things. They should not necessarily
-be seen as facts, but rather as opinions, even though I use facts to support my
-opinions,
+be seen as facts, but rather as opinions, even though I try to back them up with
+facts.

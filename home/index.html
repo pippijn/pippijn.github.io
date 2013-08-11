@@ -22,6 +22,7 @@
 <li>
 <a id="actmenu">Home</a></li><li>
 <a href="/home/projects">Projects <span class="small">[+]</span></a></li><li>
+<a href="/home/opinions">Opinions <span class="small">[+]</span></a></li><li>
 <a href="/home/programming">Programming <span class="small">[+]</span></a></li><li>
 <a href="/home/links">Links</a></li><li>
 <a href="/home/contact">Contact</a></li></ul>
@@ -31,7 +32,10 @@
 		<div id="content">
 			<h2>
 Home</h2>
-<ul></ul><p>
+<ul><li><a href='#h1'>Welcome</a></li>
+<li><a href='#h2'>Programming</a></li></ul><h3>
+<a id='h1'>Welcome</a></h3>
+<p>
 Welcome to my homepage. The initial version of this was produced as part of a
 first semester task at the University for Applied Sciences in Karlsruhe, where I
 did my bachelor's and am currently pursuing a master's degree. Since then, it
@@ -46,6 +50,8 @@ been asked to write and some of which are no longer accessible via the menu,
 because they are severely out of date or no longer reflect my opinions). On the
 page you are reading now, I will try to say a few words about who I am and what
 I do.</p>
+<h3>
+<a id='h2'>Programming</a></h3>
 <p>
 My passion is computer science. My main fields of interest are programming
 languages, compilers and the formalisms and implementations behind them. I enjoy
@@ -54,17 +60,25 @@ and like to design domain specific languages that enable one to do that.</p>
 <p>
 I am also forced to think about build system design, as I have been unable to
 find a build system that meets my needs, but it is not my main academic
-interest.</p>
+interest. Recently, I have started working on a build system
+<a href='https://github.com/pippijn/obuild'>prototype</a> built on OMake. After its feature
+set and syntax stabilise, I may start generating recipes for other build
+systems, such as the GNU autotools, from the OMake build descriptions.</p>
 <p>
 At the moment, my languages of choice for most tasks are OCaml, C++ and Perl.
 Knowledge of OCaml is my most recent acquisition and is not very deep, yet, but
 some of my projects are written in it and I plan on using it more.</p>
+<p>
+I have recently moved most of my code to the open source repository hosting
+platform <a href='https://github.com/pippijn'>github</a>. A mirror of this website is also
+hosted there. Some of my code is still hosted by Xinutec, but those are projects
+I no longer work on or that have been suspended.</p>
 
 		</div> 
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Fri Dec  7 12:19:12 CET 2012</div> 
+			<div id="updated">Last updated Sat Aug 10 23:28:03 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 
