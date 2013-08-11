@@ -37,6 +37,9 @@
 					#[errorlogs => "Error logs"],
 					#[licence => "Licence"],
 				]],
+				[cparser => "C Parser", [
+					[online => "Online"],
+				]],
 				[jmlc => "JML"],
 				[libcdk => "CDK library"],
 				[rasm => "Runtime assembler"],
