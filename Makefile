@@ -10,7 +10,7 @@ define copyproj
 EXTERNAL += $(subst .web/,,$(patsubst ../../../%,external/projects/%,$1))
 $(subst .web/,,$(patsubst ../../../%,external/projects/%,$1)): $1
 	mkdir -p $$(@D)
-	cp $$< $$@
+	ln -sf $$(realpath $$<) $$@
 
 endef
 
