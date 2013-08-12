@@ -75,18 +75,18 @@ C functions.
 
 This can be solved by doing something like
 
-=begin code CPP
+=begin code cpp
 
    struct foo { // alignment=2 (x86)
       char a;
       short b;
    };
 
-=end code CPP
+=end code cpp
 
 is compiled to:
 
-=begin code CPP
+=begin code cpp
 
    struct foo_data { // alignment still 2
       char a;
@@ -97,15 +97,15 @@ is compiled to:
       foo_data data;
    };
 
-=end code CPP
+=end code cpp
 
 and passing foo* to an extern C function looks like:
 
-=begin code CPP
+=begin code cpp
 
    cfun (&foo->data);
 
-=end code CPP
+=end code cpp
 
 Similarly, a struct foo can be passed as C<cfun (foo.data)>.
 

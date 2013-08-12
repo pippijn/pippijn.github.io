@@ -37,7 +37,7 @@ the time being, I expect it to be reasonably fast).
 
 In C, it is possible to have pointers to members of a struct. For example:
 
-=begin code CPP
+=begin code cpp
 
    struct buffer {
       string_t data;
@@ -49,7 +49,7 @@ In C, it is possible to have pointers to members of a struct. For example:
       return &buf->len;
    }
 
-=end code CPP
+=end code cpp
 
 When all references to C<buf> have gone out of scope, the pointer to its
 C<len> member may still exist. In particular, that pointer is definitely

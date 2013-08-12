@@ -51,21 +51,25 @@ Language Specification) does not specify this.</p>
 Overuse of inheritance<a id='inheritance'></a><p>
 Due to Java's lack of proper generics or templates, programmers are forced to
 use inheritance for everything. Where in C++, one could write</p>
-<pre class="code-block">   <span class="key3">template</span>&lt;<span class="key3">typename</span> CollectionT, <span class="key3">typename</span> T&gt;
-   <span class="key3">void</span> add_item (CollectionT collection, T element)
+<pre class='code-block'>
+   template&lt;typename CollectionT, typename T&gt;
+   void add_item (CollectionT collection, T element)
    {
      collection.add (element);
    }
 
-</pre><p>
+</pre>
+<p>
 and it would work for all types that provide a member function called <span class='code'>add(T)</span>,
 in Java, we have to inherit from <span class='code'>java.util.Collection&lt;T&gt;</span> and write</p>
-<pre class="code-block">   <span class="key1">public</span> &lt;T&gt; <span class="key3">void</span> addItem(<span class="key5">Collection</span>&lt;T&gt; collection, T element)
+<pre class='code-block'>
+   <span class="Type">public</span> &lt;T&gt; <span class="Type">void</span> addItem(Collection&lt;T&gt; collection, T element)
    {
        collection.add(element);
    }
 
-</pre></li>
+</pre>
+</li>
 <li>
 No proper generics<a id='generics'></a><p>
 Apart from the issue explained in the point above, generics in Java are pretty
@@ -73,11 +77,13 @@ useless. The only thing they add to the language is some sort of type-safety.
 Type-safety is pretty much overrated, in my opinion, but that's not relevant
 now. In the Java runtime, generics do not exist. This simple fact limits their
 use enormously. Think about the following simple factory function:</p>
-<pre class="code-block">   <span class="key1">public</span> &lt;T&gt; T create() {
-       <span class="key1">return</span> <span class="key1">new</span> T();
+<pre class='code-block'>
+   <span class="Type">public</span> &lt;T&gt; T create() {
+       <span class="Statement">return</span> <span class="Statement">new</span> T();
    }
 
-</pre><p>
+</pre>
+<p>
 This code does not compile, because T can not be instantiated. The reason for
 this is explained in 4.6 of the JLS. Types are erased. They do not exist at
 runtime. Therefore, it is not possible to create new objects or arrays of them.
@@ -85,15 +91,17 @@ The Java solution is to pass in a non-generic factory class that instantiates
 the object. What this factory function was supposed to deliver, though, was a
 generic factory class. A factory class you can pass in could be Class&lt;T&gt;.
 The code could be written like this:</p>
-<pre class="code-block">   <span class="key1">public</span> &lt;T&gt; T create(<span class="key5">Class</span>&lt;T&gt; cls) {
-       <span class="key1">return</span> cls.newInstance();
+<pre class='code-block'>
+   <span class="Type">public</span> &lt;T&gt; T create(Class&lt;T&gt; cls) {
+       <span class="Statement">return</span> cls.newInstance();
    }
-   <span class="comment">// Or, for arrays:</span>
-   <span class="key1">public</span> &lt;T&gt; T[] createArray(<span class="key5">Class</span>&lt;T[]&gt; arraytype, <span class="key3">int</span> size) {
-       <span class="key1">return</span> arraytype.cast(<span class="key5">Array</span>.newInstance(arraytype.getComponentType(), size));
+   <span class="Comment">// Or, for arrays:</span>
+   <span class="Type">public</span> &lt;T&gt; T[] createArray(Class&lt;T[]&gt; arraytype, <span class="Type">int</span> size) {
+       <span class="Statement">return</span> arraytype.cast(Array.newInstance(arraytype.getComponentType(), size));
    }
 
-</pre><p>
+</pre>
+<p>
 Note that you can not create arrays of primitive types this way, only of the
 boxed versions. Another issue with Java generics is that due to type erasure,
 only class or interface types may be used inside a generic. The effect of this
@@ -102,18 +110,22 @@ values in a contiguous chunk of memory, encouraging fragmentation of memory.o
 The <span class='code'>Integer</span>s are allocated in various places on the heap.</p>
 <p>
 It is also not possible to write code like this:</p>
-<pre class="code-block">   <span class="key1">public</span> &lt;T&gt; <span class="key3">void</span> func(T o) {
+<pre class='code-block'>
+   <span class="Type">public</span> &lt;T&gt; <span class="Type">void</span> func(T o) {
        o.method();
    }
 
-</pre><p>
+</pre>
+<p>
 While using C++ templates, this would be possible for all types T that define a
 member function <span class='code'>method()</span>. In Java, the solution to this is:</p>
-<pre class="code-block">   <span class="key1">public</span> &lt;T <span class="key3">extends</span> TypeWithMethod&gt; <span class="key3">void</span> func(T o) {
+<pre class='code-block'>
+   <span class="Type">public</span> &lt;T <span class="Type">extends</span> TypeWithMethod&gt; <span class="Type">void</span> func(T o) {
        o.method();
    }
 
-</pre><p>
+</pre>
+<p>
 This pretty much repeats the point above, but emphasises more on the generics
 part of the issue whereas the other point emphasises on the inheritance part.</p>
 </li>
@@ -127,27 +139,31 @@ involves a call to the <span class='code'>new</span> instruction for allocation 
 to virtual methods (the constructor chain). More importantly, though, is the
 fact that objects are not reused. Java does not put its locally used objects on
 the stack, so this space is not reused. Consider the following code:</p>
-<pre class="code-block">   <span class="key1">for</span> (<span class="key5">Collection</span>&lt;Item&gt; c : collections) {
-      <span class="key5">Vector</span>&lt;Item&gt; v = <span class="key1">new</span> <span class="key5">Vector</span>&lt;Item&gt;();
-      <span class="key1">for</span> (Item i : c) {
+<pre class='code-block'>
+   <span class="Statement">for</span> (Collection&lt;Item&gt; c : collections) {
+      Vector&lt;Item&gt; v = <span class="Statement">new</span> Vector&lt;Item&gt;();
+      <span class="Statement">for</span> (Item i : c) {
          v.add(i);
       }
       doSomething(v);
    }
 
-</pre><p>
+</pre>
+<p>
 In this code, a new <span class='code'>Vector&lt;Item&gt;</span> object is created every time and
 discarded for the next outer loop iteration. This code could be rewritten as</p>
-<pre class="code-block">   <span class="key5">Vector</span>&lt;Item&gt; v = <span class="key1">new</span> <span class="key5">Vector</span>&lt;Item&gt;();
-   <span class="key1">for</span> (<span class="key5">Collection</span>&lt;Item&gt; c : collections) {
-      <span class="key1">for</span> (Item i : c) {
+<pre class='code-block'>
+   Vector&lt;Item&gt; v = <span class="Statement">new</span> Vector&lt;Item&gt;();
+   <span class="Statement">for</span> (Collection&lt;Item&gt; c : collections) {
+      <span class="Statement">for</span> (Item i : c) {
          v.add(i);
       }
       doSomething(v);
       v.clear();
    }
 
-</pre><p>
+</pre>
+<p>
 This is not by itself bad about Java but it shows a problem many don't
 acknowledge: Even with a GC'd language, you need to take care of memory
 allocations.</p>
@@ -247,15 +263,17 @@ assigned once in a static { } block but then it works like C's top-level const.
 </ul>
 <p>
 Also, consider the following code snippet:</p>
-<pre class="code-block">    <span class="key1">public</span> <span class="key3">static</span> <span class="key3">void</span> main (<span class="key5">String</span>[] argv) {
-        <span class="key3">int</span> i;
-        <span class="key1">if</span> (argv.<span class="key1">length</span> &gt;= <span class="number">0</span>) {
-            i = <span class="number">5</span>;
+<pre class='code-block'>
+    <span class="Type">public</span> <span class="Type">static</span> <span class="Type">void</span> main (String[] argv) {
+        <span class="Type">int</span> i;
+        <span class="Statement">if</span> (argv.length &gt;= <span class="Number">0</span>) {
+            i = <span class="Number">5</span>;
         }
-        <span class="key5">System</span>.out.println(i);
+        System.out.println(i);
     }
 
-</pre><p>
+</pre>
+<p>
 The compiler errors out, saying that i "may not have been initialised". Is that
 so? Array lengths can never be less than 0. If our compiler is smart enough to
 prevent compilation of this code, it should be smart enough to know that <span class='code'>i</span> is
@@ -333,13 +351,15 @@ Unreachable code is not allowed (14.21)<p>
 Except in <span class='code'>if (false) { }</span> statements, which is Java's attempt to emulate
 compile-time conditionals such as the ones provided by a preprocessor. This
 exception does not hold for <span class='code'>while (false) { }</span>.  Consider code like this:</p>
-<pre class="code-block">   <span class="key1">while</span> (<span class="key4">true</span>) <span class="key1">return</span>;
-   <span class="key5">System</span>.out.println(<span class="string">"Unreachable"</span>); <span class="comment">// this statement is unreachable and an error</span>
-   <span class="comment">// but</span>
-   <span class="key1">if</span> (<span class="key4">true</span>) <span class="key1">return</span>;
-   <span class="key5">System</span>.out.println(<span class="string">"Unreachable"</span>); <span class="comment">// this statement is unreachable but not an error</span>
+<pre class='code-block'>
+   <span class="Statement">while</span> (<span class="Constant">true</span>) <span class="Statement">return</span>;
+   System.out.println(<span class="String">&quot;Unreachable&quot;</span>); <span class="Comment">// this statement is unreachable and an error</span>
+   <span class="Comment">// but</span>
+   <span class="Statement">if</span> (<span class="Constant">true</span>) <span class="Statement">return</span>;
+   System.out.println(<span class="String">&quot;Unreachable&quot;</span>); <span class="Comment">// this statement is unreachable but not an error</span>
 
-</pre><p>
+</pre>
+<p>
 Note that this behaviour is specified by the JLS. I do think, though, that this
 is inconsistent.</p>
 </li>
@@ -351,30 +371,34 @@ An important pattern in languages such as Perl and C++ is RAII, which stands for
 "Resource Acquisition Is Initialisation". It basically means that objects
 acquire resources in their constructor and release it in their destructor. A
 good example of this is lock acquisition and release:</p>
-<pre class="code-block">   <span class="key3">void</span> function (<span class="key3">int</span> i)
+<pre class='code-block'>
+   <span class="Type">void</span> function (<span class="Type">int</span> i)
    {
-     mutex::locker mlock (<span class="key1">this</span>-&gt;mtx);
+     mutex::locker mlock (<span class="Statement">this</span>-&gt;mtx);
      check (i);
-     <span class="key1">this</span>-&gt;number += i;
+     <span class="Statement">this</span>-&gt;number += i;
    }
 
-</pre><p>
+</pre>
+<p>
 This code locks a mutex and unlocks it whenever the function returns. This may
 happen on exceptions or on normal return. The <span class='code'>check</span> function may throw an
 exception if <span class='code'>i</span> is wrong. We don't have to care about that here. In Java, we
 do:</p>
-<pre class="code-block">  <span class="key3">void</span> function(<span class="key3">int</span> i) <span class="key1">throws</span> <span class="key5">Exception</span>
+<pre class='code-block'>
+  <span class="Type">void</span> function(<span class="Type">int</span> i) <span class="Type">throws</span> Exception
   {
-      <span class="key1">this</span>.mtx.lock ();
-      <span class="key1">try</span> {
+      <span class="Type">this</span>.mtx.lock ();
+      <span class="Statement">try</span> {
           check(i);
-      } <span class="key1">finally</span> {
-          <span class="key1">this</span>.mtx.unlock();
+      } <span class="Statement">finally</span> {
+          <span class="Type">this</span>.mtx.unlock();
       }
-      <span class="key1">this</span>.number += i;
+      <span class="Type">this</span>.number += i;
   }
 
-</pre><p>
+</pre>
+<p>
 In the code above, the issue is not that apparent, but when you start playing
 with file I/O, you may need a cascade of up to three <span class='code'>try</span>'s and <span class='code'>catch</span>es in
 order to catch all exceptions thrown. Opening, writing and closing may throw. A
@@ -394,15 +418,17 @@ diagnostics, you need to use something like the Eclipse compiler.</p>
 <li>
 Almost enforced writing of documentation<a id='javadoc'></a><p>
 This may by itself not sound bad, but it leads to comments such as these:</p>
-<pre class="code-block">   <span class="comment">/**
-    * Returns the X coordinate of this &lt;code&gt;Point2D&lt;/code&gt; in
-    * &lt;code&gt;double&lt;/code&gt; precision.
-    * @return the X coordinate of this &lt;code&gt;Point2D&lt;/code&gt;.
-    * @since 1.2
-    */</span>
-   <span class="key1">public</span> <span class="key3">abstract</span> <span class="key3">double</span> getX();
+<pre class='code-block'>
+   <span class="Comment">/**</span>
+<span class="Comment">    *</span><span class="Special"> Returns the X coordinate of this </span><span class="Identifier">&lt;</span><span class="Statement">code</span><span class="Identifier">&gt;</span><span class="Special">Point2D</span><span class="Identifier">&lt;/</span><span class="Statement">code</span><span class="Identifier">&gt;</span><span class="Special"> in</span>
+<span class="Comment">    *</span><span class="Special"> </span><span class="Identifier">&lt;</span><span class="Statement">code</span><span class="Identifier">&gt;</span><span class="Special">double</span><span class="Identifier">&lt;/</span><span class="Statement">code</span><span class="Identifier">&gt;</span><span class="Special"> precision.</span>
+<span class="Comment">    * </span><span class="Special">@return</span><span class="Comment"> the X coordinate of this </span><span class="Identifier">&lt;</span><span class="Statement">code</span><span class="Identifier">&gt;</span><span class="Comment">Point2D</span><span class="Identifier">&lt;/</span><span class="Statement">code</span><span class="Identifier">&gt;</span><span class="Comment">.</span>
+<span class="Comment">    * </span><span class="Special">@since</span><span class="Identifier"> 1.2</span>
+<span class="Comment">    */</span>
+   <span class="Type">public</span> <span class="Type">abstract</span> <span class="Type">double</span> getX();
 
-</pre><p>
+</pre>
+<p>
 Breaking up the description:</p>
 <ul>
 <li>
@@ -464,24 +490,28 @@ option on startup.
 No "rethrow"<a id='rethrow'></a><p>
 In Java, it is not possible to throw the same exception, preserving the stack
 trace. In C++, we could do:</p>
-<pre class="code-block">   <span class="key1">try</span> {
+<pre class='code-block'>
+   try {
      function ();
-   } <span class="key1">catch</span> (exception <span class="key3">const</span> &amp;e) {
+   } catch (exception const &amp;e) {
      do_some_cleanups ();
-     <span class="key1">throw</span>;
+     throw;
    }
 
-</pre><p>
+</pre>
+<p>
 In Java, we have to create a new <span class='code'>Exception</span> object and pass the old one as
 argument:</p>
-<pre class="code-block">   <span class="key1">try</span> {
+<pre class='code-block'>
+   try {
        method();
-   } <span class="key1">catch</span> (<span class="key5">Exception</span> e) {
+   } catch (Exception e) {
        doSomeCleanups();
-       <span class="key1">throw</span> <span class="key1">new</span> <span class="key5">Exception</span>(e);
+       throw new Exception(e);
    }
 
-</pre></li>
+</pre>
+</li>
 <li>
 Everything passed by value<a id='pass_by_value'></a><p>
 This means you cannot pass an <span class='code'>int</span> and expect it to be modified. Neither can
@@ -529,7 +559,7 @@ a problem with many curly-bracket languages.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Fri May 27 22:07:44 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:39:21 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

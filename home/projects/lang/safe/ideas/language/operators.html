@@ -65,13 +65,15 @@
 Operators</h2>
 <ul></ul><p>
 Pass operators to functions, for example (pseudo-code):</p>
-<pre class="code-block">    apply ((+), <span class="number">2</span>, <span class="number">3</span>) == <span class="number">5</span>;
+<pre class='code-block'>
+    apply ((+), <span class="Number">2</span>, <span class="Number">3</span>) == <span class="Number">5</span>;
   where
-    <span class="key3">long</span> <span class="key1">operator</span>+ (<span class="key3">long</span>, <span class="key3">long</span>);
-    <span class="key3">long</span> apply (<span class="key3">long</span> (@f)(<span class="key3">long</span>, <span class="key3">long</span>), <span class="key3">long</span> v1, <span class="key3">long</span> v2)
-    { <span class="key1">return</span> f (v1, v2); }
+    <span class="Type">long</span> <span class="Statement">operator</span>+ (<span class="Type">long</span>, <span class="Type">long</span>);
+    <span class="Type">long</span> apply (<span class="Type">long</span> (@f)(<span class="Type">long</span>, <span class="Type">long</span>), <span class="Type">long</span> v1, <span class="Type">long</span> v2)
+    { <span class="Statement">return</span> f (v1, v2); }
 
-</pre><p>
+</pre>
+<p>
 For this, operator stubs need to be generated.</p>
 <p>
 Parse things like <span class='code'>a-&gt;[3]</span> into <span class='code'>(*a)[3]</span>.</p>
@@ -80,7 +82,7 @@ Parse things like <span class='code'>a-&gt;[3]</span> into <span class='code'>(*
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Mon Jul  4 23:58:35 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:41:04 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

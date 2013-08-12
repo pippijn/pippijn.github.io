@@ -24,7 +24,7 @@ from an object of derived type (often called slicing, because only the base
 part of the object is retained). In C, this implicit construction is not
 possible. Consider the following C++ code:
 
-=begin code CPP
+=begin code cpp
 
   // C++ code:
   struct base {
@@ -45,7 +45,7 @@ possible. Consider the following C++ code:
     bp->b = d.base::a; // <- or
   }
 
-=end code CPP
+=end code cpp
 
 In this code, an object of type C<derived> is created, then an object of type
 C<base> is created and the derived object is sliced to form the base object.
@@ -54,7 +54,7 @@ pointer C<bp>. The last two lines are equivalent in that they both access the
 member C<a> in the base class and assign it to C<b> in the base class using
 the base pointer.
 
-=begin code CPP
+=begin code cpp
 
   // C code:
   struct base {
@@ -77,7 +77,7 @@ the base pointer.
     bp->b = ((struct base *)&d)->a; // <- or
   }
 
-=end code CPP
+=end code cpp
 
 In long lines with several levels of inheritance, base accesses become
 cumbersome and casting is probably the way to go. (Think of
@@ -92,7 +92,7 @@ directive C<#include> to inherit the base members. The advantage of this is
 that member accesses are completely transparent, the disadvantage is that the
 data members are going to be spread over many small files.
 
-=begin code CPP
+=begin code cpp
 
   // base-members.h
     char a;
@@ -121,7 +121,7 @@ data members are going to be spread over many small files.
     bp->b = d.a; // <- works fine for long inheritance lines
   }
 
-=end code CPP
+=end code cpp
 
 As you can see, the client code for this is cleaner. There is no visible base
 object. The casts are all valid, because the beginning of both structs are
@@ -140,7 +140,7 @@ you need an AST. Such trees are usually directed acyclic graphs consisting of
 many nodes of different types pointing at other nodes in the graph. A simple
 example could be:
 
-=begin code CPP
+=begin code cpp
 
   struct node {
   };
@@ -158,7 +158,7 @@ example could be:
     int value;
   };
 
-=end code CPP
+=end code cpp
 
 Now you can build an expression tree from an expression like C<3 + 2 * 7 / 3>.
 If you want to evaluate the tree, you need to somehow find out what type of

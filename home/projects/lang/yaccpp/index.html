@@ -83,11 +83,13 @@ languages can get a well-tested parser generator without having to write their
 own Bison template. A Perl module or Aldor domain will be generated to
 encapsulate the action code. This feature can be controlled using the
 <span class='code'>%action-lang</span> directive.</p>
-<pre class="code-block">   %action-lang <span class="string">"Aldor"</span> MyLanguageParserDom
-   <span class="comment">// or:</span>
-   %action-lang <span class="string">"Perl"</span> Parse::MyLanguage
+<pre class='code-block'>
+   %action-lang <span class="String">&quot;Aldor&quot;</span> MyLanguageParserDom
+   <span class="Comment">// or:</span>
+   %action-lang <span class="String">&quot;Perl&quot;</span> Parse::MyLanguage
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h3'>Merge multiple input files</a></h3>
 <p>
 By listing several files on the command line, you can merge multiple grammar
@@ -104,15 +106,17 @@ than the expanded grammar. Note that unlike abstract syntax trees (ASTs), the
 parse tree contains everything, including all tokens such as <span class='code'>'+'</span>, <span class='code'>';'</span> and
 <span class='code'>'{'</span> tokens. The class members will carry the names of the rhs parts. If more
 than one rhs part has the same name, an 1-based index is appended.</p>
-<pre class="code-block">   %parse-tree <span class="string">"C++"</span>
+<pre class='code-block'>
+   %parse-tree <span class="String">&quot;C++&quot;</span>
    %%
    add_exp
       : mul_exp
-      | add_exp <span class="string">'+'</span> mul_exp %<span class="key3">class</span> add_exp
-      | add_exp <span class="string">'-'</span> mul_exp %<span class="key3">class</span> add_exp
+      | add_exp <span class="Constant">'+'</span> mul_exp %<span class="Type">class</span> add_exp
+      | add_exp <span class="Constant">'-'</span> mul_exp %<span class="Type">class</span> add_exp
       ;
 
-</pre><p>
+</pre>
+<p>
 The above grammar productions will yield two classes. By using the <span class='code'>%class</span>
 directive, the common productions are written directly in the base class
 <span class='code'>add_exp_node</span>. This class will have three members <span class='code'>add_exp</span>, <span class='code'>tok</span>,
@@ -121,28 +125,32 @@ directive, the common productions are written directly in the base class
 If <span class='code'>%class</span> is omitted, each production will get its own class,
 unless a pattern can be detected. If <span class='code'>%class</span> had been omitted in the above
 example, the three classes would be:</p>
-<pre class="code-block">   add_exp_node &lt;&lt;abstract&gt;&gt;
-   add_exp_node1 : add_exp_node { node *mul_exp; };
-   add_exp_node2 : add_exp_node { node *add_exp, *tok, *mul_exp; };
+<pre class='code-block'>
+   add_exp_node &lt;&lt;abstract&gt;&gt;
+   <span class="Statement">add_exp_node1</span> : add_exp_node { node *mul_exp; };
+   <span class="Statement">add_exp_node2</span> : add_exp_node { node *add_exp, *tok, *mul_exp; };
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h5'>Expand macro grammars</a></h3>
 <p>
 Yaccpp implements a variant of macro grammars as described in Peter Thiemann's
 <a href='http://www.informatik.uni-freiburg.de/~thiemann/papers/macro-grammar.pdf'>Macros for Context-Free Grammars</a>
 paper.</p>
-<pre class="code-block">   <span class="comment">// E (sep E)*</span>
+<pre class='code-block'>
+   <span class="Comment">// E (sep E)*</span>
    list(E, sep, list_type)
       : E
-         <span class="comment">// You may refer to arguments of macros in action code using the ` prefix.</span>
-         { ($$ = <span class="key1">new</span> `list_type)-&gt;add ($1); }
+         <span class="Comment">// You may refer to arguments of macros in action code using the ` prefix.</span>
+         { ($$ = <span class="Statement">new</span> `list_type)-&gt;add ($<span class="Number">1</span>); }
       | list(E, sep, list_type) sep E
-         { ($$ = $1)-&gt;add ($3); }
+         { ($$ = $<span class="Number">1</span>)-&gt;add ($<span class="Number">3</span>); }
       ;
 
-   argument_list: <span class="string">'('</span> list (argument, <span class="string">';'</span>, node_list) <span class="string">')'</span>;
+   <span class="Statement">argument_list</span>: <span class="Constant">'('</span> list (argument, <span class="Constant">';'</span>, node_list) <span class="Constant">')'</span>;
 
-</pre><p>
+</pre>
+<p>
 In addition to the expansion described in the paper, Yaccpp supports higher
 order programming by passing unexpanded macro names to other macros. These
 macros can then be expanded within the other macro.</p>
@@ -155,68 +163,76 @@ Macros can be overloaded by argument count. Using the <span class='code'>...</sp
 of a parameter list, a macro may accept any number of arguments. Overloading
 resolution will select <a href='http://en.wikipedia.org/wiki/Variadic_function'>variadic</a>
 macros only if there is no overload with the exact number of parameters.</p>
-<pre class="code-block">   opt(E)
-      : <span class="comment">/* empty */</span>
+<pre class='code-block'>
+   opt(E)
+      : <span class="Comment">/*</span><span class="Comment"> empty </span><span class="Comment">*/</span>
       | E
       ;
 
-   <span class="comment">// partially apply the macro</span>
+   <span class="Comment">// partially apply the macro</span>
    apply(macro, arg): macro (arg) ;
-   <span class="comment">// recursively expand the apply macro with less and less arguments</span>
-   <span class="comment">// until there is no "rest", anymore, and the first "apply" macro is called</span>
+   <span class="Comment">// recursively expand the apply macro with less and less arguments</span>
+   <span class="Comment">// until there is no &quot;rest&quot;, anymore, and the first &quot;apply&quot; macro is called</span>
    apply(macro, arg, rest...): apply (apply (macro, arg), rest...) ;
 
    expr.opt
-      : opt(E: expr) <span class="comment">// named arguments</span>
+      : opt(E: expr) <span class="Comment">// named arguments</span>
       ;
 
-</pre><p>
+</pre>
+<p>
 Variadic arguments can not be directly expanded in the grammar. If you need a
 space separated list of all arguments passed to a macro, you will need to use
 something like this:</p>
-<pre class="code-block">   expand(arg, rest...): arg expand(rest...);
+<pre class='code-block'>
+   expand(arg, rest...): arg expand(rest...);
 
-</pre><h4>
+</pre>
+<h4>
 Specialisation<a id='spec'></a></h4>
 <p>
 Sometimes you may want to specialise a generic macro by production. Macros can
 be specialised by overloading them and defining one or more of its arguments
 with a production name.</p>
-<pre class="code-block">   <span class="comment">// Generic list macro for the + operator</span>
-   list.<span class="number">1</span>(E)
+<pre class='code-block'>
+   <span class="Comment">// Generic list macro for the + operator</span>
+   list<span class="Number">.1</span>(E)
       : E
-      | list.<span class="number">1</span>(E) E
+      | list<span class="Number">.1</span>(E) E
       ;
 
-   <span class="comment">// specialise the macro for list of "statement"</span>
-   list.<span class="number">1</span>(E: statement)
-      : E <span class="string">';'</span>
-      | list.<span class="number">1</span>(E) E <span class="string">';'</span>
+   <span class="Comment">// specialise the macro for list of &quot;statement&quot;</span>
+   list<span class="Number">.1</span>(E: statement)
+      : E <span class="Constant">';'</span>
+      | list<span class="Number">.1</span>(E) E <span class="Constant">';'</span>
       ;
 
-</pre><h4>
+</pre>
+<h4>
 Pattern matching</h4>
 <p>
 Macros can not only be specialised with production names, but also with ML-style
 patterns.</p>
-<pre class="code-block">   <span class="comment">// specialise the '+' macro for list of optional statements</span>
-   list.<span class="number">1</span>(E: opt(E: statement))
-      : <span class="string">';'</span>
-      | list.<span class="number">1</span>(E) E <span class="string">';'</span>
+<pre class='code-block'>
+   <span class="Comment">// specialise the '+' macro for list of optional statements</span>
+   list<span class="Number">.1</span>(E: opt(E: statement))
+      : <span class="Constant">';'</span>
+      | list<span class="Number">.1</span>(E) E <span class="Constant">';'</span>
       ;
 
-   <span class="comment">// partially specialise to extract the argument</span>
-   <span class="comment">// this macro reverses the effect of opt(E)</span>
+   <span class="Comment">// partially specialise to extract the argument</span>
+   <span class="Comment">// this macro reverses the effect of opt(E)</span>
    notopt(E: opt(E)) : E ;
-   <span class="comment">// anything else is used as-is</span>
+   <span class="Comment">// anything else is used as-is</span>
    notopt(E): E ;
 
    foo
-      : notopt(opt(statement)) <span class="comment">// =&gt; statement</span>
-      | notopt(expression) <span class="comment">// =&gt; expression</span>
+      : notopt(opt(statement)) <span class="Comment">// =&gt; statement</span>
+      | notopt(expression) <span class="Comment">// =&gt; expression</span>
       ;
 
-</pre><h4>
+</pre>
+<h4>
 Analysis</h4>
 <p>
 Yaccpp performs an extensive analysis of the macro grammar before attempting to
@@ -227,7 +243,8 @@ macros defined inline in an argument list are not supported.</p>
 <a id='h6'>Refer to other symbols on the rhs</a></h3>
 <p>
 As a form of abbreviation, you may use variable references on the rhs of a rule.</p>
-<pre class="code-block">   some_macro(with,many,arguments,it,would,be,unfeasible,to,write,it,again)
+<pre class='code-block'>
+   some_macro(with,many,arguments,it,would,be,unfeasible,to,write,it,again)
       : $$ with it
       | many $$ arguments
       | unfeasible to write $$
@@ -235,40 +252,43 @@ As a form of abbreviation, you may use variable references on the rhs of a rule.
       ;
 
    initialiser
-      : <span class="string">'['</span> assignment.expression <span class="string">"..."</span> $2 <span class="string">']'</span> basic.initialiser
+      : <span class="Constant">'['</span> assignment.expression <span class="String">&quot;...&quot;</span> $<span class="Number">2</span> <span class="Constant">']'</span> basic.initialiser
       ;
 
-   <span class="key1">asm</span>.statement
-      : <span class="string">"asm"</span> type.qualifier <span class="string">'('</span> string.literal.list
-        <span class="string">':'</span> <span class="key1">asm</span>.argument.list?[L] <span class="comment">// define a named component</span>
-        <span class="string">':'</span> $L <span class="comment">// refer to it here</span>
-        <span class="string">':'</span> <span class="key1">asm</span>.clobbered.list <span class="string">')'</span> <span class="string">';'</span>
+   <span class="Statement">asm</span>.statement
+      : <span class="String">&quot;asm&quot;</span> type.qualifier <span class="Constant">'('</span> string.literal.list
+        <span class="Constant">':'</span> <span class="Statement">asm</span>.argument.list?[L] <span class="Comment">// define a named component</span>
+        <span class="Constant">':'</span> $L <span class="Comment">// refer to it here</span>
+        <span class="Constant">':'</span> <span class="Statement">asm</span>.clobbered.list <span class="Constant">')'</span> <span class="Constant">';'</span>
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h7'>Regular grammars on the rhs</a></h3>
 <p>
 Yaccpp supports regular grammars known from regular expressions and EBNF on the
 right hand side of rules.</p>
-<pre class="code-block">   identifier
-      <span class="comment">// Note that you need to write out the "..." yourself. Character ranges</span>
-      <span class="comment">// are not supported.</span>
-      : (<span class="string">'a'</span> | <span class="string">'b'</span> | ... | <span class="string">'z'</span> | <span class="string">'A'</span> | ... | <span class="string">'Z'</span>)
-        (<span class="string">'a'</span> | <span class="string">'b'</span> | ... | <span class="string">'z'</span> | <span class="string">'A'</span> | ... | <span class="string">'Z'</span> | <span class="string">'0'</span> | ... <span class="string">'9'</span>)*
+<pre class='code-block'>
+   identifier
+      <span class="Comment">// Note that you need to write out the &quot;...&quot; yourself. Character ranges</span>
+      <span class="Comment">// are not supported.</span>
+      : (<span class="Constant">'a'</span> | <span class="Constant">'b'</span> | ... | <span class="Constant">'z'</span> | <span class="Constant">'A'</span> | ... | <span class="Constant">'Z'</span>)
+        (<span class="Constant">'a'</span> | <span class="Constant">'b'</span> | ... | <span class="Constant">'z'</span> | <span class="Constant">'A'</span> | ... | <span class="Constant">'Z'</span> | <span class="Constant">'0'</span> | ... <span class="Constant">'9'</span>)*
       ;
 
-   <span class="comment">// Be careful:</span>
+   <span class="Comment">// Be careful:</span>
    macro(A): A;
-   nonterm: macro (foo | bar)*; <span class="comment">// does not call macro</span>
-   nonterm: macro ((foo | bar))*; <span class="comment">// calls macro and repeats the expansion {0,n}</span>
-   nonterm: macro ((foo | bar)*); <span class="comment">// repeats the alternatives {0,n} and calls macro on that</span>
+   <span class="Statement">nonterm</span>: macro (foo | bar)*; <span class="Comment">// does not call macro</span>
+   <span class="Statement">nonterm</span>: macro ((foo | bar))*; <span class="Comment">// calls macro and repeats the expansion {0,n}</span>
+   <span class="Statement">nonterm</span>: macro ((foo | bar)*); <span class="Comment">// repeats the alternatives {0,n} and calls macro on that</span>
 
-   <span class="comment">// The second definition would expand to the the following:</span>
-   nonterm: macro (anon123)*;
-   nonterm: list.<span class="number">0</span> (macro (anon123));
-   nonterm: list.<span class="number">0</span> (macro__anon123);
-   nonterm: list.0__macro__anon123;
+   <span class="Comment">// The second definition would expand to the the following:</span>
+   <span class="Statement">nonterm</span>: macro (anon123)*;
+   <span class="Statement">nonterm</span>: list<span class="Number">.0</span> (macro (anon123));
+   <span class="Statement">nonterm</span>: list<span class="Number">.0</span> (macro__anon123);
+   <span class="Statement">nonterm</span>: list.0__macro__anon123;
 
-</pre><p>
+</pre>
+<p>
 As a generic tool, Yaccpp cannot know how you want to handle lists and optional
 elements, it requires the grammar to contain the following definitions. Defaults
 are provided, if a definition is not given. The list macros do not, however, know how to
@@ -296,35 +316,39 @@ name and that rule name is written in its place. You can write semantic actions
 in anonymous rules just as you would in global rules. If all alternatives have
 the same type, the type of the anonymous rule is inferred to be that type.
 Otherwise, you need to specify the type, explicitly.</p>
-<pre class="code-block">   <span class="comment">// OK: all alternatives have the same type; $1's type is "token"</span>
-   local: (alt1 | alt2) { $$ = $1; } <span class="comment">// this is implicit</span>
+<pre class='code-block'>
+   <span class="Comment">// OK: all alternatives have the same type; $1's type is &quot;token&quot;</span>
+   <span class="Statement">local</span>: (alt1 | alt2) { $$ = $<span class="Number">1</span>; } <span class="Comment">// this is implicit</span>
    alt1&lt;token&gt;: TK_IDENTIFIER;
    alt2&lt;token&gt;: TK_STRING;
 
-   <span class="comment">// OK: explicit type given</span>
-   local: (alt1 | alt2)&lt;node&gt;; <span class="comment">// implicit $$ = $1</span>
+   <span class="Comment">// OK: explicit type given</span>
+   <span class="Statement">local</span>: (alt1 | alt2)&lt;node&gt;; <span class="Comment">// implicit $$ = $1</span>
    alt1&lt;node&gt;: funcall;
    alt2&lt;token&gt;: TK_IDENTIFIER;
 
-   <span class="comment">// ERROR: ambiguous type</span>
-   local: (alt1 | alt2);
+   <span class="Comment">// ERROR: ambiguous type</span>
+   <span class="Statement">local</span>: (alt1 | alt2);
    alt1&lt;node&gt;: funcall;
    alt2&lt;token&gt;: TK_IDENTIFIER;
 
-</pre></li>
+</pre>
+</li>
 </ul>
 <h3>
 <a id='h8'>Named references</a></h3>
 <p>
 Added in Bison 2.5, this feature is very useful for long rules. Especially when
 these rules change a lot, it is easy to make a mistake in counting the indices.</p>
-<pre class="code-block">   funcall: id <span class="string">'('</span> args <span class="string">')'</span>
-         { $funcall = <span class="key1">new</span> funcall ($id, $args); }
+<pre class='code-block'>
+   <span class="Statement">funcall</span>: id <span class="Constant">'('</span> args <span class="Constant">')'</span>
+         { $funcall = <span class="Statement">new</span> funcall ($id, $args); }
 
-   addition: exp[left] <span class="string">'+'</span> exp[right-side]
-         { $$ = $left + $[right-side]; } <span class="comment">// use [] because the name has a - in it</span>
+   <span class="Statement">addition</span>: exp[left] <span class="Constant">'+'</span> exp[right-side]
+         { $$ = $left + $[right-side]; } <span class="Comment">// use [] because the name has a - in it</span>
 
-</pre><p>
+</pre>
+<p>
 See the <a href='http://www.gnu.org/software/bison/manual/bison.html#Named-References'>Bison manual</a>
 for more examples and details.</p>
 <h3>
@@ -336,22 +360,26 @@ analysis from the parsing. The usual practice is to generate an <span class='cod
 <span class='code'>#define</span> list from the grammar and use that in the scanner. Using
 <span class='code'>%include-enum</span>, both use the same external token information source without
 depending on each other.</p>
-<pre class="code-block">   <span class="comment">// we import symbols from "enum token_type" in "tokens.h":</span>
-   %<span class="key2">include</span>-<span class="key3">enum</span> <span class="string">"tokens.h"</span> token_type
+<pre class='code-block'>
+   <span class="Comment">// we import symbols from &quot;enum token_type&quot; in &quot;tokens.h&quot;:</span>
+   %include-<span class="Type">enum</span> <span class="String">&quot;tokens.h&quot;</span> token_type
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h10'>Specify types on lhs of rules</a></h3>
 <p>
 Defining the types at the top of a grammar file splits information about rules
 in two parts: the type information and the actual rule. In Yaccpp, you can
 declare the type on the nonterminal you are defining.</p>
-<pre class="code-block">   add_exp&lt;add_exp_node&gt;: exp + exp ;
-   <span class="comment">// becomes</span>
+<pre class='code-block'>
+   add_exp&lt;add_exp_node&gt;: exp + exp ;
+   <span class="Comment">// becomes</span>
    %type&lt;add_exp_node&gt; add_exp
    %%
-   add_exp: exp + exp ;
+   <span class="Statement">add_exp</span>: exp + exp ;
 
-</pre><p>
+</pre>
+<p>
 If you split the definition of a nonterminal into several separate rules, you
 only need to define the type on one of them. Defining a different type on the
 same nonterminal is an error.</p>
@@ -361,46 +389,52 @@ same nonterminal is an error.</p>
 Using the <span class='code'>%default-token-type</span>, you can specify the type to be used on tokens
 read from the included enum. They may be overridden using the <span class='code'>%token</span> directive.
 The <span class='code'>%default-rule-type</span> defines the default type of lhs symbols.</p>
-<pre class="code-block">   %<span class="key1">default</span>-rule-type &lt;ast_node&gt;
+<pre class='code-block'>
+   %<span class="Statement">default</span>-rule-type &lt;ast_node&gt;
    %%
-   decls: decl | decls decl ;
+   <span class="Statement">decls</span>: decl | decls decl ;
 
-   <span class="comment">// becomes:</span>
+   <span class="Comment">// becomes:</span>
    %type&lt;ast_node&gt; decls decl
    %%
-   decls: decl | decls decl ;
+   <span class="Statement">decls</span>: decl | decls decl ;
 
-</pre><p>
+</pre>
+<p>
 You may override the type analogously to the token types.</p>
 <h3>
 <a id='h12'>"typeof"</a></h3>
 <p>
 You may refer to the type of any typed nonterminal or terminal using the new
 <span class='code'>#</span> symbol.</p>
-<pre class="code-block">   %type&lt;funcall_node&gt; funcall
+<pre class='code-block'>
+   %type&lt;funcall_node&gt; funcall
    %%
-   funcall: id <span class="string">'('</span> args <span class="string">')'</span>
-         { $$ = <span class="key1">new</span> #$ ($1, $3); }
+   <span class="Statement">funcall</span>: id <span class="Constant">'('</span> args <span class="Constant">')'</span>
+         { $$ = <span class="Statement">new</span> #$ ($<span class="Number">1</span>, $<span class="Number">3</span>); }
 
-   <span class="comment">// is translated to:</span>
-   funcall: id <span class="string">'('</span> args <span class="string">')'</span>
-         { $$ = <span class="key1">new</span> funcall_node ($1, $3); }
+   <span class="Comment">// is translated to:</span>
+   <span class="Statement">funcall</span>: id <span class="Constant">'('</span> args <span class="Constant">')'</span>
+         { $$ = <span class="Statement">new</span> funcall_node ($<span class="Number">1</span>, $<span class="Number">3</span>); }
 
-</pre><p>
+</pre>
+<p>
 You may also refer to the types of rhs symbols, which may be useful in template
 instantiations.</p>
-<pre class="code-block">   %type&lt;add_exp_node&gt; add_exp
+<pre class='code-block'>
+   %type&lt;add_exp_node&gt; add_exp
    %type&lt;mul_exp_node&gt; mul_exp
    %type&lt;div_exp_node&gt; div_exp
    %%
-   add_exp: mul_exp + div_exp
-         { $$ = <span class="key1">new</span> $#&lt;#<span class="number">1</span>, #<span class="number">3</span>&gt; ($1, $3); } <span class="comment">// template instantiation</span>
+   <span class="Statement">add_exp</span>: mul_exp + div_exp
+         { $$ = <span class="Statement">new</span> $#&lt;#<span class="Number">1</span>, #<span class="Number">3</span>&gt; ($<span class="Number">1</span>, $<span class="Number">3</span>); } <span class="Comment">// template instantiation</span>
 
-   <span class="comment">// is translated to:</span>
-   add_exp: mul_exp + div_exp
-         { $$ = <span class="key1">new</span> add_exp_node&lt;add_exp_node, mul_exp_node&gt; ($1, $3); }
+   <span class="Comment">// is translated to:</span>
+   <span class="Statement">add_exp</span>: mul_exp + div_exp
+         { $$ = <span class="Statement">new</span> add_exp_node&lt;add_exp_node, mul_exp_node&gt; ($<span class="Number">1</span>, $<span class="Number">3</span>); }
 
-</pre><p>
+</pre>
+<p>
 Referring to the type of untyped (non)terminals is an error.</p>
 <h3>
 <a id='h13'>Extensible through Perl</a></h3>
@@ -413,7 +447,7 @@ extract additional information from the grammar.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sun Aug 11 23:25:16 MEST 2013</div> 
+			<div id="updated">Last updated Mon Aug 12 02:37:47 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

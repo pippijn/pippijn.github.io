@@ -96,17 +96,19 @@ the time being, I expect it to be reasonably fast).</p>
 Interior pointers</h4>
 <p>
 In C, it is possible to have pointers to members of a struct. For example:</p>
-<pre class="code-block">   <span class="key3">struct</span> buffer {
+<pre class='code-block'>
+   <span class="Type">struct</span> buffer {
       string_t data;
-      <span class="key3">size_t</span> pos;
-      <span class="key3">size_t</span> len;
+      <span class="Type">size_t</span> pos;
+      <span class="Type">size_t</span> len;
    };
 
-   <span class="key3">size_t</span> @foo (buffer @buf) {
-      <span class="key1">return</span> &amp;buf-&gt;len;
+   <span class="Type">size_t</span> @foo (buffer @buf) {
+      <span class="Statement">return</span> &amp;buf-&gt;len;
    }
 
-</pre><p>
+</pre>
+<p>
 When all references to <span class='code'>buf</span> have gone out of scope, the pointer to its
 <span class='code'>len</span> member may still exist. In particular, that pointer is definitely
 not equal to <span class='code'>buf</span>. Fat pointers don't have this problem, because they
@@ -267,7 +269,7 @@ careful to skip any pinned objects.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Mon Jul  4 23:55:58 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:41:08 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

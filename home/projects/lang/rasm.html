@@ -57,35 +57,37 @@ Runtime assembler</h2>
 This is a portable C++ runtime assembler backed by GNU Lightning. It currently
 has four CPU backends: x86, x86_64, PowerPC and Sparc. What I have right now
 is a working parser and assembler for things like this:</p>
-<pre class="code-block">  <span class="comment"># mnemonic    op1             op2             op3     ret</span>
-  <span class="key1">prolog</span>        <span class="number">1</span>
-  <span class="key1">arg</span>                                                   <span class="key3">=&gt;</span> $in
-  <span class="key1">getarg</span>        <span class="key4">%v0</span>             $in                                   <span class="comment"># V0 = n</span>
-  <span class="key1">blt</span>           <span class="key2">!forward</span>        <span class="key4">%v0</span>             <span class="number">2</span>       <span class="key3">=&gt;</span> @ref
-  <span class="key1">sub</span>           <span class="key4">%v1</span>             <span class="key4">%v0</span>             <span class="number">1</span>                     <span class="comment"># V1 = n - 1</span>
-  <span class="key1">sub</span>           <span class="key4">%v2</span>             <span class="key4">%v0</span>             <span class="number">2</span>                     <span class="comment"># V2 = n - 2</span>
-  <span class="key1">prepare</span>       <span class="number">1</span>                                                     <span class="comment"># Prepare for a call with</span>
-                                                                      <span class="comment"># one argument</span>
-  <span class="key1">pusharg</span>       <span class="key4">%v1</span>                                                   <span class="comment"># Push the argument</span>
-  <span class="key1">finish</span>        <span class="key5">@self</span>         <span class="comment"># The self-pointer is a pointer to the</span>
-                              <span class="comment"># beginning of the code block (entry point).</span>
-                              <span class="comment"># This instruction jumps to the beginning of the</span>
-                              <span class="comment"># code, causing recursion</span>
+<pre class='code-block'>
+  # mnemonic    op1             op2             op3     ret
+  prolog        1
+  arg                                                   =&gt; $in
+  getarg        %v0             $in                                   # V0 = n
+  blt           !forward        %v0             2       =&gt; @ref
+  sub           %v1             %v0             1                     # V1 = n - 1
+  sub           %v2             %v0             2                     # V2 = n - 2
+  prepare       1                                                     # Prepare for a call with
+                                                                      # one argument
+  pusharg       %v1                                                   # Push the argument
+  finish        @self         # The self-pointer is a pointer to the
+                              # beginning of the code block (entry point).
+                              # This instruction jumps to the beginning of the
+                              # code, causing recursion
 
-  <span class="key1">retval</span>        <span class="key4">%v1</span>                                   <span class="comment"># Store the result in V1</span>
-  <span class="key1">prepare</span>       <span class="number">1</span>                                     <span class="comment"># Another</span>
-  <span class="key1">pusharg</span>       <span class="key4">%v2</span>                                   <span class="comment"># recursive</span>
-  <span class="key1">finish</span>        <span class="key5">@self</span>                                 <span class="comment"># call</span>
-  <span class="key1">retval</span>        <span class="key4">%v2</span>                                   <span class="comment"># Store the result in V2</span>
-  <span class="key1">add</span>           <span class="key4">%v1</span>             <span class="key4">%v1</span>             <span class="number">1</span>     <span class="comment"># V1++</span>
-  <span class="key1">add</span>           <span class="key4">%ret</span>            <span class="key4">%v1</span>             <span class="key4">%v2</span>   <span class="comment"># RET = V1 + V2</span>
-  <span class="key1">ret</span>                                                 <span class="comment"># Return</span>
-  
-  <span class="key1">patch</span>         @ref                                  <span class="comment"># Patch jump</span>
-  <span class="key1">mov</span>           <span class="key4">%ret</span>            <span class="number">1</span>                     <span class="comment"># RET = 1</span>
-  <span class="key1">ret</span>                                                 <span class="comment"># Return</span>
+  retval        %v1                                   # Store the result in V1
+  prepare       1                                     # Another
+  pusharg       %v2                                   # recursive
+  finish        @self                                 # call
+  retval        %v2                                   # Store the result in V2
+  add           %v1             %v1             1     # V1++
+  add           %ret            %v1             %v2   # RET = V1 + V2
+  ret                                                 # Return
 
-</pre><p>
+  patch         @ref                                  # Patch jump
+  mov           %ret            1                     # RET = 1
+  ret                                                 # Return
+
+</pre>
+<p>
 This example is a function that takes one integer argument <span class='code'>N</span> and calculates
 the <span class='code'>N</span>-th Fibonacci number.</p>
 <h3>
@@ -167,7 +169,7 @@ An immediate (integer) value.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sat Aug 10 01:41:27 MEST 2013</div> 
+			<div id="updated">Last updated Mon Aug 12 02:40:33 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

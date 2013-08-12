@@ -1,6 +1,6 @@
 =head1 Aldor source highlighting
 
-=begin code Aldor
+=begin code aldor
 
   #include "aldor.as"
   #include "aldorio"
@@ -347,4 +347,4 @@
     }
   }
 
-=end code Aldor
+=end code

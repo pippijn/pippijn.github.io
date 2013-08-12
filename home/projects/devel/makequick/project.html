@@ -55,18 +55,20 @@ Unlike rule files, this block is not purely declarative and there may only be
 one. While the rule translator is free to move around declarations, the project
 block defines an order in which requirements are tested. This order is honoured
 by the translator.</p>
-<pre class="code-block">   <span class="key1">project</span> <span class="string">'MakePP'</span> {
-      <span class="key5">version:</span> <span class="string">'0.1'</span>
-      <span class="key5">contact:</span> <span class="string">'makepp@xinutec.org'</span>
+<pre class='code-block'>
+   <span class="Type">project</span> <span class="String">'MakePP'</span> <span class="Identifier">{</span>
+      version<span class="Statement">:</span> <span class="String">'0.1'</span>
+      contact<span class="Statement">:</span> <span class="String">'makepp@xinutec.org'</span>
 
-      <span class="key5">config_header:</span> config.h
+      config_header<span class="Statement">:</span> config.h
 
-      <span class="key1">section</span> <span class="string">'some checks'</span> {
+      <span class="Type">section</span> <span class="String">'some checks'</span> <span class="Identifier">{</span>
          ...
-      }
-   }
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
 
-</pre><h4>
+</pre>
+<h4>
 section</h4>
 <p>
 Configure time checks are grouped in sections for better readability. Each
@@ -76,17 +78,19 @@ library</h4>
 <p>
 In a <span class='code'>project</span> context, <span class='code'>library</span> checks whether a library is installed and a
 program can be linked against it.</p>
-<pre class="code-block">   <span class="comment"># GNU Multiprecision Library, can be disabled with --without-gmp,</span>
-   <span class="comment"># if all targets defined in Rules files that link to it are optional.</span>
-   <span class="key1">library</span> gmp {
-      <span class="key5">symbol:</span> mpz_init
-      <span class="key5">header:</span> gmp.h
-      <span class="comment"># You may optionally add a description to each check. This will cause it</span>
-      <span class="comment"># to appear in the summary at the end of a configure run.</span>
-      <span class="string">'Build with GNU Multiprecision Library support'</span>
-   }
+<pre class='code-block'>
+   <span class="Comment"># GNU Multiprecision Library, can be disabled with --without-gmp,</span>
+   <span class="Comment"># if all targets defined in Rules files that link to it are optional.</span>
+   <span class="Type">library</span> gmp <span class="Identifier">{</span>
+      symbol<span class="Statement">:</span> mpz_init
+      header<span class="Statement">:</span> gmp.h
+      <span class="Comment"># You may optionally add a description to each check. This will cause it</span>
+      <span class="Comment"># to appear in the summary at the end of a configure run.</span>
+      <span class="String">'Build with GNU Multiprecision Library support'</span>
+   <span class="Identifier">}</span>
 
-</pre><p>
+</pre>
+<p>
 The above <span class='code'>library</span> directive defines the following variables:</p>
 <ul>
 <li>
@@ -113,16 +117,18 @@ headers/functions</h4>
 <p>
 The <span class='code'>headers</span> section can be used to check for additional headers. <span class='code'>functions</span>
 checks whether a list of functions is available.</p>
-<pre class="code-block">   <span class="key1">headers</span> {
-      <span class="comment"># Valgrind runtime support</span>
+<pre class='code-block'>
+   <span class="Type">headers</span> <span class="Identifier">{</span>
+      <span class="Comment"># Valgrind runtime support</span>
       valgrind/valgrind.h
-   }
-   <span class="key1">functions</span> {
-      <span class="comment"># New POSIX signal handling</span>
+   <span class="Identifier">}</span>
+   <span class="Type">functions</span> <span class="Identifier">{</span>
+      <span class="Comment"># New POSIX signal handling</span>
       sigaction
-   }
+   <span class="Identifier">}</span>
 
-</pre><p>
+</pre>
+<p>
 This directive only defines <span class='code'>HAVE_</span> variables in the config header.</p>
 <h4>
 arg_enable</h4>
@@ -133,10 +139,12 @@ this directive is a descriptive string that is shown when configure is passed
 <span class='code'>yes</span>. A default may be given. This default may be <span class='code'>yes</span> or <span class='code'>no</span> or a
 backtick-string, which is evaluated at configure time. Thus, the following two
 are equivalent:</p>
-<pre class="code-block">   <span class="key1">arg_enable</span> my-sub-package <span class="key3">=</span> yes { <span class="string">'Also build sub-package'</span> }
-   <span class="key1">arg_enable</span> my-sub-package <span class="key3">=</span> `echo yes` { <span class="string">'Also build sub-package'</span> }
+<pre class='code-block'>
+   <span class="Type">arg_enable</span> my-sub-package <span class="Statement">=</span> yes <span class="Identifier">{</span> <span class="String">'Also build sub-package'</span> <span class="Identifier">}</span>
+   <span class="Type">arg_enable</span> my-sub-package <span class="Statement">=</span> <span class="String">`echo yes`</span> <span class="Identifier">{</span> <span class="String">'Also build sub-package'</span> <span class="Identifier">}</span>
 
-</pre><p>
+</pre>
+<p>
 This adds the option <span class='code'>--enable-my-sub-package</span> and defines the following
 variables:</p>
 <ul>
@@ -164,26 +172,28 @@ or 1, depending on the user's choice.</p>
 options</h5>
 <p>
 Instead of a yes/no, you can define your own options.</p>
-<pre class="code-block">   <span class="key1">arg_enable</span> app <span class="key3">=</span> iphone {
-      <span class="string">'Build an app for this software. Only one app can be chosen'</span>
-      <span class="key1">options</span> {
-         android <span class="key3">=&gt;</span> {
-            <span class="comment"># check for additional libraries</span>
-         }
-         iphone <span class="key3">=&gt;</span> {
-            warning <span class="string">'Support for iPhones is unstable.'</span>
-         }
-         no <span class="key3">=&gt;</span> {
-            <span class="comment"># no app is being built</span>
-         }
-         <span class="comment"># optional catch-all option</span>
-         _ <span class="key3">=&gt;</span> {
-            error <span class="string">'No support for the $app phone planned.'</span>
-         }
-      }
-   }
+<pre class='code-block'>
+   <span class="Type">arg_enable</span> app <span class="Statement">=</span> iphone <span class="Identifier">{</span>
+      <span class="String">'Build an app for this software. Only one app can be chosen'</span>
+      <span class="Type">options</span> <span class="Identifier">{</span>
+         android <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
+            <span class="Comment"># check for additional libraries</span>
+         <span class="Identifier">}</span>
+         iphone <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
+            warning <span class="String">'Support for iPhones is unstable.'</span>
+         <span class="Identifier">}</span>
+         no <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
+            <span class="Comment"># no app is being built</span>
+         <span class="Identifier">}</span>
+         <span class="Comment"># optional catch-all option</span>
+<span class="Identifier">         _</span> <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
+            error <span class="String">'No support for the $app phone planned.'</span>
+         <span class="Identifier">}</span>
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
 
-</pre><p>
+</pre>
+<p>
 The defined variables and macros are the same as with the normal yes/no
 <span class='code'>arg_enable</span>, except that the config header gets one macro per option, which is
 defined to 1 if that option is selected. Thus, <span class='code'>--enable-app=android</span> will
@@ -193,19 +203,21 @@ cflags</h4>
 <p>
 The <span class='code'>cflags</span> directive tries to compile a simple program with the passed flags
 and adds them to the named variable or <span class='code'>CFLAGS</span> by default.</p>
-<pre class="code-block">   <span class="comment"># Adds to CFLAGS</span>
-   <span class="key1">cflags</span> {
+<pre class='code-block'>
+   <span class="Comment"># Adds to CFLAGS</span>
+   <span class="Type">cflags</span> <span class="Identifier">{</span>
       -pipe
       -ggdb3
       -pedantic
       -ansi
-   }
-   <span class="comment"># Adds to HIDDEN_CFLAGS</span>
-   <span class="key1">cflags</span> HIDDEN_CFLAGS {
-      -fvisibility=hidden
-   }
+   <span class="Identifier">}</span>
+   <span class="Comment"># Adds to HIDDEN_CFLAGS</span>
+   <span class="Type">cflags</span> HIDDEN_CFLAGS <span class="Identifier">{</span>
+      -fvisibility<span class="Statement">=</span>hidden
+   <span class="Identifier">}</span>
 
-</pre><p>
+</pre>
+<p>
 Each of the flags is tested separately in the order listed. The set added to the
 variable is the subset of flags that work together.</p>
 <h4>
@@ -308,7 +320,7 @@ intptr_t</li>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu Jul  7 04:31:04 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:36:51 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

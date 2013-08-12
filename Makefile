@@ -7,9 +7,9 @@ PROJSRC	:= $(shell find ../../../*/*/.web -type f)
 
 define copyproj
 
-EXTERNAL += $(subst .web/,,$(patsubst ../../../%,external/projects/%,$1))
+external.stamp: $(subst .web/,,$(patsubst ../../../%,external/projects/%,$1))
 $(subst .web/,,$(patsubst ../../../%,external/projects/%,$1)): $1
-	mkdir -p $$(@D)
+	@mkdir -p $$(@D)
 	ln -sf $$(realpath $$<) $$@
 
 endef

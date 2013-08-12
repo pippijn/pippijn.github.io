@@ -65,24 +65,28 @@
 Iterators</h2>
 <ul></ul><p>
 Add built-in support for iterators. We could use C++-style iterators:</p>
-<pre class="code-block">   let i = string_iterator (<span class="string">"hello"</span>);
-   <span class="key1">while</span> (i) {       <span class="comment">// conversion to bool acts like hasNext</span>
-      putchar (*i);  <span class="comment">// * operator yields the current item</span>
-      ++i;           <span class="comment">// perhaps, similar to C++ iterators,</span>
-                     <span class="comment">// skips to the next element</span>
-      i += <span class="number">2</span>;        <span class="comment">// skips 2 elements</span>
+<pre class='code-block'>
+   let i = string_iterator (<span class="String">&quot;hello&quot;</span>);
+   <span class="Statement">while</span> (i) {       <span class="Comment">// conversion to bool acts like hasNext</span>
+      putchar (*i);  <span class="Comment">// * operator yields the current item</span>
+      ++i;           <span class="Comment">// perhaps, similar to C++ iterators,</span>
+                     <span class="Comment">// skips to the next element</span>
+      i += <span class="Number">2</span>;        <span class="Comment">// skips 2 elements</span>
    }
 
-</pre><p>
+</pre>
+<p>
 The decrement and subtraction operators can be implemented analogically.</p>
 <p>
 Or we could take some ideas from the Sather programming language.</p>
-<pre class="code-block">   <span class="key1">while</span> {
-      let c = string_iterator! (<span class="string">"hello"</span>);
+<pre class='code-block'>
+   <span class="Statement">while</span> {
+      let c = string_iterator! (<span class="String">&quot;hello&quot;</span>);
       putchar (c);
    }
 
-</pre><p>
+</pre>
+<p>
 In this example, incrementing or decrementing the iterator is not possible.
 Maybe we don't need that. How to do this in Sather? This needs some thought.</p>
 
@@ -90,7 +94,7 @@ Maybe we don't need that. How to do this in Sather? This needs some thought.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Mon Jul  4 23:54:31 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:40:43 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

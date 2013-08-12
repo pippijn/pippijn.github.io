@@ -49,27 +49,29 @@ It is very easy to interface Perl to other languages like C, C++ and Java. C
 and C++ are interfaced using the easy-to-use XS interface. Using JPL, it is
 possible to call Java from Perl and Perl from Java. To make a C function
 callable from Perl, all you have to do is:</p>
-<pre class="code-block">   #<span class="key2">include</span> &lt;EXTERN.h&gt;
-   #<span class="key2">include</span> &lt;perl.h&gt;
-   #<span class="key2">include</span> &lt;XSUB.h&gt;
-   
-   <span class="comment">// declare a function</span>
-   <span class="key3">extern</span> <span class="key3">int</span> sub (<span class="key3">int</span>, <span class="key3">int</span>);
-   
-   <span class="comment">// define the interface from Perl</span>
-   <span class="key1">MODULE</span> = MyModule    <span class="key1">PACKAGE</span> = MyModule
-   
-   <span class="key3">int</span>
-   add (<span class="key3">int</span> a, <span class="key3">int</span> b)
-       <span class="key1">CODE</span>:
-       <span class="key2">RETVAL</span> = a + b; <span class="comment">// We can define the function in-line</span>
-       <span class="key1">OUTPUT</span>:
-       <span class="key2">RETVAL</span>
-   
-   <span class="key3">int</span>
-   sub (<span class="key3">int</span> a, <span class="key3">int</span> b);
+<pre class='code-block'>
+<span class="Include">   #include </span><span class="String">&lt;EXTERN.h&gt;</span>
+<span class="Include">   #include </span><span class="String">&lt;perl.h&gt;</span>
+<span class="Include">   #include </span><span class="String">&lt;XSUB.h&gt;</span>
 
-</pre></li>
+   <span class="Comment">// declare a function</span>
+   <span class="Type">extern</span> <span class="Type">int</span> sub (<span class="Type">int</span>, <span class="Type">int</span>);
+
+   <span class="Comment">// define the interface from Perl</span>
+   <span class="Statement">MODULE</span> = MyModule    <span class="Statement">PACKAGE</span> = MyModule
+
+   <span class="Type">int</span>
+   add (<span class="Type">int</span> a, <span class="Type">int</span> b)
+       <span class="Statement">CODE</span>:
+       <span class="Identifier">RETVAL</span> = a + b; <span class="Comment">// We can define the function in-line</span>
+       <span class="Statement">OUTPUT</span>:
+       <span class="Identifier">RETVAL</span>
+
+   <span class="Type">int</span>
+   sub (<span class="Type">int</span> a, <span class="Type">int</span> b);
+
+</pre>
+</li>
 <li>
 Very portable<p>
 Java is available for download on Linux/x86, Linux/x64, Solaris/Sparc,
@@ -111,7 +113,7 @@ of <a href='http://perl.plover.com/local.html#5_Dynamic_Scope'>dynamic scope</a>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu May 26 20:36:20 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:39:45 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

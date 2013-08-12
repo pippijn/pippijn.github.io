@@ -56,33 +56,39 @@ Variables</h2>
 Variables are actually wrongly named "variable", as they are really constants,
 but everybody always calls them variables, so here they shall be called
 variables, as well.</p>
-<pre class="code-block">   SRCEXTS <span class="key3">=</span> c h
-   OBJEXTS <span class="key3">=</span> o obj
-   EXTS <span class="key3">=</span> <span class="key2">$(SRCEXTS)</span> <span class="key2">$(OBJEXTS)</span>
+<pre class='code-block'>
+<span class="Identifier">   SRCEXTS</span> <span class="Statement">=</span> c h
+<span class="Identifier">   OBJEXTS</span> <span class="Statement">=</span> o obj
+<span class="Identifier">   EXTS</span> <span class="Statement">=</span> <span class="Identifier">$(SRCEXTS)</span> <span class="Identifier">$(OBJEXTS)</span>
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h1'>Scopes</a></h3>
 <p>
 Variable definitions may be scoped. These are not visible outside the scope of
 the enclosing target, project or template.</p>
-<pre class="code-block">   <span class="key1">program</span> prog {
-      VARIABLE <span class="key3">=</span> a b c d
-   }
+<pre class='code-block'>
+   <span class="Type">program</span> prog <span class="Identifier">{</span>
+<span class="Identifier">      VARIABLE</span> <span class="Statement">=</span> a b c d
+   <span class="Identifier">}</span>
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h2'>Line continuations</a></h3>
 <p>
 Variable definitions may span multiple lines. The line continues as long as the
 indentation level is higher than the variable definition.</p>
-<pre class="code-block">   VARIABLE <span class="key3">=</span> some values
+<pre class='code-block'>
+<span class="Identifier">   VARIABLE</span> <span class="Statement">=</span> some values
       the values
          continue
       until here
-      OTHERVAR <span class="key3">=</span> this line is still part of
+<span class="Identifier">      OTHERVAR</span> <span class="Statement">=</span> this line is still part of
       the variable definition
-   OTHERVAR <span class="key3">=</span> this is a new variable definition
+<span class="Identifier">   OTHERVAR</span> <span class="Statement">=</span> this is a new variable definition
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h3'>Expansion</a></h3>
 <p>
 Variables are not expanded unless they really have to be. Eager contexts include
@@ -93,22 +99,24 @@ expanded in an eager context. Variables are not expanded in rule bodies.</p>
 <a id='h4'>Pseudo-variables</a></h3>
 <p>
 Pseudo-variables can be used to query declarations or to call functions on data.</p>
-<pre class="code-block">   <span class="key1">program</span> prog {
-      <span class="key1">sources</span> {
+<pre class='code-block'>
+   <span class="Type">program</span> prog <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span>
          ...
-      }
-      <span class="key1">link</span> {
+      <span class="Identifier">}</span>
+      <span class="Type">link</span> <span class="Identifier">{</span>
          mylib1
          mylib2
          -lm
-      }
-   }
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
 
-   PROGLINK <span class="key3">=</span> <span class="key2">$(prog.link)</span>
-   <span class="comment"># filter by locally built libraries</span>
-   PROGLIBS <span class="key3">=</span> <span class="key2">$(prog.link:library)</span>
+<span class="Identifier">   PROGLINK</span> <span class="Statement">=</span> <span class="Identifier">$(prog.link)</span>
+   <span class="Comment"># filter by locally built libraries</span>
+<span class="Identifier">   PROGLIBS</span> <span class="Statement">=</span> <span class="Identifier">$(prog.link:library)</span>
 
-</pre><p>
+</pre>
+<p>
 The above filter syntax can be used to filter out system libraries such as, in
 this example, <span class='code'>-lm</span>. Thus, the <span class='code'>PROGLIBS</span> variable would be expanded to
 <span class='code'>mylib1 mylib2</span>, <span class='code'>$(PROGLINK)</span> would also include <span class='code'>-lm</span>. This may be useful
@@ -121,7 +129,7 @@ pseudo-variables such as <span class='code'>$(mytarget.link)</span>.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Fri Jun 24 02:33:35 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:37:26 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

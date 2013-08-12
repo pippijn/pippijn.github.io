@@ -120,18 +120,20 @@ here is inheritance to gain memory allocation semantics. For instance, if you
 write a high performance slice allocator that defines <span class='code'>operator new</span> and
 <span class='code'>delete</span>, inheriting from it will make the class automatically and
 transparently allocated using this slice allocator:</p>
-<pre class="code-block">   <span class="key3">template</span>&lt;<span class="key3">typename</span> T&gt;
-   <span class="key3">struct</span> slice_allocated
+<pre class='code-block'>
+   <span class="Type">template</span>&lt;<span class="Type">typename</span> T&gt;
+   <span class="Type">struct</span> slice_allocated
    {
-     <span class="key3">void</span> *<span class="key1">operator</span> <span class="key1">new</span> (<span class="key3">size_t</span>);
-     <span class="key3">void</span> <span class="key1">operator</span> <span class="key1">delete</span> (<span class="key3">void</span> *);
+     <span class="Type">void</span> *<span class="Statement">operator</span> <span class="Statement">new</span> (<span class="Type">size_t</span>);
+     <span class="Type">void</span> <span class="Statement">operator</span> <span class="Statement">delete</span> (<span class="Type">void</span> *);
    };
-   <span class="key3">struct</span> node : node_base, slice_allocated&lt;node&gt;
+   <span class="Type">struct</span> node : node_base, slice_allocated&lt;node&gt;
    {
-     <span class="comment">// some code here</span>
+     <span class="Comment">// some code here</span>
    };
 
-</pre><p>
+</pre>
+<p>
 Here, multiple inheritance is required to inherit the code from the allocator
 as well as the code from <span class='code'>node_base</span>. Things like that would not be possible
 with single inheritance.</p>
@@ -169,7 +171,7 @@ The <span class='code'>const</span> keyword helps the design-by-contract strateg
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu May 26 20:36:20 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:39:30 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

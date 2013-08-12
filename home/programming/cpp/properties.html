@@ -56,42 +56,44 @@ and <span class='code'>set</span>, but rather name their data member something d
 <span class='code'>x_</span> or <span class='code'>m_x</span>. This keeps the name <span class='code'>x</span> free for the accessor (<span class='code'>T x ()</span>)
 and the mutator (<span class='code'>void x (T)</span>). Still, this does not help transparency very
 much. Consider the following code:</p>
-<pre class="code-block">  <span class="comment">// Public data members</span>
-  <span class="key3">struct</span> point
+<pre class='code-block'>
+  <span class="Comment">// Public data members</span>
+  <span class="Type">struct</span> point
   {
-    <span class="key3">int</span> x;
-    <span class="key3">int</span> y;
+    <span class="Type">int</span> x;
+    <span class="Type">int</span> y;
   };
 
-  point p = { <span class="number">1</span>, <span class="number">2</span> };
-  p.x += <span class="number">20</span>;
+  point p = { <span class="Number">1</span>, <span class="Number">2</span> };
+  p.x += <span class="Number">20</span>;
 
-  <span class="comment">// Private data members with accessor/mutator functions</span>
-  <span class="key3">struct</span> point
+  <span class="Comment">// Private data members with accessor/mutator functions</span>
+  <span class="Type">struct</span> point
   {
-    <span class="key3">int</span> x () <span class="key3">const</span> { <span class="key1">return</span> x_; }
-    <span class="key3">int</span> y () <span class="key3">const</span> { <span class="key1">return</span> x_; }
-    <span class="key3">void</span> x (<span class="key3">int</span> v) { x_ = v; }
-    <span class="key3">void</span> y (<span class="key3">int</span> v) { y_ = v; }
+    <span class="Type">int</span> x () <span class="Type">const</span> { <span class="Statement">return</span> x_; }
+    <span class="Type">int</span> y () <span class="Type">const</span> { <span class="Statement">return</span> x_; }
+    <span class="Type">void</span> x (<span class="Type">int</span> v) { x_ = v; }
+    <span class="Type">void</span> y (<span class="Type">int</span> v) { y_ = v; }
 
-    <span class="comment">// Needs a constructor, due to the private data members</span>
-    point (<span class="key3">int</span> xv, <span class="key3">int</span> yv) : x_ (xv), y_ (yv) { }
+    <span class="Comment">// Needs a constructor, due to the private data members</span>
+    point (<span class="Type">int</span> xv, <span class="Type">int</span> yv) : x_ (xv), y_ (yv) { }
 
-    <span class="comment">// Private data members make the class non-standard layout,</span>
-    <span class="comment">// disabling many optimisations and making the class a whole</span>
-    <span class="comment">// lot less useful (for example, offsetof won't work, the</span>
-    <span class="comment">// objects cannot be passed through `...', the objects cannot</span>
-    <span class="comment">// be cast to a reference to their first data member's type, etc.</span>
-  <span class="key1">private</span>:
-    <span class="key3">int</span> x_;
-    <span class="key3">int</span> y_;
+    <span class="Comment">// Private data members make the class non-standard layout,</span>
+    <span class="Comment">// disabling many optimisations and making the class a whole</span>
+    <span class="Comment">// lot less useful (for example, offsetof won't work, the</span>
+    <span class="Comment">// objects cannot be passed through `...', the objects cannot</span>
+    <span class="Comment">// be cast to a reference to their first data member's type, etc.</span>
+  <span class="Statement">private</span>:
+    <span class="Type">int</span> x_;
+    <span class="Type">int</span> y_;
   };
 
-  <span class="comment">// aggregate initialisers won't work anymore</span>
-  point p (<span class="number">1</span>, <span class="number">2</span>);
-  p.x (p.x () + <span class="number">20</span>); <span class="comment">// more code to be written for the same effect</span>
+  <span class="Comment">// aggregate initialisers won't work anymore</span>
+  point p (<span class="Number">1</span>, <span class="Number">2</span>);
+  p.x (p.x () + <span class="Number">20</span>); <span class="Comment">// more code to be written for the same effect</span>
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h1'>Properties</a></h3>
 <p>
 Many modern programming languages provide a syntactic construct known as
@@ -184,17 +186,19 @@ passed as first argument to a free (namespace scope) or static member
 function. The reason for this is, plainly put, speed. Current C++ compiler do
 a pretty bad job at optimising dereferences of member function pointers, but a
 terrific job when it comes to static functions.</p>
-<pre class="code-block">  <span class="key3">template</span>&lt;
-    <span class="key3">typename</span> Class,
-    <span class="key3">typename</span> T,
-    T <span class="key3">const</span> &amp; (get) (Class <span class="key3">const</span> &amp;),
-    <span class="key3">void</span> (set) (Class &amp;, T <span class="key3">const</span> &amp;),
-    <span class="key3">size_t</span> (offset) ()
+<pre class='code-block'>
+  <span class="Type">template</span>&lt;
+    <span class="Type">typename</span> Class,
+    <span class="Type">typename</span> T,
+    T <span class="Type">const</span> &amp; (get) (Class <span class="Type">const</span> &amp;),
+    <span class="Type">void</span> (set) (Class &amp;, T <span class="Type">const</span> &amp;),
+    <span class="Type">size_t</span> (offset) ()
   &gt;
-  <span class="key3">struct</span> prop
+  <span class="Type">struct</span> prop
   {
 
-</pre><p>
+</pre>
+<p>
 You may be wondering what the <span class='code'>offset</span> function is for. As I said earlier,
 this property has zero overhead, so it can't store the <span class='code'>this</span> pointer of its
 container. That is where the <span class='code'>offset</span> function comes in. We use it to
@@ -205,17 +209,21 @@ calculate the location of the container's <span class='code'>this</span> in memo
 The following two functions calculate the <span class='code'>this</span> pointer and return a
 reference to the parent object. Due to <span class='code'>offset</span> being a function and its
 location being known at compile time, it can easily be inlined.</p>
-<pre class="code-block">    Class &amp;self ()
+<pre class='code-block'>
+    Class &amp;self ()
     {
-      <span class="key1">return</span> *<span class="key1">reinterpret_cast</span>&lt;Class *&gt; (<span class="key1">reinterpret_cast</span>&lt;<span class="key3">char</span> *&gt; (<span class="key1">this</span>) - offset ());
+      <span class="Statement">return</span> *<span class="Statement">reinterpret_cast</span>&lt;Class *&gt; (<span class="Statement">reinterpret_cast</span>&lt;<span class="Type">char</span> *&gt; (<span class="Statement">this</span>)
+                                         - offset ());
     }
 
-    Class <span class="key3">const</span> &amp;self () <span class="key3">const</span>
+    Class <span class="Type">const</span> &amp;self () <span class="Type">const</span>
     {
-      <span class="key1">return</span> *<span class="key1">reinterpret_cast</span>&lt;Class <span class="key3">const</span> *&gt; (<span class="key1">reinterpret_cast</span>&lt;<span class="key3">char</span> <span class="key3">const</span> *&gt; (<span class="key1">this</span>) - offset ());
+      <span class="Statement">return</span> *<span class="Statement">reinterpret_cast</span>&lt;Class <span class="Type">const</span> *&gt; (<span class="Statement">reinterpret_cast</span>&lt;<span class="Type">char</span> <span class="Type">const</span> *&gt; (<span class="Statement">this</span>)
+                                               - offset ());
     }
 
-</pre><p>
+</pre>
+<p>
 We need all assignment operators (=, +=, -=, *=, /=, %=, ^=, |=, &amp;=,
 &lt;&lt;= and &gt;&gt;=). We can define them all, because <span class='code'>prop</span> is a class
 template and ISO/IEC 14882:2003(E), paragraph 14.7.1, clause 1 states that
@@ -223,34 +231,40 @@ template and ISO/IEC 14882:2003(E), paragraph 14.7.1, clause 1 states that
 [...] [are implicitly instantiated when a class template is implicitly
 instantiated]"</em>. In other words, class templates are instantiated lazily,
 on demand.</p>
-<pre class="code-block">    prop &amp;<span class="key1">operator</span>   = (T <span class="key3">const</span> &amp;rhs) { set (self (), rhs); <span class="key1">return</span> *<span class="key1">this</span>; }
-    prop &amp;<span class="key1">operator</span>  += (T <span class="key3">const</span> &amp;rhs) { set (self (), get (self ())  + rhs); <span class="key1">return</span> *<span class="key1">this</span>; }
-    <span class="comment">// Analogous for the other operators</span>
+<pre class='code-block'>
+    prop &amp;<span class="Statement">operator</span>   = (T <span class="Type">const</span> &amp;rhs) { set (self (), rhs); <span class="Statement">return</span> *<span class="Statement">this</span>; }
+    prop &amp;<span class="Statement">operator</span>  += (T <span class="Type">const</span> &amp;rhs) { set (self (), get (self ())  + rhs); <span class="Statement">return</span> *<span class="Statement">this</span>; }
+    <span class="Comment">// Analogous for the other operators</span>
 
-</pre><p>
+</pre>
+<p>
 These operators define all we need for the mutator, but not for the accessor.
 Instead of defining all operators (unary +, unary -, binary +, binary *, etc.),
 we can define <span class='code'>operator T const &amp;</span> and the C++ compiler will take care of
 required conversions:</p>
-<pre class="code-block">    <span class="key1">operator</span> T <span class="key3">const</span> &amp; () <span class="key3">const</span>
+<pre class='code-block'>
+    <span class="Statement">operator</span> T <span class="Type">const</span> &amp; () <span class="Type">const</span>
     {
-      <span class="key1">return</span> get (self ());
+      <span class="Statement">return</span> get (self ());
     }
 
-</pre><p>
+</pre>
+<p>
 Now, all we need is a way to access members of the property. Then we are done:</p>
-<pre class="code-block">    T *<span class="key1">operator</span> -&gt; ()
+<pre class='code-block'>
+    T *<span class="Statement">operator</span> -&gt; ()
     {
-      <span class="key1">return</span> &amp;<span class="key1">const_cast</span>&lt;T &amp;&gt; (get (self ()));
+      <span class="Statement">return</span> &amp;<span class="Statement">const_cast</span>&lt;T &amp;&gt; (get (self ()));
     }
 
-    T <span class="key3">const</span> *<span class="key1">operator</span> -&gt; () <span class="key3">const</span>
+    T <span class="Type">const</span> *<span class="Statement">operator</span> -&gt; () <span class="Type">const</span>
     {
-      <span class="key1">return</span> &amp;get (self ());
+      <span class="Statement">return</span> &amp;get (self ());
     }
   };
 
-</pre><p>
+</pre>
+<p>
 The <span class='code'>const_cast</span> is strictly considered undefined behaviour, but if the
 property itself is non-const, we know the value is non-const, as well. This is
 a dire hack, but I don't see a better way to solve it. One way would be to
@@ -265,26 +279,30 @@ want the overhead of storing it in the containing class (remember: empty
 classes still need one byte of storage). Therefore, we introduce another class
 template, called <span class='code'>value_prop</span>, with different accessor and mutator function
 types:</p>
-<pre class="code-block">  <span class="key3">template</span>&lt;
-    <span class="key3">typename</span> Class,
-    <span class="key3">typename</span> T,
-    T <span class="key3">const</span> &amp; (get) (Class <span class="key3">const</span> &amp;, T <span class="key3">const</span> &amp;),
-    <span class="key3">void</span> (set) (Class &amp;, T &amp;, T <span class="key3">const</span> &amp;),
-    <span class="key3">size_t</span> (offset) ()
+<pre class='code-block'>
+  <span class="Type">template</span>&lt;
+    <span class="Type">typename</span> Class,
+    <span class="Type">typename</span> T,
+    T <span class="Type">const</span> &amp; (get) (Class <span class="Type">const</span> &amp;, T <span class="Type">const</span> &amp;),
+    <span class="Type">void</span> (set) (Class &amp;, T &amp;, T <span class="Type">const</span> &amp;),
+    <span class="Type">size_t</span> (offset) ()
   &gt;
-  <span class="key3">struct</span> value_prop
+  <span class="Type">struct</span> value_prop
   {
 
-</pre><p>
+</pre>
+<p>
 Now, in addition to the container's <span class='code'>this</span> pointer, the accessor <span class='code'>get</span> and
 mutator <span class='code'>set</span> also receive a reference to the value stored in the
 instantiated property class template. <span class='code'>get</span> receives a const reference.
 Now, the operator definitions look slightly different:</p>
-<pre class="code-block">    value_prop &amp;<span class="key1">operator</span>   = (T <span class="key3">const</span> &amp;rhs) { set (self (), value, rhs); <span class="key1">return</span> *<span class="key1">this</span>; }
-    value_prop &amp;<span class="key1">operator</span>  += (T <span class="key3">const</span> &amp;rhs) { set (self (), value, get (self (), value)  + rhs);
-                                              <span class="key1">return</span> *<span class="key1">this</span>; }
+<pre class='code-block'>
+    value_prop &amp;<span class="Statement">operator</span>   = (T <span class="Type">const</span> &amp;rhs) { set (self (), value, rhs); <span class="Statement">return</span> *<span class="Statement">this</span>; }
+    value_prop &amp;<span class="Statement">operator</span>  += (T <span class="Type">const</span> &amp;rhs) { set (self (), value, get (self (), value)  + rhs);
+                                              <span class="Statement">return</span> *<span class="Statement">this</span>; }
 
-</pre><p>
+</pre>
+<p>
 and the class has a public member variable called <span class='code'>value</span>. I decided to make
 it public so the instantiated class template would remain POD. This means one
 can, by directly accessing <span class='code'>value</span>, corrupt the class state, but benign
@@ -294,22 +312,24 @@ Using properties</h5>
 <p>
 To use a property in a class, we need four things: the property object, the
 accessor, the mutator and very importantly, the <span class='code'>offset</span> function.</p>
-<pre class="code-block">  <span class="key3">struct</span> point
+<pre class='code-block'>
+  <span class="Type">struct</span> point
   {
-    <span class="comment">// The X-coordinate</span>
-    value_prop&lt;point, <span class="key3">int</span>, get_x, set_x, offset_x&gt; x;
-    <span class="key3">static</span> <span class="key3">int</span> <span class="key3">const</span> &amp;get_x (point <span class="key3">const</span> &amp;self, <span class="key3">int</span> <span class="key3">const</span> &amp;property) { <span class="key1">return</span> property; }
-    <span class="key3">static</span> <span class="key3">void</span> set_x (point &amp;self, <span class="key3">int</span> &amp;property, <span class="key3">int</span> <span class="key3">const</span> &amp;value) { property = value; }
-    <span class="key3">static</span> <span class="key3">size_t</span> offset_x () { <span class="key1">return</span> offsettof (point, x); }
-    <span class="comment">// The Y-coordinate</span>
-    <span class="key3">int</span> y_;
-    prop&lt;point, <span class="key3">int</span>, get_y, set_y, offset_y&gt; y;
-    <span class="key3">static</span> <span class="key3">int</span> <span class="key3">const</span> &amp;get_y (point <span class="key3">const</span> &amp;self) { <span class="key1">return</span> self.y_; }
-    <span class="key3">static</span> <span class="key3">void</span> set_y (point &amp;self, <span class="key3">int</span> <span class="key3">const</span> &amp;value) { self.y_ = value; }
-    <span class="key3">static</span> <span class="key3">size_t</span> offset_y () { <span class="key1">return</span> offsettof (point, y); }
+    <span class="Comment">// The X-coordinate</span>
+    value_prop&lt;point, <span class="Type">int</span>, get_x, set_x, offset_x&gt; x;
+    <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> &amp;get_x (point <span class="Type">const</span> &amp;self, <span class="Type">int</span> <span class="Type">const</span> &amp;property) { <span class="Statement">return</span> property; }
+    <span class="Type">static</span> <span class="Type">void</span> set_x (point &amp;self, <span class="Type">int</span> &amp;property, <span class="Type">int</span> <span class="Type">const</span> &amp;value) { property = value; }
+    <span class="Type">static</span> <span class="Type">size_t</span> offset_x () { <span class="Statement">return</span> offsettof (point, x); }
+    <span class="Comment">// The Y-coordinate</span>
+    <span class="Type">int</span> y_;
+    prop&lt;point, <span class="Type">int</span>, get_y, set_y, offset_y&gt; y;
+    <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> &amp;get_y (point <span class="Type">const</span> &amp;self) { <span class="Statement">return</span> self.y_; }
+    <span class="Type">static</span> <span class="Type">void</span> set_y (point &amp;self, <span class="Type">int</span> <span class="Type">const</span> &amp;value) { self.y_ = value; }
+    <span class="Type">static</span> <span class="Type">size_t</span> offset_y () { <span class="Statement">return</span> offsettof (point, y); }
   };
 
-</pre><p>
+</pre>
+<p>
 The offset returned by the <span class='code'>offset_*</span> functions is the number of bytes
 between the location of the property object and the <span class='code'>this</span> pointer of the
 enclosing class. We use that in the <span class='code'>prop</span> class template to calculate the
@@ -349,44 +369,48 @@ Using macros</h5>
 <p>
 The above class definition is repetetive and error prone, so we use the
 following macros:</p>
-<pre class="code-block">  #<span class="key2">define</span> def_prop(T, Class, name, get, set)                                      \
-    <span class="key3">static</span> <span class="key3">size_t</span> offset_ ## name () { <span class="key1">return</span> offsetof (Class, name); }           \
-    <span class="key3">static</span> T <span class="key3">const</span> &amp;get_ ## name (Class <span class="key3">const</span> &amp;self) get                          \
-    <span class="key3">static</span> <span class="key3">void</span> set_ ## name (Class &amp;self, T <span class="key3">const</span> &amp;value) set                    \
-    ::prop&lt;Class, T, get_ ## name, set_ ## name, offset_ ## name&gt; name
+<pre class='code-block'>
+<span class="PreProc">  #define def_prop(T, Class, name, get, set)                                      \</span>
+<span class="PreProc">    </span><span class="Type">static</span><span class="PreProc"> </span><span class="Type">size_t</span><span class="PreProc"> offset_ ## name () { </span><span class="Statement">return</span><span class="PreProc"> offsetof (Class, name); }           \</span>
+<span class="PreProc">    </span><span class="Type">static</span><span class="PreProc"> T </span><span class="Type">const</span><span class="PreProc"> &amp;get_ ## name (Class </span><span class="Type">const</span><span class="PreProc"> &amp;self) get                          \</span>
+<span class="PreProc">    </span><span class="Type">static</span><span class="PreProc"> </span><span class="Type">void</span><span class="PreProc"> set_ ## name (Class &amp;self, T </span><span class="Type">const</span><span class="PreProc"> &amp;value) set                    \</span>
+<span class="PreProc">    ::prop&lt;Class, T, get_ ## name, set_ ## name, offset_ ## name&gt; name</span>
 
-  #<span class="key2">define</span> def_value_prop(T, Class, name, get, set)                                \
-    <span class="key3">static</span> <span class="key3">size_t</span> offset_ ## name () { <span class="key1">return</span> offsetof (Class, name); }           \
-    <span class="key3">static</span> T <span class="key3">const</span> &amp;get_ ## name (Class <span class="key3">const</span> &amp;self, T <span class="key3">const</span> &amp;property) get       \
-    <span class="key3">static</span> <span class="key3">void</span> set_ ## name (Class &amp;self, T &amp;property, T <span class="key3">const</span> &amp;value) set       \
-    ::value_prop&lt;Class, T, get_ ## name, set_ ## name, offset_ ## name&gt; name
+<span class="PreProc">  #define def_value_prop(T, Class, name, get, set)                                \</span>
+<span class="PreProc">    </span><span class="Type">static</span><span class="PreProc"> </span><span class="Type">size_t</span><span class="PreProc"> offset_ ## name () { </span><span class="Statement">return</span><span class="PreProc"> offsetof (Class, name); }           \</span>
+<span class="PreProc">    </span><span class="Type">static</span><span class="PreProc"> T </span><span class="Type">const</span><span class="PreProc"> &amp;get_ ## name (Class </span><span class="Type">const</span><span class="PreProc"> &amp;self, T </span><span class="Type">const</span><span class="PreProc"> &amp;property) get       \</span>
+<span class="PreProc">    </span><span class="Type">static</span><span class="PreProc"> </span><span class="Type">void</span><span class="PreProc"> set_ ## name (Class &amp;self, T &amp;property, T </span><span class="Type">const</span><span class="PreProc"> &amp;value) set       \</span>
+<span class="PreProc">    ::value_prop&lt;Class, T, get_ ## name, set_ ## name, offset_ ## name&gt; name</span>
 
-</pre><p>
+</pre>
+<p>
 Now, we can rewrite the class definition of <span class='code'>point</span> as follows:</p>
-<pre class="code-block">  <span class="key3">struct</span> point
+<pre class='code-block'>
+  <span class="Type">struct</span> point
   {
-    def_value_prop (<span class="key3">int</span>, point, x,
-      {
-        <span class="key1">return</span> property;
-      },
-      {
+    def_value_prop (<span class="Type">int</span>, point, x,
+      <span class="Error">{</span>
+        <span class="Statement">return</span> property;
+      <span class="Error">}</span>,
+      <span class="Error">{</span>
         property = value;
-      }
+      <span class="Error">}</span>
     );
-  
-    <span class="key3">int</span> y_;
-  
-    def_prop (<span class="key3">int</span>, point, y,
-      { 
-        <span class="key1">return</span> self.y_;
-      },
-      { 
+
+    <span class="Type">int</span> y_;
+
+    def_prop (<span class="Type">int</span>, point, y,
+      <span class="Error">{</span>
+        <span class="Statement">return</span> self.y_;
+      <span class="Error">}</span>,
+      <span class="Error">{</span>
         self.y_ = value;
-      }
+      <span class="Error">}</span>
     );
   };
 
-</pre><p>
+</pre>
+<p>
 We use value properties as well as normal properties here. Extra caution has
 to be taken with aggregate initialisers when doing this. It will generally not
 be an issue, since classes with non-value properties are unlikely to get
@@ -400,84 +424,88 @@ The problem with this macro is that it does not support code like this:
 <span class='code'>{ int a, b, c; }</span>, because the commas would be interpreted as macro argument
 delimiters. One solution would be to use GCC's variadic macros to implement an
 <span class='code'>UNPAREN</span> macro:</p>
-<pre class="code-block">  #<span class="key2">define</span> UNPAREN_(x...) x
-  #<span class="key2">define</span> UNPAREN(x) UNPAREN_ x
+<pre class='code-block'>
+<span class="PreProc">  #define UNPAREN_(x...) x</span>
+<span class="PreProc">  #define UNPAREN(x) UNPAREN_ x</span>
 
-</pre><p>
+</pre>
+<p>
 The gained advantage is that commas can be used outside parentheses inside
 accessor and mutator code, the disadvantage is that all code needs to be
 enclosed in parentheses, making the other code plain ugly (uglier than it
 already is).</p>
 <h5>
 A larger example</h5>
-<pre class="code-block">  <span class="key3">struct</span> point
+<pre class='code-block'>
+  <span class="Type">struct</span> point
   {
-    def_value_prop (<span class="key3">int</span>, point, x,
-      {
-        puts (__PRETTY_FUNCTION__);
-        <span class="key1">return</span> property;
-      },
-      {
-        puts (__PRETTY_FUNCTION__);
+    def_value_prop (<span class="Type">int</span>, point, x,
+      <span class="Error">{</span>
+        puts (<span class="Constant">__PRETTY_FUNCTION__</span>);
+        <span class="Statement">return</span> property;
+      <span class="Error">}</span>,
+      <span class="Error">{</span>
+        puts (<span class="Constant">__PRETTY_FUNCTION__</span>);
         property = value;
-      }
+      <span class="Error">}</span>
     );
-  
-    <span class="key3">int</span> y_;
-  
-    def_prop (<span class="key3">int</span>, point, y,
-      {
-        puts (__PRETTY_FUNCTION__);
-        <span class="key1">return</span> self.y_;
-      },
-      {
-        puts (__PRETTY_FUNCTION__);
+
+    <span class="Type">int</span> y_;
+
+    def_prop (<span class="Type">int</span>, point, y,
+      <span class="Error">{</span>
+        puts (<span class="Constant">__PRETTY_FUNCTION__</span>);
+        <span class="Statement">return</span> self.y_;
+      <span class="Error">}</span>,
+      <span class="Error">{</span>
+        puts (<span class="Constant">__PRETTY_FUNCTION__</span>);
         self.y_ = value;
-      }
+      <span class="Error">}</span>
     );
   };
-  
-  <span class="key3">struct</span> coordinate
+
+  <span class="Type">struct</span> coordinate
   {
     def_value_prop (point, coordinate, x,
-      { 
-        puts (__PRETTY_FUNCTION__);
-        <span class="key1">return</span> property;
-      },
-      { 
-        puts (__PRETTY_FUNCTION__);
+      <span class="Error">{</span>
+        puts (<span class="Constant">__PRETTY_FUNCTION__</span>);
+        <span class="Statement">return</span> property;
+      <span class="Error">}</span>,
+      <span class="Error">{</span>
+        puts (<span class="Constant">__PRETTY_FUNCTION__</span>);
         property = value;
-      }
+      <span class="Error">}</span>
     );
-    
+
     point y_;
-    
+
     def_prop (point, coordinate, y,
-      { 
-        puts (__PRETTY_FUNCTION__);
-        <span class="key1">return</span> self.y_;
-      },
-      { 
-        puts (__PRETTY_FUNCTION__);
+      <span class="Error">{</span>
+        puts (<span class="Constant">__PRETTY_FUNCTION__</span>);
+        <span class="Statement">return</span> self.y_;
+      <span class="Error">}</span>,
+      <span class="Error">{</span>
+        puts (<span class="Constant">__PRETTY_FUNCTION__</span>);
         self.y_ = value;
-      }
+      <span class="Error">}</span>
     );
   };
-  
-  <span class="key3">int</span>
+
+  <span class="Type">int</span>
   main ()
   {
-    <span class="comment">// Aggregate initialisers work as expected, even with classes</span>
-    <span class="comment">// containing (classes containing properties) as properties</span>
-    <span class="comment">// (parentheses added for disambiguation).</span>
-    coordinate p = { { <span class="number">2</span>, <span class="number">3</span> }, { <span class="number">4</span>, <span class="number">5</span> } };
-    printf (<span class="string">"p.x-&gt;x == %d\n"</span>, (<span class="key3">int</span>) p.x-&gt;x); <span class="comment">// Accessor and mutator called</span>
-    printf (<span class="string">"p.x-&gt;y == %d\n"</span>, (<span class="key3">int</span>) p.x-&gt;y);
-    printf (<span class="string">"p.y-&gt;x == %d\n"</span>, (<span class="key3">int</span>) p.y-&gt;x);
-    printf (<span class="string">"p.y-&gt;y == %d\n"</span>, (<span class="key3">int</span>) p.y-&gt;y);
+    <span class="Comment">// Aggregate initialisers work as expected, even with classes</span>
+    <span class="Comment">// containing (classes containing properties) as properties</span>
+    <span class="Comment">// (parentheses added for disambiguation).</span>
+    coordinate p = { { <span class="Number">2</span>, <span class="Number">3</span> }, { <span class="Number">4</span>, <span class="Number">5</span> } };
+    printf (<span class="String">&quot;p.x-&gt;x == </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, (<span class="Type">int</span>) p.x-&gt;x); <span class="Comment">// Accessor and mutator called</span>
+    printf (<span class="String">&quot;p.x-&gt;y == </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, (<span class="Type">int</span>) p.x-&gt;y);
+    printf (<span class="String">&quot;p.y-&gt;x == </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, (<span class="Type">int</span>) p.y-&gt;x);
+    printf (<span class="String">&quot;p.y-&gt;y == </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, (<span class="Type">int</span>) p.y-&gt;y);
   }
 
-</pre><p>
+</pre>
+<p>
 The output would look something like this:</p>
 <pre>
   static const point&amp; coordinate::get_x(const coordinate&amp;, const point&amp;)
@@ -502,20 +530,25 @@ overhead property template is, here is the assembler code for the following
 simple example:</p>
 <p>
 C++ code:</p>
-<pre class="code-block">  <span class="key3">int</span>
+<pre class='code-block'>
+  <span class="Type">int</span>
   main ()
   {
-    coordinate p = { { <span class="number">2</span>, <span class="number">3</span> }, { <span class="number">4</span>, <span class="number">5</span> } };
-    <span class="key3">volatile</span> <span class="key3">int</span> x = p.x-&gt;x;
+    coordinate p = { { <span class="Number">2</span>, <span class="Number">3</span> }, { <span class="Number">4</span>, <span class="Number">5</span> } };
+    <span class="Type">volatile</span> <span class="Type">int</span> x = p.x-&gt;x;
   }
 
-</pre><p>
+</pre>
+<p>
 And the assembler output:</p>
-<pre>
-  main:
-          xorl    %eax, %eax    ' set return value to 0
-          movl    $2, -4(%rsp)  ' set the variable 'x' to 2
-          ret                   ' return</pre><p>
+<pre class='code-block'>
+  <span class="Identifier">main</span>:
+          <span class="Identifier">xorl</span>    %<span class="Identifier">eax</span>, %<span class="Identifier">eax</span>    <span class="Comment">; set return value to 0</span>
+          <span class="Identifier">movl</span>    $<span class="Number">2</span>, -<span class="Number">4</span>(%<span class="Identifier">rsp</span>)  <span class="Comment">; set the variable 'x' to 2</span>
+          <span class="Identifier">ret</span>                   <span class="Comment">; return</span>
+
+</pre>
+<p>
 You can see, how the compiler completely inlined the calls to the accessors
 and then constant folded the expression, simply copying an immediate integer
 value to a memory location on the stack.</p>
@@ -525,25 +558,27 @@ Non-POD classes</h4>
 The more interesting classes are all non-POD ones. I have tested the property
 class template with the strangest configurations I could think of. The only
 configuration where <span class='code'>offsetof</span> fails is this:</p>
-<pre class="code-block">  <span class="key3">struct</span> A
+<pre class='code-block'>
+  <span class="Type">struct</span> A
   {
-    <span class="key3">virtual</span> ~A () { }
+    <span class="Type">virtual</span> ~A () { }
   };
-  <span class="key3">struct</span> B1 : <span class="key3">virtual</span> A
+  <span class="Type">struct</span> B1 : <span class="Type">virtual</span> A
   {
-    <span class="key3">int</span> i;
+    <span class="Type">int</span> i;
   };
-  <span class="key3">struct</span> B2 : <span class="key3">virtual</span> A
+  <span class="Type">struct</span> B2 : <span class="Type">virtual</span> A
   {
   };
-  <span class="key3">struct</span> D : <span class="key3">virtual</span> B1, <span class="key3">virtual</span> B2
+  <span class="Type">struct</span> D : <span class="Type">virtual</span> B1, <span class="Type">virtual</span> B2
   {
   };
 
-  <span class="key3">size_t</span> offset = offsetof (D, i);  <span class="comment">// This fails</span>
-  <span class="key3">size_t</span> offset = offsetof (B1, i); <span class="comment">// This succeeds and is correct</span>
+  <span class="Type">size_t</span> offset = offsetof (D, i);  <span class="Comment">// This fails</span>
+  <span class="Type">size_t</span> offset = offsetof (B1, i); <span class="Comment">// This succeeds and is correct</span>
 
-</pre><p>
+</pre>
+<p>
 so in fact, the property class never fails. However, I have only tested it on
 the GNU C++ compiler. Other compilers might mess up, but one thing is for
 certain: <span class='code'>prop</span> being POD allows for 100% standard compliant properties.
@@ -568,7 +603,7 @@ don't really see any reason why any compiler could mess it up.)</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sat May 28 11:00:51 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 03:24:08 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

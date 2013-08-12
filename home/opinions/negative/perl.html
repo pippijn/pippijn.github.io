@@ -58,17 +58,19 @@ right away and may cause problems in areas where none are expected.</p>
 In Perl, exceptions are caught with <span class='code'>eval</span> blocks. These catch all errors, so
 if you want to catch only a few, you need to catch all, find out whether your
 type of exception was the one thrown and rethrow the exception if not:</p>
-<pre class="code-block">   <span class="key2">eval</span> {
-      function_that_throws_exception $arg1, $arg2
+<pre class='code-block'>
+   <span class="Statement">eval</span> {
+      function_that_throws_exception <span class="Identifier">$arg1</span>, <span class="Identifier">$arg2</span>
    };
-   <span class="key1">if</span> ($@) {
-      <span class="key1">if</span> (<span class="key2">ref</span> $@ <span class="key3">eq</span> <span class="string">"My::Exception"</span>) {
+   <span class="Statement">if</span> (<span class="Identifier">$@</span>) {
+      <span class="Statement">if</span> (<span class="Statement">ref</span> <span class="Identifier">$@</span> <span class="Statement">eq</span> <span class="String">&quot;</span><span class="String">My::Exception</span><span class="String">&quot;</span>) {
          handle_error
       }
-      <span class="key2">die</span>; <span class="comment"># rethrow</span>
+      <span class="Statement">die</span>; <span class="Comment"># rethrow</span>
    }
 
-</pre><p>
+</pre>
+<p>
 This does not even work when <span class='code'>ref $@</span> is an empty string, meaning <span class='code'>$@</span> was
 a plain scalar. In that case, you have to compare the error strings, which may
 be localised, making it even harder to catch exactly the error you need.</p>
@@ -105,16 +107,20 @@ In order to create an array of arrays, you need to create an array of
 references to arrays like this: <span class='code'>([1, 2, 3], 2, 3)</span>. But then getting the
 array back out of the reference, it is necessary to dereference it, so that
 where in Lisp one can do:</p>
-<pre class="code-block">   (<span class="key1">setq</span> array '((<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="number">2</span>, <span class="number">3</span>))
-   (<span class="key1">first</span> array) <span class="comment">; Yields (1, 2, 3)</span>
+<pre class='code-block'>
+   <span class="Special">(</span><span class="Statement">setq</span> <span class="Statement">array</span> <span class="Special">'</span><span class="Special">((</span>1, 2, 3<span class="Special">)</span>, 2, 3<span class="Special">)</span><span class="Special">)</span>
+   <span class="Special">(</span><span class="Statement">first</span> <span class="Statement">array</span><span class="Special">)</span> <span class="Comment">; Yields (1, 2, 3)</span>
 
-</pre><p>
+</pre>
+<p>
 But in Perl, the same code requires:</p>
-<pre class="code-block">   <span class="key1">my</span> @array = ([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>], <span class="number">2</span>, <span class="number">3</span>);
-   $array[<span class="number">0</span>]; <span class="comment"># Yields "ARRAY(0xdeadbeef)" or similar</span>
-   @{ $array[<span class="number">0</span>] }; <span class="comment"># Dereferencing it yields our array (1, 2, 3)</span>
+<pre class='code-block'>
+   <span class="Statement">my</span> <span class="Identifier">@array</span> = ([<span class="Number">1</span>, <span class="Number">2</span>, <span class="Number">3</span>], <span class="Number">2</span>, <span class="Number">3</span>);
+   <span class="Identifier">$array[</span><span class="Number">0</span><span class="Identifier">]</span>; <span class="Comment"># Yields &quot;ARRAY(0xdeadbeef)&quot; or similar</span>
+   <span class="Identifier">@{</span> <span class="Identifier">$array[</span><span class="Number">0</span><span class="Identifier">]</span> <span class="Identifier">}</span>; <span class="Comment"># Dereferencing it yields our array (1, 2, 3)</span>
 
-</pre><p>
+</pre>
+<p>
 The reason for this is that it makes it possible to <span class='code'>push</span> a list of items
 onto an array.</p>
 </li>
@@ -148,7 +154,7 @@ can introduce memory leaks with circular references. For this, Perl provides
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu May 26 20:36:21 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:39:27 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

@@ -24,7 +24,7 @@ achieved by writing accessor functions as required.
 
 A simple example of information hiding would be a string object:
 
-=begin code CPP
+=begin code cpp
 
   struct string
   {
@@ -33,7 +33,7 @@ A simple example of information hiding would be a string object:
     size_t capacity.
   };
 
-=end code CPP
+=end code cpp
 
 This C<struct> knows its length and has a data pointer pointing at the
 in-memory string representation. It also knows its maximum capacity, so it can
@@ -41,7 +41,7 @@ allocate more memory on demand. In order to avoid corruption of the internal
 state (in this case, the len member), we write accessor functions, for
 example:
 
-=begin code CPP
+=begin code cpp
 
   size_t strLength (struct string const *str);
   char const *strToCStr (struct string const *str);
@@ -49,7 +49,7 @@ example:
   void strSetCharAt (struct string *str, size_t pos, char c);
   void strAddChars (struct string *str, char const *chars);
 
-=end code CPP
+=end code cpp
 
 These functions operate on the data structure declared above. Functions
 that take a pointer-to-const promise not to modify the structure.
@@ -58,12 +58,12 @@ Information hiding means to hide as much knowledge as possible. As part
 of this, we could define new type aliases to hide the fact that a string
 is represented by a pointer to a string structure:
 
-=begin code CPP
+=begin code cpp
 
   typedef struct string *String;
   typedef struct string const *ConstString; // Immutable string
 
-=end code CPP
+=end code cpp
 
 By doing this, we allow the representation to change at any time. For
 example, we could choose to represent String objects by a simple data
@@ -78,7 +78,7 @@ other string representations.
 
 Now, our accessor functions look like this:
 
-=begin code CPP
+=begin code cpp
 
   size_t strLength (ConstString str);
   char const *strToCStr (ConstString str);
@@ -86,7 +86,7 @@ Now, our accessor functions look like this:
   void strSetCharAt (String str, size_t pos, char c);
   void strAddChars (String str, char const *chars);
 
-=end code CPP
+=end code cpp
 
 We did not only abstract away some knowledge, we also reduced our required
 typing.
@@ -98,7 +98,7 @@ There are various more or less obvious ways to violate the principle of
 information hiding. An obvious example would be directly accessing the
 structure's members:
 
-=begin code CPP
+=begin code cpp
 
   // Wrong:
   void
@@ -114,7 +114,7 @@ structure's members:
     strAddChars (str, " has been added");
   }
 
-=end code CPP
+=end code cpp
 
 The function C<strAddChars> hides the knowledge about C<String>'s internal
 structure and abstracts away the logic needed to add characters to the string.
@@ -127,7 +127,7 @@ A less obvious violation of information hiding would be pointer operations on
 String objects. Consider our String to be defined as C<char*>. This type
 allows several operations that are built into C:
 
-=begin code CPP
+=begin code cpp
 
   typedef char *String;
   typedef char const *ConstString;
@@ -143,7 +143,7 @@ allows several operations that are built into C:
     printf ("The difference between newStr and str is %d\n", newStr - str); // Pointer difference
   }
 
-=end code CPP
+=end code cpp
 
 All these operations are defined on C<char*>, and therefore also on C<String>.
 This does not have to be the case, though. If C<String> was defined as the
@@ -160,7 +160,7 @@ I<opaque pointers>. Opaque in this sense means, we cannot touch or even I<see>
 the internal structure. C allows us to I<forward declare> structures and pass
 around pointers to them:
 
-=begin code CPP
+=begin code cpp
 
   struct string;
   typedef struct string *String;
@@ -169,7 +169,7 @@ around pointers to them:
   // The OnAdded function marked with "Right" also still works, but the one
   //   marked "Wrong" will cause a compilation error
 
-=end code CPP
+=end code cpp
 
 C<String> is now what we call a I<pointer to an incomplete type>. Incomplete
 means that it does exist as a type, but its representation is not known to the

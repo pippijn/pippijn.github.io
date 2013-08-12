@@ -109,14 +109,16 @@ struct string</h4>
 <p>
 A more sophisticated string representation is the following struct, frequently
 used by C++'s <span class='code'>std::string</span> implementations:</p>
-<pre class="code-block">  <span class="key3">struct</span> string
+<pre class='vimCodeElement'>
+  <span class="Type">struct</span> string
   {
-    <span class="key3">char</span> *rep;
-    <span class="key3">size_t</span> len;
-    <span class="key3">size_t</span> max;
+    <span class="Type">char</span> *rep;
+    <span class="Type">size_t</span> len;
+    <span class="Type">size_t</span> max;
   };
 
-</pre><p>
+</pre>
+<p>
 <span class='code'>string.rep</span> is the internal representation of the string, which is just a
 data pointer and not necessarily a NUL terminated C string. <span class='code'>len</span> holds the
 current length and <span class='code'>max</span> is the number of bytes this string can hold before
@@ -248,7 +250,7 @@ byte, and so on. For further details, see the wikipedia article on
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Wed Jun 29 12:31:33 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:39:56 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

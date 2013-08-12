@@ -94,48 +94,54 @@ The initialisation function will be emitted in the primary implementation file.<
 <a id='h2'>Primary implementation file</a></h3>
 <p>
 The idea is that a programmer can write something like:</p>
-<pre class="code-block">   <span class="comment">// buffer.h</span>
-   <span class="key1">namespace</span> Buffer {
-      <span class="key3">extern</span> <span class="key3">struct</span> t;
-      <span class="key3">typedef</span> <span class="key3">struct</span> t @T;
+<pre class='code-block'>
+   <span class="Comment">// buffer.h</span>
+   <span class="Type">namespace</span> Buffer {
+      <span class="Type">extern</span> <span class="Type">struct</span> t;
+      <span class="Type">typedef</span> <span class="Type">struct</span> t @T;
 
-      <span class="comment">// constructor</span>
-      <span class="key3">extern</span> T create (<span class="key3">size_t</span> n);
+      <span class="Comment">// constructor</span>
+      <span class="Type">extern</span> T create (<span class="Type">size_t</span> n);
 
-      <span class="comment">// accessors</span>
-      <span class="key3">extern</span> mstring_t data (T self);
-      <span class="key3">extern</span> <span class="key3">size_t</span> length (T self);
+      <span class="Comment">// accessors</span>
+      <span class="Type">extern</span> mstring_t data (T self);
+      <span class="Type">extern</span> <span class="Type">size_t</span> length (T self);
 
-      <span class="comment">// mutators</span>
-      <span class="key3">extern</span> <span class="key3">void</span> clear (T self);
-      <span class="key3">extern</span> <span class="key3">void</span> add_char (T self, <span class="key3">char</span> c);
-      <span class="key3">extern</span> <span class="key3">void</span> add_str (T self, string_t s);
+      <span class="Comment">// mutators</span>
+      <span class="Type">extern</span> <span class="Type">void</span> clear (T self);
+      <span class="Type">extern</span> <span class="Type">void</span> add_char (T self, <span class="Type">char</span> c);
+      <span class="Type">extern</span> <span class="Type">void</span> add_str (T self, string_t s);
    }
 
-</pre><p>
+</pre>
+<p>
 and have multiple implementation files, each implementing a semantically
 associated subset of the above functions.</p>
 <p>
 The internal file exposing the buffer's structure:</p>
-<pre class="code-block">   <span class="comment">// buffer-internal.h</span>
-   #<span class="key2">include</span> &lt;buffer.h&gt;
-   <span class="key1">namespace</span> Buffer {
-      abstract <span class="key3">struct</span> t {
+<pre class='code-block'>
+   <span class="Comment">// buffer-internal.h</span>
+<span class="Include">   #include </span><span class="String">&lt;buffer.h&gt;</span>
+   <span class="Type">namespace</span> Buffer {
+      abstract <span class="Type">struct</span> t {
          mstring_t buffer;
-         <span class="key3">size_t</span> pos;
-         <span class="key3">size_t</span> len;
+         <span class="Type">size_t</span> pos;
+         <span class="Type">size_t</span> len;
       };
    }
 
-</pre><p>
+</pre>
+<p>
 Implementation of constructors:</p>
-<pre class="code-block">   <span class="comment">// buffer-ctors.c</span>
-   #<span class="key2">include</span> <span class="string">"buffer-internal.h"</span>
-   <span class="key1">namespace</span> Buffer;
+<pre class='code-block'>
+   <span class="Comment">// buffer-ctors.c</span>
+<span class="Include">   #include </span><span class="String">&quot;buffer-internal.h&quot;</span>
+   <span class="Type">namespace</span> Buffer;
 
-   T create (<span class="key3">size_t</span> n) { ... }
+   T create (<span class="Type">size_t</span> n) { ... }
 
-</pre><p>
+</pre>
+<p>
 Implementation of accessors and mutators each go into their separate files.
 Now, if we generate more information about the structures, we need a primary
 implementation file. Currently, we have <span class='code'>extern</span> datatypes that don't
@@ -150,13 +156,15 @@ all the extras provided by the module system.</p>
 Now, about the primary implementation file, we need a syntax to mark that
 file. I currently don't have a good idea on this, but we could abuse any
 keyword for it (or add a new one).</p>
-<pre class="code-block">   <span class="comment">// buffer-ctors.c</span>
-   #<span class="key2">include</span> <span class="string">"buffer-internal.h"</span>
-   <span class="key3">register</span> <span class="key1">namespace</span> Buffer; <span class="comment">// primary implementation file</span>
+<pre class='code-block'>
+   <span class="Comment">// buffer-ctors.c</span>
+<span class="Include">   #include </span><span class="String">&quot;buffer-internal.h&quot;</span>
+   <span class="Type">register</span> <span class="Type">namespace</span> Buffer; <span class="Comment">// primary implementation file</span>
 
-   T create (<span class="key3">size_t</span> n) { ... }
+   T create (<span class="Type">size_t</span> n) { ... }
 
-</pre><p>
+</pre>
+<p>
 It could be <span class='code'>do</span>, <span class='code'>let</span> or anything else, but I think
 <span class='code'>register</span> fits the idea quite well. Also, it actually does emit a
 function registering GC roots.</p>
@@ -177,7 +185,7 @@ Register <span class='code'>type_info</span> structures with the RTTI subsystem 
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Tue Jul  5 00:39:33 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:41:01 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

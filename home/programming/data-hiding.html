@@ -64,36 +64,42 @@ achieved by writing accessor functions as required.</p>
 </ul>
 <p>
 A simple example of information hiding would be a string object:</p>
-<pre class="code-block">  <span class="key3">struct</span> string
+<pre class='vimCodeElement'>
+  <span class="Type">struct</span> string
   {
-    <span class="key3">char</span> *rep;
-    <span class="key3">size_t</span> len;
-    <span class="key3">size_t</span> capacity.
+    <span class="Type">char</span> *rep;
+    <span class="Type">size_t</span> len;
+    <span class="Type">size_t</span> capacity.
   };
 
-</pre><p>
+</pre>
+<p>
 This <span class='code'>struct</span> knows its length and has a data pointer pointing at the
 in-memory string representation. It also knows its maximum capacity, so it can
 allocate more memory on demand. In order to avoid corruption of the internal
 state (in this case, the len member), we write accessor functions, for
 example:</p>
-<pre class="code-block">  <span class="key3">size_t</span> strLength (<span class="key3">struct</span> string <span class="key3">const</span> *str);
-  <span class="key3">char</span> <span class="key3">const</span> *strToCStr (<span class="key3">struct</span> string <span class="key3">const</span> *str);
-  <span class="key3">char</span> strCharAt (<span class="key3">struct</span> string <span class="key3">const</span> *str, <span class="key3">size_t</span> pos);
-  <span class="key3">void</span> strSetCharAt (<span class="key3">struct</span> string *str, <span class="key3">size_t</span> pos, <span class="key3">char</span> c);
-  <span class="key3">void</span> strAddChars (<span class="key3">struct</span> string *str, <span class="key3">char</span> <span class="key3">const</span> *chars);
+<pre class='vimCodeElement'>
+  <span class="Type">size_t</span> strLength (<span class="Type">struct</span> string <span class="Type">const</span> *str);
+  <span class="Type">char</span> <span class="Type">const</span> *strToCStr (<span class="Type">struct</span> string <span class="Type">const</span> *str);
+  <span class="Type">char</span> strCharAt (<span class="Type">struct</span> string <span class="Type">const</span> *str, <span class="Type">size_t</span> pos);
+  <span class="Type">void</span> strSetCharAt (<span class="Type">struct</span> string *str, <span class="Type">size_t</span> pos, <span class="Type">char</span> c);
+  <span class="Type">void</span> strAddChars (<span class="Type">struct</span> string *str, <span class="Type">char</span> <span class="Type">const</span> *chars);
 
-</pre><p>
+</pre>
+<p>
 These functions operate on the data structure declared above. Functions
 that take a pointer-to-const promise not to modify the structure.</p>
 <p>
 Information hiding means to hide as much knowledge as possible. As part
 of this, we could define new type aliases to hide the fact that a string
 is represented by a pointer to a string structure:</p>
-<pre class="code-block">  <span class="key3">typedef</span> <span class="key3">struct</span> string *String;
-  <span class="key3">typedef</span> <span class="key3">struct</span> string <span class="key3">const</span> *ConstString; <span class="comment">// Immutable string</span>
+<pre class='vimCodeElement'>
+  <span class="Type">typedef</span> <span class="Type">struct</span> string *String;
+  <span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString; <span class="Comment">// Immutable string</span>
 
-</pre><p>
+</pre>
+<p>
 By doing this, we allow the representation to change at any time. For
 example, we could choose to represent String objects by a simple data
 pointer not knowing its size or a data pointer prepended by its size.</p>
@@ -102,13 +108,15 @@ other string representations.
 
 </p><p>
 Now, our accessor functions look like this:</p>
-<pre class="code-block">  <span class="key3">size_t</span> strLength (ConstString str);
-  <span class="key3">char</span> <span class="key3">const</span> *strToCStr (ConstString str);
-  <span class="key3">char</span> strCharAt (ConstString str, <span class="key3">size_t</span> pos);
-  <span class="key3">void</span> strSetCharAt (String str, <span class="key3">size_t</span> pos, <span class="key3">char</span> c);
-  <span class="key3">void</span> strAddChars (String str, <span class="key3">char</span> <span class="key3">const</span> *chars);
+<pre class='vimCodeElement'>
+  <span class="Type">size_t</span> strLength (ConstString str);
+  <span class="Type">char</span> <span class="Type">const</span> *strToCStr (ConstString str);
+  <span class="Type">char</span> strCharAt (ConstString str, <span class="Type">size_t</span> pos);
+  <span class="Type">void</span> strSetCharAt (String str, <span class="Type">size_t</span> pos, <span class="Type">char</span> c);
+  <span class="Type">void</span> strAddChars (String str, <span class="Type">char</span> <span class="Type">const</span> *chars);
 
-</pre><p>
+</pre>
+<p>
 We did not only abstract away some knowledge, we also reduced our required
 typing.</p>
 <h3>
@@ -117,21 +125,23 @@ typing.</p>
 There are various more or less obvious ways to violate the principle of
 information hiding. An obvious example would be directly accessing the
 structure's members:</p>
-<pre class="code-block">  <span class="comment">// Wrong:</span>
-  <span class="key3">void</span>
+<pre class='vimCodeElement'>
+  <span class="Comment">// Wrong:</span>
+  <span class="Type">void</span>
   OnAdded (String str)
   {
-    strncat (str-&gt;rep, <span class="string">" has been added"</span>, str-&gt;capacity - str-&gt;len);
+    strncat (str-&gt;rep, <span class="String">&quot; has been added&quot;</span>, str-&gt;capacity - str-&gt;len);
     str-&gt;len = strlen (str-&gt;rep);
   }
-  <span class="comment">// Right:</span>
-  <span class="key3">void</span>
+  <span class="Comment">// Right:</span>
+  <span class="Type">void</span>
   OnAdded (String str)
   {
-    strAddChars (str, <span class="string">" has been added"</span>);
+    strAddChars (str, <span class="String">&quot; has been added&quot;</span>);
   }
 
-</pre><p>
+</pre>
+<p>
 The function <span class='code'>strAddChars</span> hides the knowledge about <span class='code'>String</span>'s internal
 structure and abstracts away the logic needed to add characters to the string.
 The resulting code is more descriptive and less error prone. Instead of
@@ -142,21 +152,23 @@ the string, if it does not have enough room for the added text.</p>
 A less obvious violation of information hiding would be pointer operations on
 String objects. Consider our String to be defined as <span class='code'>char*</span>. This type
 allows several operations that are built into C:</p>
-<pre class="code-block">  <span class="key3">typedef</span> <span class="key3">char</span> *String;
-  <span class="key3">typedef</span> <span class="key3">char</span> <span class="key3">const</span> *ConstString;
+<pre class='vimCodeElement'>
+  <span class="Type">typedef</span> <span class="Type">char</span> *String;
+  <span class="Type">typedef</span> <span class="Type">char</span> <span class="Type">const</span> *ConstString;
 
-  <span class="key3">void</span>
+  <span class="Type">void</span>
   someFunc (String str)
   {
-    printf (<span class="string">"The second character is `%d'\n"</span>, str[<span class="number">1</span>]); <span class="comment">// Index</span>
-    str += <span class="number">20</span>; <span class="comment">// Addition</span>
-    printf (<span class="string">"The twenty-second character is `%d'\n"</span>, str[<span class="number">1</span>]); <span class="comment">// Index</span>
-    printf (<span class="string">"The twenty-first character is `%d'\n"</span>, *str); <span class="comment">// Dereference</span>
-    String newStr = str - <span class="number">10</span>; <span class="comment">// Subtracting integer</span>
-    printf (<span class="string">"The difference between newStr and str is %d\n"</span>, newStr - str); <span class="comment">// Pointer difference</span>
+    printf (<span class="String">&quot;The second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
+    str += <span class="Number">20</span>; <span class="Comment">// Addition</span>
+    printf (<span class="String">&quot;The twenty-second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
+    printf (<span class="String">&quot;The twenty-first character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, *str); <span class="Comment">// Dereference</span>
+    String newStr = str - <span class="Number">10</span>; <span class="Comment">// Subtracting integer</span>
+    printf (<span class="String">&quot;The difference between newStr and str is </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, newStr - str); <span class="Comment">// Pointer difference</span>
   }
 
-</pre><p>
+</pre>
+<p>
 All these operations are defined on <span class='code'>char*</span>, and therefore also on <span class='code'>String</span>.
 This does not have to be the case, though. If <span class='code'>String</span> was defined as the
 <span class='code'>struct string*</span> earlier, all of these operations would cause a compilation
@@ -170,14 +182,16 @@ C provides a very good way to enforce information hiding. We call this
 <em>opaque pointers</em>. Opaque in this sense means, we cannot touch or even <em>see</em>
 the internal structure. C allows us to <em>forward declare</em> structures and pass
 around pointers to them:</p>
-<pre class="code-block">  <span class="key3">struct</span> string;
-  <span class="key3">typedef</span> <span class="key3">struct</span> string *String;
-  <span class="key3">typedef</span> <span class="key3">struct</span> string <span class="key3">const</span> *ConstString;
-  <span class="comment">// All of the above accessor functions still work</span>
-  <span class="comment">// The OnAdded function marked with "Right" also still works, but the one</span>
-  <span class="comment">//   marked "Wrong" will cause a compilation error</span>
+<pre class='vimCodeElement'>
+  <span class="Type">struct</span> string;
+  <span class="Type">typedef</span> <span class="Type">struct</span> string *String;
+  <span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString;
+  <span class="Comment">// All of the above accessor functions still work</span>
+  <span class="Comment">// The OnAdded function marked with &quot;Right&quot; also still works, but the one</span>
+  <span class="Comment">//   marked &quot;Wrong&quot; will cause a compilation error</span>
 
-</pre><p>
+</pre>
+<p>
 <span class='code'>String</span> is now what we call a <em>pointer to an incomplete type</em>. Incomplete
 means that it does exist as a type, but its representation is not known to the
 compiler. Using opaque pointers is a good way of preventing direct member
@@ -323,7 +337,7 @@ Instead, methods are used: <span class='code'>$ob->method</span>.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sat Aug 10 02:01:43 MEST 2013</div> 
+			<div id="updated">Last updated Mon Aug 12 02:40:17 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

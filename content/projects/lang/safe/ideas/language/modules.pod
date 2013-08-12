@@ -34,7 +34,7 @@ The initialisation function will be emitted in the primary implementation file.
 
 The idea is that a programmer can write something like:
 
-=begin code CPP
+=begin code cpp
 
    // buffer.h
    namespace Buffer {
@@ -54,14 +54,14 @@ The idea is that a programmer can write something like:
       extern void add_str (T self, string_t s);
    }
 
-=end code CPP
+=end code cpp
 
 and have multiple implementation files, each implementing a semantically
 associated subset of the above functions.
 
 The internal file exposing the buffer's structure:
 
-=begin code CPP
+=begin code cpp
 
    // buffer-internal.h
    #include <buffer.h>
@@ -73,11 +73,11 @@ The internal file exposing the buffer's structure:
       };
    }
 
-=end code CPP
+=end code cpp
 
 Implementation of constructors:
 
-=begin code CPP
+=begin code cpp
 
    // buffer-ctors.c
    #include "buffer-internal.h"
@@ -85,7 +85,7 @@ Implementation of constructors:
 
    T create (size_t n) { ... }
 
-=end code CPP
+=end code cpp
 
 Implementation of accessors and mutators each go into their separate files.
 Now, if we generate more information about the structures, we need a primary
@@ -102,7 +102,7 @@ Now, about the primary implementation file, we need a syntax to mark that
 file. I currently don't have a good idea on this, but we could abuse any
 keyword for it (or add a new one).
 
-=begin code CPP
+=begin code cpp
 
    // buffer-ctors.c
    #include "buffer-internal.h"
@@ -110,7 +110,7 @@ keyword for it (or add a new one).
 
    T create (size_t n) { ... }
 
-=end code CPP
+=end code cpp
 
 It could be C<do>, C<let> or anything else, but I think
 C<register> fits the idea quite well. Also, it actually does emit a

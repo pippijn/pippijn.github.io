@@ -88,7 +88,7 @@ write a high performance slice allocator that defines C<operator new> and
 C<delete>, inheriting from it will make the class automatically and
 transparently allocated using this slice allocator:
 
-=begin code CPP
+=begin code cpp
 
    template<typename T>
    struct slice_allocated
@@ -101,7 +101,7 @@ transparently allocated using this slice allocator:
      // some code here
    };
 
-=end code CPP
+=end code cpp
 
 Here, multiple inheritance is required to inherit the code from the allocator
 as well as the code from C<node_base>. Things like that would not be possible

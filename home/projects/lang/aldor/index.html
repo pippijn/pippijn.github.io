@@ -56,11 +56,15 @@ Aldor Programming Language</h2>
 <a href='https://github.com/pippijn/aldor'>Git repository</a></p>
 <p>
 <a href='http://pippijn.github.io/aldor/'>Main website</a></p>
-<pre class="code-block">   <span class="key5">#include</span> <span class="string">"aldor"</span>
+<p>
+<a href='http://pippijn.github.io/aldor/eval/'>Try it online</a></p>
+<pre class='code-block'>
+<span class="Include">  #include </span><span class="String">&quot;aldor&quot;</span>
 
-   <span class="key4">stderr</span> <span class="key6">&lt;&lt;</span> <span class="string">"Hello world"</span> <span class="key6">&lt;&lt;</span> <span class="key4">newline</span>;
+  <span class="Constant">stderr</span> <span class="Statement">&lt;&lt;</span> <span class="String">&quot;Hello world&quot;</span> <span class="Statement">&lt;&lt;</span> <span class="Constant">newline</span>;
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h1'>The Language</a></h3>
 <p>
 From <a href='http://en.wikipedia.org/wiki/Aldor'>Wikipedia</a>:</p>
@@ -113,59 +117,63 @@ In C++, Java, C# and other languages, you can overload functions by their
 argument types and count. In Aldor, you can additionally overload them by return
 type. You can also overload constants, which might be seen as nullary functions
 that don't need the function application operator.</p>
-<pre class="code-block">   <span class="comment">-- "zero"-values for different types</span>
-   z: <span class="key3">Boolean</span> <span class="key1">==</span> <span class="key4">false</span>;
-   z: <span class="key3">Integer</span> <span class="key1">==</span> <span class="number">0</span>;
-   z: <span class="key3">String</span> <span class="key1">==</span> <span class="string">""</span>;
+<pre class='code-block'>
+  <span class="Comment">-- &quot;zero&quot;-values for different types</span>
+  z<span class="Statement">:</span> <span class="Type">Boolean</span> <span class="Statement">==</span> <span class="Constant">false</span>;
+  z<span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">==</span> <span class="Number">0</span>;
+  z<span class="Statement">:</span> <span class="Type">String</span> <span class="Statement">==</span> <span class="String">&quot;&quot;</span>;
 
-   <span class="comment">-- returns the argument matching the wanted return type</span>
-   get (i: <span class="key3">Integer</span>, b: <span class="key3">Boolean</span>): <span class="key3">Integer</span> <span class="key1">==</span> i;
-   get (i: <span class="key3">Integer</span>, b: <span class="key3">Boolean</span>): <span class="key3">Boolean</span> <span class="key1">==</span> b;
+  <span class="Comment">-- returns the argument matching the wanted return type</span>
+  get (i<span class="Statement">:</span> <span class="Type">Integer</span>, b<span class="Statement">:</span> <span class="Type">Boolean</span>)<span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">==</span> i;
+  get (i<span class="Statement">:</span> <span class="Type">Integer</span>, b<span class="Statement">:</span> <span class="Type">Boolean</span>)<span class="Statement">:</span> <span class="Type">Boolean</span> <span class="Statement">==</span> b;
 
-   <span class="comment">-- need to explicitly state the type for disambiguation</span>
-   i : <span class="key3">Integer</span> :<span class="key6">=</span> get (<span class="number">1</span>, <span class="key4">true</span>);
-   b : <span class="key3">Boolean</span> :<span class="key6">=</span> get (<span class="number">1</span>, <span class="key4">true</span>);
+  <span class="Comment">-- need to explicitly state the type for disambiguation</span>
+  i <span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">:=</span> get (<span class="Number">1</span>, <span class="Constant">true</span>);
+  b <span class="Statement">:</span> <span class="Type">Boolean</span> <span class="Statement">:=</span> get (<span class="Number">1</span>, <span class="Constant">true</span>);
 
-</pre></li>
+</pre>
+</li>
 <li>
 Dependent types<p>
 These are a little like C++ templates. Basically, it means that you can have a
 type that depends on a value. You can then use regular Aldor control structures
 to construct a type based on that value.</p>
-<pre class="code-block">   <span class="key5">#include</span> <span class="string">"aldor"</span>
-   <span class="key5">#include</span> <span class="string">"aldorio"</span>
+<pre class='code-block'>
+<span class="Include">  #include </span><span class="String">&quot;aldor&quot;</span>
+<span class="Include">  #include </span><span class="String">&quot;aldorio&quot;</span>
 
-   <span class="comment">-- import operations (Literal, quo, mod, +, ~=) on Integers</span>
-   <span class="comment">-- into the current scope</span>
-   <span class="key2">import</span> <span class="key2">from</span> <span class="key3">Integer</span>;
+  <span class="Comment">-- import operations (Literal, quo, mod, +, ~=) on Integers</span>
+  <span class="Comment">-- into the current scope</span>
+  <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Integer</span>;
 
-   <span class="key2">define</span> <span class="key3">FooType</span>(i: <span class="key3">Integer</span>): <span class="key3">Category</span> <span class="key1">==</span> <span class="key2">with</span> {
-      foo: () <span class="key6">-&gt;</span> <span class="key3">Integer</span>;
+  <span class="Statement">define</span> <span class="Type">FooType</span>(i<span class="Statement">:</span> <span class="Type">Integer</span>)<span class="Statement">:</span> <span class="Type">Category</span> <span class="Statement">==</span> <span class="Statement">with</span> {
+     foo<span class="Statement">:</span> () <span class="Statement">-&gt;</span> <span class="Type">Integer</span>;
 
-      <span class="comment">-- provide a default implementation dividing integers by 2</span>
-      <span class="key2">default</span> {
-         foo(): <span class="key3">Integer</span> <span class="key1">==</span> i <span class="key6">quo</span> <span class="number">2</span>;
-      }
-   }
+     <span class="Comment">-- provide a default implementation dividing integers by 2</span>
+     <span class="Statement">default</span> {
+        foo()<span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">==</span> i <span class="Identifier">quo</span> <span class="Number">2</span>;
+     }
+  }
 
-   <span class="comment">-- template&lt;int i&gt; class Foo;</span>
-   <span class="comment">-- actually a function returning a type</span>
-   <span class="key3">Foo</span>(i: <span class="key3">Integer</span>): <span class="key3">FooType</span>(i) <span class="key1">==</span> <span class="key2">add</span> {
-      <span class="comment">-- override the default implementation only if i is not divisible by 2</span>
-      <span class="key2">if</span> i <span class="key6">mod</span> <span class="number">2</span> <span class="key6">~=</span> <span class="number">0</span> <span class="key2">then</span> {
-         foo(): <span class="key3">Integer</span> <span class="key1">==</span> i <span class="key6">+</span> <span class="number">1</span>;
-      }
-   }
+  <span class="Comment">-- template&lt;int i&gt; class Foo;</span>
+  <span class="Comment">-- actually a function returning a type</span>
+  <span class="Type">Foo</span>(i<span class="Statement">:</span> <span class="Type">Integer</span>)<span class="Statement">:</span> <span class="Type">FooType</span>(i) <span class="Statement">==</span> <span class="Statement">add</span> {
+     <span class="Comment">-- override the default implementation only if i is not divisible by 2</span>
+     <span class="Statement">if</span> i mod <span class="Number">2</span> <span class="Statement">~=</span> <span class="Number">0</span> <span class="Statement">then</span> {
+        foo()<span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">==</span> i <span class="Statement">+</span> <span class="Number">1</span>;
+     }
+  }
 
-   <span class="comment">-- call foo() in domain Foo(3) (template class Foo&lt;3&gt;)</span>
-   <span class="key4">stdout</span> <span class="key6">&lt;&lt;</span> foo()<span class="key3">$Foo</span>(<span class="number">3</span>) <span class="key6">&lt;&lt;</span> <span class="key4">newline</span>;
-   <span class="key4">stdout</span> <span class="key6">&lt;&lt;</span> foo()<span class="key3">$Foo</span>(<span class="number">4</span>) <span class="key6">&lt;&lt;</span> <span class="key4">newline</span>;
+  <span class="Comment">-- call foo() in domain Foo(3) (template class Foo&lt;3&gt;)</span>
+  <span class="Constant">stdout</span> <span class="Statement">&lt;&lt;</span> foo()$<span class="Type">Foo</span>(<span class="Number">3</span>) <span class="Statement">&lt;&lt;</span> <span class="Constant">newline</span>;
+  <span class="Constant">stdout</span> <span class="Statement">&lt;&lt;</span> foo()$<span class="Type">Foo</span>(<span class="Number">4</span>) <span class="Statement">&lt;&lt;</span> <span class="Constant">newline</span>;
 
-</pre><p>
+</pre>
+<p>
 The output from the above code would be:</p>
 <pre>
-   4
-   2</pre><p>
+  4
+  2</pre><p>
 The value a type depends on may be any constant value of any type, unlike in
 C++, where only types, integers, templates and pointers are allowed. Since types
 are values in Aldor, you can also have types depending on other types, which
@@ -177,7 +185,7 @@ would be the <span class='code'>template&lt;typename T&gt;</span> construct in C
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sat Aug 10 02:25:30 MEST 2013</div> 
+			<div id="updated">Last updated Mon Aug 12 04:13:58 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

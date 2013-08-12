@@ -17,7 +17,7 @@ and C++ are interfaced using the easy-to-use XS interface. Using JPL, it is
 possible to call Java from Perl and Perl from Java. To make a C function
 callable from Perl, all you have to do is:
 
-=begin code XS
+=begin code xs
 
    #include <EXTERN.h>
    #include <perl.h>
@@ -39,7 +39,7 @@ callable from Perl, all you have to do is:
    int
    sub (int a, int b);
 
-=end code XS
+=end code xs
 
 =item Very portable
 

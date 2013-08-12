@@ -54,60 +54,64 @@ Target templates</h2>
 Templates define common flags and sources for targets. They do not define
 targets, by themselves. Templates offer a better structured way to inheriting
 sources and libraries.</p>
-<pre class="code-block">   <span class="comment"># Build a program that does some math</span>
-   <span class="key1">program</span> prog {
-      <span class="key1">sources</span> {
+<pre class='code-block'>
+   <span class="Comment"># Build a program that does some math</span>
+   <span class="Type">program</span> prog <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span>
          main.c
          math.c
-      }
-      <span class="key1">link</span> {
+      <span class="Identifier">}</span>
+      <span class="Type">link</span> <span class="Identifier">{</span>
          -lm
-      }
-   }
-   <span class="comment"># Build a program that does the same math but with GMP</span>
-   <span class="key1">program</span> gmpprog {
-      <span class="key1">sources</span> {
-         <span class="comment"># Import prog's sources</span>
-         <span class="key1">sources</span> (prog)
-         <span class="comment"># except math.c</span>
-         <span class="key1">exclude</span> { math.c }
-         <span class="comment"># because we reimplement it using GMP</span>
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
+   <span class="Comment"># Build a program that does the same math but with GMP</span>
+   <span class="Type">program</span> gmpprog <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span>
+         <span class="Comment"># Import prog's sources</span>
+         <span class="Type">sources</span> (prog)
+         <span class="Comment"># except math.c</span>
+         <span class="Type">exclude</span> <span class="Identifier">{</span> math.c <span class="Identifier">}</span>
+         <span class="Comment"># because we reimplement it using GMP</span>
          gmpmath.c
-      }
-      <span class="key1">link</span> {
-         <span class="comment"># Import prog's link section</span>
-         <span class="key1">link</span> (prog)
-         <span class="comment"># And link against GMP</span>
+      <span class="Identifier">}</span>
+      <span class="Type">link</span> <span class="Identifier">{</span>
+         <span class="Comment"># Import prog's link section</span>
+         <span class="Type">link</span> (prog)
+         <span class="Comment"># And link against GMP</span>
          -lgmp
-      }
-   }
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
 
-</pre><p>
+</pre>
+<p>
 The above example can be better written as follows:</p>
-<pre class="code-block">   <span class="key1">template</span> math-program {
-      <span class="key1">sources</span> {
+<pre class='code-block'>
+   <span class="Type">template</span> math-program <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span>
          main.c
-      }
-      <span class="key1">link</span> {
+      <span class="Identifier">}</span>
+      <span class="Type">link</span> <span class="Identifier">{</span>
          -lm
-      }
-   }
-   <span class="comment"># Inherit from the "math-program" template.</span>
-   <span class="key1">program</span> prog <span class="key3">:</span> math-program {
-      <span class="key1">sources</span> {
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
+   <span class="Comment"># Inherit from the &quot;math-program&quot; template.</span>
+   <span class="Type">program</span> prog <span class="Statement">:</span> math-program <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span>
          math.c
-      }
-   }
-   <span class="key1">program</span> gmpprog <span class="key3">:</span> math-program {
-      <span class="key1">sources</span> {
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
+   <span class="Type">program</span> gmpprog <span class="Statement">:</span> math-program <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span>
          gmpmath.c
-      }
-      <span class="key1">link</span> {
+      <span class="Identifier">}</span>
+      <span class="Type">link</span> <span class="Identifier">{</span>
          -lgmp
-      }
-   }
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
 
-</pre><p>
+</pre>
+<p>
 Both programs inherit the sources and link blocks from <span class='code'>math-program</span> and add
 their own sources to it. This method is better structured but less flexible.
 Templates can inherit from other templates. It is still possible to import
@@ -127,52 +131,56 @@ library or listing the exact same source file is not a conflict. Targets can not
 serve as a base, so a target or template cannot inherit from another target,
 only from templates. Inheriting from a template more than once, even implicitly
 through another base, is an error.</p>
-<pre class="code-block">   <span class="key1">template</span> math-program {
-      <span class="key1">sources</span> {
+<pre class='code-block'>
+   <span class="Type">template</span> math-program <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span>
          math-support.c
-      }
-      <span class="key1">link</span> {
+      <span class="Identifier">}</span>
+      <span class="Type">link</span> <span class="Identifier">{</span>
          -lm
-      }
-   }
-   <span class="key1">template</span> system-program {
-      <span class="key1">sources</span> {
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
+   <span class="Type">template</span> system-program <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span>
          system-support.c
-      }
-      <span class="key1">link</span> {
+      <span class="Identifier">}</span>
+      <span class="Type">link</span> <span class="Identifier">{</span>
          -lutil
-      }
-   }
-   <span class="key1">program</span> sysprog <span class="key3">:</span> math-program, system-program {
-      <span class="key1">sources</span> {
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
+   <span class="Type">program</span> sysprog <span class="Statement">:</span> math-program, system-program <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span>
          main.c
-      }
-   }
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h2'>Filtering</a></h3>
 <p>
 As we learned in <a href='variables'>variables</a>, one may filter the <span class='code'>$(prog.link)</span> variable by
 locally built libraries. Templates take this one step further by allowing you to
 filter by template.</p>
-<pre class="code-block">   <span class="key1">template</span> math-library {
+<pre class='code-block'>
+   <span class="Type">template</span> math-library <span class="Identifier">{</span>
       ...
-   }
-   <span class="key1">library</span> mathsupport <span class="key3">:</span> math-library {
+   <span class="Identifier">}</span>
+   <span class="Type">library</span> mathsupport <span class="Statement">:</span> math-library <span class="Identifier">{</span>
       ...
-   }
-   <span class="key1">program</span> mathprog {
-      <span class="key1">sources</span> { ... }
-      <span class="key1">link</span> {
-         <span class="comment"># Link against two support libraries</span>
+   <span class="Identifier">}</span>
+   <span class="Type">program</span> mathprog <span class="Identifier">{</span>
+      <span class="Type">sources</span> <span class="Identifier">{</span> ... <span class="Identifier">}</span>
+      <span class="Type">link</span> <span class="Identifier">{</span>
+         <span class="Comment"># Link against two support libraries</span>
          mathsupport
          support
-         <span class="comment"># Also link against libm</span>
+         <span class="Comment"># Also link against libm</span>
          -lm
-      }
-   }
+      <span class="Identifier">}</span>
+   <span class="Identifier">}</span>
 
-</pre><p>
+</pre>
+<p>
 In the above example, the <span class='code'>$(mathprog.link)</span> variable would expand to
 "<span class='code'>mathsupport support -lm</span>". The expansion of <span class='code'>$(mathprog.link : library)</span>
 would be "<span class='code'>mathsupport support</span>", and expanding the pseudo-variable
@@ -183,7 +191,7 @@ especially useful in <a href='rules'>pattern rules</a>.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu Jul  7 03:46:45 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:37:21 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

@@ -27,19 +27,19 @@ use inheritance for everything. Where in C++, one could write
      collection.add (element);
    }
 
-=end code CPP
+=end code cpp
 
 and it would work for all types that provide a member function called C<add(T)>,
 in Java, we have to inherit from C<java.util.Collection&lt;T&gt;> and write
 
-=begin code Java
+=begin code java
 
    public <T> void addItem(Collection<T> collection, T element)
    {
        collection.add(element);
    }
 
-=end code Java
+=end code java
 
 =item No proper generics (@generics)
 
@@ -49,13 +49,13 @@ Type-safety is pretty much overrated, in my opinion, but that's not relevant
 now. In the Java runtime, generics do not exist. This simple fact limits their
 use enormously. Think about the following simple factory function:
 
-=begin code Java
+=begin code java
 
    public <T> T create() {
        return new T();
    }
 
-=end code Java
+=end code java
 
 This code does not compile, because T can not be instantiated. The reason for
 this is explained in 4.6 of the JLS. Types are erased. They do not exist at
@@ -65,7 +65,7 @@ the object. What this factory function was supposed to deliver, though, was a
 generic factory class. A factory class you can pass in could be Class&lt;T&gt;.
 The code could be written like this:
 
-=begin code Java
+=begin code java
 
    public <T> T create(Class<T> cls) {
        return cls.newInstance();
@@ -75,7 +75,7 @@ The code could be written like this:
        return arraytype.cast(Array.newInstance(arraytype.getComponentType(), size));
    }
 
-=end code Java
+=end code java
 
 Note that you can not create arrays of primitive types this way, only of the
 boxed versions. Another issue with Java generics is that due to type erasure,
@@ -86,24 +86,24 @@ The C<Integer>s are allocated in various places on the heap.
 
 It is also not possible to write code like this:
 
-=begin code Java
+=begin code java
 
    public <T> void func(T o) {
        o.method();
    }
 
-=end code Java
+=end code java
 
 While using C++ templates, this would be possible for all types T that define a
 member function C<method()>. In Java, the solution to this is:
 
-=begin code Java
+=begin code java
 
    public <T extends TypeWithMethod> void func(T o) {
        o.method();
    }
 
-=end code Java
+=end code java
 
 This pretty much repeats the point above, but emphasises more on the generics
 part of the issue whereas the other point emphasises on the inheritance part.
@@ -119,7 +119,7 @@ to virtual methods (the constructor chain). More importantly, though, is the
 fact that objects are not reused. Java does not put its locally used objects on
 the stack, so this space is not reused. Consider the following code:
 
-=begin code Java
+=begin code java
 
    for (Collection<Item> c : collections) {
       Vector<Item> v = new Vector<Item>();
@@ -129,12 +129,12 @@ the stack, so this space is not reused. Consider the following code:
       doSomething(v);
    }
 
-=end code Java
+=end code java
 
 In this code, a new C<Vector&lt;Item&gt;> object is created every time and
 discarded for the next outer loop iteration. This code could be rewritten as
 
-=begin code Java
+=begin code java
 
    Vector<Item> v = new Vector<Item>();
    for (Collection<Item> c : collections) {
@@ -145,7 +145,7 @@ discarded for the next outer loop iteration. This code could be rewritten as
       v.clear();
    }
 
-=end code Java
+=end code java
 
 This is not by itself bad about Java but it shows a problem many don't
 acknowledge: Even with a GC'd language, you need to take care of memory
@@ -259,7 +259,7 @@ assigned once in a static { } block but then it works like C's top-level const.
 
 Also, consider the following code snippet:
 
-=begin code Java
+=begin code java
 
     public static void main (String[] argv) {
         int i;
@@ -269,7 +269,7 @@ Also, consider the following code snippet:
         System.out.println(i);
     }
 
-=end code Java
+=end code java
 
 The compiler errors out, saying that i "may not have been initialised". Is that
 so? Array lengths can never be less than 0. If our compiler is smart enough to
@@ -355,7 +355,7 @@ Except in C<if (false) { }> statements, which is Java's attempt to emulate
 compile-time conditionals such as the ones provided by a preprocessor. This
 exception does not hold for C<while (false) { }>.  Consider code like this:
 
-=begin code Java
+=begin code java
 
    while (true) return;
    System.out.println("Unreachable"); // this statement is unreachable and an error
@@ -363,7 +363,7 @@ exception does not hold for C<while (false) { }>.  Consider code like this:
    if (true) return;
    System.out.println("Unreachable"); // this statement is unreachable but not an error
 
-=end code Java
+=end code java
 
 Note that this behaviour is specified by the JLS. I do think, though, that this
 is inconsistent.
@@ -377,7 +377,7 @@ An important pattern in languages such as Perl and C++ is RAII, which stands for
 acquire resources in their constructor and release it in their destructor. A
 good example of this is lock acquisition and release:
 
-=begin code CPP
+=begin code cpp
 
    void function (int i)
    {
@@ -386,14 +386,14 @@ good example of this is lock acquisition and release:
      this->number += i;
    }
 
-=end code CPP
+=end code cpp
 
 This code locks a mutex and unlocks it whenever the function returns. This may
 happen on exceptions or on normal return. The C<check> function may throw an
 exception if C<i> is wrong. We don't have to care about that here. In Java, we
 do:
 
-=begin code Java
+=begin code java
 
   void function(int i) throws Exception
   {
@@ -406,7 +406,7 @@ do:
       this.number += i;
   }
 
-=end code Java
+=end code java
 
 In the code above, the issue is not that apparent, but when you start playing
 with file I/O, you may need a cascade of up to three C<try>'s and C<catch>es in
@@ -428,7 +428,7 @@ diagnostics, you need to use something like the Eclipse compiler.
 
 This may by itself not sound bad, but it leads to comments such as these:
 
-=begin code Java
+=begin code java
 
    /**
     * Returns the X coordinate of this <code>Point2D</code> in

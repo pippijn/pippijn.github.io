@@ -13,7 +13,7 @@ and a stub invoking the closure as function.
 Normal code calculating the sum of the numbers between C<from> and
 C<to>, each multiplied by C<num>, thus requiring a closure:
 
-=begin code CPP
+=begin code cpp
 
    int sum (int from, int to, int (@func) (int i)) {
       int result = 0;
@@ -30,11 +30,11 @@ C<to>, each multiplied by C<num>, thus requiring a closure:
       return sum (from, to, mul);
    }
 
-=end code CPP
+=end code cpp
 
 Would roughly (the names would be mangled somehow) be compiled to:
 
-=begin code CPP
+=begin code cpp
 
    struct sum_clos1 {
       void *env;
@@ -72,7 +72,7 @@ Would roughly (the names would be mangled somehow) be compiled to:
       return sum (from, to, clos);
    }
 
-=end code CPP
+=end code cpp
 
 This must be done even for simple, non-capturing and global functions, as the
 called function (in this case C<sum>) cannot know whether it gets a
@@ -80,18 +80,18 @@ closure or a normal function. It is, however, unfeasible to add a parameter
 C<void *env> to every function, so passing normal functions as function
 pointer requires the generation of stubs:
 
-=begin code CPP
+=begin code cpp
 
    int identity (int i) { return i; }
    int identity_sum (int from, int to) {
       return sum (from, to, identity);
    }
 
-=end code CPP
+=end code cpp
 
 Has to be translated to:
 
-=begin code CPP
+=begin code cpp
 
    int identity (int i) { return i; }
    int identity_stub (void *env, int i) { return identity (i); }
@@ -104,7 +104,7 @@ Has to be translated to:
       return sum (from, to, clos);
    }
 
-=end code CPP
+=end code cpp
 
 This will cause a performance hit, but has to be done for uniform handling of
 global and nested functions.
@@ -120,7 +120,7 @@ The I<libffi> library provides a relatively portable way to create
 dynamically allocated closures. In order to pass a closure to C, we would need
 to generate a libffi closure wrapper.
 
-=begin code CPP
+=begin code cpp
 
    // Same as above, but somewhere else, implemented in regular C
    extern "C" int sum (int from, int to, int (@func) (int i));
@@ -130,11 +130,11 @@ to generate a libffi closure wrapper.
       return sum (from, to, {mul}); // or some other syntax
    }
 
-=end code CPP
+=end code cpp
 
 The above code would be compiled to the following:
 
-=begin code CPP
+=begin code cpp
 
    #include <ffi.h>
    #include <sys/mman.h>
@@ -195,7 +195,7 @@ The above code would be compiled to the following:
       }
    }
 
-=end code CPP
+=end code cpp
 
 All the complexity is handled by libffi. However, the memory allocated by
 libffi would leak by default, so the garbage collector needs to be aware of
@@ -226,7 +226,7 @@ works with C functions that take both an environment and a callback. Most sane
 C APIs luckily do this.  Basically, the idea is to just pass the real function
 along with a generated C<env> pointer.
 
-=begin code CPP
+=begin code cpp
 
    // Expect C API to allow for user data to be passed.
    extern "C" int sum (int from, int to, `t env,
@@ -237,12 +237,12 @@ along with a generated C<env> pointer.
       return sum (from, to, mul);
    }
 
-=end code CPP
+=end code cpp
 
 Passing the C<mul> function would expand to two arguments: the env and the
 function pointer. It would thus be compiled to:
 
-=begin code CPP
+=begin code cpp
 
    extern int sum (int from, int to, void *env,
                    int (*func) (void *env, int i));
@@ -256,7 +256,7 @@ function pointer. It would thus be compiled to:
       return sum (from, to, &env, mul);
    }
 
-=end code CPP
+=end code cpp
 
 
 =head2 Lambda expressions
@@ -267,7 +267,7 @@ have to tell it what variables we're going to use? Oh yeah, because C++ has
 references.  Well, we don't and we're not going to have them, so the proposed
 syntax is very similar to the C# syntax.
 
-=begin code CPP
+=begin code cpp
 
    int sum_of_muls (int from, int to, int num) {
       // syntax 1:
@@ -280,7 +280,7 @@ syntax is very similar to the C# syntax.
       return sum (from, to, (i) => { return i * num; });
    }
 
-=end code CPP
+=end code cpp
 
 The type of C<i> can easily be inferred with the already implemented type
 inference engine. The expression is first compiled to a nested function and

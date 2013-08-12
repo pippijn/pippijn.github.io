@@ -121,27 +121,29 @@ weapon.</p>
 Currently, these priorities are not user-definable, but that will soon be
 implemented. The code for this is absolutely trivial and can be found in
 <span class='filename'>Quake3.pm</span>:</p>
-<pre class="code-block">  <span class="key1">my</span> %prefs = (
-     Quake3::WP_GRAPPLING_HOOK    =&gt; <span class="number">0</span>,
-     Quake3::WP_NONE              =&gt; <span class="number">0</span>,
-  
-     Quake3::WP_GAUNTLET          =&gt; <span class="number">0</span>,
-     Quake3::WP_GRENADE_LAUNCHER  =&gt; <span class="number">0</span>,
-     Quake3::WP_MACHINEGUN        =&gt; <span class="number">1</span>,
-     Quake3::WP_RAILGUN           =&gt; <span class="number">1</span>,
-     Quake3::WP_SHOTGUN           =&gt; <span class="number">2</span>,
-     Quake3::WP_LIGHTNING         =&gt; <span class="number">2</span>,
-     Quake3::WP_PLASMAGUN         =&gt; <span class="number">2</span>,
-     Quake3::WP_ROCKET_LAUNCHER   =&gt; <span class="number">3</span>,
-     Quake3::WP_BFG               =&gt; <span class="number">4</span>,
+<pre class='code-block'>
+  <span class="Statement">my</span> <span class="Identifier">%prefs</span> = (
+     Quake3::<span class="String">WP_GRAPPLING_HOOK</span>    =&gt; <span class="Number">0</span>,
+     Quake3::<span class="String">WP_NONE</span>              =&gt; <span class="Number">0</span>,
+
+     Quake3::<span class="String">WP_GAUNTLET</span>          =&gt; <span class="Number">0</span>,
+     Quake3::<span class="String">WP_GRENADE_LAUNCHER</span>  =&gt; <span class="Number">0</span>,
+     Quake3::<span class="String">WP_MACHINEGUN</span>        =&gt; <span class="Number">1</span>,
+     Quake3::<span class="String">WP_RAILGUN</span>           =&gt; <span class="Number">1</span>,
+     Quake3::<span class="String">WP_SHOTGUN</span>           =&gt; <span class="Number">2</span>,
+     Quake3::<span class="String">WP_LIGHTNING</span>         =&gt; <span class="Number">2</span>,
+     Quake3::<span class="String">WP_PLASMAGUN</span>         =&gt; <span class="Number">2</span>,
+     Quake3::<span class="String">WP_ROCKET_LAUNCHER</span>   =&gt; <span class="Number">3</span>,
+     Quake3::<span class="String">WP_BFG</span>               =&gt; <span class="Number">4</span>,
   );
-  
-  <span class="key1">sub</span> item_pickup {
-     <span class="key1">my</span> ($curweap, $newweap) = @_;
-     $prefs{$newweap} &gt;= $prefs{$curweap} ? <span class="number">1</span> : <span class="number">0</span>
+
+  <span class="Statement">sub </span><span class="Identifier">item_pickup </span>{
+     <span class="Statement">my</span> (<span class="Identifier">$curweap</span>, <span class="Identifier">$newweap</span>) = <span class="Identifier">@_</span>;
+     <span class="Identifier">$prefs{$newweap}</span> &gt;= <span class="Identifier">$prefs{$curweap}</span> ? <span class="Number">1</span> : <span class="Number">0</span>
   }
 
-</pre><h3>
+</pre>
+<h3>
 <a id='h3'>Future</a></h3>
 <p>
 The current implementation and API design is below all standards (except for
@@ -154,7 +156,7 @@ and probably be rewritten entirely from scratch.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sat Aug 10 02:08:58 MEST 2013</div> 
+			<div id="updated">Last updated Mon Aug 12 02:40:22 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

@@ -17,7 +17,7 @@ C<x_> or C<m_x>. This keeps the name C<x> free for the accessor (C<T x ()>)
 and the mutator (C<void x (T)>). Still, this does not help transparency very
 much. Consider the following code:
 
-=begin code CPP
+=begin code cpp
 
   // Public data members
   struct point
@@ -54,7 +54,7 @@ much. Consider the following code:
   point p (1, 2);
   p.x (p.x () + 20); // more code to be written for the same effect
 
-=end code CPP
+=end code cpp
 
 
 =head2 Properties
@@ -155,7 +155,7 @@ function. The reason for this is, plainly put, speed. Current C++ compiler do
 a pretty bad job at optimising dereferences of member function pointers, but a
 terrific job when it comes to static functions.
 
-=begin code CPP
+=begin code cpp
 
   template<
     typename Class,
@@ -167,7 +167,7 @@ terrific job when it comes to static functions.
   struct prop
   {
 
-=end code CPP
+=end code cpp
 
 You may be wondering what the C<offset> function is for. As I said earlier,
 this property has zero overhead, so it can't store the C<this> pointer of its
@@ -184,19 +184,21 @@ The following two functions calculate the C<this> pointer and return a
 reference to the parent object. Due to C<offset> being a function and its
 location being known at compile time, it can easily be inlined.
 
-=begin code CPP
+=begin code cpp
 
     Class &self ()
     {
-      return *reinterpret_cast<Class *> (reinterpret_cast<char *> (this) - offset ());
+      return *reinterpret_cast<Class *> (reinterpret_cast<char *> (this)
+                                         - offset ());
     }
 
     Class const &self () const
     {
-      return *reinterpret_cast<Class const *> (reinterpret_cast<char const *> (this) - offset ());
+      return *reinterpret_cast<Class const *> (reinterpret_cast<char const *> (this)
+                                               - offset ());
     }
 
-=end code CPP
+=end code cpp
 
 We need all assignment operators (=, +=, -=, *=, /=, %=, ^=, |=, &amp;=,
 &lt;&lt;= and &gt;&gt;=). We can define them all, because C<prop> is a class
@@ -206,31 +208,31 @@ I<"not the definitions or default arguments, of the class member functions,
 instantiated]">. In other words, class templates are instantiated lazily,
 on demand.
 
-=begin code CPP
+=begin code cpp
 
     prop &operator   = (T const &rhs) { set (self (), rhs); return *this; }
     prop &operator  += (T const &rhs) { set (self (), get (self ())  + rhs); return *this; }
     // Analogous for the other operators
 
-=end code CPP
+=end code cpp
 
 These operators define all we need for the mutator, but not for the accessor.
 Instead of defining all operators (unary +, unary -, binary +, binary *, etc.),
 we can define C<operator T const &amp;> and the C++ compiler will take care of
 required conversions:
 
-=begin code CPP
+=begin code cpp
 
     operator T const & () const
     {
       return get (self ());
     }
 
-=end code CPP
+=end code cpp
 
 Now, all we need is a way to access members of the property. Then we are done:
 
-=begin code CPP
+=begin code cpp
 
     T *operator -> ()
     {
@@ -243,7 +245,7 @@ Now, all we need is a way to access members of the property. Then we are done:
     }
   };
 
-=end code CPP
+=end code cpp
 
 The C<const_cast> is strictly considered undefined behaviour, but if the
 property itself is non-const, we know the value is non-const, as well. This is
@@ -261,7 +263,7 @@ classes still need one byte of storage). Therefore, we introduce another class
 template, called C<value_prop>, with different accessor and mutator function
 types:
 
-=begin code CPP
+=begin code cpp
 
   template<
     typename Class,
@@ -273,20 +275,20 @@ types:
   struct value_prop
   {
 
-=end code CPP
+=end code cpp
 
 Now, in addition to the container's C<this> pointer, the accessor C<get> and
 mutator C<set> also receive a reference to the value stored in the
 instantiated property class template. C<get> receives a const reference.
 Now, the operator definitions look slightly different:
 
-=begin code CPP
+=begin code cpp
 
     value_prop &operator   = (T const &rhs) { set (self (), value, rhs); return *this; }
     value_prop &operator  += (T const &rhs) { set (self (), value, get (self (), value)  + rhs);
                                               return *this; }
 
-=end code CPP
+=end code cpp
 
 and the class has a public member variable called C<value>. I decided to make
 it public so the instantiated class template would remain POD. This means one
@@ -299,7 +301,7 @@ client code will not do that.
 To use a property in a class, we need four things: the property object, the
 accessor, the mutator and very importantly, the C<offset> function.
 
-=begin code CPP
+=begin code cpp
 
   struct point
   {
@@ -316,7 +318,7 @@ accessor, the mutator and very importantly, the C<offset> function.
     static size_t offset_y () { return offsettof (point, y); }
   };
 
-=end code CPP
+=end code cpp
 
 The offset returned by the C<offset_*> functions is the number of bytes
 between the location of the property object and the C<this> pointer of the
@@ -371,7 +373,7 @@ The above does not mean POD structs may not have member functions.
 The above class definition is repetetive and error prone, so we use the
 following macros:
 
-=begin code CPP
+=begin code cpp
 
   #define def_prop(T, Class, name, get, set)                                      \
     static size_t offset_ ## name () { return offsetof (Class, name); }           \
@@ -385,11 +387,11 @@ following macros:
     static void set_ ## name (Class &self, T &property, T const &value) set       \
     ::value_prop<Class, T, get_ ## name, set_ ## name, offset_ ## name> name
 
-=end code CPP
+=end code cpp
 
 Now, we can rewrite the class definition of C<point> as follows:
 
-=begin code CPP
+=begin code cpp
 
   struct point
   {
@@ -414,7 +416,7 @@ Now, we can rewrite the class definition of C<point> as follows:
     );
   };
 
-=end code CPP
+=end code cpp
 
 We use value properties as well as normal properties here. Extra caution has
 to be taken with aggregate initialisers when doing this. It will generally not
@@ -431,12 +433,12 @@ C<{ int a, b, c; }>, because the commas would be interpreted as macro argument
 delimiters. One solution would be to use GCC's variadic macros to implement an
 C<UNPAREN> macro:
 
-=begin code CPP
+=begin code cpp
 
   #define UNPAREN_(x...) x
   #define UNPAREN(x) UNPAREN_ x
 
-=end code CPP
+=end code cpp
 
 The gained advantage is that commas can be used outside parentheses inside
 accessor and mutator code, the disadvantage is that all code needs to be
@@ -446,7 +448,7 @@ already is).
 
 =head4 A larger example
 
-=begin code CPP
+=begin code cpp
 
   struct point
   {
@@ -515,7 +517,7 @@ already is).
     printf ("p.y->y == %d\n", (int) p.y->y);
   }
 
-=end code CPP
+=end code cpp
 
 The output would look something like this:
 
@@ -544,7 +546,7 @@ simple example:
 
 C++ code:
 
-=begin code CPP
+=begin code cpp
 
   int
   main ()
@@ -553,14 +555,18 @@ C++ code:
     volatile int x = p.x->x;
   }
 
-=end code CPP
+=end code cpp
 
 And the assembler output:
 
+=begin code asm
+
   main:
-          xorl    %eax, %eax    ' set return value to 0
-          movl    $2, -4(%rsp)  ' set the variable 'x' to 2
-          ret                   ' return
+          xorl    %eax, %eax    ; set return value to 0
+          movl    $2, -4(%rsp)  ; set the variable 'x' to 2
+          ret                   ; return
+
+=end code asm
 
 You can see, how the compiler completely inlined the calls to the accessors
 and then constant folded the expression, simply copying an immediate integer
@@ -572,7 +578,7 @@ The more interesting classes are all non-POD ones. I have tested the property
 class template with the strangest configurations I could think of. The only
 configuration where C<offsetof> fails is this:
 
-=begin code CPP
+=begin code cpp
 
   struct A
   {
@@ -592,7 +598,7 @@ configuration where C<offsetof> fails is this:
   size_t offset = offsetof (D, i);  // This fails
   size_t offset = offsetof (B1, i); // This succeeds and is correct
 
-=end code CPP
+=end code cpp
 
 so in fact, the property class never fails. However, I have only tested it on
 the GNU C++ compiler. Other compilers might mess up, but one thing is for

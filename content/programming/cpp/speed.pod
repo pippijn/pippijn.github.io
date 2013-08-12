@@ -20,7 +20,7 @@ In C++, there is the possibility of <acronym title="Classes are user defined
 inheriting members from other classes. A simple example of this in C++ would
 be:
 
-=begin code CPP toggle
+=begin code cpp toggle
 
   struct Base
   {
@@ -40,7 +40,7 @@ be:
   // This object can be implicitly converted to a Base reference
   Base &b = d;
 
-=end code CPP toggle
+=end code cpp toggle
 
 How is this done in C? For inheritance, there are basically two possibilities
 of which one has two variations. The first possibility is to give C<Derived>
@@ -53,7 +53,7 @@ the body of C<Base> in a header file and including that inside C<Derived>.
 
 =head4 Possibility 1
 
-=begin code CPP toggle
+=begin code cpp toggle
 
   struct Base
   {
@@ -75,12 +75,12 @@ the body of C<Base> in a header file and including that inside C<Derived>.
   // or take the address of the base object
   struct Base *b = &d.base;
 
-=end code CPP toggle
+=end code cpp toggle
 
 
 =head4 Possibility 2
 
-=begin code CPP toggle
+=begin code cpp toggle
 
   struct Base
   {
@@ -112,7 +112,7 @@ the body of C<Base> in a header file and including that inside C<Derived>.
   // We can explicitly convert a pointer to this object to Base
   struct Base *b = (struct Base *)&d;
 
-=end code CPP toggle
+=end code cpp toggle
 
 Multiple inheritance can be achieved in C, but not by C<#include>ing the
 multiple bases' bodies. That would break casts to those bases. It is possible
@@ -130,7 +130,7 @@ member function on an object, you in fact pass a pointer to the object as
 argument to the invisible first parameter called C<this>. You can do that in
 C, too, except that the syntax looks a bit different:
 
-=begin code CPP toggle
+=begin code cpp toggle
 
   // C++
   struct Base
@@ -168,7 +168,7 @@ C, too, except that the syntax looks a bit different:
   struct Base *b = &d;
   Base_foo (b);
 
-=end code CPP toggle
+=end code cpp toggle
 
 If you want to override C<foo()> in C<Derived>, in C++ you simply mention
 C<void foo()> in C<Derived>'s class definition. In C, you need to modify all

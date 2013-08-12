@@ -79,7 +79,7 @@ interpreted as C<"Hello">.
 A more sophisticated string representation is the following struct, frequently
 used by C++'s C<std::string> implementations:
 
-=begin code CPP
+=begin code cpp
 
   struct string
   {
@@ -88,7 +88,7 @@ used by C++'s C<std::string> implementations:
     size_t max;
   };
 
-=end code CPP
+=end code cpp
 
 C<string.rep> is the internal representation of the string, which is just a
 data pointer and not necessarily a NUL terminated C string. C<len> holds the

@@ -55,25 +55,27 @@ In C++, there is the possibility of <acronym title="Classes are user defined
  types defined with the 'class' or 'struct' keyword">class</acronym>es
 inheriting members from other classes. A simple example of this in C++ would
 be:</p>
-<pre class="code-block">  <span class="key3">struct</span> Base
+<pre class='vimCodeElement'>
+  <span class="Type">struct</span> Base
   {
-    <span class="key3">int</span> a;
+    <span class="Type">int</span> a;
   };
 
-  <span class="key3">struct</span> Derived : Base
+  <span class="Type">struct</span> Derived : Base
   {
-    <span class="key3">int</span> b;
+    <span class="Type">int</span> b;
   };
 
-  <span class="comment">// Now, we can have an object of type Derived and modify its data members</span>
-  <span class="comment">// a and b directly.</span>
+  <span class="Comment">// Now, we can have an object of type Derived and modify its data members</span>
+  <span class="Comment">// a and b directly.</span>
   Derived d;
-  d.a = <span class="number">3</span>;
-  d.b = <span class="number">4</span>;
-  <span class="comment">// This object can be implicitly converted to a Base reference</span>
+  d.a = <span class="Number">3</span>;
+  d.b = <span class="Number">4</span>;
+  <span class="Comment">// This object can be implicitly converted to a Base reference</span>
   Base &amp;b = d;
 
-</pre><p>
+</pre>
+<p>
 How is this done in C? For inheritance, there are basically two possibilities
 of which one has two variations. The first possibility is to give <span class='code'>Derived</span>
 an object of type <span class='code'>Base</span> as its first member. This has the advantage of less
@@ -83,59 +85,63 @@ members of <span class='code'>Base</span> in <span class='code'>Derived</span>, 
 the body of <span class='code'>Base</span> in a header file and including that inside <span class='code'>Derived</span>.</p>
 <h5>
 Possibility 1</h5>
-<pre class="code-block">  <span class="key3">struct</span> Base
+<pre class='vimCodeElement'>
+  <span class="Type">struct</span> Base
   {
-    <span class="key3">int</span> a;
+    <span class="Type">int</span> a;
   };
 
-  <span class="key3">struct</span> Derived
+  <span class="Type">struct</span> Derived
   {
-    <span class="key3">struct</span> Base base;
-    <span class="key3">int</span> b;
+    <span class="Type">struct</span> Base base;
+    <span class="Type">int</span> b;
   };
 
-  <span class="comment">// Define an object of type Derived</span>
-  <span class="key3">struct</span> Derived d;
-  d.base.a = <span class="number">3</span>; <span class="comment">// or: ((struct Base *)&amp;d)-&gt;a = 3;</span>
-  d.b = <span class="number">4</span>;
-  <span class="comment">// We can either explicitly convert a pointer to this object to Base</span>
-  <span class="key3">struct</span> Base *b = (<span class="key3">struct</span> Base *)&amp;d;
-  <span class="comment">// or take the address of the base object</span>
-  <span class="key3">struct</span> Base *b = &amp;d.base;
+  <span class="Comment">// Define an object of type Derived</span>
+  <span class="Type">struct</span> Derived d;
+  d.base.a = <span class="Number">3</span>; <span class="Comment">// or: ((struct Base *)&amp;d)-&gt;a = 3;</span>
+  d.b = <span class="Number">4</span>;
+  <span class="Comment">// We can either explicitly convert a pointer to this object to Base</span>
+  <span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;
+  <span class="Comment">// or take the address of the base object</span>
+  <span class="Type">struct</span> Base *b = &amp;d.base;
 
-</pre><h5>
+</pre>
+<h5>
 Possibility 2</h5>
-<pre class="code-block">  <span class="key3">struct</span> Base
+<pre class='vimCodeElement'>
+  <span class="Type">struct</span> Base
   {
-    <span class="key3">int</span> a;
+    <span class="Type">int</span> a;
   };
 
-  <span class="key3">struct</span> Derived
+  <span class="Type">struct</span> Derived
   {
-    <span class="key3">int</span> a;
-    <span class="key3">int</span> b;
+    <span class="Type">int</span> a;
+    <span class="Type">int</span> b;
   };
 
-  <span class="comment">// Or:</span>
-  <span class="key3">struct</span> Base
+  <span class="Comment">// Or:</span>
+  <span class="Type">struct</span> Base
   {
-  #<span class="key2">include</span> <span class="string">"Base_body.h"</span>
+<span class="Include">  #include </span><span class="String">&quot;Base_body.h&quot;</span>
   };
 
-  <span class="key3">struct</span> Derived
+  <span class="Type">struct</span> Derived
   {
-  #<span class="key2">include</span> <span class="string">"Base_body.h"</span>
-  #<span class="key2">include</span> <span class="string">"Derived_body.h"</span>
+<span class="Include">  #include </span><span class="String">&quot;Base_body.h&quot;</span>
+<span class="Include">  #include </span><span class="String">&quot;Derived_body.h&quot;</span>
   };
 
-  <span class="comment">// Define an object of type Derived</span>
-  <span class="key3">struct</span> Derived d;
-  d.a = <span class="number">3</span>;
-  d.b = <span class="number">4</span>;
-  <span class="comment">// We can explicitly convert a pointer to this object to Base</span>
-  <span class="key3">struct</span> Base *b = (<span class="key3">struct</span> Base *)&amp;d;
+  <span class="Comment">// Define an object of type Derived</span>
+  <span class="Type">struct</span> Derived d;
+  d.a = <span class="Number">3</span>;
+  d.b = <span class="Number">4</span>;
+  <span class="Comment">// We can explicitly convert a pointer to this object to Base</span>
+  <span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;
 
-</pre><p>
+</pre>
+<p>
 Multiple inheritance can be achieved in C, but not by <span class='code'>#include</span>ing the
 multiple bases' bodies. That would break casts to those bases. It is possible
 to <span class='code'>#include</span> the first base, but the others need to be included as objects
@@ -150,16 +156,17 @@ functions except they are called "on" an object. By calling a non-static
 member function on an object, you in fact pass a pointer to the object as
 argument to the invisible first parameter called <span class='code'>this</span>. You can do that in
 C, too, except that the syntax looks a bit different:</p>
-<pre class="code-block">  <span class="comment">// C++</span>
-  <span class="key3">struct</span> Base
+<pre class='vimCodeElement'>
+  <span class="Comment">// C++</span>
+  <span class="Type">struct</span> Base
   {
-    <span class="key3">int</span> a;
-    <span class="key3">void</span> foo () { a = <span class="number">3</span>; }
+    <span class="Type">int</span> a;
+    <span class="Type">void</span> foo () { a = <span class="Number">3</span>; }
   };
 
-  <span class="key3">struct</span> Derived : Base
+  <span class="Type">struct</span> Derived : Base
   {
-    <span class="key3">int</span> b;
+    <span class="Type">int</span> b;
   };
 
   Derived d;
@@ -167,26 +174,27 @@ C, too, except that the syntax looks a bit different:</p>
   Base &amp;b = d;
   b.foo ();
 
-  <span class="comment">// C:</span>
-  <span class="key3">struct</span> Base
+  <span class="Comment">// C:</span>
+  <span class="Type">struct</span> Base
   {
-    <span class="key3">int</span> a;
+    <span class="Type">int</span> a;
   };
 
-  <span class="key3">static</span> <span class="key3">void</span> Base_foo (<span class="key3">struct</span> Base *<span class="key1">this</span>) { <span class="key1">this</span>-&gt;a = <span class="number">3</span>; }
+  <span class="Type">static</span> <span class="Type">void</span> Base_foo (<span class="Type">struct</span> Base *<span class="Statement">this</span>) { <span class="Statement">this</span>-&gt;a = <span class="Number">3</span>; }
 
-  <span class="key3">struct</span> Derived
+  <span class="Type">struct</span> Derived
   {
-    <span class="key3">int</span> a;
-    <span class="key3">int</span> b;
+    <span class="Type">int</span> a;
+    <span class="Type">int</span> b;
   };
 
-  <span class="key3">struct</span> Derived d;
-  Base_foo ((<span class="key3">struct</span> Base *)&amp;d);
-  <span class="key3">struct</span> Base *b = &amp;d;
+  <span class="Type">struct</span> Derived d;
+  Base_foo ((<span class="Type">struct</span> Base *)&amp;d);
+  <span class="Type">struct</span> Base *b = &amp;d;
   Base_foo (b);
 
-</pre><p>
+</pre>
+<p>
 If you want to override <span class='code'>foo()</span> in <span class='code'>Derived</span>, in C++ you simply mention
 <span class='code'>void foo()</span> in <span class='code'>Derived</span>'s class definition. In C, you need to modify all
 callers, as well as adding a <span class='code'>Derived_foo()</span>. The problems arise when virtual
@@ -203,7 +211,7 @@ optimise away everything and <span class='code'>main()</span> will become a <spa
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu May 26 20:36:24 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:40:09 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

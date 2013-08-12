@@ -87,7 +87,7 @@ Currently, these priorities are not user-definable, but that will soon be
 implemented. The code for this is absolutely trivial and can be found in
 F<Quake3.pm>:
 
-=begin code Perl
+=begin code perl
 
   my %prefs = (
      Quake3::WP_GRAPPLING_HOOK    => 0,
@@ -109,7 +109,7 @@ F<Quake3.pm>:
      $prefs{$newweap} >= $prefs{$curweap} ? 1 : 0
   }
 
-=end code Perl
+=end code perl
 
 
 =head2 Future

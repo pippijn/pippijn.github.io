@@ -64,54 +64,58 @@ classes to pointers to their base. One can construct a new object of base type
 from an object of derived type (often called slicing, because only the base
 part of the object is retained). In C, this implicit construction is not
 possible. Consider the following C++ code:</p>
-<pre class="code-block">  <span class="comment">// C++ code:</span>
-  <span class="key3">struct</span> base {
-    <span class="key3">char</span> a;
-    <span class="key3">int</span> b;
+<pre class='vimCodeElement'>
+  <span class="Comment">// C++ code:</span>
+  <span class="Type">struct</span> base {
+    <span class="Type">char</span> a;
+    <span class="Type">int</span> b;
   };
 
-  <span class="key3">struct</span> derived : base {
-    <span class="key3">int</span> c;
-    <span class="key3">char</span> d;
+  <span class="Type">struct</span> derived : base {
+    <span class="Type">int</span> c;
+    <span class="Type">char</span> d;
   };
 
-  <span class="key3">void</span> function () {
+  <span class="Type">void</span> function () {
     derived d;
     base b = d;
     base *bp = &amp;d;
-    bp-&gt;b = d.a; <span class="comment">// &lt;- either</span>
-    bp-&gt;b = d.base::a; <span class="comment">// &lt;- or</span>
+    bp-&gt;b = d.a; <span class="Comment">// &lt;- either</span>
+    bp-&gt;b = d.base::a; <span class="Comment">// &lt;- or</span>
   }
 
-</pre><p>
+</pre>
+<p>
 In this code, an object of type <span class='code'>derived</span> is created, then an object of type
 <span class='code'>base</span> is created and the derived object is sliced to form the base object.
 The address of <span class='code'>d</span> is then implicitly converted to <span class='code'>base *</span> to form the
 pointer <span class='code'>bp</span>. The last two lines are equivalent in that they both access the
 member <span class='code'>a</span> in the base class and assign it to <span class='code'>b</span> in the base class using
 the base pointer.</p>
-<pre class="code-block">  <span class="comment">// C code:</span>
-  <span class="key3">struct</span> base {
-    <span class="key3">char</span> a;
-    <span class="key3">int</span> b;
+<pre class='vimCodeElement'>
+  <span class="Comment">// C code:</span>
+  <span class="Type">struct</span> base {
+    <span class="Type">char</span> a;
+    <span class="Type">int</span> b;
   };
 
-  <span class="key3">struct</span> derived {
-    <span class="key3">struct</span> base base;
-    <span class="key3">int</span> c;
-    <span class="key3">char</span> d;
+  <span class="Type">struct</span> derived {
+    <span class="Type">struct</span> base base;
+    <span class="Type">int</span> c;
+    <span class="Type">char</span> d;
   };
 
-  <span class="key3">void</span> function () {
-    <span class="key3">struct</span> derived d;
-    <span class="key3">struct</span> base b = d.base; <span class="comment">// &lt;- either (bad for long inheritance lines)</span>
-    <span class="key3">struct</span> base b2 = *(<span class="key3">struct</span> base *)&amp;d; <span class="comment">// &lt;- or</span>
-    <span class="key3">struct</span> base *bp = (<span class="key3">struct</span> base *)&amp;d;
-    bp-&gt;b = d.base.a; <span class="comment">// &lt;- either (bad)</span>
-    bp-&gt;b = ((<span class="key3">struct</span> base *)&amp;d)-&gt;a; <span class="comment">// &lt;- or</span>
+  <span class="Type">void</span> function () {
+    <span class="Type">struct</span> derived d;
+    <span class="Type">struct</span> base b = d.base; <span class="Comment">// &lt;- either (bad for long inheritance lines)</span>
+    <span class="Type">struct</span> base b2 = *(<span class="Type">struct</span> base *)&amp;d; <span class="Comment">// &lt;- or</span>
+    <span class="Type">struct</span> base *bp = (<span class="Type">struct</span> base *)&amp;d;
+    bp-&gt;b = d.base.a; <span class="Comment">// &lt;- either (bad)</span>
+    bp-&gt;b = ((<span class="Type">struct</span> base *)&amp;d)-&gt;a; <span class="Comment">// &lt;- or</span>
   }
 
-</pre><p>
+</pre>
+<p>
 In long lines with several levels of inheritance, base accesses become
 cumbersome and casting is probably the way to go. (Think of
 <span class='code'>d-&gt;base.base.base.base.base.base.a = 3</span> versus
@@ -123,34 +127,36 @@ A more transparent way to simulate the above is to use the preprocessor
 directive <span class='code'>#include</span> to inherit the base members. The advantage of this is
 that member accesses are completely transparent, the disadvantage is that the
 data members are going to be spread over many small files.</p>
-<pre class="code-block">  <span class="comment">// base-members.h</span>
-    <span class="key3">char</span> a;
-    <span class="key3">int</span> b;
+<pre class='vimCodeElement'>
+  <span class="Comment">// base-members.h</span>
+    <span class="Type">char</span> a;
+    <span class="Type">int</span> b;
 
-  <span class="comment">// base.h</span>
-  <span class="key3">struct</span> base {
-  #<span class="key2">include</span> <span class="string">"base-members.h"</span>
+  <span class="Comment">// base.h</span>
+  <span class="Type">struct</span> base {
+<span class="Include">  #include </span><span class="String">&quot;base-members.h&quot;</span>
   };
 
-  <span class="comment">// derived-members.h</span>
-  #<span class="key2">include</span> <span class="string">"base-members.h"</span>
-    <span class="key3">int</span> c;
-    <span class="key3">char</span> d;
+  <span class="Comment">// derived-members.h</span>
+<span class="Include">  #include </span><span class="String">&quot;base-members.h&quot;</span>
+    <span class="Type">int</span> c;
+    <span class="Type">char</span> d;
 
-  <span class="comment">// derived.h</span>
-  <span class="key3">struct</span> derived {
-  #<span class="key2">include</span> <span class="string">"derived-members.h"</span>
+  <span class="Comment">// derived.h</span>
+  <span class="Type">struct</span> derived {
+<span class="Include">  #include </span><span class="String">&quot;derived-members.h&quot;</span>
   };
 
-  <span class="comment">// main.c</span>
-  <span class="key3">void</span> function () {
-    <span class="key3">struct</span> derived d;
-    <span class="key3">struct</span> base b = *(<span class="key3">struct</span> base *)&amp;d;
-    <span class="key3">struct</span> base *bp = (<span class="key3">struct</span> base *)&amp;d;
-    bp-&gt;b = d.a; <span class="comment">// &lt;- works fine for long inheritance lines</span>
+  <span class="Comment">// main.c</span>
+  <span class="Type">void</span> function () {
+    <span class="Type">struct</span> derived d;
+    <span class="Type">struct</span> base b = *(<span class="Type">struct</span> base *)&amp;d;
+    <span class="Type">struct</span> base *bp = (<span class="Type">struct</span> base *)&amp;d;
+    bp-&gt;b = d.a; <span class="Comment">// &lt;- works fine for long inheritance lines</span>
   }
 
-</pre><p>
+</pre>
+<p>
 As you can see, the client code for this is cleaner. There is no visible base
 object. The casts are all valid, because the beginning of both structs are
 equal. This way, you can easily extend to arbitrary inheritance levels. Data
@@ -166,23 +172,25 @@ replace template parameters with their arguments and resume typechecking. So,
 you need an AST. Such trees are usually directed acyclic graphs consisting of
 many nodes of different types pointing at other nodes in the graph. A simple
 example could be:</p>
-<pre class="code-block">  <span class="key3">struct</span> node {
+<pre class='vimCodeElement'>
+  <span class="Type">struct</span> node {
   };
 
-  <span class="key3">enum</span> op { ADD, SUB, MUL, DIV };
+  <span class="Type">enum</span> op { ADD, SUB, MUL, DIV };
 
-  <span class="comment">// a OP b</span>
-  <span class="key3">struct</span> operation : node {
-    node *lhs; <span class="comment">// a</span>
-    <span class="key3">enum</span> op op; <span class="comment">// +, -, *, /</span>
-    node *rhs; <span class="comment">// b</span>
+  <span class="Comment">// a OP b</span>
+  <span class="Type">struct</span> operation : node {
+    node *lhs; <span class="Comment">// a</span>
+    <span class="Type">enum</span> op op; <span class="Comment">// +, -, *, /</span>
+    node *rhs; <span class="Comment">// b</span>
   };
 
-  <span class="key3">struct</span> integer : node {
-    <span class="key3">int</span> value;
+  <span class="Type">struct</span> integer : node {
+    <span class="Type">int</span> value;
   };
 
-</pre><p>
+</pre>
+<p>
 Now you can build an expression tree from an expression like <span class='code'>3 + 2 * 7 / 3</span>.
 If you want to evaluate the tree, you need to somehow find out what type of
 node it is that was on the left or right hand side of the operation. It could
@@ -203,7 +211,7 @@ TODO: you do it with tags.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu May 26 20:36:24 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:39:52 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

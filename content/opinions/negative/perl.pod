@@ -26,7 +26,7 @@ In Perl, exceptions are caught with C<eval> blocks. These catch all errors, so
 if you want to catch only a few, you need to catch all, find out whether your
 type of exception was the one thrown and rethrow the exception if not:
 
-=begin code Perl
+=begin code perl
 
    eval {
       function_that_throws_exception $arg1, $arg2
@@ -38,7 +38,7 @@ type of exception was the one thrown and rethrow the exception if not:
       die; # rethrow
    }
 
-=end code Perl
+=end code perl
 
 This does not even work when C<ref $@> is an empty string, meaning C<$@> was
 a plain scalar. In that case, you have to compare the error strings, which may
@@ -77,22 +77,22 @@ references to arrays like this: C<([1, 2, 3], 2, 3)>. But then getting the
 array back out of the reference, it is necessary to dereference it, so that
 where in Lisp one can do:
 
-=begin code Lisp
+=begin code lisp
 
    (setq array '((1, 2, 3), 2, 3))
    (first array) ; Yields (1, 2, 3)
 
-=end code Lisp
+=end code lisp
 
 But in Perl, the same code requires:
 
-=begin code Perl
+=begin code perl
 
    my @array = ([1, 2, 3], 2, 3);
    $array[0]; # Yields "ARRAY(0xdeadbeef)" or similar
    @{ $array[0] }; # Dereferencing it yields our array (1, 2, 3)
 
-=end code Perl
+=end code perl
 
 The reason for this is that it makes it possible to C<push> a list of items
 onto an array.

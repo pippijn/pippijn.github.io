@@ -51,12 +51,47 @@
 JML Translator</h2>
 <ul></ul><p>
 <a href='https://github.com/pippijn/jmlc'>Git repository</a></p>
+<p>
+JML is an alternative syntax for XML. It aims to supports every feature of XML,
+but in a curly brace syntax. Unlike XML, JML allows a mix of attributes and
+content nodes.</p>
+<pre class='code-block'>
+  <span class="Type">window </span><span class="Identifier">{</span>
+     <span class="Statement">id</span>: <span class="String">&quot;rootWnd&quot;</span>
+     <span class="Statement">title</span>: <span class="String">&quot;Register Online!&quot;</span>
+
+     <span class="Type">description </span><span class="Identifier">{</span> <span class="String">&quot;Register Online!&quot;</span> <span class="Identifier">}</span>
+     <span class="Type">vbox </span><span class="Identifier">{</span>
+        <span class="Type">description </span><span class="Identifier">{</span> <span class="String">&quot;Register Online!&quot;</span> <span class="Identifier">}</span>
+        <span class="Type">hbox </span><span class="Identifier">{</span>
+           <span class="Type">image </span><span class="Identifier">{</span> <span class="Statement">src</span>: <span class="String">&quot;wall-create-account-button.png&quot;</span> <span class="Identifier">}</span>
+           <span class="Type">description </span><span class="Identifier">{</span> <span class="String">&quot;Register Online!&quot;</span> <span class="Identifier">}</span>
+        <span class="Identifier">}</span>
+     <span class="Identifier">}</span>
+  <span class="Identifier">}</span>
+
+</pre>
+<p>
+The above code becomes:</p>
+<pre class='code-block'>
+  <span class="Identifier">&lt;</span><span class="Identifier">window</span><span class="Identifier"> </span><span class="Type">id</span>=<span class="String">&quot;rootWnd&quot;</span><span class="Identifier"> </span><span class="Type">title</span>=<span class="String">&quot;Register Online!&quot;</span><span class="Identifier">&gt;</span>
+    <span class="Identifier">&lt;</span><span class="Identifier">description</span><span class="Identifier">&gt;</span>Register Online!<span class="Identifier">&lt;/description&gt;</span>
+    <span class="Identifier">&lt;</span><span class="Identifier">vbox</span><span class="Identifier">&gt;</span>
+      <span class="Identifier">&lt;</span><span class="Identifier">description</span><span class="Identifier">&gt;</span>Register Online!<span class="Identifier">&lt;/description&gt;</span>
+      <span class="Identifier">&lt;</span><span class="Identifier">hbox</span><span class="Identifier">&gt;</span>
+        <span class="Identifier">&lt;</span><span class="Identifier">image</span><span class="Identifier"> </span><span class="Type">src</span>=<span class="String">&quot;wall-create-account-button.png&quot;</span><span class="Identifier">&gt;</span><span class="Identifier">&lt;/image&gt;</span>
+        <span class="Identifier">&lt;</span><span class="Identifier">description</span><span class="Identifier">&gt;</span>Register Online!<span class="Identifier">&lt;/description&gt;</span>
+      <span class="Identifier">&lt;/hbox&gt;</span>
+    <span class="Identifier">&lt;/vbox&gt;</span>
+  <span class="Identifier">&lt;/window&gt;</span>
+
+</pre>
 
 		</div> 
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sat Aug 10 01:41:07 MEST 2013</div> 
+			<div id="updated">Last updated Mon Aug 12 04:11:12 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

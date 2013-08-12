@@ -126,27 +126,33 @@ Yes, this is a problem, because we can't just pass ptr + sizeof(pointer) to a
 C functions.</p>
 <p>
 This can be solved by doing something like</p>
-<pre class="code-block">   <span class="key3">struct</span> foo { <span class="comment">// alignment=2 (x86)</span>
-      <span class="key3">char</span> a;
-      <span class="key3">short</span> b;
+<pre class='code-block'>
+   <span class="Type">struct</span> foo { <span class="Comment">// alignment=2 (x86)</span>
+      <span class="Type">char</span> a;
+      <span class="Type">short</span> b;
    };
 
-</pre><p>
+</pre>
+<p>
 is compiled to:</p>
-<pre class="code-block">   <span class="key3">struct</span> foo_data { <span class="comment">// alignment still 2</span>
-      <span class="key3">char</span> a;
-      <span class="key3">short</span> b;
+<pre class='code-block'>
+   <span class="Type">struct</span> foo_data { <span class="Comment">// alignment still 2</span>
+      <span class="Type">char</span> a;
+      <span class="Type">short</span> b;
    };
-   <span class="key3">struct</span> foo { <span class="comment">// alignment=4 (x86)</span>
-      type_info <span class="key3">const</span> *ti;
+   <span class="Type">struct</span> foo { <span class="Comment">// alignment=4 (x86)</span>
+      type_info <span class="Type">const</span> *ti;
       foo_data data;
    };
 
-</pre><p>
+</pre>
+<p>
 and passing foo* to an extern C function looks like:</p>
-<pre class="code-block">   cfun (&amp;foo-&gt;data);
+<pre class='code-block'>
+   cfun (&amp;foo-&gt;data);
 
-</pre><p>
+</pre>
+<p>
 Similarly, a struct foo can be passed as <span class='code'>cfun (foo.data)</span>.</p>
 <p>
 Special care must be taken with casts. We support casting to supertypes. This
@@ -162,7 +168,7 @@ non-pointers or introduce some kind of autoboxing for non-pointer types.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Mon Jul  4 23:54:09 MEST 2011</div> 
+			<div id="updated">Last updated Mon Aug 12 02:40:39 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

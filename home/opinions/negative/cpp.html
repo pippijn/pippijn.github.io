@@ -84,123 +84,129 @@ Templates are a different language with a different syntax than the rest of C++.
 The verbose and different syntax make template metaprogramming cumbersome.  If
 you want, for example, compile-time evaluation of a simple function such as
 fibonacci, you have to write code like this:</p>
-<pre class="code-block">   <span class="comment">// Define generic fibonacci algorithm</span>
-   <span class="key3">template</span>&lt;<span class="key3">int</span> N&gt;
-   <span class="key3">struct</span> fibonacci
+<pre class='code-block'>
+   <span class="Comment">// Define generic fibonacci algorithm</span>
+   <span class="Type">template</span>&lt;<span class="Type">int</span> N&gt;
+   <span class="Type">struct</span> fibonacci
    {
-     <span class="key3">static</span> <span class="key3">int</span> <span class="key3">const</span> value = fibonacci&lt;N - <span class="number">1</span>&gt;::value + fibonacci&lt;N - <span class="number">2</span>&gt;::value;
+     <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> value = fibonacci&lt;N - <span class="Number">1</span>&gt;::value + fibonacci&lt;N - <span class="Number">2</span>&gt;::value;
    }
-   <span class="comment">// Specialise it for N == 0</span>
-   <span class="key3">template</span>&lt;&gt;
-   <span class="key3">struct</span> fibonacci&lt;<span class="number">0</span>&gt;
+   <span class="Comment">// Specialise it for N == 0</span>
+   <span class="Type">template</span>&lt;&gt;
+   <span class="Type">struct</span> fibonacci&lt;<span class="Number">0</span>&gt;
    {
-     <span class="key3">static</span> <span class="key3">int</span> <span class="key3">const</span> value = <span class="number">1</span>;
+     <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> value = <span class="Number">1</span>;
    }
-   <span class="comment">// Specialise it for N == 1</span>
-   <span class="key3">template</span>&lt;&gt;
-   <span class="key3">struct</span> fibonacci&lt;<span class="number">1</span>&gt;
+   <span class="Comment">// Specialise it for N == 1</span>
+   <span class="Type">template</span>&lt;&gt;
+   <span class="Type">struct</span> fibonacci&lt;<span class="Number">1</span>&gt;
    {
-     <span class="key3">static</span> <span class="key3">int</span> <span class="key3">const</span> value = <span class="number">1</span>;
+     <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> value = <span class="Number">1</span>;
    }
-   <span class="comment">// USe it like this:</span>
-   <span class="key3">static</span> <span class="key3">int</span> <span class="key3">const</span> fib4 = fibonacci&lt;<span class="number">4</span>&gt;::value;
+   <span class="Comment">// USe it like this:</span>
+   <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> fib4 = fibonacci&lt;<span class="Number">4</span>&gt;::value;
 
-</pre><p>
+</pre>
+<p>
 In languages such as Lisp and D, which have compile-time code execution built
 in, writing such an expression is equal to writing normal code:</p>
-<pre class="code-block">   <span class="comment">; Macro to calculate fibonacci numbers</span>
-   (<span class="key1">defmacro</span> fib (n)
-     (<span class="key1">labels</span> ((fib (n)
-                (<span class="key1">if</span> (<span class="key1">&lt;=</span> n <span class="number">1</span>)
+<pre class='code-block'>
+   <span class="Comment">; Macro to calculate fibonacci numbers</span>
+   <span class="Special">(</span><span class="Statement">defmacro</span> fib <span class="Special">(</span>n<span class="Special">)</span>
+     <span class="Special">(</span><span class="Statement">labels</span> <span class="Special">((</span>fib <span class="Special">(</span>n<span class="Special">)</span>
+                <span class="Special">(</span><span class="Statement">if</span> <span class="Special">(</span><span class="Statement">&lt;=</span> n <span class="Number">1</span><span class="Special">)</span>
                   n
-                  (<span class="key1">+</span> (fib (<span class="key1">-</span> n <span class="number">1</span>)) (fib (<span class="key1">-</span> n <span class="number">2</span>))))))
-       (fib n)))
-   <span class="comment">; Use it like this:</span>
-   (<span class="key1">print</span> (fib <span class="number">4</span>))
+                  <span class="Special">(</span><span class="Statement">+</span> <span class="Special">(</span>fib <span class="Special">(</span><span class="Statement">-</span> n <span class="Number">1</span><span class="Special">))</span> <span class="Special">(</span>fib <span class="Special">(</span><span class="Statement">-</span> n <span class="Number">2</span><span class="Special">))))))</span>
+       <span class="Special">(</span>fib n<span class="Special">)))</span>
+   <span class="Comment">; Use it like this:</span>
+   <span class="Special">(</span><span class="Statement">print</span> <span class="Special">(</span>fib <span class="Number">4</span><span class="Special">))</span>
 
-</pre><p>
+</pre>
+<p>
 The macro is expanded at compile-time. The D programming language has static
 evaluation of complex constant functions. The new C++ standard allows for these,
 but in a severely limited form.</p>
 </li>
 <li>
-Compiler diagnostics are often unreadable<a id='diag'></a><pre class="code-block">   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl&lt;TraitsT&gt;
+Compiler diagnostics are often unreadable<a id='diag'></a><pre class='code-block'>
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl&lt;TraitsT&gt;
    ::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::node::next() [with TraitsT = adt::detail::choose_traits&lt;DEFAULT, std::pa
-   ir, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;<span class="key3">int</span>, <span class="key3">int</span>&gt;]’:
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">647</span>:   instantiated from ‘adt::detail::hash_table_impl&lt;Tra
-   itsT&gt;::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::create_node_uniq(<span class="key3">const</span> <span class="key3">typename</span> TraitsT::pair_type&amp;, <span class="key3">bool</span>&amp;) [with T
+   ir, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;<span class="Type">int</span>, <span class="Type">int</span>&gt;]’:
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">647</span>:   instantiated from ‘adt::detail::hash_table_impl&lt;Tra
+   itsT&gt;::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::create_node_uniq(<span class="Type">const</span> <span class="Type">typename</span> TraitsT::pair_type&amp;, <span class="Type">bool</span>&amp;) [with T
    raitsT = adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt:
-   :hash_policy&gt;::type&gt;::type&lt;<span class="key3">int</span>, <span class="key3">int</span>&gt;]’
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">1248</span>:   instantiated from ‘typename adt::detail::choose_tr
+   :hash_policy&gt;::type&gt;::type&lt;<span class="Type">int</span>, <span class="Type">int</span>&gt;]’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">1248</span>:   instantiated from ‘<span class="Type">typename</span> adt::detail::choose_tr
    aits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt;::value_type&amp; adt::hash_table&lt;KeyT, ValueT, Policy, PairT,
-    FullTraitsT, TraitsT&gt;::<span class="key1">operator</span>[](<span class="key3">const</span> <span class="key3">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
-   &lt;KeyT, ValueT&gt;::key_type&amp;) [with KeyT = <span class="key3">int</span>, ValueT = <span class="key3">int</span>, adt::rp::resize_policy Policy = DEFAULT, PairT = std::pair, 
+    FullTraitsT, TraitsT&gt;::<span class="Statement">operator</span>[](<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
+   &lt;KeyT, ValueT&gt;::key_type&amp;) [with KeyT = <span class="Type">int</span>, ValueT = <span class="Type">int</span>, adt::rp::resize_policy Policy = DEFAULT, PairT = std::pair,
    FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type]’
-   /home/pippijn/rona/devel/librona/run.cc:<span class="number">20</span>:   instantiated from here
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">251</span>: <span class="key2">error</span>: invalid conversion from ‘adt::detail::node_bas
+   /home/pippijn/rona/devel/librona/run.cc:<span class="Number">20</span>:   instantiated from here
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">251</span>: error: invalid conversion from ‘adt::detail::node_bas
    e*’ to ‘adt::detail::hash_table_impl&lt;adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt::detail::fill
-   _in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;<span class="key3">int</span>, <span class="key3">int</span>&gt; &gt;::node*’
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl&lt;TraitsT&gt;
+   _in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;<span class="Type">int</span>, <span class="Type">int</span>&gt; &gt;::node*’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl&lt;TraitsT&gt;
    ::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::node::next() [with TraitsT = adt::detail::choose_traits&lt;DEFAULT, std::pa
-   ir, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;<span class="key3">long</span> <span class="key3">int</span>, <span class="key3">long</span> <span class="key3">int</span>&gt;]’:
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">647</span>:   instantiated from ‘adt::detail::hash_table_impl&lt;Tra
-   itsT&gt;::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::create_node_uniq(<span class="key3">const</span> <span class="key3">typename</span> TraitsT::pair_type&amp;, <span class="key3">bool</span>&amp;) [with T
+   ir, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;<span class="Type">long</span> <span class="Type">int</span>, <span class="Type">long</span> <span class="Type">int</span>&gt;]’:
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">647</span>:   instantiated from ‘adt::detail::hash_table_impl&lt;Tra
+   itsT&gt;::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::create_node_uniq(<span class="Type">const</span> <span class="Type">typename</span> TraitsT::pair_type&amp;, <span class="Type">bool</span>&amp;) [with T
    raitsT = adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt:
-   :hash_policy&gt;::type&gt;::type&lt;<span class="key3">long</span> <span class="key3">int</span>, <span class="key3">long</span> <span class="key3">int</span>&gt;]’
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">1248</span>:   instantiated from ‘typename adt::detail::choose_tr
+   :hash_policy&gt;::type&gt;::type&lt;<span class="Type">long</span> <span class="Type">int</span>, <span class="Type">long</span> <span class="Type">int</span>&gt;]’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">1248</span>:   instantiated from ‘<span class="Type">typename</span> adt::detail::choose_tr
    aits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt;::value_type&amp; adt::hash_table&lt;KeyT, ValueT, Policy, PairT,
-    FullTraitsT, TraitsT&gt;::<span class="key1">operator</span>[](<span class="key3">const</span> <span class="key3">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
-   &lt;KeyT, ValueT&gt;::key_type&amp;) [with KeyT = <span class="key3">long</span> <span class="key3">int</span>, ValueT = <span class="key3">long</span> <span class="key3">int</span>, adt::rp::resize_policy Policy = DEFAULT, PairT = s
+    FullTraitsT, TraitsT&gt;::<span class="Statement">operator</span>[](<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
+   &lt;KeyT, ValueT&gt;::key_type&amp;) [with KeyT = <span class="Type">long</span> <span class="Type">int</span>, ValueT = <span class="Type">long</span> <span class="Type">int</span>, adt::rp::resize_policy Policy = DEFAULT, PairT = s
    td::pair, FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type]’
-   /home/pippijn/rona/devel/librona/run.cc:<span class="number">127</span>:   instantiated from here
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">251</span>: <span class="key2">error</span>: invalid conversion from ‘adt::detail::node_bas
+   /home/pippijn/rona/devel/librona/run.cc:<span class="Number">127</span>:   instantiated from here
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">251</span>: error: invalid conversion from ‘adt::detail::node_bas
    e*’ to ‘adt::detail::hash_table_impl&lt;adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt::detail::fill
-   _in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;<span class="key3">long</span> <span class="key3">int</span>, <span class="key3">long</span> <span class="key3">int</span>&gt; &gt;::node*’
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl&lt;TraitsT&gt;
+   _in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;<span class="Type">long</span> <span class="Type">int</span>, <span class="Type">long</span> <span class="Type">int</span>&gt; &gt;::node*’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl&lt;TraitsT&gt;
    ::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::node::next() [with TraitsT = adt::detail::choose_traits&lt;DEFAULT, std::pa
    ir, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;adt::scalar, adt::scalar&gt;
    ]’:
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">647</span>:   instantiated from ‘adt::detail::hash_table_impl&lt;Tra
-   itsT&gt;::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::create_node_uniq(<span class="key3">const</span> <span class="key3">typename</span> TraitsT::pair_type&amp;, <span class="key3">bool</span>&amp;) [with T
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">647</span>:   instantiated from ‘adt::detail::hash_table_impl&lt;Tra
+   itsT&gt;::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::create_node_uniq(<span class="Type">const</span> <span class="Type">typename</span> TraitsT::pair_type&amp;, <span class="Type">bool</span>&amp;) [with T
    raitsT = adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt:
    :hash_policy&gt;::type&gt;::type&lt;adt::scalar, adt::scalar&gt;]’
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">1248</span>:   instantiated from ‘typename adt::detail::choose_tr
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">1248</span>:   instantiated from ‘<span class="Type">typename</span> adt::detail::choose_tr
    aits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt;::value_type&amp; adt::hash_table&lt;KeyT, ValueT, Policy, PairT,
-    FullTraitsT, TraitsT&gt;::<span class="key1">operator</span>[](<span class="key3">const</span> <span class="key3">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
+    FullTraitsT, TraitsT&gt;::<span class="Statement">operator</span>[](<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
    &lt;KeyT, ValueT&gt;::key_type&amp;) [with KeyT = adt::scalar, ValueT = adt::scalar, adt::rp::resize_policy Policy = DEFAULT, Pai
    rT = std::pair, FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::t
    ype]’
-   /home/pippijn/rona/devel/librona/run.cc:<span class="number">130</span>:   instantiated from here
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">251</span>: <span class="key2">error</span>: invalid conversion from ‘adt::detail::node_bas
+   /home/pippijn/rona/devel/librona/run.cc:<span class="Number">130</span>:   instantiated from here
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">251</span>: error: invalid conversion from ‘adt::detail::node_bas
    e*’ to ‘adt::detail::hash_table_impl&lt;adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt::detail::fill
    _in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;adt::scalar, adt::scalar&gt; &gt;::node*’
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl&lt;TraitsT&gt;
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h: In member function ‘adt::detail::hash_table_impl&lt;TraitsT&gt;
    ::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::node::next() [with TraitsT = adt::detail::choose_traits&lt;DEFAULT, std::pa
-   ir, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;std::basic_string&lt;<span class="key3">char</span>, s
-   td::char_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;<span class="key3">char</span>&gt; &gt;, std::basic_string&lt;<span class="key3">char</span>, std::char_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;<span class="key3">char</span>&gt; &gt; &gt;
+   ir, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;std::basic_string&lt;<span class="Type">char</span>, s
+   td::char_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;<span class="Type">char</span>&gt; &gt;, std::basic_string&lt;<span class="Type">char</span>, std::char_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;<span class="Type">char</span>&gt; &gt; &gt;
    ]’:
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">647</span>:   instantiated from ‘adt::detail::hash_table_impl&lt;Tra
-   itsT&gt;::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::create_node_uniq(<span class="key3">const</span> <span class="key3">typename</span> TraitsT::pair_type&amp;, <span class="key3">bool</span>&amp;) [with T
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">647</span>:   instantiated from ‘adt::detail::hash_table_impl&lt;Tra
+   itsT&gt;::node* adt::detail::hash_table_impl&lt;TraitsT&gt;::create_node_uniq(<span class="Type">const</span> <span class="Type">typename</span> TraitsT::pair_type&amp;, <span class="Type">bool</span>&amp;) [with T
    raitsT = adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt::detail::fill_in&lt;DEFAULT, std::pair, adt:
-   :hash_policy&gt;::type&gt;::type&lt;std::basic_string&lt;<span class="key3">char</span>, std::char_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;<span class="key3">char</span>&gt; &gt;, std::basic_string&lt;ch
-   ar, std::char_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;<span class="key3">char</span>&gt; &gt; &gt;]’
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">1310</span>:   instantiated from ‘PairT&lt;<span class="key3">typename</span> adt::detail::has
-   h_table_impl&lt;<span class="key3">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt; &gt;::iterator, 
-   <span class="key3">bool</span>&gt; adt::hash_table&lt;KeyT, ValueT, Policy, PairT, FullTraitsT, TraitsT&gt;::insert(<span class="key3">const</span> <span class="key3">typename</span> adt::detail::choose_tra
-   its&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt;::pair_type&amp;) [with KeyT = std::basic_string&lt;<span class="key3">char</span>, std::cha
-   r_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;<span class="key3">char</span>&gt; &gt;, ValueT = std::basic_string&lt;<span class="key3">char</span>, std::char_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;<span class="key3">char</span>&gt; &gt;
+   :hash_policy&gt;::type&gt;::type&lt;std::basic_string&lt;<span class="Type">char</span>, std::char_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;<span class="Type">char</span>&gt; &gt;, std::basic_string&lt;ch
+   ar, std::char_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;<span class="Type">char</span>&gt; &gt; &gt;]’
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">1310</span>:   instantiated from ‘PairT&lt;<span class="Type">typename</span> adt::detail::has
+   h_table_impl&lt;<span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt; &gt;::iterator,
+   <span class="Type">bool</span>&gt; adt::hash_table&lt;KeyT, ValueT, Policy, PairT, FullTraitsT, TraitsT&gt;::insert(<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_tra
+   its&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt;::pair_type&amp;) [with KeyT = std::basic_string&lt;<span class="Type">char</span>, std::cha
+   r_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;<span class="Type">char</span>&gt; &gt;, ValueT = std::basic_string&lt;<span class="Type">char</span>, std::char_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;<span class="Type">char</span>&gt; &gt;
    , adt::rp::resize_policy Policy = DEFAULT, PairT = std::pair, FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fi
    ll_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type]’
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">1456</span>:   instantiated from ‘void hash_table&lt;KeyT, ValueT&gt;::
-   put(KeyT, ValueT) [with KeyT = std::basic_string&lt;<span class="key3">char</span>, std::char_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;<span class="key3">char</span>&gt; &gt;, ValueT = std::ba
-   sic_string&lt;<span class="key3">char</span>, std::char_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;<span class="key3">char</span>&gt; &gt;]’
-   /home/pippijn/rona/devel/librona/run.cc:<span class="number">133</span>:   instantiated from here
-   /home/pippijn/rona/devel/librona/<span class="key2">include</span>/AD/hash/hashtable.h:<span class="number">251</span>: <span class="key2">error</span>: invalid conversion from ‘adt::detail::node_bas
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">1456</span>:   instantiated from ‘<span class="Type">void</span> hash_table&lt;KeyT, ValueT&gt;::
+   put(KeyT, ValueT) [with KeyT = std::basic_string&lt;<span class="Type">char</span>, std::char_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;<span class="Type">char</span>&gt; &gt;, ValueT = std::ba
+   sic_string&lt;<span class="Type">char</span>, std::char_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;<span class="Type">char</span>&gt; &gt;]’
+   /home/pippijn/rona/devel/librona/run.cc:<span class="Number">133</span>:   instantiated from here
+   /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">251</span>: error: invalid conversion from ‘adt::detail::node_bas
    e*’ to ‘adt::detail::hash_table_impl&lt;adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt::detail::fill
-   _in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;std::basic_string&lt;<span class="key3">char</span>, std::char_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;c
-   har&gt; &gt;, std::basic_string&lt;<span class="key3">char</span>, std::char_traits&lt;<span class="key3">char</span>&gt;, std::allocator&lt;<span class="key3">char</span>&gt; &gt; &gt; &gt;::node*’
+   _in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type&gt;::type&lt;std::basic_string&lt;<span class="Type">char</span>, std::char_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;c
+   har&gt; &gt;, std::basic_string&lt;<span class="Type">char</span>, std::char_traits&lt;<span class="Type">char</span>&gt;, std::allocator&lt;<span class="Type">char</span>&gt; &gt; &gt; &gt;::node*’
 
-</pre><p>
+</pre>
+<p>
 The error here is that I was trying to convert a <span class='code'>node_base</span> pointer to a
 derived <span class='code'>node</span> pointer without a cast.</p>
 </li>
@@ -212,19 +218,21 @@ pass around opaque pointers to an object, in Java you don't even need the source
 file in order to use a class. The <span class='code'>private</span> modifier in C++ is mostly used as
 documentation, saying "you should not modify this yourself". If you really want
 to, you can still do it:</p>
-<pre class="code-block">   <span class="comment">// Class with private members</span>
-   <span class="key3">class</span> point
+<pre class='code-block'>
+   <span class="Comment">// Class with private members</span>
+   <span class="Type">class</span> point
    {
-   <span class="key1">private</span>:
-     <span class="key3">int</span> <span class="key3">const</span> x_;
-     <span class="key3">int</span> <span class="key3">const</span> y_;
-   <span class="key1">public</span>:
-     point (<span class="key3">int</span> x, <span class="key3">int</span> y) : x_ (x), y_ (y) { }
-     <span class="key3">int</span> x () { <span class="key1">return</span> x_; }
-     <span class="key3">int</span> y () { <span class="key1">return</span> y_; }
+   <span class="Statement">private</span>:
+     <span class="Type">int</span> <span class="Type">const</span> x_;
+     <span class="Type">int</span> <span class="Type">const</span> y_;
+   <span class="Statement">public</span>:
+     point (<span class="Type">int</span> x, <span class="Type">int</span> y) : x_ (x), y_ (y) { }
+     <span class="Type">int</span> x () { <span class="Statement">return</span> x_; }
+     <span class="Type">int</span> y () { <span class="Statement">return</span> y_; }
    };
 
-</pre><p>
+</pre>
+<p>
 Now we can just define the exact same class but with the <span class='code'>public</span> keyword moved
 up two lines, get rid of the <span class='code'>const</span> keyword and use <span class='code'>reinterpret_cast</span> to
 cast the object to our own class and happily modify x and y even though they
@@ -314,33 +322,39 @@ ALL KICK ASS".</p>
 Verbose "lambda expression"<a id='verbose'></a><p>
 In order to emulate lambda expressions in C++, you have to write verbose code
 like this:</p>
-<pre class="code-block">   <span class="key3">struct</span> equality_predicate
+<pre class='code-block'>
+   <span class="Type">struct</span> equality_predicate
    {
-     equality_predicate (<span class="key3">char</span> <span class="key3">const</span> *key) : key_ (key) { }
-     <span class="key3">bool</span> <span class="key1">operator</span> () (<span class="key3">char</span> <span class="key3">const</span> *key)
+     equality_predicate (<span class="Type">char</span> <span class="Type">const</span> *key) : key_ (key) { }
+     <span class="Type">bool</span> <span class="Statement">operator</span> () (<span class="Type">char</span> <span class="Type">const</span> *key)
      {
-       <span class="key1">return</span> !strcmp (key, key_);
+       <span class="Statement">return</span> !strcmp (key, key_);
      }
-   <span class="key1">private</span>:
-     <span class="key3">char</span> <span class="key3">const</span> *key_;
+   <span class="Statement">private</span>:
+     <span class="Type">char</span> <span class="Type">const</span> *key_;
    };
-   std::find (c.begin (), c.end (), equality_predicate (key)); <span class="comment">// c is a linear container</span>
+   std::find (c.begin (), c.end (), equality_predicate (key)); <span class="Comment">// c is a linear container</span>
 
-</pre><p>
+</pre>
+<p>
 In Java, this code becomes a little less verbose, if the Collection was sorted:</p>
-<pre class="code-block">   <span class="key5">Collections</span>.binarySearch(c, key, <span class="key1">new</span> <span class="key5">Comparator</span>&lt;<span class="key5">String</span>&gt;() {
-       <span class="key1">public</span> <span class="key3">int</span> compare(<span class="key5">String</span> a, <span class="key5">String</span> b) {
-           <span class="key1">return</span> a.compareTo(b);
+<pre class='code-block'>
+   Collections.binarySearch(c, key, <span class="Statement">new</span> Comparator&lt;String&gt;() {
+       <span class="Type">public</span> <span class="Type">int</span> compare(String a, String b) {
+           <span class="Statement">return</span> a.compareTo(b);
        }
    });
 
-</pre><p>
+</pre>
+<p>
 Or, in languages with functional elements such as Perl:</p>
-<pre class="code-block">   $c-&gt;find ($key, <span class="key1">sub</span> {
-      $_[<span class="number">0</span>] <span class="key3">eq</span> $_[<span class="number">1</span>]
+<pre class='code-block'>
+   <span class="Identifier">$c</span><span class="Identifier">-&gt;find</span> (<span class="Identifier">$key</span>, <span class="Statement">sub </span>{
+      <span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span> <span class="Statement">eq</span> <span class="Identifier">$_[</span><span class="Number">1</span><span class="Identifier">]</span>
    });
 
-</pre></li>
+</pre>
+</li>
 <li>
 Operator overloading can make code complicated<a id='overload'></a><p>
 In C++, almost every operator can be overloaded. This includes <span class='code'>operator||</span> and
@@ -364,38 +378,42 @@ to be understood.</p>
 <li>
 Impossible to chain constructors<a id='chained_ctor'></a><p>
 Where in Java one could write</p>
-<pre class="code-block">   <span class="key3">class</span> <span class="key5">Point</span>
+<pre class='code-block'>
+ <span class="Type">  class</span> Point
    {
-       <span class="key3">int</span> x, y;
-       <span class="key5">Point</span>(<span class="key3">int</span> x, <span class="key3">int</span> y)
+       <span class="Type">int</span> x, y;
+       Point(<span class="Type">int</span> x, <span class="Type">int</span> y)
        {
-           <span class="key1">this</span>.x = x;
-           <span class="key1">this</span>.y = y;
+           <span class="Type">this</span>.x = x;
+           <span class="Type">this</span>.y = y;
        }
-       <span class="key5">Point</span>(<span class="key3">int</span> xAndY)
+       Point(<span class="Type">int</span> xAndY)
        {
-           <span class="key1">this</span>(xAndY, xAndY);
+           <span class="Type">this</span>(xAndY, xAndY);
        }
    }
 
-</pre><p>
+</pre>
+<p>
 this is not possible at all in C++. One can not chain constructors (this has
 been fixed in C++11). Trying it like this:</p>
-<pre class="code-block">   <span class="key3">class</span> Point
+<pre class='code-block'>
+   <span class="Type">class</span> Point
    {
-       <span class="key3">int</span> x, y;
-       Point (<span class="key3">int</span> x, <span class="key3">int</span> y)
+       <span class="Type">int</span> x, y;
+       Point (<span class="Type">int</span> x, <span class="Type">int</span> y)
        {
-           <span class="key1">this</span>-&gt;x = x;
-           <span class="key1">this</span>-&gt;y = y;
+           <span class="Statement">this</span>-&gt;x = x;
+           <span class="Statement">this</span>-&gt;y = y;
        }
-       Point (<span class="key3">int</span> xAndY)
+       Point (<span class="Type">int</span> xAndY)
        {
-           Point (xAndY, xAndY); <span class="comment">// The other constructor is indeed called, but not for 'this'</span>
+           Point (xAndY, xAndY); <span class="Comment">// The other constructor is indeed called, but not for 'this'</span>
        }
    };
 
-</pre><p>
+</pre>
+<p>
 does call the other constructor but creates an anonymous <span class='code'>Point</span> on the stack
 and discards it right away. Trying to copy the Java syntax <span class='code'>this()</span> results in
 a compile-time error.</p>
@@ -406,7 +424,7 @@ a compile-time error.</p>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu Dec  6 23:26:19 CET 2012</div> 
+			<div id="updated">Last updated Mon Aug 12 02:39:07 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 
