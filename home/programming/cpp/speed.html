@@ -55,7 +55,7 @@ In C++, there is the possibility of <acronym title="Classes are user defined
  types defined with the 'class' or 'struct' keyword">class</acronym>es
 inheriting members from other classes. A simple example of this in C++ would
 be:</p>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Type">struct</span> Base
   {
     <span class="Type">int</span> a;
@@ -85,7 +85,7 @@ members of <span class='code'>Base</span> in <span class='code'>Derived</span>, 
 the body of <span class='code'>Base</span> in a header file and including that inside <span class='code'>Derived</span>.</p>
 <h5>
 Possibility 1</h5>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Type">struct</span> Base
   {
     <span class="Type">int</span> a;
@@ -109,7 +109,7 @@ Possibility 1</h5>
 </pre>
 <h5>
 Possibility 2</h5>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Type">struct</span> Base
   {
     <span class="Type">int</span> a;
@@ -156,7 +156,7 @@ functions except they are called "on" an object. By calling a non-static
 member function on an object, you in fact pass a pointer to the object as
 argument to the invisible first parameter called <span class='code'>this</span>. You can do that in
 C, too, except that the syntax looks a bit different:</p>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Comment">// C++</span>
   <span class="Type">struct</span> Base
   {

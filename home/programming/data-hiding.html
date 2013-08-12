@@ -64,7 +64,7 @@ achieved by writing accessor functions as required.</p>
 </ul>
 <p>
 A simple example of information hiding would be a string object:</p>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Type">struct</span> string
   {
     <span class="Type">char</span> *rep;
@@ -79,7 +79,7 @@ in-memory string representation. It also knows its maximum capacity, so it can
 allocate more memory on demand. In order to avoid corruption of the internal
 state (in this case, the len member), we write accessor functions, for
 example:</p>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Type">size_t</span> strLength (<span class="Type">struct</span> string <span class="Type">const</span> *str);
   <span class="Type">char</span> <span class="Type">const</span> *strToCStr (<span class="Type">struct</span> string <span class="Type">const</span> *str);
   <span class="Type">char</span> strCharAt (<span class="Type">struct</span> string <span class="Type">const</span> *str, <span class="Type">size_t</span> pos);
@@ -94,7 +94,7 @@ that take a pointer-to-const promise not to modify the structure.</p>
 Information hiding means to hide as much knowledge as possible. As part
 of this, we could define new type aliases to hide the fact that a string
 is represented by a pointer to a string structure:</p>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Type">typedef</span> <span class="Type">struct</span> string *String;
   <span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString; <span class="Comment">// Immutable string</span>
 
@@ -108,7 +108,7 @@ other string representations.
 
 </p><p>
 Now, our accessor functions look like this:</p>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Type">size_t</span> strLength (ConstString str);
   <span class="Type">char</span> <span class="Type">const</span> *strToCStr (ConstString str);
   <span class="Type">char</span> strCharAt (ConstString str, <span class="Type">size_t</span> pos);
@@ -125,7 +125,7 @@ typing.</p>
 There are various more or less obvious ways to violate the principle of
 information hiding. An obvious example would be directly accessing the
 structure's members:</p>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Comment">// Wrong:</span>
   <span class="Type">void</span>
   OnAdded (String str)
@@ -152,7 +152,7 @@ the string, if it does not have enough room for the added text.</p>
 A less obvious violation of information hiding would be pointer operations on
 String objects. Consider our String to be defined as <span class='code'>char*</span>. This type
 allows several operations that are built into C:</p>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Type">typedef</span> <span class="Type">char</span> *String;
   <span class="Type">typedef</span> <span class="Type">char</span> <span class="Type">const</span> *ConstString;
 
@@ -182,7 +182,7 @@ C provides a very good way to enforce information hiding. We call this
 <em>opaque pointers</em>. Opaque in this sense means, we cannot touch or even <em>see</em>
 the internal structure. C allows us to <em>forward declare</em> structures and pass
 around pointers to them:</p>
-<pre class='vimCodeElement'>
+<pre class='code-block'>
   <span class="Type">struct</span> string;
   <span class="Type">typedef</span> <span class="Type">struct</span> string *String;
   <span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString;
