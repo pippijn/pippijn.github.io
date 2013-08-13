@@ -47,38 +47,34 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Variables</h2>
-<ul><li><a href='#h1'>Scopes</a></li>
-<li><a href='#h2'>Line continuations</a></li>
-<li><a href='#h3'>Expansion</a></li>
-<li><a href='#h4'>Pseudo-variables</a></li></ul><p>
-Variables are actually wrongly named "variable", as they are really constants,
+			<h2>Variables
+
+</h2> <p>Variables are actually wrongly named "variable", as they are really constants,
 but everybody always calls them variables, so here they shall be called
-variables, as well.</p>
-<pre class='code-block'>
+variables, as well.
+
+</p> <pre class="code-block">
 <span class="Identifier">   SRCEXTS</span> <span class="Statement">=</span> c h
 <span class="Identifier">   OBJEXTS</span> <span class="Statement">=</span> o obj
 <span class="Identifier">   EXTS</span> <span class="Statement">=</span> <span class="Identifier">$(SRCEXTS)</span> <span class="Identifier">$(OBJEXTS)</span>
 
-</pre>
-<h3>
-<a id='h1'>Scopes</a></h3>
-<p>
-Variable definitions may be scoped. These are not visible outside the scope of
-the enclosing target, project or template.</p>
-<pre class='code-block'>
+</pre> <pre>
+</pre> <h3>Scopes
+
+</h3> <p>Variable definitions may be scoped. These are not visible outside the scope of
+the enclosing target, project or template.
+
+</p> <pre class="code-block">
    <span class="Type">program</span> prog <span class="Identifier">{</span>
 <span class="Identifier">      VARIABLE</span> <span class="Statement">=</span> a b c d
    <span class="Identifier">}</span>
 
-</pre>
-<h3>
-<a id='h2'>Line continuations</a></h3>
-<p>
-Variable definitions may span multiple lines. The line continues as long as the
-indentation level is higher than the variable definition.</p>
-<pre class='code-block'>
+</pre> <h3>Line continuations
+
+</h3> <p>Variable definitions may span multiple lines. The line continues as long as the
+indentation level is higher than the variable definition.
+
+</p> <pre class="code-block">
 <span class="Identifier">   VARIABLE</span> <span class="Statement">=</span> some values
       the values
          continue
@@ -87,19 +83,21 @@ indentation level is higher than the variable definition.</p>
       the variable definition
 <span class="Identifier">   OTHERVAR</span> <span class="Statement">=</span> this is a new variable definition
 
-</pre>
-<h3>
-<a id='h3'>Expansion</a></h3>
-<p>
-Variables are not expanded unless they really have to be. Eager contexts include
-<span class='code'>sources</span> and <span class='code'>link</span> sections and rules. Variables are not expanded in other
+</pre> <h3>Expansion
+
+</h3> <p>Variables are not expanded unless they really have to be. Eager contexts include
+
+  <code>sources</code> and 
+  <code>link</code> sections and rules. Variables are not expanded in other
 variable definitions, but are recursively expanded if the defined variable is
-expanded in an eager context. Variables are not expanded in rule bodies.</p>
-<h3>
-<a id='h4'>Pseudo-variables</a></h3>
-<p>
-Pseudo-variables can be used to query declarations or to call functions on data.</p>
-<pre class='code-block'>
+expanded in an eager context. Variables are not expanded in rule bodies.
+
+
+</p> <h3>Pseudo-variables
+
+</h3> <p>Pseudo-variables can be used to query declarations or to call functions on data.
+
+</p> <pre class="code-block">
    <span class="Type">program</span> prog <span class="Identifier">{</span>
       <span class="Type">sources</span> <span class="Identifier">{</span>
          ...
@@ -115,16 +113,23 @@ Pseudo-variables can be used to query declarations or to call functions on data.
    <span class="Comment"># filter by locally built libraries</span>
 <span class="Identifier">   PROGLIBS</span> <span class="Statement">=</span> <span class="Identifier">$(prog.link:library)</span>
 
-</pre>
-<p>
-The above filter syntax can be used to filter out system libraries such as, in
-this example, <span class='code'>-lm</span>. Thus, the <span class='code'>PROGLIBS</span> variable would be expanded to
-<span class='code'>mylib1 mylib2</span>, <span class='code'>$(PROGLINK)</span> would also include <span class='code'>-lm</span>. This may be useful
-in <a href='rules'>rules</a>.</p>
-<p>
-This filter syntax cannot be used to filter arbitrary text. It only works on
-pseudo-variables such as <span class='code'>$(mytarget.link)</span>.</p>
+</pre> <p>The above filter syntax can be used to filter out system libraries such as, in
+this example, 
+  <code>-lm</code>. Thus, the 
+  <code>PROGLIBS</code> variable would be expanded to
 
+  <code>mylib1 mylib2</code>, 
+  <code>$(PROGLINK)</code> would also include 
+  <code>-lm</code>. This may be useful
+in 
+  <a href="rules">rules</a>.
+
+
+</p> <p>This filter syntax cannot be used to filter arbitrary text. It only works on
+pseudo-variables such as 
+  <code>$(mytarget.link)</code>.
+
+</p>
 		</div> 
 
 		<div id="footer"> 

@@ -32,83 +32,90 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Why to use Perl</h2>
-<ul></ul><p>
-Despite the many anti-Perl rants, I believe it is a valid choice for certain
-jobs.</p>
-<ul>
-<li>
-CPAN<p>
-The Comprehensive Perl Archive Network is one of the world's largest free code
-bases. Almost anything you can think of has been solved in one way or another.</p>
-</li>
-<li>
-Easy FFI<p>
-It is very easy to interface Perl to other languages like C, C++ and Java. C
-and C++ are interfaced using the easy-to-use XS interface. Using JPL, it is
-possible to call Java from Perl and Perl from Java. To make a C function
-callable from Perl, all you have to do is:</p>
-<pre class='code-block'>
-<span class="Include">   #include </span><span class="String">&lt;EXTERN.h&gt;</span>
-<span class="Include">   #include </span><span class="String">&lt;perl.h&gt;</span>
-<span class="Include">   #include </span><span class="String">&lt;XSUB.h&gt;</span>
+			<h2>Why to use Perl
 
-   <span class="Comment">// declare a function</span>
-   <span class="Type">extern</span> <span class="Type">int</span> sub (<span class="Type">int</span>, <span class="Type">int</span>);
+</h2> <p>Despite the many anti-Perl rants, I believe it is a valid choice for certain
+jobs.
 
-   <span class="Comment">// define the interface from Perl</span>
-   <span class="Statement">MODULE</span> = MyModule    <span class="Statement">PACKAGE</span> = MyModule
-
-   <span class="Type">int</span>
-   add (<span class="Type">int</span> a, <span class="Type">int</span> b)
-       <span class="Statement">CODE</span>:
-       <span class="Identifier">RETVAL</span> = a + b; <span class="Comment">// We can define the function in-line</span>
-       <span class="Statement">OUTPUT</span>:
-       <span class="Identifier">RETVAL</span>
-
-   <span class="Type">int</span>
-   sub (<span class="Type">int</span> a, <span class="Type">int</span> b);
-
-</pre>
-</li>
-<li>
-Very portable<p>
-Java is available for download on Linux/x86, Linux/x64, Solaris/Sparc,
-Solaris/x86, Solaris/x64, Windows/x86, Windows/x64. Perl has currently been
-ported to <a href='http://www.cpan.org/ports/'>over 100 platforms</a>.</p>
-</li>
-<li>
-Generalised data interface<p>
-With <a href='http://dbi.perl.org/'>DBI</a>, Perl provides an interface to various
-databases including Microsoft ADO, CSV, MySQL, SQLite and many more. With its
-<span class='code'>AnyData</span>, it provides seamless interfacing of Perl objects and data
-structures with persistent storage including XML, passwd-files, ini-files and
-weblogs.</p>
-</li>
-<li>
-<span class='code'>mod_perl</span><p>
-The Apache web server contains a Perl module that allows high performance web
-applications to be written in Perl. That gives Apache full access to the
-entire CPAN repository and it gives Perl full access to the Apache internals.
-This website is built on Apache/mod_perl with HTML::Mason.</p>
-</li>
-<li>
-Good support<p>
-In contrast to Java, which keeps the same VM and provides backwards
-compatibility, Perl does not have any problems with throwing away old code and
-reworking the language to some extent. But instead of really throwing it away,
-teams are working on Perl 5.6, 5.8 and 5.10 at the same time.</p>
-</li>
-<li>
-Scoped resource management<p>
-Like C++, Perl has scoped resource management and therefore supports RAII.
-That means you do not need to close file handles you no longer use, just let
-them go out of scope. In addition to the lexical scope, Perl has the concept
-of <a href='http://perl.plover.com/local.html#5_Dynamic_Scope'>dynamic scope</a>.</p>
-</li>
+</p> <ul>
+  <li>CPAN
+  
+  
+    <p>The Comprehensive Perl Archive Network is one of the world's largest free code
+    bases. Almost anything you can think of has been solved in one way or another.
+    
+    </p>
+  </li>
+  <li>Easy FFI
+  
+  
+    <p>It is very easy to interface Perl to other languages like C, C++ and Java. C
+    and C++ are interfaced using the easy-to-use XS interface. Using JPL, it is
+    possible to call Java from Perl and Perl from Java. To make a C function
+    callable from Perl, all you have to do is:
+    
+    </p>
+    <code />
+  </li>
+  <li>Very portable
+  
+  
+    <p>Java is available for download on Linux/x86, Linux/x64, Solaris/Sparc,
+    Solaris/x86, Solaris/x64, Windows/x86, Windows/x64. Perl has currently been
+    ported to 
+      <a href="http://www.cpan.org/ports/">over 100 platforms</a>.
+    
+    
+    </p>
+  </li>
+  <li>Generalised data interface
+  
+  
+    <p>With 
+      <a href="http://dbi.perl.org/">DBI</a>, Perl provides an interface to various
+    databases including Microsoft ADO, CSV, MySQL, SQLite and many more. With its
+    
+      <code>AnyData</code>, it provides seamless interfacing of Perl objects and data
+    structures with persistent storage including XML, passwd-files, ini-files and
+    weblogs.
+    
+    
+    </p>
+  </li>
+  <li>
+    <code>mod_perl</code>
+  
+  
+    <p>The Apache web server contains a Perl module that allows high performance web
+    applications to be written in Perl. That gives Apache full access to the
+    entire CPAN repository and it gives Perl full access to the Apache internals.
+    This website is built on Apache/mod_perl with HTML::Mason.
+    
+    </p>
+  </li>
+  <li>Good support
+  
+  
+    <p>In contrast to Java, which keeps the same VM and provides backwards
+    compatibility, Perl does not have any problems with throwing away old code and
+    reworking the language to some extent. But instead of really throwing it away,
+    teams are working on Perl 5.6, 5.8 and 5.10 at the same time.
+    
+    </p>
+  </li>
+  <li>Scoped resource management
+  
+  
+    <p>Like C++, Perl has scoped resource management and therefore supports RAII.
+    That means you do not need to close file handles you no longer use, just let
+    them go out of scope. In addition to the lexical scope, Perl has the concept
+    of 
+      <a href="http://perl.plover.com/local.html#5_Dynamic_Scope">dynamic scope</a>.
+    
+    
+    </p>
+  </li>
 </ul>
-
 		</div> 
 
 		<div id="footer"> 

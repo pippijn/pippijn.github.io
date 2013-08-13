@@ -56,47 +56,60 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Garbage collection</h2>
-<ul><li><a href='#h1'>Problems</a></li>
-<li><a href='#h2'>Scanning the stack</a></li>
-<li><a href='#h3'>Interior pointers</a></li>
-<li><a href='#h4'>Collection algorithm</a></li>
-<li><a href='#h5'>Precise GC</a></li></ul><p>
-Strongly typed mostly-precise (we still need to scan the stack).
-garbage collection can be implemented using the RTTI structures. Some ideas:</p>
-<ul>
-<li>
-Global pointers are registered as roots when a module is initialised. See
-<a href='../language/modules'>modules</a> for ideas on the module system.</li>
-<li>
-<span class='code'>new</span> and <span class='code'>malloc</span> register the allocated pointers with the GC. The GC
-can find their <span class='code'>type_info</span> at offset 0.</li>
-<li>
-When marking, the GC first recursively marks the global roots. After that,
-the stack is scanned. The <span class='code'>main()</span> function initialises the stack bottom.
-Stack top is known in the marking function (perhaps the address of the first
-argument of <span class='code'>malloc</span>?).</li>
-<li>
-The GC operates on a given heap size beyond which it doesn't expand.</li>
-<li>
-In the first implementation, naive mark and sweep will be implemented.
-Later, an alternative implementation could be provided doing tri-colour marking.</li>
-<li>
-Using RTTI, the collector can recursively mark contained objects.</li>
-</ul>
-<p>
-This garbage collection implementation would be highly portable and probably
-a little faster than Boehm's GC (potentially a <strong>lot</strong> faster when
+			<h2>Garbage collection
+
+</h2> <p>Strongly typed mostly-precise (we still need to scan the stack).
+garbage collection can be implemented using the RTTI structures. Some ideas:
+
+</p> <ul>
+  <li>Global pointers are registered as roots when a module is initialised. See
+  
+    <a href="../language/modules">modules</a> for ideas on the module system.
+  
+  
+  </li>
+  <li>
+    <code>new</code> and 
+    <code>malloc</code> register the allocated pointers with the GC. The GC
+  can find their 
+    <code>type_info</code> at offset 0.
+  
+  
+  </li>
+  <li>When marking, the GC first recursively marks the global roots. After that,
+  the stack is scanned. The 
+    <code>main()</code> function initialises the stack bottom.
+  Stack top is known in the marking function (perhaps the address of the first
+  argument of 
+    <code>malloc</code>?).
+  
+  
+  </li>
+  <li>The GC operates on a given heap size beyond which it doesn't expand.
+  
+  </li>
+  <li>In the first implementation, naive mark and sweep will be implemented.
+  Later, an alternative implementation could be provided doing tri-colour marking.
+  
+  </li>
+  <li>Using RTTI, the collector can recursively mark contained objects.
+  
+  </li>
+</ul> <p>This garbage collection implementation would be highly portable and probably
+a little faster than Boehm's GC (potentially a 
+  <strong>lot</strong> faster when
 implemented in a smart way, but I have no clue about memory managers, so for
-the time being, I expect it to be reasonably fast).</p>
-<h3>
-<a id='h1'>Problems</a></h3>
-<h4>
-Interior pointers</h4>
-<p>
-In C, it is possible to have pointers to members of a struct. For example:</p>
-<pre class='code-block'>
+the time being, I expect it to be reasonably fast).
+
+
+</p> <pre>
+</pre> <h3>Problems
+
+</h3> <h4>Interior pointers
+
+</h4> <p>In C, it is possible to have pointers to members of a struct. For example:
+
+</p> <pre class="code-block">
    <span class="Type">struct</span> buffer {
       string_t data;
       <span class="Type">size_t</span> pos;
@@ -107,22 +120,25 @@ In C, it is possible to have pointers to members of a struct. For example:</p>
       <span class="Statement">return</span> &amp;buf-&gt;len;
    }
 
-</pre>
-<p>
-When all references to <span class='code'>buf</span> have gone out of scope, the pointer to its
-<span class='code'>len</span> member may still exist. In particular, that pointer is definitely
-not equal to <span class='code'>buf</span>. Fat pointers don't have this problem, because they
+</pre> <p>When all references to 
+  <code>buf</code> have gone out of scope, the pointer to its
+
+  <code>len</code> member may still exist. In particular, that pointer is definitely
+not equal to 
+  <code>buf</code>. Fat pointers don't have this problem, because they
 always contain the base pointer. Zero-terminated pointers may be more
 problematic (perhaps we could just get rid of them? Are there any good
-reasons to keep them?). Either way, this has to be handled, somehow.</p>
-<p>
-Basically, the collector needs to check whether a pointer (or, while scanning
+reasons to keep them?). Either way, this has to be handled, somehow.
+
+
+</p> <p>Basically, the collector needs to check whether a pointer (or, while scanning
 the stack, something that looks like a pointer) points into and not just onto
-an object. This requirement prevents a simple hash lookup.</p>
-<h3>
-<a id='h2'>Scanning the stack</a></h3>
-<p>
-When scanning the stack, we need to iterate over it in pointer-size steps.  If
+an object. This requirement prevents a simple hash lookup.
+
+</p> <pre>
+</pre> <h3>Scanning the stack
+
+</h3> <p>When scanning the stack, we need to iterate over it in pointer-size steps.  If
 we manage our own heap then each such candidate pointer should first be
 checked whether it is inside that heap. If it is not, we can skip to the next
 candidate and don't need to perform a lookup. If it is, it is very likely to
@@ -130,141 +146,183 @@ be a pointer. Anyway, we need to look up the pointer in our pointer list or
 table or whatever we store pointers in. The previously mentioned problem is
 that if we have a list of pointers to the beginning of our objects, then an
 interior pointer will cause a false negative, because it does not match any
-pointers, directly.</p>
-<h3>
-<a id='h3'>Interior pointers</a></h3>
-<p>
-One possible solution would be to just generally store pointers as pointer +
+pointers, directly.
+
+</p> <pre>
+</pre> <h3>Interior pointers
+
+</h3> <p>One possible solution would be to just generally store pointers as pointer +
 offset, but that would make everything slower and more complicated and it
 would add yet another special case when interfacing with C (this last
 argument is not so severe. The C interface can be as complicated as it has to
-be).</p>
-<p>
-Another solution would be to simply iterate over all pointers in the system and
-check whether the candidate is <em>b <= c <= b + s</em> where <em>b</em> is the start of the
-pointer, <em>c</em> is the candidate and <em>s</em> is the size of the object pointed at as
-found in the type info structure (see <a href='../compiler/rtti'>RTTI</a>). This algorithm
-is extremely slow with <em>O(n*m)</em> with <em>n</em> being the number of pointers in the
-system and <em>m</em> being the number of candidates. It could be optimised by moving
+be).
+
+</p> <p>Another solution would be to simply iterate over all pointers in the system and
+check whether the candidate is 
+  <em>b &lt;= c &lt;= b + s</em> where 
+  <em>b</em> is the start of the
+pointer, 
+  <em>c</em> is the candidate and 
+  <em>s</em> is the size of the object pointed at as
+found in the type info structure (see 
+  <a href="../compiler/rtti">RTTI</a>). This algorithm
+is extremely slow with 
+  <em>O(n*m)</em> with 
+  <em>n</em> being the number of pointers in the
+system and 
+  <em>m</em> being the number of candidates. It could be optimised by moving
 already-marked pointers off the list. This would initially leave us with the
 pointer set minus the pointers reachable from the root set and gradually leave
-us with less and less pointers as we scan the stack.</p>
-<p>
-How do other collectors do this? What does Boehm do? Unless we come up with
+us with less and less pointers as we scan the stack.
+
+
+</p> <p>How do other collectors do this? What does Boehm do? Unless we come up with
 some more intelligent ideas, we'll have to try the naive method as described
-above.</p>
-<h3>
-<a id='h4'>Collection algorithm</a></h3>
-<p>
-Currently, two solutions are up for debate:</p>
-<h4>
-Binary search on collection</h4>
-<p>
-This solution assumes a hash table or other kind of sparse array as pointer
+above.
+
+</p> <pre>
+</pre> <h3>Collection algorithm
+
+</h3> <p>Currently, two solutions are up for debate:
+
+</p> <pre>
+</pre> <h4>Binary search on collection
+
+</h4> <p>This solution assumes a hash table or other kind of sparse array as pointer
 set so registering pointers on allocation and unregistering them on
-deallocation are amortised <em>O(1)</em>.</p>
-<p>
-A collection would then be performed as follows:</p>
-<ul>
-<li>
-Construct a sorted array of pointers from the pointer set (<em>O(n log n)</em>
-over the number of managed pointers). We call this array <span class='code'>start_set</span>.</li>
-<li>
-Iterate over the initial global root set, marking all reachable objects
-(<em>O(n)</em> over the reachable pointers). We proved at compile time that all
-non-NULL pointers point to valid objects, but not all are necessarily in the
-managed heap, as they may point at other global data.  Therefore, we need to
-check each pointer whether it points into the managed heap.</li>
-<li>
-Iterate over the stack in pointer-size steps (<em>O(n)</em> over the current
-stack size):<ul>
-<li>
-Check whether the current candidate is a possible pointer. The property
-held by pointers is being inside the managed heap.</li>
-<li>
-Mark the object pointed at by the candidate.</li>
-</ul>
-</li>
-<li>
-Iterate over <span class='code'>start_set</span> and free all unmarked objects, removing them
-from the pointer set.</li>
-</ul>
-<p>
-We either know the heap boundaries from step 1: the start of the first object to
+deallocation are amortised 
+  <em>O(1)</em>.
+
+
+</p> <p>A collection would then be performed as follows:
+
+</p> <ul>
+  <li>Construct a sorted array of pointers from the pointer set (
+    <em>O(n log n)</em>
+  over the number of managed pointers). We call this array 
+    <code>start_set</code>.
+  
+  
+  </li>
+  <li>Iterate over the initial global root set, marking all reachable objects
+  (
+    <em>O(n)</em> over the reachable pointers). We proved at compile time that all
+  non-NULL pointers point to valid objects, but not all are necessarily in the
+  managed heap, as they may point at other global data.  Therefore, we need to
+  check each pointer whether it points into the managed heap.
+  
+  
+  </li>
+  <li>Iterate over the stack in pointer-size steps (
+    <em>O(n)</em> over the current
+  stack size):
+  
+  
+    <ul>
+      <li>Check whether the current candidate is a possible pointer. The property
+      held by pointers is being inside the managed heap.
+                  
+      </li>
+      <li>Mark the object pointed at by the candidate.
+      
+      </li>
+    </ul>
+  </li>
+  <li>Iterate over 
+    <code>start_set</code> and free all unmarked objects, removing them
+  from the pointer set.
+  
+  
+  </li>
+</ul> <p>We either know the heap boundaries from step 1: the start of the first object to
 the end of the last object, or because we manage our heap ourselves. This way,
-we can check whether a pointer points into the managed heap.</p>
-<p>
-If the heap is non-contiguous, this check may almost always yield true, in which
+we can check whether a pointer points into the managed heap.
+
+</p> <p>If the heap is non-contiguous, this check may almost always yield true, in which
 case the collector will still work but be slower. In the future, we are probably
-going to manage our own heap, making sure it is in one piece.</p>
-<h5>
-Marking algorithm</h5>
-<p>
-In order to find the object pointed at by a given pointer, we first perform a
+going to manage our own heap, making sure it is in one piece.
+
+</p> <h5>Marking algorithm
+
+</h5> <p>In order to find the object pointed at by a given pointer, we first perform a
 hash lookup into our pointer set. In most cases where plain objects are
-involved, this will yield a result in amortised <em>O(1)</em>. If the pointer was not
-found, we need to perform a modified binary search in the <span class='code'>start_set</span>. It is
+involved, this will yield a result in amortised 
+  <em>O(1)</em>. If the pointer was not
+found, we need to perform a modified binary search in the 
+  <code>start_set</code>. It is
 modified in that we do not look for an element equal to the candidate pointer
 but rather for an element less than it. Once we find the greatest element less
 than the candidate, we check whether its value offset by the object size is
 greater than the candidate, in which case we are dealing with an interior
-pointer.</p>
-<p>
-The above yields either the start address of an object or nothing, in which case
+pointer.
+
+
+</p> <p>The above yields either the start address of an object or nothing, in which case
 the next candidate is considered. Once we are at a start address, we can mark
 this object and repeat the above algorithm for each pointer member of the object
-(members can just as easily be interior pointers).</p>
-<p>
-It can occur frequently that no object was found, especially in the presence of
+(members can just as easily be interior pointers).
+
+</p> <p>It can occur frequently that no object was found, especially in the presence of
 region based memory management. Pointers pointing into regions will appear to be
 in the same heap as garbage collected objects and will be considered but will
-neither be found by the hash lookup nor by the binary search.</p>
-<p>
-Unique and reference counted pointers do not influence the GC, as they are
-allocated in the managed heap.</p>
-<p>
-Regions do not need to be scanned separately for pointers. Scanning global
-pointers, registers and the call stack is sufficient.</p>
-<h4>
-Interval tree as pointer set</h4>
-<p>
-Another option is to use an interval tree instead of a hash table as data
+neither be found by the hash lookup nor by the binary search.
+
+</p> <p>Unique and reference counted pointers do not influence the GC, as they are
+allocated in the managed heap.
+
+</p> <p>Regions do not need to be scanned separately for pointers. Scanning global
+pointers, registers and the call stack is sufficient.
+
+</p> <pre>
+</pre> <h4>Interval tree as pointer set
+
+</h4> <p>Another option is to use an interval tree instead of a hash table as data
 structure for the pointer set. This would increase the cost of allocation from
-amortised <em>O(1)</em> to <em>O(log n)</em> (insertion into an interval tree). The cost of
-a garbage collection would be decreased from <em>O(n log n)</em> to <em>O(n)</em>, as it no
-longer involves sorting.</p>
-<p>
-However, there are likely to be many pointers to the start of an object. Using
-an interval tree as pointer set would mean that object lookups are <strong>always</strong>
-<em>O(log n)</em>, resulting in an <em>O(n log n)</em> algorithm over the stack size instead
-of over the pointer set size.</p>
-<p>
-It has to be evaluated, which alternative will be faster. The current belief is
-that the first one is more efficient.</p>
-<h3>
-<a id='h5'>Precise GC</a></h3>
-<p>
-In order to produce a completely precise garbage collector, code needs to be
+amortised 
+  <em>O(1)</em> to 
+  <em>O(log n)</em> (insertion into an interval tree). The cost of
+a garbage collection would be decreased from 
+  <em>O(n log n)</em> to 
+  <em>O(n)</em>, as it no
+longer involves sorting.
+
+
+</p> <p>However, there are likely to be many pointers to the start of an object. Using
+an interval tree as pointer set would mean that object lookups are 
+  <strong>always</strong>
+
+  <em>O(log n)</em>, resulting in an 
+  <em>O(n log n)</em> algorithm over the stack size instead
+of over the pointer set size.
+
+
+</p> <p>It has to be evaluated, which alternative will be faster. The current belief is
+that the first one is more efficient.
+
+</p> <pre>
+</pre> <h3>Precise GC
+
+</h3> <p>In order to produce a completely precise garbage collector, code needs to be
 generated that registers all local pointers as roots on function entry and
 unregisters them on function exit. There are a few problems involved with C
-interoperability.</p>
-<h4>
-Pinning</h4>
-<p>
-For example, passing a pointer to a managed object into C needs to make sure the
+interoperability.
+
+</p> <h4>Pinning
+
+</h4> <p>For example, passing a pointer to a managed object into C needs to make sure the
 object isn't moved in memory while the called C code still has references to it.
 Since for now there are no plans to have support for threads, the object only
 needs to be pinned (marked non-movable) if the C code will keep a pointer to it
 after the called function returns. In practice, this doesn't happen so often,
 but it does happen, so the GC needs to provide support for pinning. This will
-make the code a lot less safe.</p>
-<p>
-When objects are pinned, they probably need to be moved to a non-moving heap,
+make the code a lot less safe.
+
+</p> <p>When objects are pinned, they probably need to be moved to a non-moving heap,
 first, so the compacting algorithm and later the allocator are not disturbed by
 pinned objects. Having a pinned object inside the compacted heap would mean that
 the allocator cannot simply bump the heap pointer, anymore, but needs to be
-careful to skip any pinned objects.</p>
-
+careful to skip any pinned objects.
+</p>
 		</div> 
 
 		<div id="footer"> 

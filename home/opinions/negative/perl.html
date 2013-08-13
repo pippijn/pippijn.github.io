@@ -32,124 +32,168 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Why not to use Perl</h2>
-<ul></ul><p>
-Perl is a highly dynamic language in which complex tasks can be solved within
+			<h2>Why not to use Perl
+
+</h2> <p>Perl is a highly dynamic language in which complex tasks can be solved within
 a few lines of elegant code. It has downsides, however, and I will elaborate
-on a few of them here.</p>
-<ul>
-<li>
-Errors caught at runtime<p>
-Since Perl is a dynamic language, it has no type checking aside from the
-syntax errors that result from incorrectly using scalars, arrays or hashes.
-This means that errors in code can only be caught at runtime.</p>
-<p>
-Unless you explicitly ask for it using <span class='code'>strict</span>, things can go wrong and they
-may not at all be obvious. For instance, without the <span class='code'>strict</span> pragma, Perl
-allows programmers to use "bare words" as string literals. You can write
-<span class='code'>$a = hello; print $a;</span> and it writes "hello" to <span class='code'>stdout</span>.</p>
-<p>
-When changing an existing program erroneously, the error may not be caught
-right away and may cause problems in areas where none are expected.</p>
-</li>
-<li>
-<span class='code'>eval</span>-blocks catch <em>all</em> errors<p>
-In Perl, exceptions are caught with <span class='code'>eval</span> blocks. These catch all errors, so
-if you want to catch only a few, you need to catch all, find out whether your
-type of exception was the one thrown and rethrow the exception if not:</p>
-<pre class='code-block'>
-   <span class="Statement">eval</span> {
-      function_that_throws_exception <span class="Identifier">$arg1</span>, <span class="Identifier">$arg2</span>
-   };
-   <span class="Statement">if</span> (<span class="Identifier">$@</span>) {
-      <span class="Statement">if</span> (<span class="Statement">ref</span> <span class="Identifier">$@</span> <span class="Statement">eq</span> <span class="String">&quot;</span><span class="String">My::Exception</span><span class="String">&quot;</span>) {
-         handle_error
-      }
-      <span class="Statement">die</span>; <span class="Comment"># rethrow</span>
-   }
+on a few of them here.
 
-</pre>
-<p>
-This does not even work when <span class='code'>ref $@</span> is an empty string, meaning <span class='code'>$@</span> was
-a plain scalar. In that case, you have to compare the error strings, which may
-be localised, making it even harder to catch exactly the error you need.</p>
-<p>
-By the way, <span class='code'>eval</span> is not only an exception handling keyword, it is also a
-string evaluation keyword. This may cause confusion to beginners.</p>
-</li>
-<li>
-Easy to write bad code<p>
-Perl makes it very easy to write code and APIs. Where strictly object oriented
-languages such as Java enforce a certain paradigm, Perl allows one to design
-APIs like the Irssi scripting API. There is an awful lot of crappy Perl code
-out there, people tend to call "line noise". While it is possible to write
-crappy code with Java, it is much harder to do so than in Perl.</p>
-</li>
-<li>
-Many pitfalls<p>
-There are many areas in the language that can bite you if you don't know about
-them.</p>
-</li>
-<li>
-Features built into the language<p>
-Perl has many more or less known features that are built into the language.
-One of them is <a href='http://perldoc.perl.org/perlform.html'>formats</a>. The problem
-with this is that there is no easy way of replacing or enhancing the
-functionality provided by them. Perl formats cannot be returned from functions
-nor can they be manipulated after their creation.</p>
-</li>
-<li>
-Arrays or array references<p>
-Arrays of arrays do not exist in Perl and an attempt to create one yields a
-flattened array such that <span class='code'>((1, 2, 3), 2, 3)</span> becomes <span class='code'>(1, 2, 3, 2, 3)</span>.
-In order to create an array of arrays, you need to create an array of
-references to arrays like this: <span class='code'>([1, 2, 3], 2, 3)</span>. But then getting the
-array back out of the reference, it is necessary to dereference it, so that
-where in Lisp one can do:</p>
-<pre class='code-block'>
-   <span class="Special">(</span><span class="Statement">setq</span> <span class="Statement">array</span> <span class="Special">'</span><span class="Special">((</span>1, 2, 3<span class="Special">)</span>, 2, 3<span class="Special">)</span><span class="Special">)</span>
-   <span class="Special">(</span><span class="Statement">first</span> <span class="Statement">array</span><span class="Special">)</span> <span class="Comment">; Yields (1, 2, 3)</span>
-
-</pre>
-<p>
-But in Perl, the same code requires:</p>
-<pre class='code-block'>
-   <span class="Statement">my</span> <span class="Identifier">@array</span> = ([<span class="Number">1</span>, <span class="Number">2</span>, <span class="Number">3</span>], <span class="Number">2</span>, <span class="Number">3</span>);
-   <span class="Identifier">$array[</span><span class="Number">0</span><span class="Identifier">]</span>; <span class="Comment"># Yields &quot;ARRAY(0xdeadbeef)&quot; or similar</span>
-   <span class="Identifier">@{</span> <span class="Identifier">$array[</span><span class="Number">0</span><span class="Identifier">]</span> <span class="Identifier">}</span>; <span class="Comment"># Dereferencing it yields our array (1, 2, 3)</span>
-
-</pre>
-<p>
-The reason for this is that it makes it possible to <span class='code'>push</span> a list of items
-onto an array.</p>
-</li>
-<li>
-Implicit behaviour<p>
-Simple, machine oriented languages such as C contain very little magic. Perl
-does. An example is the ability to assign an array to a hash:
-<span class='code'>my %hash = (1, 2, 3, 4)</span>. The resulting hash contains:
-<span class='code'>(1 => 2, 3 => 4)</span>. The language is full of implicit behaviour, which I
-call "magic".</p>
-</li>
-<li>
-Functions interfaces<p>
-In Perl, functions do not need to provide prototypes and a lot of code indeed
-does not. If it does, <span class='code'>perl</span> can check whether the provided number of
-arguments is correct, but the callee still has to manually decode the argument
-list from <span class='code'>@_</span>, the argument stack. The usual way is to do this as the first
-thing in a function like: <span class='code'>my ($a, $b, $c) = @_;</span>. This is not required,
-though, and it is not rare that code uses <span class='code'>@_</span> directly with subscript
-access. That makes the code unreadable.</p>
-</li>
-<li>
-Circular references<p>
-Perl has no cycle breaking system in its reference counting. This means you
-can introduce memory leaks with circular references. For this, Perl provides
-<span class='code'>Scalar::Util::weaken</span>, but you still have to do it.</p>
-</li>
+</p> <ul>
+  <li>Errors caught at runtime
+  
+  
+    <p>Since Perl is a dynamic language, it has no type checking aside from the
+    syntax errors that result from incorrectly using scalars, arrays or hashes.
+    This means that errors in code can only be caught at runtime.
+    
+    </p>
+    <p>Unless you explicitly ask for it using 
+      <code>strict</code>, things can go wrong and they
+    may not at all be obvious. For instance, without the 
+      <code>strict</code> pragma, Perl
+    allows programmers to use "bare words" as string literals. You can write
+    
+      <code>$a = hello; print $a;</code> and it writes "hello" to 
+      <code>stdout</code>.
+    
+    
+    </p>
+    <p>When changing an existing program erroneously, the error may not be caught
+    right away and may cause problems in areas where none are expected.
+    
+    </p>
+  </li>
+  <li>
+    <code>eval</code>-blocks catch 
+    <em>all</em> errors
+  
+  
+    <p>In Perl, exceptions are caught with 
+      <code>eval</code> blocks. These catch all errors, so
+    if you want to catch only a few, you need to catch all, find out whether your
+    type of exception was the one thrown and rethrow the exception if not:
+    
+    
+    </p>
+    <code />
+    <p>This does not even work when 
+      <code>ref $@</code> is an empty string, meaning 
+      <code>$@</code> was
+    a plain scalar. In that case, you have to compare the error strings, which may
+    be localised, making it even harder to catch exactly the error you need.
+    
+    
+    </p>
+    <p>By the way, 
+      <code>eval</code> is not only an exception handling keyword, it is also a
+    string evaluation keyword. This may cause confusion to beginners.
+    
+    
+    </p>
+  </li>
+  <li>Easy to write bad code
+  
+  
+    <p>Perl makes it very easy to write code and APIs. Where strictly object oriented
+    languages such as Java enforce a certain paradigm, Perl allows one to design
+    APIs like the Irssi scripting API. There is an awful lot of crappy Perl code
+    out there, people tend to call "line noise". While it is possible to write
+    crappy code with Java, it is much harder to do so than in Perl.
+    
+    </p>
+  </li>
+  <li>Many pitfalls
+  
+  
+    <p>There are many areas in the language that can bite you if you don't know about
+    them.
+    
+    </p>
+  </li>
+  <li>Features built into the language
+  
+  
+    <p>Perl has many more or less known features that are built into the language.
+    One of them is 
+      <a href="http://perldoc.perl.org/perlform.html">formats</a>. The problem
+    with this is that there is no easy way of replacing or enhancing the
+    functionality provided by them. Perl formats cannot be returned from functions
+    nor can they be manipulated after their creation.
+    
+    
+    </p>
+  </li>
+  <li>Arrays or array references
+  
+  
+    <p>Arrays of arrays do not exist in Perl and an attempt to create one yields a
+    flattened array such that 
+      <code>((1, 2, 3), 2, 3)</code> becomes 
+      <code>(1, 2, 3, 2, 3)</code>.
+    In order to create an array of arrays, you need to create an array of
+    references to arrays like this: 
+      <code>([1, 2, 3], 2, 3)</code>. But then getting the
+    array back out of the reference, it is necessary to dereference it, so that
+    where in Lisp one can do:
+    
+    
+    </p>
+    <code />
+    <p>But in Perl, the same code requires:
+    
+    </p>
+    <code />
+    <p>The reason for this is that it makes it possible to 
+      <code>push</code> a list of items
+    onto an array.
+    
+    
+    </p>
+  </li>
+  <li>Implicit behaviour
+  
+  
+    <p>Simple, machine oriented languages such as C contain very little magic. Perl
+    does. An example is the ability to assign an array to a hash:
+    
+      <code>my %hash = (1, 2, 3, 4)</code>. The resulting hash contains:
+    
+      <code>(1 =&gt; 2, 3 =&gt; 4)</code>. The language is full of implicit behaviour, which I
+    call "magic".
+    
+    
+    </p>
+  </li>
+  <li>Functions interfaces
+  
+  
+    <p>In Perl, functions do not need to provide prototypes and a lot of code indeed
+    does not. If it does, 
+      <code>perl</code> can check whether the provided number of
+    arguments is correct, but the callee still has to manually decode the argument
+    list from 
+      <code>@_</code>, the argument stack. The usual way is to do this as the first
+    thing in a function like: 
+      <code>my ($a, $b, $c) = @_;</code>. This is not required,
+    though, and it is not rare that code uses 
+      <code>@_</code> directly with subscript
+    access. That makes the code unreadable.
+    
+    
+    </p>
+  </li>
+  <li>Circular references
+  
+  
+    <p>Perl has no cycle breaking system in its reference counting. This means you
+    can introduce memory leaks with circular references. For this, Perl provides
+    
+      <code>Scalar::Util::weaken</code>, but you still have to do it.
+    
+    
+    </p>
+  </li>
 </ul>
-
 		</div> 
 
 		<div id="footer"> 

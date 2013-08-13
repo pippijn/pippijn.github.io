@@ -32,66 +32,71 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Experiences with Java Software Development</h2>
-<ul><li><a href='#h1'>Development itself</a></li>
-<li><a href='#h2'>Working with other Java developers</a></li>
-<li><a href='#h3'>Final thoughts</a></li></ul><p>
-I work at a small software company that primarily uses the Java programming
+			<h2>Experiences with Java Software Development
+
+</h2> <p>I work at a small software company that primarily uses the Java programming
 language for its development. While I have come to appreciate many features of
 Java and its tooling, there are several things about the workflow I am
 very unhappy about. On this page, I will describe some recent experience I have
-had with web application development in Java.</p>
-<h3>
-<a id='h1'>Development itself</a></h3>
-<h4>
-Setting up the IDE</h4>
-<p>
-Java development is usually done using the Eclipse platform and integrated
+had with web application development in Java.
+
+</p> <h3>Development itself
+
+</h3> <h4>Setting up the IDE
+
+</h4> <p>Java development is usually done using the Eclipse platform and integrated
 development environment. After downloading and extracting the Eclipse platform
 for web developers, you need to install some plugins. For my current project (at
 the time of writing), I needed five plugins. Installing them was no problem. One
 of the plugins was Subclipse, another was m2eclipse, the Maven integration for
 the IDE. It all went well, so far. The whole process took about two hours, but
 that's no problem. Setting up the development environment for C++ or any other
-language will take roughly the same amount of time.</p>
-<h4>
-Importing the project</h4>
-<p>
-I had already worked on a project, which I now wanted to import into my new
-Eclipse, so I checked it out via the <span class='code'>svn</span> command line tool. Then I imported
-it into Eclipse using the m2eclipse feature <em>Import existing Maven project</em>.
+language will take roughly the same amount of time.
+
+</p> <h4>Importing the project
+
+</h4> <p>I had already worked on a project, which I now wanted to import into my new
+Eclipse, so I checked it out via the 
+  <code>svn</code> command line tool. Then I imported
+it into Eclipse using the m2eclipse feature 
+  <em>Import existing Maven project</em>.
 That, too, went well. The project appeared in my project explorer and it started
-compiling it, right away. And this is when the fun part begins.</p>
-<h4>
-Building the project</h4>
-<p>
-The first time you want to build a project, Maven will download all the
+compiling it, right away. And this is when the fun part begins.
+
+
+</p> <h4>Building the project
+
+</h4> <p>The first time you want to build a project, Maven will download all the
 dependencies and Maven plugins required to perform the requested action.
 Compiling will download the "compile" plugin and execute it. Then, something
 happened that should not have happened: the internet connection went down for a
 few seconds, maybe half a minute, right when Maven was downloading dependencies.
-The router sent back <span class='code'>Network unreachable</span> ICMP packets, causing Maven to skip
+The router sent back 
+  <code>Network unreachable</code> ICMP packets, causing Maven to skip
 that download and try the next one. It took just a moment for Maven to have
 tried all 65 dependencies it still had to fetch. When the connection was
 re-established, I wanted it to continue the build, so I did a "clean" on the
-project, hoping it would then continue downloading.</p>
-<p>
-Instead of downloading the rest of the packages, I got 65 messages that roughly
+project, hoping it would then continue downloading.
+
+
+</p> <p>Instead of downloading the rest of the packages, I got 65 messages that roughly
 stated "Could not download package $package:$name:$version for the reason
 'Network unreachable'. Will not re-attempt to download it unless the update site
-expires or an update is forced."</p>
-<p>
-My poor Eclipse was deeply traumatised by not being able to download something.
-From now on, it will <strong>never</strong> try to download those things, anymore. It is too
+expires or an update is forced."
+
+</p> <p>My poor Eclipse was deeply traumatised by not being able to download something.
+From now on, it will 
+  <strong>never</strong> try to download those things, anymore. It is too
 afraid the horrible "Network unreachable" packet will come again. It's like
 "Dear diary, on May 25th, the internet connection was gone and the router said
-bad words to me :'("</p>
-<p>
-Having spent 4 hours downloading and configuring Eclipse and all the plugins, I
+bad words to me :'("
+
+
+</p> <p>Having spent 4 hours downloading and configuring Eclipse and all the plugins, I
 did not want to do it all over again, so I seeked alternative solutions. The
 only viable solutions I could come up with was: using the Maven command line
-tool <span class='code'>mvn</span>. And this is where things went really well. I typed "mvn compile"
+tool 
+  <code>mvn</code>. And this is where things went really well. I typed "mvn compile"
 and it compiled. I typed "mvn package" and I got a packaged version of my
 project. Everything went smoothly. Afterwards, Eclipse's Maven was also happier,
 because the missing packages were now installed. However, it was still missing
@@ -100,20 +105,21 @@ version, because the CLI one was more recent than the one integrated with
 Eclipse. This plugin was impossible to download, because Eclipse was still
 traumatised, so I had to go to the update site and download the four files (jar,
 pom and their respective sha1 sum files) by hand and put them into my local
-Maven repository.</p>
-<h4>
-Starting new projects</h4>
-<p>
-One of my coworkers recently gave me the following advice: "When you have
+Maven repository.
+
+
+</p> <h4>Starting new projects
+
+</h4> <p>One of my coworkers recently gave me the following advice: "When you have
 multiple projects with different toolset requirements, you should have one
 Eclipse installation per project. If you try to cram all the plugins needed for
 all your projects into one Eclipse, it will become so slow it's not funny,
 anymore." In other words, for each project, I need a 300MB IDE along with
 100-200MB of plugins. Of course, the whole process described above is initially
 required before actual development can begin. He also said, it's no problem to
-maintain several Eclipses in parallel. I don't completely agree.</p>
-<p>
-Imagine having started a project after spending an entire nine-to-five working
+maintain several Eclipses in parallel. I don't completely agree.
+
+</p> <p>Imagine having started a project after spending an entire nine-to-five working
 day setting up the IDE. I tend to work on a project with great motivation for a
 while and then to completely forget about it for several months, maybe even a
 year. If I want to continue working on it with an up-to-date toolset, I don't
@@ -124,13 +130,14 @@ plugins, you will find that all the configuration files have slightly changed
 their format, so you'll need to manually adapt those, as well, so when updating,
 you'll probably spend two days instead of one, because you need to adapt the
 files you gradually configured to your needs while developing the project a year
-ago.</p>
-<h4>
-Installing a library not in the Maven repository</h4>
-<p>
-Installing dependencies is very easy, if the library is in the Maven repository.
+ago.
+
+</p> <h4>Installing a library not in the Maven repository
+
+</h4> <p>Installing dependencies is very easy, if the library is in the Maven repository.
 If you need an up-to-date version of it, it's also not so hard: you download the
-new source package and do <span class='code'>mvn install</span> in its project root (alternatively, you
+new source package and do 
+  <code>mvn install</code> in its project root (alternatively, you
 import it in Eclipse and spend several orders of magnitude more time on it). If
 the package doesn't use Maven, it probably uses ant. That is all fine, you can
 build a jar with ant and use that from Eclipse. However, if you are not the only
@@ -138,123 +145,159 @@ one who works on the project or you want to employ a continuous integration
 system such as the Hudson build server, you will need to write a Maven POM
 (Project Object Model) file. This is an XML file that is probably not going to
 be less than a few hundred lines long. Nice and easy, right? Oh yes, you also
-need your own non-local Maven repository to store the new package in.</p>
-<h4>
-Solving a problem</h4>
-<p>
-When something suddenly doesn't work anymore in a Java web development
-environment, these are the steps you follow:</p>
-<ul>
-<li>
-Clean all projects and rebuild the workspace.</li>
-<li>
-Clean the tomcat server.</li>
-<li>
-Restart the tomcat server, in case you had the crazy idea to reload it, instead.</li>
-<li>
-Delete the tomcat server and add it again and all servlets you may have had.</li>
-<li>
-Clean again. If it didn't work, clean again. Repeat until it works or you're fed up with it.</li>
-<li>
-Restart Eclipse.</li>
-<li>
-Clean again.</li>
-<li>
-Delete the project and re-import it (I hope you are using Maven).</li>
-<li>
-Search the internet for the error message you got.</li>
-<li>
-If none of that worked, reinstall Eclipse, and delete your workspace along with all its settings.</li>
-</ul>
-<p>
-Indeed, most common problems are solved after a few cleans. That's the sad part.
+need your own non-local Maven repository to store the new package in.
+
+
+</p> <h4>Solving a problem
+
+</h4> <p>When something suddenly doesn't work anymore in a Java web development
+environment, these are the steps you follow:
+
+</p> <ul>
+  <li>Clean all projects and rebuild the workspace.
+  
+  </li>
+  <li>Clean the tomcat server.
+  
+  </li>
+  <li>Restart the tomcat server, in case you had the crazy idea to reload it, instead.
+  
+  </li>
+  <li>Delete the tomcat server and add it again and all servlets you may have had.
+  
+  </li>
+  <li>Clean again. If it didn't work, clean again. Repeat until it works or you're fed up with it.
+  
+  </li>
+  <li>Restart Eclipse.
+  
+  </li>
+  <li>Clean again.
+  
+  </li>
+  <li>Delete the project and re-import it (I hope you are using Maven).
+  
+  </li>
+  <li>Search the internet for the error message you got.
+  
+  </li>
+  <li>If none of that worked, reinstall Eclipse, and delete your workspace along with all its settings.
+  
+  </li>
+</ul> <p>Indeed, most common problems are solved after a few cleans. That's the sad part.
 One clean might not suffice, so just do it twice. Maybe restart the IDE and
 clean again, that might work. While Java has no undefined behaviour in the
-language itself, the tools are supremely unpredictable.</p>
-<p>
-This all takes time. This all takes <em>much</em> time. It takes so much time during
+language itself, the tools are supremely unpredictable.
+
+</p> <p>This all takes time. This all takes 
+  <em>much</em> time. It takes so much time during
 which I can not write code that it's annoying. In fact, I think that the
 productivity lost in should-be needless cleans and restarts is so much that the
 productivity gained by being able to write code with a few keystrokes less than
-with a normal editor does not make up for it.</p>
-<p>
-On a side note, tomcat reloading usually works, but sometimes doesn't. You will
+with a normal editor does not make up for it.
+
+
+</p> <p>On a side note, tomcat reloading usually works, but sometimes doesn't. You will
 learn, after using it for some time, after roughly how many reloads the server
 will be broken. You will learn that restarting it by hand before that time is
 faster than waiting for it to die when broken. You will note that a broken
-tomcat in Eclipse might just hose your IDE completely, requiring a restart.</p>
-<h3>
-<a id='h2'>Working with other Java developers</a></h3>
-<p>
-People are generally very convinced of the technology they use. Be it a car, a
+tomcat in Eclipse might just hose your IDE completely, requiring a restart.
+
+</p> <pre>
+</pre> <h3>Working with other Java developers
+
+</h3> <p>People are generally very convinced of the technology they use. Be it a car, a
 phone or a programming language. Programmers are no different and one of the
 demigods Java developers worship is Eclipse (another is Maven). Personally, I
-tend to see the positive and negative sides of each piece of technology I use.</p>
-<h4>
-Positive about working with C++</h4>
-<p>
-When I write C++ programs, I use the GNU build system, better known as the
-<span class='code'>autotools</span>. I wrote some <span class='code'>m4</span> and <span class='code'>automake</span> utilities to make my life
+tend to see the positive and negative sides of each piece of technology I use.
+
+</p> <h4>Positive about working with C++
+
+</h4> <p>When I write C++ programs, I use the GNU build system, better known as the
+
+  <code>autotools</code>. I wrote some 
+  <code>m4</code> and 
+  <code>automake</code> utilities to make my life
 easier when maintaining or enhancing existing projects and when creating new
-projects (see <a href='http://xinutec.org/git/devel/autoproj.git'>autoproj</a>). I usually
-spend a few minutes setting up a new project (<span class='code'>autoproj $projectname</span>). Then, I
+projects (see 
+  <a href="http://xinutec.org/git/devel/autoproj.git">autoproj</a>). I usually
+spend a few minutes setting up a new project (
+  <code>autoproj $projectname</code>). Then, I
 can start developing, right away. My editor loads its plugins based on file type
-and it does so very quickly. My IDE is <span class='code'>zsh</span>, <span class='code'>mc</span>, <span class='code'>vim</span> and all those
-smaller UNIX utilities along with some other utilities I or other people wrote.</p>
-<p>
-I spend most of my time writing programs.</p>
-<h4>
-Negative about working with C++</h4>
-<p>
-Automake is very limited in its language support. It has good support for
+and it does so very quickly. My IDE is 
+  <code>zsh</code>, 
+  <code>mc</code>, 
+  <code>vim</code> and all those
+smaller UNIX utilities along with some other utilities I or other people wrote.
+
+
+</p> <p>I spend most of my time writing programs.
+
+</p> <h4>Negative about working with C++
+
+</h4> <p>Automake is very limited in its language support. It has good support for
 several different languages, but if you need support for another language, it is
 very weak. A simple example: I have a tool called "producer" that produces a .c
-file from a .p file. The rule for this .c file is:</p>
-<pre>
-    .p.c:
-            $(builddir)/producer$(EXEEXT) $&lt; $@</pre><p>
-Easy enough. However, it has one problem: it has no dependency on <span class='code'>producer</span>,
+file from a .p file. The rule for this .c file is:
+
+</p> <pre>    .p.c:
+            $(builddir)/producer$(EXEEXT) $&lt; $@
+
+</pre> <p>Easy enough. However, it has one problem: it has no dependency on 
+  <code>producer</code>,
 so parallel builds may (and do) fail. There is also no good way to introduce
 this dependency to make. You could use GNU make, but then automake doesn't
-understand it, anymore. This is all not optimal, and there is more.</p>
-<h4>
-Java developers' view of Java</h4>
-<p>
-In the above two paragraphs, I described some positive and negative sides of
+understand it, anymore. This is all not optimal, and there is more.
+
+
+</p> <h4>Java developers' view of Java
+
+</h4> <p>In the above two paragraphs, I described some positive and negative sides of
 working with C++ and automake. My main issue with Java developers is their
 complete lack of objectivity. Java and, by extension, Eclipse and Maven, are
 tools brought into being by the lord himself and are perfect in every form (yes,
 I am exaggerating a little, but it's almost like this). This is what I heard so
-many times from my coworkers:</p>
-<ul>
-<li>
-With Eclipse and Maven, everything is so easy.<p>
-No, not really. Read up.</p>
-</li>
-<li>
-With Eclipse and Maven, you don't need to mess with configuration files.<p>
-Yes, you do, and it's worse than with <span class='code'>make</span>, because you're not supposed to
-meddle with them, so tools that operate on those files may mess up your
-customisations.</p>
-</li>
-<li>
-I don't want to write my own makefiles, I want to write code.<p>
-The thing is, if you do write your own makefiles, fixing a problem is much
-easier, because you're used to it. Fixing a problem in Eclipse or Maven takes
-hours, because you have to seek help on the internet with people who already
-went through the tens of XML files you may need to modify.</p>
-</li>
-</ul>
-<h3>
-<a id='h3'>Final thoughts</a></h3>
-<p>
-I do like some aspects of Java and I do dislike some aspects of C++, but one
+many times from my coworkers:
+
+</p> <ul>
+  <li>With Eclipse and Maven, everything is so easy.
+  
+  
+    <p>No, not really. Read up.
+    
+    </p>
+  </li>
+  <li>With Eclipse and Maven, you don't need to mess with configuration files.
+  
+  
+    <p>Yes, you do, and it's worse than with 
+      <code>make</code>, because you're not supposed to
+    meddle with them, so tools that operate on those files may mess up your
+    customisations.
+    
+    
+    </p>
+  </li>
+  <li>I don't want to write my own makefiles, I want to write code.
+  
+  
+    <p>The thing is, if you do write your own makefiles, fixing a problem is much
+    easier, because you're used to it. Fixing a problem in Eclipse or Maven takes
+    hours, because you have to seek help on the internet with people who already
+    went through the tens of XML files you may need to modify.
+    
+    </p>
+  </li>
+</ul> <pre>
+</pre> <h3>Final thoughts
+
+</h3> <p>I do like some aspects of Java and I do dislike some aspects of C++, but one
 should always use the tool that best fits the job. Furthermore, one should know
 the limitations and negative sides of the tools at hand, not deny them. That is
-what makes a tool user a tool zealot.</p>
-<p>
-Enjoy your experience with Java.</p>
+what makes a tool user a tool zealot.
 
+</p> <p>Enjoy your experience with Java.
+</p>
 		</div> 
 
 		<div id="footer"> 

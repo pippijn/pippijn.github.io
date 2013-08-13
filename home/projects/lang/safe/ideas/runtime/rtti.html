@@ -56,58 +56,85 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Runtime Type Information (Reflection)</h2>
-<ul></ul><p>
-The RTTI system will benefit from runtime support in addition to the generated
-structures. Ideas for some runtime library functionality:</p>
-<ul>
-<li>
-On module initialisation, type information from that module is registered
-(see <a href='../language/modules'>modules</a>).</li>
-<li>
-Registration can construct additional cached links between structures such
-as backlinks from members to their parents and construction of other mappings
-from string to RTTI structures.</li>
-<li>
-Lookup of type info by name (using abovementioned mappings). E.g. the
-lookup of <span class='code'>"Core::Buffer::t"</span> would yield the <span class='code'>type_info</span> structure for that
-type (even if it is private).</li>
-<li>
-Allocate an object from a <span class='code'>type_info</span>. It will simply call <span class='code'>malloc</span> with
-the appropriate size as found in the info. What to do with its members?<ul>
-<li>
-Uninitialised: Dangerous!</li>
-<li>
-<span class='code'>bzero</span>'d (using memset): Has the problem that the representation of NULL
-may not actually be all bits zero, thus causes potential undefined behaviour on
-platforms where it's not.</li>
-<li>
-Iterate over its members and initialise appropriately: More effort and
-slower, but safe and portable. Perhaps some information could be cached about
-the type, whether it is data-only or contains pointers. Data-only structs can be
-<span class='code'>memset</span> as an optional optimisation.</li>
-</ul>
-</li>
-<li>
-Set members of an object. I'm not sure how to do this properly, as there
-is no standard way to uniformly treat all kinds of data. Perhaps an <span class='code'>inject</span>
-could help handling this (similar to <span class='code'>printf</span>).  Runtime type checking should
-be performed by this function.</li>
-<li>
-Read members of an object. This has similar issues as the above. It could
-just return the same <span class='code'>datatype</span> as the member-set function and the callee must
-examine it (probably the best way).</li>
-<li>
-Provide iterators (see <a href='../language/iterators'>iterators</a>) for members,
-namespace children and contained structs, etc.</li>
-</ul>
-<p>
-The runtime library would also contain predefined type info structures for
-built-in types.</p>
-<p>
-This would be so much fun!</p>
+			<h2>Runtime Type Information (Reflection)
 
+</h2> <p>The RTTI system will benefit from runtime support in addition to the generated
+structures. Ideas for some runtime library functionality:
+
+</p> <ul>
+  <li>On module initialisation, type information from that module is registered
+  (see 
+    <a href="../language/modules">modules</a>).
+  
+  
+  </li>
+  <li>Registration can construct additional cached links between structures such
+  as backlinks from members to their parents and construction of other mappings
+  from string to RTTI structures.
+  
+  </li>
+  <li>Lookup of type info by name (using abovementioned mappings). E.g. the
+  lookup of 
+    <code>"Core::Buffer::t"</code> would yield the 
+    <code>type_info</code> structure for that
+  type (even if it is private).
+  
+  
+  </li>
+  <li>Allocate an object from a 
+    <code>type_info</code>. It will simply call 
+    <code>malloc</code> with
+  the appropriate size as found in the info. What to do with its members?
+  
+  
+    <ul>
+      <li>Uninitialised: Dangerous!
+      
+      </li>
+      <li>
+        <code>bzero</code>'d (using memset): Has the problem that the representation of NULL
+      may not actually be all bits zero, thus causes potential undefined behaviour on
+      platforms where it's not.
+      
+      
+      </li>
+      <li>Iterate over its members and initialise appropriately: More effort and
+      slower, but safe and portable. Perhaps some information could be cached about
+      the type, whether it is data-only or contains pointers. Data-only structs can be
+      
+        <code>memset</code> as an optional optimisation.
+      
+      
+      </li>
+    </ul>
+  </li>
+  <li>Set members of an object. I'm not sure how to do this properly, as there
+  is no standard way to uniformly treat all kinds of data. Perhaps an 
+    <code>inject</code>
+  could help handling this (similar to 
+    <code>printf</code>).  Runtime type checking should
+  be performed by this function.
+  
+  
+  </li>
+  <li>Read members of an object. This has similar issues as the above. It could
+  just return the same 
+    <code>datatype</code> as the member-set function and the callee must
+  examine it (probably the best way).
+  
+  
+  </li>
+  <li>Provide iterators (see 
+    <a href="../language/iterators">iterators</a>) for members,
+  namespace children and contained structs, etc.
+  
+  
+  </li>
+</ul> <p>The runtime library would also contain predefined type info structures for
+built-in types.
+
+</p> <p>This would be so much fun!
+</p>
 		</div> 
 
 		<div id="footer"> 

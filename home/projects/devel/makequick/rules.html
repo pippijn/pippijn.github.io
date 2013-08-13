@@ -47,59 +47,60 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Rules</h2>
-<ul><li><a href='#h1'>Pattern matching</a></li>
-<li><a href='#h2'>Code continuations</a></li>
-<li><a href='#h3'>Special variables in rules</a></li>
-<li><a href='#h4'>Target-specific variables</a></li>
-<li><a href='#h5'>Output in $(builddir)</a></li>
-<li><a href='#h6'>Silencing rules</a></li>
-<li><a href='#h7'>External rules</a></li>
-<li><a href='#h8'>Replacing automake rules</a></li></ul><p>
-<span class='code'>MakeQuick</span> defines a few rules itself and has knowledge about automake-defined
+			<h2>Rules
+
+</h2> <p>
+  <code>MakeQuick</code> defines a few rules itself and has knowledge about automake-defined
 rules, so that e.g. rules for compiling C sources are not emitted again. The
-rules feature in <span class='code'>MakeQuick</span> is the reason this project was actually started. The
+rules feature in 
+  <code>MakeQuick</code> is the reason this project was actually started. The
 syntax is basically the same as GNU Make pattern rules with some extensions, but
-the way they are expanded makes them much more useful.</p>
-<pre class='code-block'>
+the way they are expanded makes them much more useful.
+
+
+</p> <pre class="code-block">
    %.o<span class="Statement">:</span> %.c <span class="Identifier">{</span>
       <span class="Identifier">$(CC)</span> <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-The above example is a simple rule to build object files from C sources. The
+</pre> <p>The above example is a simple rule to build object files from C sources. The
 rule is instantiated for each match, so that the resulting Makefile has only
-explicit rules.</p>
-<p>
-Rules are matched on the graph, rather than on the file system. When a rule
+explicit rules.
+
+</p> <p>Rules are matched on the graph, rather than on the file system. When a rule
 matches a file in the graph, an edge from that file to the new file is created.
-Other rules can then match this new file.</p>
-<p>
-Rules defined in a program block implicitly depend on that program and
-<span class='code'>$(THIS)</span> expands to the program location with <span class='code'>$(EXEEXT)</span> appended. Thus, in
-this case, the <span class='code'>$(THIS)</span> variable used in rules is expanded to
-<span class='code'>$(builddir)/msgcat$(EXEEXT)</span></p>
-<pre class='code-block'>
+Other rules can then match this new file.
+
+</p> <p>Rules defined in a program block implicitly depend on that program and
+
+  <code>$(THIS)</code> expands to the program location with 
+  <code>$(EXEEXT)</code> appended. Thus, in
+this case, the 
+  <code>$(THIS)</code> variable used in rules is expanded to
+
+  <code>$(builddir)/msgcat$(EXEEXT)</code>
+
+
+</p> <pre class="code-block">
    <span class="Type">program</span> msgcat <span class="Identifier">{</span>
       %.c<span class="Statement">:</span> %.msg <span class="Identifier">{</span>
          <span class="Identifier">$(THIS)</span> -c <span class="Identifier">$&lt;</span> <span class="Identifier">$@</span>
       <span class="Identifier">}</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-Rules inside programs are always considered for match, but are disabled in the
+</pre> <p>Rules inside programs are always considered for match, but are disabled in the
 resulting Makefile, if the program was conditional and disabled at configure
-time.</p>
-<h3>
-<a id='h1'>Pattern matching</a></h3>
-<p>
-The introductory example is already a pattern rule. Patterns in <span class='code'>MakeQuick</span> are
+time.
+
+</p> <h3>Pattern matching
+
+</h3> <p>The introductory example is already a pattern rule. Patterns in 
+  <code>MakeQuick</code> are
 slightly more advanced than in GNU Make. There is a set of rules defining which
-pattern is matched. Simply speaking, the most special pattern is matched.</p>
-<pre class='code-block'>
+pattern is matched. Simply speaking, the most special pattern is matched.
+
+
+</p> <pre class="code-block">
    %.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
       ...
    <span class="Identifier">}</span>
@@ -107,15 +108,21 @@ pattern is matched. Simply speaking, the most special pattern is matched.</p>
       ...
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-In the above example, the second rule is matched for all <span class='code'>.y</span> files under
-<span class='code'>src/</span>. All other <span class='code'>.y</span> files are matched by the first rule.</p>
-<h3>
-<a id='h2'>Code continuations</a></h3>
-<p>
-Rules can span multiple lines, just like <a href='variables'>variables</a>.</p>
-<pre class='code-block'>
+</pre> <p>In the above example, the second rule is matched for all 
+  <code>.y</code> files under
+
+  <code>src/</code>. All other 
+  <code>.y</code> files are matched by the first rule.
+
+
+</p> <pre>
+</pre> <h3>Code continuations
+
+</h3> <p>Rules can span multiple lines, just like 
+  <a href="variables">variables</a>.
+
+
+</p> <pre class="code-block">
    %.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
       echo This is the first line
       bison
@@ -126,47 +133,84 @@ Rules can span multiple lines, just like <a href='variables'>variables</a>.</p>
          the third line
    <span class="Identifier">}</span>
 
-</pre>
-<h3>
-<a id='h3'>Special variables in rules</a></h3>
-<ul>
-<li>
-$<<p>
-This variable expands to the first dependency. It does not exist, if the target
-does not have any dependencies or the only dependency is <span class='code'>$(THIS)</span>.</p>
-</li>
-<li>
-$@<p>
-This variable expands to the target. It does not exist, if the rule has multiple
-targets.</p>
-</li>
-<li>
-$*<p>
-The string matched by <span class='code'>%</span> in a pattern rule. It only exists in pattern rules.</p>
-</li>
-<li>
-$1 ... $n<p>
-The <span class='code'>n</span>th dependency. Only dependencies listed on the rule itself are
-considered. Dependencies in external dependency declarations are not considered.</p>
-</li>
-<li>
-$-1 ... $-n<p>
-The <span class='code'>n</span>th dependency, counting from the last. Thus, <span class='code'>$-1</span> is the last
-dependency.</p>
-</li>
-<li>
-$0<p>
-An alias for <span class='code'>$(THIS)</span>. Neither <span class='code'>$0</span> nor <span class='code'>$(THIS)</span> exist in global rules.</p>
-</li>
-</ul>
-<h3>
-<a id='h4'>Target-specific variables</a></h3>
-<p>
-For a generic rule, it is often useful to let targets define an additional set
-of flags for the tool. The variable syntax <span class='code'>$[VAR]</span> roughly expands to
-<span class='code'>$(AM_VAR) $(VAR) $($(target)_VAR)</span>, where <span class='code'>$(target)</span> is the <span class='code'>program</span> or
-<span class='code'>library</span> the target file is being built for.</p>
-<pre class='code-block'>
+</pre> <pre>
+</pre> <h3>Special variables in rules
+
+</h3> <ul>
+  <li>$&lt;
+  
+  
+    <p>This variable expands to the first dependency. It does not exist, if the target
+    does not have any dependencies or the only dependency is 
+      <code>$(THIS)</code>.
+    
+    
+    </p>
+  </li>
+  <li>$@
+  
+  
+    <p>This variable expands to the target. It does not exist, if the rule has multiple
+    targets.
+    
+    </p>
+  </li>
+  <li>$*
+  
+  
+    <p>The string matched by 
+      <code>%</code> in a pattern rule. It only exists in pattern rules.
+    
+    
+    </p>
+  </li>
+  <li>$1 ... $n
+  
+  
+    <p>The 
+      <code>n</code>th dependency. Only dependencies listed on the rule itself are
+    considered. Dependencies in external dependency declarations are not considered.
+    
+    
+    </p>
+  </li>
+  <li>$-1 ... $-n
+  
+  
+    <p>The 
+      <code>n</code>th dependency, counting from the last. Thus, 
+      <code>$-1</code> is the last
+    dependency.
+    
+    
+    </p>
+  </li>
+  <li>$0
+  
+  
+    <p>An alias for 
+      <code>$(THIS)</code>. Neither 
+      <code>$0</code> nor 
+      <code>$(THIS)</code> exist in global rules.
+    
+    
+    </p>
+  </li>
+</ul> <pre>
+</pre> <h3>Target-specific variables
+
+</h3> <p>For a generic rule, it is often useful to let targets define an additional set
+of flags for the tool. The variable syntax 
+  <code>$[VAR]</code> roughly expands to
+
+  <code>$(AM_VAR) $(VAR) $($(target)_VAR)</code>, where 
+  <code>$(target)</code> is the 
+  <code>program</code> or
+
+  <code>library</code> the target file is being built for.
+
+
+</p> <pre class="code-block">
    %.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
       <span class="Identifier">$(YACC)</span> <span class="Identifier">$[YFLAGS]</span> -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
    <span class="Identifier">}</span>
@@ -177,27 +221,30 @@ of flags for the tool. The variable syntax <span class='code'>$[VAR]</span> roug
       <span class="Identifier">}</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-The pattern rule in the above example might be expanded to roughly the following
-make code:</p>
-<pre class='code-block'>
+</pre> <p>The pattern rule in the above example might be expanded to roughly the following
+make code:
+
+</p> <pre class="code-block">
    src/parser.c<span class="Statement">:</span> src/parser.y
       <span class="Identifier">$(MKDIR_P)</span> src/
       <span class="Identifier">$(YACC)</span> <span class="Identifier">$(AM_YFLAGS)</span> <span class="Identifier">$(YFLAGS)</span> <span class="Identifier">$(myparser_YFLAGS)</span> -o src/parser.c \
          <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y
 
-</pre>
-<p>
-The <span class='code'>test</span> makes sure that vpath builds work correctly. The first line will
-make the target directory, if it does not yet exist.</p>
-<h4>
-$(TARGET)</h4>
-<p>
-The special variable <span class='code'>$(TARGET)</span> will expand to the library or program name.
+</pre> <p>The 
+  <code>test</code> makes sure that vpath builds work correctly. The first line will
+make the target directory, if it does not yet exist.
+
+
+</p> <h4>$(TARGET)
+
+</h4> <p>The special variable 
+  <code>$(TARGET)</code> will expand to the library or program name.
 Not only that, but you can also access its declarations using the syntax
-described in <a href='variables'>variables</a>.</p>
-<pre class='code-block'>
+described in 
+  <a href="variables">variables</a>.
+
+
+</p> <pre class="code-block">
    %.c<span class="Statement">:</span> %.cx <span class="Identifier">{</span>
       <span class="Identifier">$(CPP)</span>
          -DTARGET<span class="Statement">=</span><span class="String">'&quot;</span><span class="Identifier">$(TARGET)</span><span class="String">&quot;'</span>
@@ -215,59 +262,86 @@ described in <a href='variables'>variables</a>.</p>
       <span class="Identifier">}</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-In the above example, <span class='code'>$(TARGET.link : library)</span> will be expanded to <span class='code'>mylib1</span>.</p>
-<h3>
-<a id='h5'>Output in $(builddir)</a></h3>
-<p>
-You may want to output the resulting files directly into the <span class='code'>$(builddir)</span>,
-instead of a subdirectory. For this use case, the <span class='code'>%%</span> pattern may be used.</p>
-<pre class='code-block'>
+</pre> <p>In the above example, 
+  <code>$(TARGET.link : library)</code> will be expanded to 
+  <code>mylib1</code>.
+
+
+</p> <pre>
+</pre> <h3>Output in $(builddir)
+
+</h3> <p>You may want to output the resulting files directly into the 
+  <code>$(builddir)</code>,
+instead of a subdirectory. For this use case, the 
+  <code>%%</code> pattern may be used.
+
+
+</p> <pre class="code-block">
    %%.c<span class="Statement">:</span> %%.y <span class="Identifier">{</span>
       <span class="Identifier">$(YACC)</span> <span class="Identifier">$[YFLAGS]</span> -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-The <span class='code'>%%</span> pattern on the left will match exactly one path segment, i.e. without
-any path separators (<span class='code'>/</span>). A <span class='code'>%%</span> on the right matches any number of path
+</pre> <p>The 
+  <code>%%</code> pattern on the left will match exactly one path segment, i.e. without
+any path separators (
+  <code>/</code>). A 
+  <code>%%</code> on the right matches any number of path
 segments before matching the final path segment, i.e. the file, which was
-matched by the <span class='code'>%%</span> on the left. The above example might be expanded to:</p>
-<pre class='code-block'>
+matched by the 
+  <code>%%</code> on the left. The above example might be expanded to:
+
+
+</p> <pre class="code-block">
    parser.c<span class="Statement">:</span> src/parser.y
       <span class="Identifier">$(YACC)</span> <span class="Identifier">$(AM_YFLAGS)</span> <span class="Identifier">$(YFLAGS)</span> <span class="Identifier">$(myparser_YFLAGS)</span> -o parser.c \
          <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y
 
-</pre>
-<p>
-As you can see, a <span class='code'>mkdir</span> is no longer necessary and the output is now in the
-current directory.</p>
-<h3>
-<a id='h6'>Silencing rules</a></h3>
-<p>
-Similar to <span class='code'>make</span>, lines of a recipe may be silenced by prepending them with
-<span class='code'>@</span>. <span class='code'>MakeQuick</span> extends this to automake <span class='code'>silent-rules</span>.</p>
-<pre class='code-block'>
+</pre> <p>As you can see, a 
+  <code>mkdir</code> is no longer necessary and the output is now in the
+current directory.
+
+
+</p> <pre>
+</pre> <h3>Silencing rules
+
+</h3> <p>Similar to 
+  <code>make</code>, lines of a recipe may be silenced by prepending them with
+
+  <code>@</code>. 
+  <code>MakeQuick</code> extends this to automake 
+  <code>silent-rules</code>.
+
+
+</p> <pre class="code-block">
    %.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
       @echo Calling bison
       @(YACC)bison <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-The <span class='code'>@(NAME)</span> syntax emits an <span class='code'>$(AM_V_GEN)</span>-like variable that prints <span class='code'>YACC</span>
-and the target (<span class='code'>$@</span>) in the <span class='code'>silent-rules</span> style. Calling <span class='code'>make V=1</span> will
-print the actual command instead of the single-line message.</p>
-<h3>
-<a id='h7'>External rules</a></h3>
-<p>
-If <span class='code'>MakeQuick</span> is not flexible enough for the use case, external rules may be
-imported using the <span class='code'>extern</span> keyword. You may optionally add rule stubs
+</pre> <p>The 
+  <code>@(NAME)</code> syntax emits an 
+  <code>$(AM_V_GEN)</code>-like variable that prints 
+  <code>YACC</code>
+and the target (
+  <code>$@</code>) in the 
+  <code>silent-rules</code> style. Calling 
+  <code>make V=1</code> will
+print the actual command instead of the single-line message.
+
+
+</p> <pre>
+</pre> <h3>External rules
+
+</h3> <p>If 
+  <code>MakeQuick</code> is not flexible enough for the use case, external rules may be
+imported using the 
+  <code>extern</code> keyword. You may optionally add rule stubs
 declaring patterns or explicit graph edges that may be assumed as being
 implemented. Note that these rules are not special and more exact rules can
-still be matched.</p>
-<pre class='code-block'>
+still be matched.
+
+
+</p> <pre class="code-block">
    extern <span class="String">'lex-rules.am'</span> %.c<span class="Statement">:</span> %.l
    extern <span class="String">'yacc-rules.am'</span> <span class="Identifier">{</span>
       %.c<span class="Statement">:</span> %.y ;
@@ -275,28 +349,32 @@ still be matched.</p>
    <span class="Identifier">}</span>
    extern <span class="String">'more-rules.am'</span>
 
-</pre>
-<h3>
-<a id='h8'>Replacing automake rules</a></h3>
-<p>
-The power gained with the introduction of these pattern rules can be used to
+</pre> <pre>
+</pre> <h3>Replacing automake rules
+
+</h3> <p>The power gained with the introduction of these pattern rules can be used to
 replace large parts of automake. E.g. a simplified automake rule for building
-object files from C sources can be written as follows:</p>
-<pre class='code-block'>
+object files from C sources can be written as follows:
+
+</p> <pre class="code-block">
    %%.o<span class="Statement">:</span> %%.c <span class="Identifier">{</span>
       @(CC)<span class="Identifier">$(CC)</span> <span class="Identifier">$[CPPFLAGS]</span> <span class="Identifier">$[CFLAGS]</span> -MT <span class="Identifier">$@</span> -MD -MP -MF <span class="Identifier">$(DEPDIR)</span>/<span class="Identifier">$*</span>.Tpo -c -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-Automake still provides many useful tools, such as its <span class='code'>distcheck</span> and
-<span class='code'>parallel-tests</span> facilities. These tools are the reason <span class='code'>MakeQuick</span> targets automake
-and not make, directly.</p>
-<p>
-Also note that it's not useful to actually rewrite the automake rules, as the
-resulting Makefile will not be any shorter. Automake may do optimisations at a
-lower level than <span class='code'>MakeQuick</span>, so it is not advisable to override many of its rules.</p>
+</pre> <p>Automake still provides many useful tools, such as its 
+  <code>distcheck</code> and
 
+  <code>parallel-tests</code> facilities. These tools are the reason 
+  <code>MakeQuick</code> targets automake
+and not make, directly.
+
+
+</p> <p>Also note that it's not useful to actually rewrite the automake rules, as the
+resulting Makefile will not be any shorter. Automake may do optimisations at a
+lower level than 
+  <code>MakeQuick</code>, so it is not advisable to override many of its rules.
+
+</p>
 		</div> 
 
 		<div id="footer"> 

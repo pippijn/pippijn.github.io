@@ -32,141 +32,193 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Why to use C++</h2>
-<ul><li><a href='#h1'>Links</a></li></ul><p>
-These are a few arguments why to use C++.</p>
-<ul>
-<li>
-High performance<a id='performance'></a><p>
-C++ can be very fast. It can be very lightweight and execute code with very
-high performance. Also, modern compilers do an excellent job on optimising
-code. They can generate assembler code specific to a processor and optimise
-for specific branch predictors or even models of branch predictors.</p>
-</li>
-<li>
-Little magic<a id='nomagic'></a><p>
-The only things magical in C++ are the operators on built-in types. The
-operators on strings such as less-than comparison, equality comparison and
-assignment are all well-defined in the C++ standard library. They can be
-inspected and modified at will. It would be even nicer if it were possible to
-override the operators for built-in types within certain classes or namespaces.</p>
-</li>
-<li>
-Pragmatic<a id='pragmatic'></a><p>
-Being a multi-paradigm language, C++ adapts to real-world problems with fairly
-little effort. Functional programming can be achieved with function pointers,
-upcoming lambda expressions (which are currently emulated with function-local
-classes). Object oriented is built in using classes and full inheritance.
-Procedural programming is done with functions.</p>
-</li>
-<li>
-Flexible<a id='flexible'></a><p>
-With sufficient effort, it can be made to do almost anything any other
-language can do. This effort may be enormous, but it is possible.</p>
-</li>
-<li>
-Unrestrictive<a id='unrestrictive'></a><p>
-Many see this as a negative aspect of a language, but in C++ you are able to
-force your machine into doing exactly what you want. You are not limited by
-the language, only by your skill and imagination. Even though you may only
-abuse the language in a very small area (my <span class='code'>hash_table</span> implementation
-abuses C++ in exactly one line), this small amount of abuse may be essential
-for performance (that single line makes the code much more efficient).</p>
-</li>
-<li>
-Easy to interface with other languages<a id='interop'></a></li>
-<li>
-Templates<a id='templates'></a><p>
-The C++ <span class='code'>template</span> system is a very powerful code generator.</p>
-</li>
-<li>
-Choices<a id='choices'></a><p>
-Instead of enforcing checks, C++ allows optional checking for runtime errors
-such as invalid array accesses, buffer overflows, invalid pointer dereferences
-and more. These checks slow down the program in the same way automatically
-checked languages like Java are slowed down. The difference is that in C++
-you have the choice.</p>
-<p>
-This is one of the main strengths of C++: it leaves many things open to the
-programmer. They can choose to use automatic memory management or to manually
-free all used memory. They can decide where to store the created objects.
-Choices include the stack, the heap and a specialised object allocator.</p>
-</li>
-<li>
-Standard library is to the point<a id='stdlib'></a><p>
-The C++ standard library is much more limited than the Java class library, but
-it is much more to the point. It provides tools that are used in almost any
-program. Features include data structures, algorithms, streams and simple
-template metaprogramming tools. The GNU C++ library is 7MB which is tiny compared
-to the 105MB of the Java class library. This limited set of features make C++
-much more portable than Java. C++ can be implemented on platforms that provide
-no graphical user interface. While the Java core language can be implemented
-on such platforms, the class library can't.</p>
-</li>
-<li>
-Operator overloading<a id='operators'></a><p>
-This is a very important feature and is used to create algorithms that operate
-on pointers and primitive arrays as well as classes. It also allows us to
-create used defined datatypes that act like built-in types. With C++, it is
-possible to define a <span class='code'>rational</span> class that has all mathematical operators
-defined and can be used just like a normal floating point number.</p>
-</li>
-<li>
-Multiple inheritance<a id='mi'></a><p>
-Although arguably a bad feature, multiple inheritance makes many things a lot
-easier. It can be abused, but it can also be used right. An example I can give
-here is inheritance to gain memory allocation semantics. For instance, if you
-write a high performance slice allocator that defines <span class='code'>operator new</span> and
-<span class='code'>delete</span>, inheriting from it will make the class automatically and
-transparently allocated using this slice allocator:</p>
-<pre class='code-block'>
-   <span class="Type">template</span>&lt;<span class="Type">typename</span> T&gt;
-   <span class="Type">struct</span> slice_allocated
-   {
-     <span class="Type">void</span> *<span class="Statement">operator</span> <span class="Statement">new</span> (<span class="Type">size_t</span>);
-     <span class="Type">void</span> <span class="Statement">operator</span> <span class="Statement">delete</span> (<span class="Type">void</span> *);
-   };
-   <span class="Type">struct</span> node : node_base, slice_allocated&lt;node&gt;
-   {
-     <span class="Comment">// some code here</span>
-   };
+			<h2>Why to use C++
 
-</pre>
-<p>
-Here, multiple inheritance is required to inherit the code from the allocator
-as well as the code from <span class='code'>node_base</span>. Things like that would not be possible
-with single inheritance.</p>
-</li>
-<li>
-Scoped resource management<a id='raii'></a><p>
-This allows for the RAII design pattern. It acquires a resource when
-initialising an object and releases it when destroying the object. See the
-<a href='why-not-use_java.xhtml#raii'>Why not to use Java</a> page for an example.</p>
-</li>
-<li>
-<span class='code'>const</span>-correctness<p>
-C++ can, using the <span class='code'>const</span> keyword, help the programmer prevent modification
-to unwritable objects. This can prevent accidental modification of actual
-read-only data such as string literals but also indicate what a programmer may
-do with an object. As always, there are ways to work around the constness of
-an object using <span class='code'>const_cast</span> but that is rarely a good idea and may result in
-<a href='why-not-use_cpp.xhtml#ub'>undefined behaviour</a>. Member functions marked
-<span class='code'>const</span> indicate that those functions do not modify the data structure they
-operate on. This is both documenting and error preventing. Using top-level
-<span class='code'>const</span> on function parameters prevents assignment of such (and therefore
-works like Java's <span class='code'>final</span> keyword).</p>
-<p>
-The <span class='code'>const</span> keyword helps the design-by-contract strategy.</p>
-</li>
-</ul>
-<h3>
-<a id='h1'>Links</a></h3>
-<ul>
-<li>
-<a href='http://bruscy.republika.pl/pages/przemek/java_not_really_faster_than_cpp.html'>The Java (not really) Faster than C++ Benchmark</a></li>
-</ul>
+</h2> <p>These are a few arguments why to use C++.
 
+</p> <ul>
+  <li>High performance (@performance)
+  
+  
+    <p>C++ can be very fast. It can be very lightweight and execute code with very
+    high performance. Also, modern compilers do an excellent job on optimising
+    code. They can generate assembler code specific to a processor and optimise
+    for specific branch predictors or even models of branch predictors.
+    
+    </p>
+  </li>
+  <li>Little magic (@nomagic)
+  
+  
+    <p>The only things magical in C++ are the operators on built-in types. The
+    operators on strings such as less-than comparison, equality comparison and
+    assignment are all well-defined in the C++ standard library. They can be
+    inspected and modified at will. It would be even nicer if it were possible to
+    override the operators for built-in types within certain classes or namespaces.
+    
+    </p>
+  </li>
+  <li>Pragmatic (@pragmatic)
+  
+  
+    <p>Being a multi-paradigm language, C++ adapts to real-world problems with fairly
+    little effort. Functional programming can be achieved with function pointers,
+    upcoming lambda expressions (which are currently emulated with function-local
+    classes). Object oriented is built in using classes and full inheritance.
+    Procedural programming is done with functions.
+    
+    </p>
+  </li>
+  <li>Flexible (@flexible)
+  
+  
+    <p>With sufficient effort, it can be made to do almost anything any other
+    language can do. This effort may be enormous, but it is possible.
+    
+    </p>
+  </li>
+  <li>Unrestrictive (@unrestrictive)
+  
+  
+    <p>Many see this as a negative aspect of a language, but in C++ you are able to
+    force your machine into doing exactly what you want. You are not limited by
+    the language, only by your skill and imagination. Even though you may only
+    abuse the language in a very small area (my 
+      <code>hash_table</code> implementation
+    abuses C++ in exactly one line), this small amount of abuse may be essential
+    for performance (that single line makes the code much more efficient).
+    
+    
+    </p>
+  </li>
+  <li>Easy to interface with other languages (@interop)
+  
+  </li>
+  <li>Templates (@templates)
+  
+  
+    <p>The C++ 
+      <code>template</code> system is a very powerful code generator.
+    
+    
+    </p>
+  </li>
+  <li>Choices (@choices)
+  
+  
+    <p>Instead of enforcing checks, C++ allows optional checking for runtime errors
+    such as invalid array accesses, buffer overflows, invalid pointer dereferences
+    and more. These checks slow down the program in the same way automatically
+    checked languages like Java are slowed down. The difference is that in C++
+    you have the choice.
+    
+    </p>
+    <p>This is one of the main strengths of C++: it leaves many things open to the
+    programmer. They can choose to use automatic memory management or to manually
+    free all used memory. They can decide where to store the created objects.
+    Choices include the stack, the heap and a specialised object allocator.
+    
+    </p>
+  </li>
+  <li>Standard library is to the point (@stdlib)
+  
+  
+    <p>The C++ standard library is much more limited than the Java class library, but
+    it is much more to the point. It provides tools that are used in almost any
+    program. Features include data structures, algorithms, streams and simple
+    template metaprogramming tools. The GNU C++ library is 7MB which is tiny compared
+    to the 105MB of the Java class library. This limited set of features make C++
+    much more portable than Java. C++ can be implemented on platforms that provide
+    no graphical user interface. While the Java core language can be implemented
+    on such platforms, the class library can't.
+    
+    </p>
+  </li>
+  <li>Operator overloading (@operators)
+  
+  
+    <p>This is a very important feature and is used to create algorithms that operate
+    on pointers and primitive arrays as well as classes. It also allows us to
+    create used defined datatypes that act like built-in types. With C++, it is
+    possible to define a 
+      <code>rational</code> class that has all mathematical operators
+    defined and can be used just like a normal floating point number.
+    
+    
+    </p>
+  </li>
+  <li>Multiple inheritance (@mi)
+  
+  
+    <p>Although arguably a bad feature, multiple inheritance makes many things a lot
+    easier. It can be abused, but it can also be used right. An example I can give
+    here is inheritance to gain memory allocation semantics. For instance, if you
+    write a high performance slice allocator that defines 
+      <code>operator new</code> and
+    
+      <code>delete</code>, inheriting from it will make the class automatically and
+    transparently allocated using this slice allocator:
+    
+    
+    </p>
+    <code />
+    <p>Here, multiple inheritance is required to inherit the code from the allocator
+    as well as the code from 
+      <code>node_base</code>. Things like that would not be possible
+    with single inheritance.
+    
+    
+    </p>
+  </li>
+  <li>Scoped resource management (@raii)
+  
+  
+    <p>This allows for the RAII design pattern. It acquires a resource when
+    initialising an object and releases it when destroying the object. See the
+    
+      <a href="why-not-use_java.xhtml#raii">Why not to use Java</a> page for an example.
+    
+    
+    </p>
+  </li>
+  <li>
+    <code>const</code>-correctness
+  
+  
+    <p>C++ can, using the 
+      <code>const</code> keyword, help the programmer prevent modification
+    to unwritable objects. This can prevent accidental modification of actual
+    read-only data such as string literals but also indicate what a programmer may
+    do with an object. As always, there are ways to work around the constness of
+    an object using 
+      <code>const_cast</code> but that is rarely a good idea and may result in
+    
+      <a href="why-not-use_cpp.xhtml#ub">undefined behaviour</a>. Member functions marked
+    
+      <code>const</code> indicate that those functions do not modify the data structure they
+    operate on. This is both documenting and error preventing. Using top-level
+    
+      <code>const</code> on function parameters prevents assignment of such (and therefore
+    works like Java's 
+      <code>final</code> keyword).
+    
+    
+    </p>
+    <p>The 
+      <code>const</code> keyword helps the design-by-contract strategy.
+    
+    
+    </p>
+  </li>
+</ul> <h3>Links
+
+</h3> <ul>
+  <li>
+    <a href="http://bruscy.republika.pl/pages/przemek/java_not_really_faster_than_cpp.html">The Java (not really) Faster than C++ Benchmark</a>
+  
+  
+  </li>
+</ul>
 		</div> 
 
 		<div id="footer"> 

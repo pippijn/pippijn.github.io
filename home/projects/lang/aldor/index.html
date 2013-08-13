@@ -49,138 +49,131 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Aldor Programming Language</h2>
-<ul><li><a href='#h1'>The Language</a></li>
-<li><a href='#h2'>Why Aldor?</a></li></ul><p>
-<a href='https://github.com/pippijn/aldor'>Git repository</a></p>
-<p>
-<a href='http://pippijn.github.io/aldor/'>Main website</a></p>
-<p>
-<a href='http://pippijn.github.io/aldor/eval/'>Try it online</a></p>
-<pre class='code-block'>
+			<h2>Aldor Programming Language
+
+</h2> <p>
+  <a href="https://github.com/pippijn/aldor">Git repository</a>
+
+
+</p> <p>
+  <a href="http://pippijn.github.io/aldor/">Main website</a>
+
+
+</p> <p>
+  <a href="http://pippijn.github.io/aldor/eval/">Try it online</a>
+
+
+</p> <pre class="code-block">
 <span class="Include">  #include </span><span class="String">&quot;aldor&quot;</span>
 
   <span class="Constant">stderr</span> <span class="Statement">&lt;&lt;</span> <span class="String">&quot;Hello world&quot;</span> <span class="Statement">&lt;&lt;</span> <span class="Constant">newline</span>;
 
-</pre>
-<h3>
-<a id='h1'>The Language</a></h3>
-<p>
-From <a href='http://en.wikipedia.org/wiki/Aldor'>Wikipedia</a>:</p>
-<p>
-Aldor is a programming language. It is the successor of A# as the extension
-language of the Axiom computer algebra system.</p>
-<p>
-The Aldor language combines imperative, functional, and object-oriented
+</pre> <pre>
+</pre> <h3>The Language
+
+</h3> <p>From 
+  <a href="http://en.wikipedia.org/wiki/Aldor">Wikipedia</a>:
+
+
+</p> <p>Aldor is a programming language. It is the successor of A# as the extension
+language of the Axiom computer algebra system.
+
+</p> <p>The Aldor language combines imperative, functional, and object-oriented
 features. It has an elaborate dependent type system[citation needed], allowing
 types to be used as first-class values. Aldor's syntax is heavily influenced by
 Pascal, but it is optionally indentation-sensitive, like Python. In its current
-implementation, it is compiled, but an interactive listener is provided.</p>
-<h3>
-<a id='h2'>Why Aldor?</a></h3>
-<p>
-This is of course the question every language developer is asked: Why do we need
+implementation, it is compiled, but an interactive listener is provided.
+
+</p> <pre>
+</pre> <h3>Why Aldor?
+
+</h3> <p>This is of course the question every language developer is asked: Why do we need
 another language? Can't we do all that with other languages, already? What about
-the community, the library support, etc? Why do I even bother developing Aldor?</p>
-<p>
-There are several reasons why I personally like Aldor very much:</p>
-<ul>
-<li>
-Easy syntax<p>
-The Aldor grammar is consistent and unambiguous. Both a compiler and a human
-reader can immediately know what a piece of code means. The meaning and semantic
-effect of syntax does not depend on the context.</p>
-</li>
-<li>
-Few built-ins<p>
-Without a library, Aldor is pretty much an empty language. There are no
-integers, strings, arrays, etc. All that is defined within a library. By
-importing <span class='code'>Integer</span> into the current scope, integer literals gain meaning.
-Before that, the lexical structure of integer literals is defined by the
-compiler, but the value is not known. Only when a library implements a function
-from <span class='code'>Literal</span> to <span class='code'>Integer</span>, the literal can be assigned a value. Such a thing
-has recently been added to C++0x, but it's still far from what Aldor can do.</p>
-</li>
-<li>
-Everything is a value<p>
-The difference between types, functions and objects as it exists in C does not
-exist in Aldor. Aldor differentiates between constants and variables. Types,
-functions and objects are all values in Aldor. You may pass types to functions
-and let those functions return a new type based on that old type. For example,
-the <span class='code'>List</span> "type" is actually a function that returns a type, "<span class='code'>List of T</span>"
-where <span class='code'>T</span> is the type passed to the <span class='code'>List</span> function.</p>
-</li>
-<li>
-Return type overloading<p>
-In C++, Java, C# and other languages, you can overload functions by their
-argument types and count. In Aldor, you can additionally overload them by return
-type. You can also overload constants, which might be seen as nullary functions
-that don't need the function application operator.</p>
-<pre class='code-block'>
-  <span class="Comment">-- &quot;zero&quot;-values for different types</span>
-  z<span class="Statement">:</span> <span class="Type">Boolean</span> <span class="Statement">==</span> <span class="Constant">false</span>;
-  z<span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">==</span> <span class="Number">0</span>;
-  z<span class="Statement">:</span> <span class="Type">String</span> <span class="Statement">==</span> <span class="String">&quot;&quot;</span>;
+the community, the library support, etc? Why do I even bother developing Aldor?
 
-  <span class="Comment">-- returns the argument matching the wanted return type</span>
-  get (i<span class="Statement">:</span> <span class="Type">Integer</span>, b<span class="Statement">:</span> <span class="Type">Boolean</span>)<span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">==</span> i;
-  get (i<span class="Statement">:</span> <span class="Type">Integer</span>, b<span class="Statement">:</span> <span class="Type">Boolean</span>)<span class="Statement">:</span> <span class="Type">Boolean</span> <span class="Statement">==</span> b;
+</p> <p>There are several reasons why I personally like Aldor very much:
 
-  <span class="Comment">-- need to explicitly state the type for disambiguation</span>
-  i <span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">:=</span> get (<span class="Number">1</span>, <span class="Constant">true</span>);
-  b <span class="Statement">:</span> <span class="Type">Boolean</span> <span class="Statement">:=</span> get (<span class="Number">1</span>, <span class="Constant">true</span>);
-
-</pre>
-</li>
-<li>
-Dependent types<p>
-These are a little like C++ templates. Basically, it means that you can have a
-type that depends on a value. You can then use regular Aldor control structures
-to construct a type based on that value.</p>
-<pre class='code-block'>
-<span class="Include">  #include </span><span class="String">&quot;aldor&quot;</span>
-<span class="Include">  #include </span><span class="String">&quot;aldorio&quot;</span>
-
-  <span class="Comment">-- import operations (Literal, quo, mod, +, ~=) on Integers</span>
-  <span class="Comment">-- into the current scope</span>
-  <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Integer</span>;
-
-  <span class="Statement">define</span> <span class="Type">FooType</span>(i<span class="Statement">:</span> <span class="Type">Integer</span>)<span class="Statement">:</span> <span class="Type">Category</span> <span class="Statement">==</span> <span class="Statement">with</span> {
-     foo<span class="Statement">:</span> () <span class="Statement">-&gt;</span> <span class="Type">Integer</span>;
-
-     <span class="Comment">-- provide a default implementation dividing integers by 2</span>
-     <span class="Statement">default</span> {
-        foo()<span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">==</span> i <span class="Identifier">quo</span> <span class="Number">2</span>;
-     }
-  }
-
-  <span class="Comment">-- template&lt;int i&gt; class Foo;</span>
-  <span class="Comment">-- actually a function returning a type</span>
-  <span class="Type">Foo</span>(i<span class="Statement">:</span> <span class="Type">Integer</span>)<span class="Statement">:</span> <span class="Type">FooType</span>(i) <span class="Statement">==</span> <span class="Statement">add</span> {
-     <span class="Comment">-- override the default implementation only if i is not divisible by 2</span>
-     <span class="Statement">if</span> i mod <span class="Number">2</span> <span class="Statement">~=</span> <span class="Number">0</span> <span class="Statement">then</span> {
-        foo()<span class="Statement">:</span> <span class="Type">Integer</span> <span class="Statement">==</span> i <span class="Statement">+</span> <span class="Number">1</span>;
-     }
-  }
-
-  <span class="Comment">-- call foo() in domain Foo(3) (template class Foo&lt;3&gt;)</span>
-  <span class="Constant">stdout</span> <span class="Statement">&lt;&lt;</span> foo()$<span class="Type">Foo</span>(<span class="Number">3</span>) <span class="Statement">&lt;&lt;</span> <span class="Constant">newline</span>;
-  <span class="Constant">stdout</span> <span class="Statement">&lt;&lt;</span> foo()$<span class="Type">Foo</span>(<span class="Number">4</span>) <span class="Statement">&lt;&lt;</span> <span class="Constant">newline</span>;
-
-</pre>
-<p>
-The output from the above code would be:</p>
-<pre>
-  4
-  2</pre><p>
-The value a type depends on may be any constant value of any type, unlike in
-C++, where only types, integers, templates and pointers are allowed. Since types
-are values in Aldor, you can also have types depending on other types, which
-would be the <span class='code'>template&lt;typename T&gt;</span> construct in C++.</p>
-</li>
+</p> <ul>
+  <li>Easy syntax
+  
+  
+    <p>The Aldor grammar is consistent and unambiguous. Both a compiler and a human
+    reader can immediately know what a piece of code means. The meaning and semantic
+    effect of syntax does not depend on the context.
+    
+    </p>
+  </li>
+  <li>Few built-ins
+  
+  
+    <p>Without a library, Aldor is pretty much an empty language. There are no
+    integers, strings, arrays, etc. All that is defined within a library. By
+    importing 
+      <code>Integer</code> into the current scope, integer literals gain meaning.
+    Before that, the lexical structure of integer literals is defined by the
+    compiler, but the value is not known. Only when a library implements a function
+    from 
+      <code>Literal</code> to 
+      <code>Integer</code>, the literal can be assigned a value. Such a thing
+    has recently been added to C++0x, but it's still far from what Aldor can do.
+    
+    
+    </p>
+  </li>
+  <li>Everything is a value
+  
+  
+    <p>The difference between types, functions and objects as it exists in C does not
+    exist in Aldor. Aldor differentiates between constants and variables. Types,
+    functions and objects are all values in Aldor. You may pass types to functions
+    and let those functions return a new type based on that old type. For example,
+    the 
+      <code>List</code> "type" is actually a function that returns a type, "
+      <code>List of T</code>"
+    where 
+      <code>T</code> is the type passed to the 
+      <code>List</code> function.
+    
+    
+    </p>
+  </li>
+  <li>Return type overloading
+  
+  
+    <p>In C++, Java, C# and other languages, you can overload functions by their
+    argument types and count. In Aldor, you can additionally overload them by return
+    type. You can also overload constants, which might be seen as nullary functions
+    that don't need the function application operator.
+    
+    </p>
+    <code />
+  </li>
+  <li>Dependent types
+  
+  
+    <p>These are a little like C++ templates. Basically, it means that you can have a
+    type that depends on a value. You can then use regular Aldor control structures
+    to construct a type based on that value.
+    
+    </p>
+    <code />
+    <p>The output from the above code would be:
+    
+    </p>
+    <pre>  4
+      2
+    
+    </pre>
+    <p>The value a type depends on may be any constant value of any type, unlike in
+    C++, where only types, integers, templates and pointers are allowed. Since types
+    are values in Aldor, you can also have types depending on other types, which
+    would be the 
+      <code>template&lt;typename T&gt;</code> construct in C++.
+    
+    
+    </p>
+  </li>
 </ul>
-
 		</div> 
 
 		<div id="footer"> 

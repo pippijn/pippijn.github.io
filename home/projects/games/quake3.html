@@ -41,87 +41,145 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Quake 3</h2>
-<ul><li><a href='#h1'>IRC Logging</a></li>
-<li><a href='#h2'>Client-Perl</a></li>
-<li><a href='#h3'>Future</a></li></ul><p>
-I've started hacking on the <a href='http://ioquake3.org/'>ioquake3</a> sources, adding
-a <a href='http://www.perl.org/'>Perl</a> interface to a small number of C functions and
+			<h2>Quake 3
+
+</h2> <p>I've started hacking on the 
+  <a href="http://ioquake3.org/">ioquake3</a> sources, adding
+a 
+  <a href="http://www.perl.org/">Perl</a> interface to a small number of C functions and
 a few callbacks from C/QVM to Perl functions. This allowed me to add an IRC
-logging backend and a client hack for weapon selection.</p>
-<h3>
-<a id='h1'>IRC Logging</a></h3>
-<p>
-The IRC logging captures game events and produces a message to be sent to IRC.
+logging backend and a client hack for weapon selection.
+
+
+</p> <pre>
+</pre> <h3>IRC Logging
+
+</h3> <p>The IRC logging captures game events and produces a message to be sent to IRC.
 The current implementation uses Net::IRC3 but this is soon going to change to
-AnyEvent::IRC.</p>
-<p>
-The PerlQuake3 server is running on <span class='code'>q3a.xinutec.org</span> and events are written
-to the channel <span class='code'>#q3a</span> on <span class='code'>irc.xinutec.org</span>.</p>
-<p>
-The following events are transferred to IRC:</p>
-<ul>
-<li>
-Player connected<pre>
-  12:49 &lt; q3a&gt; Jules_Vernes connected</pre></li>
-<li>
-Player disconnected<pre>
-  13:20 &lt; q3a&gt; Jules_Vernes disconnected</pre></li>
-<li>
-Player was killed<pre>
-  12:54 &lt; q3a&gt; Jules_Vernes was squished
-  13:00 &lt; q3a&gt; LucY was railed by Jules_Vernes
-  13:18 &lt; q3a&gt; Jules_Vernes was in the wrong place</pre></li>
-<li>
-Round finished<pre>
-  22:16 &lt; q3a&gt; Round finished:
-  22:16 &lt; q3a&gt; 1. LucY score: 20  ping 33
-  22:16 &lt; q3a&gt; 2. peter lustich score: 3  ping 61
-  22:16 &lt; q3a&gt; 3. Jules_Vernes score: -2  ping 91</pre></li>
-<li>
-Player said something<pre>
-  22:17 &lt; q3a&gt; &lt;peter lustich&gt; lol</pre></li>
-</ul>
-<p>
-IRC users can chat back into the game and it will look like it origined from
-<span class='code'>irc/user</span> where <span class='code'>user</span> is the nickname of the person on IRC. Quake colours
-are converted to IRC colours and vice versa.</p>
-<p>
-Furthermore, the IRC bot has the following commands:</p>
-<ul>
-<li>
-!clients<p>
-Show all players currently in the game.</p>
-</li>
-<li>
-!verbosity [level]<p>
-If no <span class='code'>level</span> is given, this shows the current IRC verbosity. Currently,
-there are four verbosity bits that can be set: <span class='code'>CHAT</span>, <span class='code'>KILL</span>, <span class='code'>JOIN</span> and
-<span class='code'>STAT</span>. If <span class='code'>level</span> is given in the form <span class='code'>!verbosity +chat -kill +join</span>,
-the respective bits are set or unset.</p>
-</li>
-<li>
-!help [command]<p>
-Shows help on <span class='code'>command</span> or a list of commands if <span class='code'>command</span> is omitted.</p>
-</li>
-<li>
-!reload<p>
-Reloads all <span class='code'>Quake3::</span> modules except for the <span class='code'>Quake3</span> module itself.</p>
-</li>
-</ul>
-<h3>
-<a id='h2'>Client-Perl</a></h3>
-<p>
-The Quake 3 client has been enhanced to allow for prioritising weapon
-selection on pickup. That means, if <span class='code'>cg_autoswitch</span> is on, weapons are only
+AnyEvent::IRC.
+
+</p> <p>The PerlQuake3 server is running on 
+  <code>q3a.xinutec.org</code> and events are written
+to the channel 
+  <code>#q3a</code> on 
+  <code>irc.xinutec.org</code>.
+
+
+</p> <p>The following events are transferred to IRC:
+
+</p> <ul>
+  <li>Player connected
+  
+  
+    <pre>  12:49 &lt; q3a&gt; Jules_Vernes connected
+    
+    </pre>
+  </li>
+  <li>Player disconnected
+  
+  
+    <pre>  13:20 &lt; q3a&gt; Jules_Vernes disconnected
+    
+    </pre>
+  </li>
+  <li>Player was killed
+  
+  
+    <pre>  12:54 &lt; q3a&gt; Jules_Vernes was squished
+      13:00 &lt; q3a&gt; LucY was railed by Jules_Vernes
+      13:18 &lt; q3a&gt; Jules_Vernes was in the wrong place
+    
+    </pre>
+  </li>
+  <li>Round finished
+  
+  
+    <pre>  22:16 &lt; q3a&gt; Round finished:
+      22:16 &lt; q3a&gt; 1. LucY score: 20  ping 33
+      22:16 &lt; q3a&gt; 2. peter lustich score: 3  ping 61
+      22:16 &lt; q3a&gt; 3. Jules_Vernes score: -2  ping 91
+    
+    </pre>
+  </li>
+  <li>Player said something
+  
+  
+    <pre>  22:17 &lt; q3a&gt; &lt;peter lustich&gt; lol
+    
+    </pre>
+  </li>
+</ul> <p>IRC users can chat back into the game and it will look like it origined from
+
+  <code>irc/user</code> where 
+  <code>user</code> is the nickname of the person on IRC. Quake colours
+are converted to IRC colours and vice versa.
+
+
+</p> <p>Furthermore, the IRC bot has the following commands:
+
+</p> <ul>
+  <li>!clients
+  
+  
+    <p>Show all players currently in the game.
+    
+    </p>
+  </li>
+  <li>!verbosity [level]
+  
+  
+    <p>If no 
+      <code>level</code> is given, this shows the current IRC verbosity. Currently,
+    there are four verbosity bits that can be set: 
+      <code>CHAT</code>, 
+      <code>KILL</code>, 
+      <code>JOIN</code> and
+    
+      <code>STAT</code>. If 
+      <code>level</code> is given in the form 
+      <code>!verbosity +chat -kill +join</code>,
+    the respective bits are set or unset.
+    
+    
+    </p>
+  </li>
+  <li>!help [command]
+  
+  
+    <p>Shows help on 
+      <code>command</code> or a list of commands if 
+      <code>command</code> is omitted.
+    
+    
+    </p>
+  </li>
+  <li>!reload
+  
+  
+    <p>Reloads all 
+      <code>Quake3::</code> modules except for the 
+      <code>Quake3</code> module itself.
+    
+    
+    </p>
+  </li>
+</ul> <pre>
+</pre> <h3>Client-Perl
+
+</h3> <p>The Quake 3 client has been enhanced to allow for prioritising weapon
+selection on pickup. That means, if 
+  <code>cg_autoswitch</code> is on, weapons are only
 selected if their priority is higher or equal to the priority of the current
-weapon.</p>
-<p>
-Currently, these priorities are not user-definable, but that will soon be
+weapon.
+
+
+</p> <p>Currently, these priorities are not user-definable, but that will soon be
 implemented. The code for this is absolutely trivial and can be found in
-<span class='filename'>Quake3.pm</span>:</p>
-<pre class='code-block'>
+
+  <span class="filename">Quake3.pm</span>:
+
+
+</p> <pre class="code-block">
   <span class="Statement">my</span> <span class="Identifier">%prefs</span> = (
      Quake3::<span class="String">WP_GRAPPLING_HOOK</span>    =&gt; <span class="Number">0</span>,
      Quake3::<span class="String">WP_NONE</span>              =&gt; <span class="Number">0</span>,
@@ -142,16 +200,15 @@ implemented. The code for this is absolutely trivial and can be found in
      <span class="Identifier">$prefs{$newweap}</span> &gt;= <span class="Identifier">$prefs{$curweap}</span> ? <span class="Number">1</span> : <span class="Number">0</span>
   }
 
-</pre>
-<h3>
-<a id='h3'>Future</a></h3>
-<p>
-The current implementation and API design is below all standards (except for
+</pre> <pre>
+</pre> <h3>Future
+
+</h3> <p>The current implementation and API design is below all standards (except for
 maybe the irssiperl one) and requires some real thinking. This interface was
 written in a few minutes (after needing an hour to figure out how the QVM and
 callbacks to C work). In the future, the API will undergo some serious changes
-and probably be rewritten entirely from scratch.</p>
-
+and probably be rewritten entirely from scratch.
+</p>
 		</div> 
 
 		<div id="footer"> 

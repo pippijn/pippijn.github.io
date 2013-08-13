@@ -61,40 +61,46 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Module system</h2>
-<ul><li><a href='#h1'>Initialisation</a></li>
-<li><a href='#h2'>Primary implementation file</a></li>
-<li><a href='#h3'>Initialisation function</a></li></ul><p>
-We need a better module system for several features to become much easier to
-handle, such as:</p>
-<ul>
-<li>
-RTTI</li>
-<li>
-strongly typed precise garbage collection</li>
-<li>
-serialisation</li>
-<li>
-global non-constant initialisation</li>
-</ul>
-<p>
-The already implemented strong static typing means only little work is needed
-to implement this.</p>
-<h3>
-<a id='h1'>Initialisation</a></h3>
-<p>
-In order to register global pointers as GC roots (see <a href='../runtime/gc'>GC</a>), each
+			<h2>Module system
+
+</h2> <p>We need a better module system for several features to become much easier to
+handle, such as:
+
+</p> <ul>
+  <li>RTTI
+  
+  </li>
+  <li>strongly typed precise garbage collection
+  
+  </li>
+  <li>serialisation
+  
+  </li>
+  <li>global non-constant initialisation
+  
+  </li>
+</ul> <pre>
+</pre> <p>The already implemented strong static typing means only little work is needed
+to implement this.
+
+</p> <pre>
+</pre> <h3>Initialisation
+
+</h3> <p>In order to register global pointers as GC roots (see 
+  <a href="../runtime/gc">GC</a>), each
 file linked into the final application needs an initialisation function. This
 initialisation must be performed conservatively. That means, every module must
-call the initialisation function of every module it uses.</p>
-<p>
-The initialisation function will be emitted in the primary implementation file.</p>
-<h3>
-<a id='h2'>Primary implementation file</a></h3>
-<p>
-The idea is that a programmer can write something like:</p>
-<pre class='code-block'>
+call the initialisation function of every module it uses.
+
+
+</p> <p>The initialisation function will be emitted in the primary implementation file.
+
+</p> <pre>
+</pre> <h3>Primary implementation file
+
+</h3> <p>The idea is that a programmer can write something like:
+
+</p> <pre class="code-block">
    <span class="Comment">// buffer.h</span>
    <span class="Type">namespace</span> Buffer {
       <span class="Type">extern</span> <span class="Type">struct</span> t;
@@ -113,13 +119,12 @@ The idea is that a programmer can write something like:</p>
       <span class="Type">extern</span> <span class="Type">void</span> add_str (T self, string_t s);
    }
 
-</pre>
-<p>
-and have multiple implementation files, each implementing a semantically
-associated subset of the above functions.</p>
-<p>
-The internal file exposing the buffer's structure:</p>
-<pre class='code-block'>
+</pre> <p>and have multiple implementation files, each implementing a semantically
+associated subset of the above functions.
+
+</p> <p>The internal file exposing the buffer's structure:
+
+</p> <pre class="code-block">
    <span class="Comment">// buffer-internal.h</span>
 <span class="Include">   #include </span><span class="String">&lt;buffer.h&gt;</span>
    <span class="Type">namespace</span> Buffer {
@@ -130,57 +135,68 @@ The internal file exposing the buffer's structure:</p>
       };
    }
 
-</pre>
-<p>
-Implementation of constructors:</p>
-<pre class='code-block'>
+</pre> <p>Implementation of constructors:
+
+</p> <pre class="code-block">
    <span class="Comment">// buffer-ctors.c</span>
 <span class="Include">   #include </span><span class="String">&quot;buffer-internal.h&quot;</span>
    <span class="Type">namespace</span> Buffer;
 
    T create (<span class="Type">size_t</span> n) { ... }
 
-</pre>
-<p>
-Implementation of accessors and mutators each go into their separate files.
+</pre> <p>Implementation of accessors and mutators each go into their separate files.
 Now, if we generate more information about the structures, we need a primary
-implementation file. Currently, we have <span class='code'>extern</span> datatypes that don't
+implementation file. Currently, we have 
+  <code>extern</code> datatypes that don't
 emit their tags. Maybe we want to keep this, but a slightly more explicit
-module system might be a better solution.</p>
-<p>
-Care should be taken not to deviate from C too much, because porting existing
+module system might be a better solution.
+
+
+</p> <p>Care should be taken not to deviate from C too much, because porting existing
 C code would become much more work. Perhaps the compiler could support both
 ways, dealing with non-module code as it does now and handle module code with
-all the extras provided by the module system.</p>
-<p>
-Now, about the primary implementation file, we need a syntax to mark that
+all the extras provided by the module system.
+
+</p> <p>Now, about the primary implementation file, we need a syntax to mark that
 file. I currently don't have a good idea on this, but we could abuse any
-keyword for it (or add a new one).</p>
-<pre class='code-block'>
+keyword for it (or add a new one).
+
+</p> <pre class="code-block">
    <span class="Comment">// buffer-ctors.c</span>
 <span class="Include">   #include </span><span class="String">&quot;buffer-internal.h&quot;</span>
    <span class="Type">register</span> <span class="Type">namespace</span> Buffer; <span class="Comment">// primary implementation file</span>
 
    T create (<span class="Type">size_t</span> n) { ... }
 
-</pre>
-<p>
-It could be <span class='code'>do</span>, <span class='code'>let</span> or anything else, but I think
-<span class='code'>register</span> fits the idea quite well. Also, it actually does emit a
-function registering GC roots.</p>
-<h3>
-<a id='h3'>Initialisation function</a></h3>
-<p>
-The initialisation function does the following:</p>
-<ul>
-<li>
-Register global pointers (and structures containing pointers) with the GC as roots.</li>
-<li>
-Call initialisation functions for global non-constantly initialised data (like global constructors in C++ and <span class='code'>static { }</span> in Java).</li>
-<li>
-Register <span class='code'>type_info</span> structures with the RTTI subsystem (see <a href='../runtime/rtti'>RTTI</a>).</li>
-</ul>
+</pre> <p>It could be 
+  <code>do</code>, 
+  <code>let</code> or anything else, but I think
 
+  <code>register</code> fits the idea quite well. Also, it actually does emit a
+function registering GC roots.
+
+
+</p> <pre>
+</pre> <h3>Initialisation function
+
+</h3> <p>The initialisation function does the following:
+
+</p> <ul>
+  <li>Register global pointers (and structures containing pointers) with the GC as roots.
+  
+  </li>
+  <li>Call initialisation functions for global non-constantly initialised data (like global constructors in C++ and 
+    <code>static { }</code> in Java).
+  
+  
+  </li>
+  <li>Register 
+    <code>type_info</code> structures with the RTTI subsystem (see 
+    <a href="../runtime/rtti">RTTI</a>).
+  
+  
+  </li>
+</ul>
 		</div> 
 
 		<div id="footer"> 

@@ -47,14 +47,13 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Target templates</h2>
-<ul><li><a href='#h1'>Multiple inheritance</a></li>
-<li><a href='#h2'>Filtering</a></li></ul><p>
-Templates define common flags and sources for targets. They do not define
+			<h2>Target templates
+
+</h2> <p>Templates define common flags and sources for targets. They do not define
 targets, by themselves. Templates offer a better structured way to inheriting
-sources and libraries.</p>
-<pre class='code-block'>
+sources and libraries.
+
+</p> <pre class="code-block">
    <span class="Comment"># Build a program that does some math</span>
    <span class="Type">program</span> prog <span class="Identifier">{</span>
       <span class="Type">sources</span> <span class="Identifier">{</span>
@@ -83,10 +82,9 @@ sources and libraries.</p>
       <span class="Identifier">}</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-The above example can be better written as follows:</p>
-<pre class='code-block'>
+</pre> <p>The above example can be better written as follows:
+
+</p> <pre class="code-block">
    <span class="Type">template</span> math-program <span class="Identifier">{</span>
       <span class="Type">sources</span> <span class="Identifier">{</span>
          main.c
@@ -110,28 +108,33 @@ The above example can be better written as follows:</p>
       <span class="Identifier">}</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-Both programs inherit the sources and link blocks from <span class='code'>math-program</span> and add
+</pre> <p>Both programs inherit the sources and link blocks from 
+  <code>math-program</code> and add
 their own sources to it. This method is better structured but less flexible.
 Templates can inherit from other templates. It is still possible to import
-sources from other templates and even targets.</p>
-<p>
-Note that templates also have their own namespace, so that it is possible to
-declare a template with the same name as a target.</p>
-<p>
-It is not possible to exclude inherited <span class='code'>sources</span>, <span class='code'>link</span>, etc. Template
-inheritance forms an <em>is-a</em> relationship.</p>
-<h3>
-<a id='h1'>Multiple inheritance</a></h3>
-<p>
-Multiple templates can be inherited. Order of inheritance does not matter and
+sources from other templates and even targets.
+
+
+</p> <p>Note that templates also have their own namespace, so that it is possible to
+declare a template with the same name as a target.
+
+</p> <p>It is not possible to exclude inherited 
+  <code>sources</code>, 
+  <code>link</code>, etc. Template
+inheritance forms an 
+  <em>is-a</em> relationship.
+
+
+</p> <h3>Multiple inheritance
+
+</h3> <p>Multiple templates can be inherited. Order of inheritance does not matter and
 conflicts are flagged as an error. Two templates linking against the same
 library or listing the exact same source file is not a conflict. Targets can not
 serve as a base, so a target or template cannot inherit from another target,
 only from templates. Inheriting from a template more than once, even implicitly
-through another base, is an error.</p>
-<pre class='code-block'>
+through another base, is an error.
+
+</p> <pre class="code-block">
    <span class="Type">template</span> math-program <span class="Identifier">{</span>
       <span class="Type">sources</span> <span class="Identifier">{</span>
          math-support.c
@@ -154,14 +157,17 @@ through another base, is an error.</p>
       <span class="Identifier">}</span>
    <span class="Identifier">}</span>
 
-</pre>
-<h3>
-<a id='h2'>Filtering</a></h3>
-<p>
-As we learned in <a href='variables'>variables</a>, one may filter the <span class='code'>$(prog.link)</span> variable by
+</pre> <pre>
+</pre> <h3>Filtering
+
+</h3> <p>As we learned in 
+  <a href="variables">variables</a>, one may filter the 
+  <code>$(prog.link)</code> variable by
 locally built libraries. Templates take this one step further by allowing you to
-filter by template.</p>
-<pre class='code-block'>
+filter by template.
+
+
+</p> <pre class="code-block">
    <span class="Type">template</span> math-library <span class="Identifier">{</span>
       ...
    <span class="Identifier">}</span>
@@ -179,14 +185,20 @@ filter by template.</p>
       <span class="Identifier">}</span>
    <span class="Identifier">}</span>
 
-</pre>
-<p>
-In the above example, the <span class='code'>$(mathprog.link)</span> variable would expand to
-"<span class='code'>mathsupport support -lm</span>". The expansion of <span class='code'>$(mathprog.link : library)</span>
-would be "<span class='code'>mathsupport support</span>", and expanding the pseudo-variable
-<span class='code'>$(mathprog.link : math-library)</span> results in just "<span class='code'>mathsupport</span>". This is
-especially useful in <a href='rules'>pattern rules</a>.</p>
+</pre> <p>In the above example, the 
+  <code>$(mathprog.link)</code> variable would expand to
+"
+  <code>mathsupport support -lm</code>". The expansion of 
+  <code>$(mathprog.link : library)</code>
+would be "
+  <code>mathsupport support</code>", and expanding the pseudo-variable
 
+  <code>$(mathprog.link : math-library)</code> results in just "
+  <code>mathsupport</code>". This is
+especially useful in 
+  <a href="rules">pattern rules</a>.
+
+</p>
 		</div> 
 
 		<div id="footer"> 

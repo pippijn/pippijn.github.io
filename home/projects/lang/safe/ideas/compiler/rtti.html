@@ -61,81 +61,87 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Runtime Type Information</h2>
-<ul><li><a href='#h1'>alignment would always be at least alignof(pointer)</a></li></ul><p>
-Generate runtime type info. e.g.:</p>
-<h5>
-namespace info</h5>
-<ul>
-<li>
-pointer to parent namespace (or NULL)</li>
-<li>
-name of namespace (or "" for global namespace (defined in runtime library))</li>
-</ul>
-<h5>
-type info</h5>
-<ul>
-<li>
-pointer to containing namespace</li>
-<li>
-name of type</li>
-</ul>
-<h5>
-struct info (inherits type info)</h5>
-<ul>
-<li>
-sizeof struct</li>
-<li>
-alignof struct (optional)</li>
-<li>
-array of members</li>
-</ul>
-<h5>
-datatype info (inherits type info)</h5>
-<ul>
-<li>
-array of constructors</li>
-<li>
-extensible flag (is this useful for anything?)</li>
-</ul>
-<h5>
-constructor info</h5>
-<ul>
-<li>
-name of constructor</li>
-<li>
-array of arguments (members)</li>
-</ul>
-<h5>
-member info</h5>
-<ul>
-<li>
-name of member</li>
-<li>
-pointer to type</li>
-</ul>
-<p>
-All (some?) structs and datatypes will have an additional first member
+			<h2>Runtime Type Information
+
+</h2> <p>Generate runtime type info. e.g.:
+
+</p> <h5>namespace info
+
+</h5> <ul>
+  <li>pointer to parent namespace (or NULL)
+  
+  </li>
+  <li>name of namespace (or "" for global namespace (defined in runtime library))
+  
+  </li>
+</ul> <h5>type info
+
+</h5> <ul>
+  <li>pointer to containing namespace
+  
+  </li>
+  <li>name of type
+  
+  </li>
+</ul> <h5>struct info (inherits type info)
+
+</h5> <ul>
+  <li>sizeof struct
+  
+  </li>
+  <li>alignof struct (optional)
+  
+  </li>
+  <li>array of members
+  
+  </li>
+</ul> <h5>datatype info (inherits type info)
+
+</h5> <ul>
+  <li>array of constructors
+  
+  </li>
+  <li>extensible flag (is this useful for anything?)
+  
+  </li>
+</ul> <h5>constructor info
+
+</h5> <ul>
+  <li>name of constructor
+  
+  </li>
+  <li>array of arguments (members)
+  
+  </li>
+</ul> <h5>member info
+
+</h5> <ul>
+  <li>name of member
+  
+  </li>
+  <li>pointer to type
+  
+  </li>
+</ul> <p>All (some?) structs and datatypes will have an additional first member
 pointing to their type info structure the problem with this is that they are
-no longer compatible with C, because:</p>
-<h3>
-<a id='h1'>alignment would always be at least alignof(pointer)</a></h3>
-<p>
-Yes, this is a problem, because we can't just pass ptr + sizeof(pointer) to a
-C functions.</p>
-<p>
-This can be solved by doing something like</p>
-<pre class='code-block'>
+no longer compatible with C, because:
+
+</p> <h3>alignment would always be at least alignof(pointer)
+
+</h3> <p>Yes, this is a problem, because we can't just pass ptr + sizeof(pointer) to a
+C functions.
+
+</p> <p>This can be solved by doing something like
+
+</p> <pre class="code-block">
    <span class="Type">struct</span> foo { <span class="Comment">// alignment=2 (x86)</span>
       <span class="Type">char</span> a;
       <span class="Type">short</span> b;
    };
 
-</pre>
-<p>
-is compiled to:</p>
-<pre class='code-block'>
+</pre> <p>is compiled to:
+
+</p> <pre class="code-block">
    <span class="Type">struct</span> foo_data { <span class="Comment">// alignment still 2</span>
       <span class="Type">char</span> a;
       <span class="Type">short</span> b;
@@ -145,25 +151,31 @@ is compiled to:</p>
       foo_data data;
    };
 
-</pre>
-<p>
-and passing foo* to an extern C function looks like:</p>
-<pre class='code-block'>
+</pre> <p>and passing foo* to an extern C function looks like:
+
+</p> <pre class="code-block">
    cfun (&amp;foo-&gt;data);
 
-</pre>
-<p>
-Similarly, a struct foo can be passed as <span class='code'>cfun (foo.data)</span>.</p>
-<p>
-Special care must be taken with casts. We support casting to supertypes. This
-should retain the <span class='code'>type_info</span> of the original struct, but if its pointee
-is copied, the <span class='code'>type_info</span> should be updated to reflect the supertype.</p>
-<p>
-Luckily, there is no <span class='code'>void*</span>, but <span class='code'>`t</span> exists and this also needs
-special thought, because rtti is most useful for generic functions. The
-problem is that <span class='code'>`t</span> can be non-pointer. Perhaps it is a good idea to forbid
-non-pointers or introduce some kind of autoboxing for non-pointer types.</p>
+</pre> <p>Similarly, a struct foo can be passed as 
+  <code>cfun (foo.data)</code>.
 
+
+</p> <p>Special care must be taken with casts. We support casting to supertypes. This
+should retain the 
+  <code>type_info</code> of the original struct, but if its pointee
+is copied, the 
+  <code>type_info</code> should be updated to reflect the supertype.
+
+
+</p> <p>Luckily, there is no 
+  <code>void*</code>, but 
+  <code>`t</code> exists and this also needs
+special thought, because rtti is most useful for generic functions. The
+problem is that 
+  <code>`t</code> can be non-pointer. Perhaps it is a good idea to forbid
+non-pointers or introduce some kind of autoboxing for non-pointer types.
+
+</p>
 		</div> 
 
 		<div id="footer"> 

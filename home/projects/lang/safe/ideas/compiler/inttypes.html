@@ -61,25 +61,35 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Integer types</h2>
-<ul></ul><p>
-Fix the type of <span class='code'>sizeof</span>:</p>
-<p>
-sizeof is currently typed unsigned int but should be <span class='code'>size_t</span>, which is
+			<h2>Integer types
+
+</h2> <p>Fix the type of 
+  <code>sizeof</code>:
+
+
+</p> <p>sizeof is currently typed unsigned int but should be 
+  <code>size_t</code>, which is
 platform dependent and should be handled as such in the compiler probably by
 adding an internal type representation similar to that of unsigned int
-(<span class='code'>uint_type</span>) called <span class='code'>size_type</span> which will be <span class='code'>uint_type</span> or <span class='code'>ulong_type</span>
-depending on what platform it compiles for.</p>
-<p>
-The compiler is currently full of assumptions.  Those assumptions should be
-factored out into platform configuration files.</p>
-<p>
-Maybe add a box type for <span class='code'>intptr_t</span>-style boxes. Currently this is long, but
-long isn't required to be able to hold pointers. <span class='code'>intptr_t</span> is also not
-required to exist, but for generics to work the way they currenty do, we need
-int -> ptr at the C level.</p>
+(
+  <code>uint_type</code>) called 
+  <code>size_type</code> which will be 
+  <code>uint_type</code> or 
+  <code>ulong_type</code>
+depending on what platform it compiles for.
 
+
+</p> <p>The compiler is currently full of assumptions.  Those assumptions should be
+factored out into platform configuration files.
+
+</p> <p>Maybe add a box type for 
+  <code>intptr_t</code>-style boxes. Currently this is long, but
+long isn't required to be able to hold pointers. 
+  <code>intptr_t</code> is also not
+required to exist, but for generics to work the way they currenty do, we need
+int -&gt; ptr at the C level.
+
+</p>
 		</div> 
 
 		<div id="footer"> 

@@ -49,136 +49,235 @@
 		</div> 
 
 		<div id="content">
-			<h2>
-Installing Aldor</h2>
-<ul><li><a href='#h1'>Windows</a></li>
-<li><a href='#h2'>Linux</a></li></ul><h3>
-<a id='h1'>Windows</a></h3>
-<p>
-Just download the <a href='#'>installer</a> and launch it. Alternatively, if you
+			<h2>Installing Aldor
+
+</h2> <h3>Windows
+
+</h3> <p>Just download the 
+  <a href="#">installer</a> and launch it. Alternatively, if you
 have Microsoft Windows Installer version 3.0 or higher (you probably do, if
 you have Windows XP SP 2 or higher), you can download and install the MS
-installer <a href='#'>package</a>.</p>
-<p>
-To verify the installer and package, you can use their <a href='aldor-md5.txt'>MD5</a>
-and <a href='aldor-sha1.txt'>SHA1</a> sums.</p>
-<h3>
-<a id='h2'>Linux</a></h3>
-<h4>
-Installing pre-built packages<a id='packages'></a></h4>
-<p>
-Debian users can simply add the Xinutec repository to their
-<span class='filename'>/etc/apt/sources.list</span>:</p>
-<pre>
-   deb http://debian.xinutec.org/ etch main non-free</pre><p>
-Currently, only Debian etch packages are provided. These should work with
+installer 
+  <a href="#">package</a>.
+
+
+</p> <p>To verify the installer and package, you can use their 
+  <a href="aldor-md5.txt">MD5</a>
+and 
+  <a href="aldor-sha1.txt">SHA1</a> sums.
+
+
+</p> <pre>
+</pre> <h3>Linux
+
+</h3> <h4>Installing pre-built packages (@packages)
+
+</h4> <p>Debian users can simply add the Xinutec repository to their
+
+  <span class="filename">/etc/apt/sources.list</span>:
+
+
+</p> <pre>   deb http://debian.xinutec.org/ etch main non-free
+
+</pre> <p>Currently, only Debian etch packages are provided. These should work with
 newer releases, though. Ubuntu users may also have luck with this package.
-To install, issue the following command as root:</p>
-<pre>
-   # aptitude install aldor</pre><p>
-If you want the package signatures to be checked, you need to accept my key.
-The easiest way to do this is by installing the <span class='code'>xinutec-archive-keyring</span>
-package from my repository:</p>
-<pre>
-   # aptitude install xinutec-archive-keyring</pre><p>
-Alternatively, you can manually add the key to the trusted keyring:</p>
-<pre>
-   # gpg --keyserver pgp.mit.edu --recv-keys 0x635D0E0A
-   # gpg --armor --export 0x635D0E0A | apt-key add -</pre><h4>
-Installing from sources<a id='source'></a></h4>
-<p>
-<strong>This is currently disabled due to licence uncertainness.</strong></p>
-<ul>
-<li>
-1. Download the <a href='#'>AGPL source package</a> and <a href='aldor-1.1.0-1_apl.tar.gz'>APL source package</a><pre>
-   % wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_agpl.tar.gz
-   % wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_apl.tar.gz</pre></li>
-<li>
-2. Extract the package.<pre>
-   % gunzip -c aldor-1.1.0-1_agpl.tar.gz | tar x
-   % gunzip -c aldor-1.1.0-1_apl.tar.gz | tar x</pre></li>
-<li>
-3. Enter the source directory.<pre>
-   % cd aldor-1.1.0-1</pre></li>
-<li>
-4. Run the configure script.<pre>
-   % ./configure</pre><p>
-This script takes a few options controlling compile-time options of the C
-compiler and the source files and run-time behaviour of the Aldor compiler.
-Most interesting for you should be the options controlling debugging and
-optimisation flags for the C compiler. By default, aldor is built with debug
-information. To see the options, pass the <span class='code'>--help</span> option to the script:</p>
-<pre>
-   % ./configure --help</pre><p>
-If you want to install it anywhere else than the default installation path
-(usually <span class='filename'>/usr/local</span>), you need to provide a <span class='code'>prefix</span>. Here we install
-aldor into the <span class='filename'>$HOME/aldor</span> directory.</p>
-<pre>
-   % ./configure --prefix=$HOME/aldor</pre><p>
-This will look for required functions and libraries and prepare makefiles for
-the build.</p>
-</li>
-<li>
-5. Set environment variables<a id='setenv'></a><p>
-In case you use the bourne shell or one of its derivatives (<span class='code'>bash</span>, <span class='code'>zsh</span>,
-<span class='code'>dash</span>, ...), use the following command:</p>
-<pre>
-   % source setenv.sh</pre><p>
-For C shell and equivalents (<span class='code'>csh</span>, <span class='code'>tcsh</span>, those that use <span class='code'>setenv</span> instead
-of <span class='code'>export</span>...), use this command:</p>
-<pre>
-   % source setenv.csh</pre><p>
-If both of those fail, make sure you have the following environment setup:</p>
-<pre>
-   ALDORROOT       = $PWD/obj
-   PATH            = $PWD/obj/bin:$PATH
-   LD_LIBRARY_PATH = $PWD/obj/lib</pre><p class='small'>If you open the file setenv.sh, you will notice that LD_LIBRARY_PATH
-also contains something with icc. This is something I use on my system
-which is required for the Intel&copy; C++ Compiler to work.
+To install, issue the following command as root:
 
-</p></li>
-<li>
-6. Build the compiler<pre>
-   % make</pre><p>
-Parallel building is not supported by all parts of the build, but you can
-speed up compilation by building in steps:</p>
-<pre>
-   % make prepare -j4
-   % make compiler -j4
-   % make libraries3</pre><p>
-You can also use <span class='code'>make libraries2</span>. This will limit the library building to
-at most two jobs at a time. No more than three jobs are supported at this
-time.</p>
-</li>
-<li>
-6.1. Run the testsuite<p>
-This step is optional. You can use it to verify that the compiler works the
-same way as it does on my system. This will take a long time.</p>
-<p class='small'>Note that some of these tests test whether the compiler works like it does
-here and some test whether the compiler does what it should. I collected as
-many correct test results as I could, but still some (or many, but not all)
-tests will fail.
+</p> <pre>   # aptitude install aldor
 
-</p><pre>
-   % make testcases -j4
-   % make check -j4</pre></li>
-<li>
-7. Install aldor<pre>
-   % make install</pre></li>
-</ul>
-<p>
-Now you should have a directory at <span class='filename'>$HOME/aldor</span> containing the Aldor
+</pre> <p>If you want the package signatures to be checked, you need to accept my key.
+The easiest way to do this is by installing the 
+  <code>xinutec-archive-keyring</code>
+package from my repository:
+
+
+</p> <pre>   # aptitude install xinutec-archive-keyring
+
+</pre> <p>Alternatively, you can manually add the key to the trusted keyring:
+
+</p> <pre>   # gpg --keyserver pgp.mit.edu --recv-keys 0x635D0E0A
+   # gpg --armor --export 0x635D0E0A | apt-key add -
+
+</pre> <pre>
+</pre> <h4>Installing from sources (@source)
+
+</h4> <p>
+  <strong>This is currently disabled due to licence uncertainness.</strong>
+
+
+</p> <ul>
+  <li>1. Download the 
+    <a href="#">AGPL source package</a> and 
+    <a href="aldor-1.1.0-1_apl.tar.gz">APL source package</a>
+  
+  
+    <pre>   % wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_agpl.tar.gz
+       % wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_apl.tar.gz
+    
+    </pre>
+  </li>
+  <li>2. Extract the package.
+  
+  
+    <pre>   % gunzip -c aldor-1.1.0-1_agpl.tar.gz | tar x
+       % gunzip -c aldor-1.1.0-1_apl.tar.gz | tar x
+    
+    </pre>
+  </li>
+  <li>3. Enter the source directory.
+  
+  
+    <pre>   % cd aldor-1.1.0-1
+    
+    </pre>
+  </li>
+  <li>4. Run the configure script.
+  
+  
+    <pre>   % ./configure
+    
+    </pre>
+    <p>This script takes a few options controlling compile-time options of the C
+    compiler and the source files and run-time behaviour of the Aldor compiler.
+    Most interesting for you should be the options controlling debugging and
+    optimisation flags for the C compiler. By default, aldor is built with debug
+    information. To see the options, pass the 
+      <code>--help</code> option to the script:
+    
+    
+    </p>
+    <pre>   % ./configure --help
+    
+    </pre>
+    <p>If you want to install it anywhere else than the default installation path
+    (usually 
+      <span class="filename">/usr/local</span>), you need to provide a 
+      <code>prefix</code>. Here we install
+    aldor into the 
+      <span class="filename">$HOME/aldor</span> directory.
+    
+    
+    </p>
+    <pre>   % ./configure --prefix=$HOME/aldor
+    
+    </pre>
+    <p>This will look for required functions and libraries and prepare makefiles for
+    the build.
+    
+    </p>
+  </li>
+  <li>5. Set environment variables (@setenv)
+  
+  
+    <p>In case you use the bourne shell or one of its derivatives (
+      <code>bash</code>, 
+      <code>zsh</code>,
+    
+      <code>dash</code>, ...), use the following command:
+    
+    
+    </p>
+    <pre>   % source setenv.sh
+    
+    </pre>
+    <p>For C shell and equivalents (
+      <code>csh</code>, 
+      <code>tcsh</code>, those that use 
+      <code>setenv</code> instead
+    of 
+      <code>export</code>...), use this command:
+    
+    
+    </p>
+    <pre>   % source setenv.csh
+    
+    </pre>
+    <p>If both of those fail, make sure you have the following environment setup:
+    
+    </p>
+    <pre>   ALDORROOT       = $PWD/obj
+       PATH            = $PWD/obj/bin:$PATH
+       LD_LIBRARY_PATH = $PWD/obj/lib
+    
+    </pre>
+    <p class="small">
+      <p>If you open the file setenv.sh, you will notice that LD_LIBRARY_PATH
+      also contains something with icc. This is something I use on my system
+      which is required for the Intel&copy; C++ Compiler to work.
+      
+      </p>
+    </p>
+  </li>
+  <li>6. Build the compiler
+  
+  
+    <pre>   % make
+    
+    </pre>
+    <p>Parallel building is not supported by all parts of the build, but you can
+    speed up compilation by building in steps:
+    
+    </p>
+    <pre>   % make prepare -j4
+       % make compiler -j4
+       % make libraries3
+    
+    </pre>
+    <p>You can also use 
+      <code>make libraries2</code>. This will limit the library building to
+    at most two jobs at a time. No more than three jobs are supported at this
+    time.
+    
+    
+    </p>
+  </li>
+  <li>6.1. Run the testsuite
+  
+  
+    <p>This step is optional. You can use it to verify that the compiler works the
+    same way as it does on my system. This will take a long time.
+    
+    </p>
+    <p class="small">
+      <p>Note that some of these tests test whether the compiler works like it does
+      here and some test whether the compiler does what it should. I collected as
+      many correct test results as I could, but still some (or many, but not all)
+      tests will fail.
+      
+      </p>
+    </p>
+    <pre>   % make testcases -j4
+       % make check -j4
+    
+    </pre>
+  </li>
+  <li>7. Install aldor
+  
+  
+    <pre>   % make install
+    
+    </pre>
+  </li>
+</ul> <p>Now you should have a directory at 
+  <span class="filename">$HOME/aldor</span> containing the Aldor
 compiler and libraries, include files, configuration files and
-internationalisation files.</p>
-<p>
-You will need to set the <span class='code'>ALDORROOT</span> environment variable to the directory
-given as <span class='code'>prefix</span>. Usually, this is <span class='code'>/usr/local</span>.</p>
-<p>
-If anything went wrong, don't hesitate to <a href='contact'>contact</a> me.</p>
-<p>
-Here is the entire script without the prompt (%):</p>
-<pre>
-   wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_agpl.tar.gz
+internationalisation files.
+
+
+</p> <p>You will need to set the 
+  <code>ALDORROOT</code> environment variable to the directory
+given as 
+  <code>prefix</code>. Usually, this is 
+  <code>/usr/local</code>.
+
+
+</p> <p>If anything went wrong, don't hesitate to 
+  <a href="contact">contact</a> me.
+
+
+</p> <p>Here is the entire script without the prompt (%):
+
+</p> <pre>   wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_agpl.tar.gz
    wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_apl.tar.gz
    gunzip -c aldor-1.1.0-1_agpl.tar.gz | tar x
    gunzip -c aldor-1.1.0-1_apl.tar.gz | tar x
@@ -188,12 +287,13 @@ Here is the entire script without the prompt (%):</p>
    make prepare -j4
    make compiler -j4
    make libraries3
-   make install</pre>
+   make install
+</pre>
 		</div> 
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu May 26 20:36:22 MEST 2011</div> 
+			<div id="updated">Last updated Tue Aug 13 19:40:35 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 
