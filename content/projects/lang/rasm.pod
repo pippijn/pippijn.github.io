@@ -1,12 +1,12 @@
 =head1 Runtime assembler
 
-L<Git repository|https://github.com/pippijn/rasm>
-
 This is a portable C++ runtime assembler backed by GNU Lightning. It currently
 has four CPU backends: x86, x86_64, PowerPC and Sparc. What I have right now
 is a working parser and assembler for things like this:
 
-=begin code rasm
+L<Git repository|https://github.com/pippijn/rasm>
+
+=begin code perl
 
   # mnemonic    op1             op2             op3     ret
   prolog        1
@@ -36,7 +36,7 @@ is a working parser and assembler for things like this:
   mov           %ret            1                     # RET = 1
   ret                                                 # Return
 
-=end code rasm
+=end
 
 This example is a function that takes one integer argument C<N> and calculates
 the C<N>-th Fibonacci number.
