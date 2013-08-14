@@ -1,4 +1,10 @@
-=head1 Aldor source highlighting
+=head1 Code highlighting test
+
+=begin code ocaml
+
+  let rec foo = fun bar -> x * y
+
+=end
 
 =begin code aldor
 
