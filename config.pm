@@ -53,6 +53,7 @@
 					[online => "Online"],
 				]],
 				[jmlc => "JML"],
+				[merr => "Meta-Error"],
 				[re2ml => "Re2ML"],
 				[libcdk => "CDK library"],
 				[rasm => "Runtime assembler"],
