@@ -1,10 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
 	<head> 
-		<title>Pippijn - Projects / Lang / Ccparse</title> 
+		<title>Pippijn - Projects / Lang / Hm / Online</title> 
 		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
 		<meta http-equiv="content-style-type" content="text/css"/> 
-		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Ccparse"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Hm / Online"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
 		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
@@ -30,10 +30,12 @@
 <a href="/home/projects/lang">Languages <span class="small">[-]</span></a><ul>
 <li>
 <a href="/home/projects/lang/aldor">Aldor <span class="small">[+]</span></a></li><li>
-<a id="actmenu">CParseParse</a></li><li>
+<a href="/home/projects/lang/ccparse">CParseParse</a></li><li>
 <a href="/home/projects/lang/cparser">C Parser <span class="small">[+]</span></a></li><li>
 <a href="/home/projects/lang/glr">GLR Parser</a></li><li>
-<a href="/home/projects/lang/hm">Hindley-Milner <span class="small">[+]</span></a></li><li>
+<a href="/home/projects/lang/hm">Hindley-Milner <span class="small">[-]</span></a><ul>
+<li>
+<a id="actmenu">Online</a></li></ul></li><li>
 <a href="/home/projects/lang/jmlc">JML</a></li><li>
 <a href="/home/projects/lang/re2ml">Re2ML</a></li><li>
 <a href="/home/projects/lang/libcdk">CDK library</a></li><li>
@@ -52,21 +54,54 @@
 		</div> 
 
 		<div id="content">
-			<h2>C++ Parser
+			<h2 id="title">Loading parser...</h2>
 
-</h2> <p>This project aims to create an extensible C++ parser for building source to
-source transformation tools. It may also serve as a compiler front-end, in the
-future.
+<style>
+   #left {
+      float: left;
+      width: 50%;
+   }
+   #right {
+      float: right;
+      width: 50%;
+   }
 
-</p> <p>
-  <a href="https://github.com/pippijn/cparseparse">Git repository</a>
+   textarea {
+      width: 90%;
+   }
+</style>
 
+<p>
+   <em>
+      This parser is unstable and may stop working for no apparent reason.
+      Reload the page when that happens. It may take a while to load the
+      JavaScript code on slow connections.
+   </em>
 </p>
+
+<script type="text/javascript" src="http://xinutec.org/~pippijn/files/up/parser/missing.js"></script>
+<script type="text/javascript" src="http://xinutec.org/~pippijn/files/up/parser/hm_js.js"></script>
+
+<div id="left">
+   <h3 id="code_title">Code</h3>
+   <textarea id="input" rows="20">3</textarea>
+</div>
+<div id="right">
+   <h3 id="missing_title">Extra info</h3>
+   <textarea id="missing" rows="20"></textarea>
+</div>
+
+<pre id="error"></pre>
+<h3 id="sexp_title">Parse tree</h3>
+<pre id="sexp"></pre>
+<h3 id="output_title">Deparsed</h3>
+<pre id="output"></pre>
+
 		</div> 
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Wed Aug 14 03:44:43 MEST 2013</div> 
+			<div id="updated">Last updated Wed Aug 14 04:38:22 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

@@ -35,6 +35,7 @@
 <li>
 <a id="actmenu">Online</a></li></ul></li><li>
 <a href="/home/projects/lang/glr">GLR Parser</a></li><li>
+<a href="/home/projects/lang/hm">Hindley-Milner <span class="small">[+]</span></a></li><li>
 <a href="/home/projects/lang/jmlc">JML</a></li><li>
 <a href="/home/projects/lang/re2ml">Re2ML</a></li><li>
 <a href="/home/projects/lang/libcdk">CDK library</a></li><li>
@@ -64,9 +65,6 @@
       float: right;
       width: 50%;
    }
-   #bottom {
-      clear: both;
-   }
 
    textarea {
       width: 90%;
@@ -84,29 +82,26 @@
 <script type="text/javascript" src="http://xinutec.org/~pippijn/files/up/parser/missing.js"></script>
 <script type="text/javascript" src="http://xinutec.org/~pippijn/files/up/parser/fcc_js.js"></script>
 
-<div>
-   <div id="left">
-      <h3 id="code_title">Code</h3>
-      <textarea id="input" rows="20">3</textarea>
-   </div>
-   <div id="right">
-      <h3 id="missing_title">Extra info</h3>
-      <textarea id="missing" rows="20"></textarea>
-   </div>
+<div id="left">
+   <h3 id="code_title">Code</h3>
+   <textarea id="input" rows="20">3</textarea>
 </div>
-<div id="bottom">
-   <pre id="error"></pre>
-   <h3 id="sexp_title">Parse tree</h3>
-   <pre id="sexp"></pre>
-   <h3 id="output_title">Deparsed</h3>
-   <pre id="output"></pre>
+<div id="right">
+   <h3 id="missing_title">Extra info</h3>
+   <textarea id="missing" rows="20"></textarea>
 </div>
+
+<pre id="error"></pre>
+<h3 id="sexp_title">Parse tree</h3>
+<pre id="sexp"></pre>
+<h3 id="output_title">Deparsed</h3>
+<pre id="output"></pre>
 
 		</div> 
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Mon Aug 12 01:43:18 MEST 2013</div> 
+			<div id="updated">Last updated Wed Aug 14 04:38:17 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

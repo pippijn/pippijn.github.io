@@ -49,6 +49,9 @@
 					[online => "Online"],
 				]],
 				[glr => "GLR Parser"],
+				[hm => "Hindley-Milner", [
+					[online => "Online"],
+				]],
 				[jmlc => "JML"],
 				[re2ml => "Re2ML"],
 				[libcdk => "CDK library"],
