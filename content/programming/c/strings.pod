@@ -33,9 +33,9 @@ C<L"text">'s representation is even more platform dependent and could be:
 This is not surprising. More surprising would be the representation of
 C<"&#x263a;"> and C<L"&#x263a;">:
 
-  C<"☺">
+  "&#x263a;"
   { 0x3f, 0x98, 0xba, 0 }
-  C<L"☺">
+  L"&#x263a;"
   { 0x263a, 0 }
 
 The former is the UTF-8 octet-representation of the smiley face, the latter is

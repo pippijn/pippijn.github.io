@@ -19,19 +19,51 @@
 			<h2>Menu</h2> 
 			<div id="menubar">
 				<ul>
-<li>
-<a href="/home/">Home</a></li><li>
-<a href="/home/projects">Projects <span class="small">[+]</span></a></li><li>
-<a href="/home/opinions">Opinions <span class="small">[+]</span></a></li><li>
-<a href="/home/programming">Programming <span class="small">[-]</span></a><ul>
-<li>
-<a href="/home/programming/data-hiding">Data hiding</a></li><li>
-<a href="/home/programming/c">C <span class="small">[-]</span></a><ul>
-<li>
-<a id="actmenu">Strings</a></li></ul></li><li>
-<a href="/home/programming/cpp">C++ <span class="small">[+]</span></a></li></ul></li><li>
-<a href="/home/links">Links</a></li><li>
-<a href="/home/contact">Contact</a></li></ul>
+  <li>
+    <a href="/home/">Home</a>
+  </li>
+  <li>
+    <a href="/home/projects">Projects
+      <span class="small">[+]</span>
+    </a>
+  </li>
+  <li>
+    <a href="/home/opinions">Opinions
+      <span class="small">[+]</span>
+    </a>
+  </li>
+  <li>
+    <a href="/home/programming">Programming
+      <span class="small">[-]</span>
+    </a>
+    <ul>
+      <li>
+        <a href="/home/programming/data-hiding">Data hiding</a>
+      </li>
+      <li>
+        <a href="/home/programming/c">C
+          <span class="small">[-]</span>
+        </a>
+        <ul>
+          <li>
+            <a id="actmenu">Strings</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="/home/programming/cpp">C++
+          <span class="small">[+]</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="/home/links">Links</a>
+  </li>
+  <li>
+    <a href="/home/contact">Contact</a>
+  </li>
+</ul>
 			</div> 
 		</div> 
 
@@ -81,9 +113,9 @@ character and wide character string literals. The latter is written
   <code>L"&#x263a;"</code>:
 
 
-</p> <pre>  C&lt;"âº"&gt;
+</p> <pre>  "&#x263a;"
   { 0x3f, 0x98, 0xba, 0 }
-  C&lt;L"âº"&gt;
+  L"&#x263a;"
   { 0x263a, 0 }
 
 </pre> <p>The former is the UTF-8 octet-representation of the smiley face, the latter is
@@ -323,7 +355,7 @@ byte, and so on. For further details, see the wikipedia article on
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Mon Aug 12 02:39:56 MEST 2013</div> 
+			<div id="updated">Last updated Wed Aug 14 06:15:28 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 
