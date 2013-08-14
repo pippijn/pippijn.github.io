@@ -47,8 +47,7 @@ usually represented by a
 well be represented by an octet string or a 32 bit integer string.
 
 
-</p> <pre>
-</pre> <h3>Different representations
+</p> <h3>Different representations
 
 </h3> <h4>NUL terminated
 
@@ -130,16 +129,14 @@ represented in memory.
     
     </p>
   </li>
-</ul> <pre>
-</pre> <h4>struct string
+</ul> <h4>struct string
 
 </h4> <p>A more sophisticated string representation is the following struct, frequently
 used by C++'s 
   <code>std::string</code> implementations:
 
 
-</p> <pre class="code-block">
-<span class="Type">struct</span> string
+</p> <pre class="code-block"><span class="Type">struct</span> string
 {
   <span class="Type">char</span> *rep;
   <span class="Type">size_t</span> len;
@@ -193,8 +190,7 @@ it needs a reallocation.
     
     </p>
   </li>
-</ul> <pre>
-</pre> <h4>Netstring
+</ul> <h4>Netstring
 
 </h4> <p>
   <a href="http://cr.yp.to/proto/netstrings.txt">Netstrings</a> are strings in the form
@@ -245,8 +241,7 @@ it needs a reallocation.
     
     </p>
   </li>
-</ul> <pre>
-</pre> <h4>String with size prepended
+</ul> <h4>String with size prepended
 
 </h4> <p>This is a 
   <code>char*</code> object that looks just like any normal C string, except

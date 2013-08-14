@@ -48,16 +48,14 @@ C++ is faster than C and pointed at templates. In this article, I will try to
 evaluate the truth of both opinions. In order to do this, I will present a few
 C++ features and possible implementations of them in C.
 
-</p> <pre>
-</pre> <h3>Inheritance
+</p> <h3>Inheritance
 
 </h3> <p>In C++, there is the possibility of &lt;acronym title="Classes are user defined
  types defined with the 'class' or 'struct' keyword"&gt;class&lt;/acronym&gt;es
 inheriting members from other classes. A simple example of this in C++ would
 be:
 
-</p> <pre class="code-block">
-<span class="Type">struct</span> Base
+</p> <pre class="code-block"><span class="Type">struct</span> Base
 {
   <span class="Type">int</span> a;
 };
@@ -73,9 +71,7 @@ Derived d;
 d.a = <span class="Number">3</span>;
 d.b = <span class="Number">4</span>;
 <span class="Comment">// This object can be implicitly converted to a Base reference</span>
-Base &amp;b = d;
-
-</pre> <p>How is this done in C? For inheritance, there are basically two possibilities
+Base &amp;b = d;</pre> <p>How is this done in C? For inheritance, there are basically two possibilities
 of which one has two variations. The first possibility is to give 
   <code>Derived</code>
 an object of type 
@@ -90,11 +86,9 @@ the body of
   <code>Derived</code>.
 
 
-</p> <pre>
-</pre> <h5>Possibility 1
+</p> <h5>Possibility 1
 
-</h5> <pre class="code-block">
-<span class="Type">struct</span> Base
+</h5> <pre class="code-block"><span class="Type">struct</span> Base
 {
   <span class="Type">int</span> a;
 };
@@ -112,13 +106,9 @@ d.b = <span class="Number">4</span>;
 <span class="Comment">// We can either explicitly convert a pointer to this object to Base</span>
 <span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;
 <span class="Comment">// or take the address of the base object</span>
-<span class="Type">struct</span> Base *b = &amp;d.base;
+<span class="Type">struct</span> Base *b = &amp;d.base;</pre> <h5>Possibility 2
 
-</pre> <pre>
-</pre> <h5>Possibility 2
-
-</h5> <pre class="code-block">
-<span class="Type">struct</span> Base
+</h5> <pre class="code-block"><span class="Type">struct</span> Base
 {
   <span class="Type">int</span> a;
 };
@@ -146,9 +136,7 @@ d.b = <span class="Number">4</span>;
 d.a = <span class="Number">3</span>;
 d.b = <span class="Number">4</span>;
 <span class="Comment">// We can explicitly convert a pointer to this object to Base</span>
-<span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;
-
-</pre> <p>Multiple inheritance can be achieved in C, but not by 
+<span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;</pre> <p>Multiple inheritance can be achieved in C, but not by 
   <code>#include</code>ing the
 multiple bases' bodies. That would break casts to those bases. It is possible
 to 
@@ -158,8 +146,7 @@ because it has to know intimate details about the class layout or use accessor
 and mutator functions all the time.
 
 
-</p> <pre>
-</pre> <h3>Member functions
+</p> <h3>Member functions
 
 </h3> <p>C++ has the notion of (non-static) member functions, which are like normal
 functions except they are called "on" an object. By calling a non-static
@@ -169,8 +156,7 @@ argument to the invisible first parameter called
 C, too, except that the syntax looks a bit different:
 
 
-</p> <pre class="code-block">
-<span class="Comment">// C++</span>
+</p> <pre class="code-block"><span class="Comment">// C++</span>
 <span class="Type">struct</span> Base
 {
   <span class="Type">int</span> a;
@@ -204,9 +190,7 @@ b.foo ();
 <span class="Type">struct</span> Derived d;
 Base_foo ((<span class="Type">struct</span> Base *)&amp;d);
 <span class="Type">struct</span> Base *b = &amp;d;
-Base_foo (b);
-
-</pre> <p>If you want to override 
+Base_foo (b);</pre> <p>If you want to override 
   <code>foo()</code> in 
   <code>Derived</code>, in C++ you simply mention
 
@@ -217,8 +201,7 @@ callers, as well as adding a
 function calls are used.
 
 
-</p> <pre>
-</pre> <h3>Virtual function calls
+</p> <h3>Virtual function calls
 
 </h3> <p>Until now, the C and C++ implementation have been reasonably equal in both
 development time and execution time. With compiler optimisation, both generate

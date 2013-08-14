@@ -62,8 +62,7 @@ from an object of derived type (often called slicing, because only the base
 part of the object is retained). In C, this implicit construction is not
 possible. Consider the following C++ code:
 
-</p> <pre class="code-block">
-<span class="Comment">// C++ code:</span>
+</p> <pre class="code-block"><span class="Comment">// C++ code:</span>
 <span class="Type">struct</span> base {
   <span class="Type">char</span> a;
   <span class="Type">int</span> b;
@@ -80,9 +79,7 @@ possible. Consider the following C++ code:
   base *bp = &amp;d;
   bp-&gt;b = d.a; <span class="Comment">// &lt;- either</span>
   bp-&gt;b = d.base::a; <span class="Comment">// &lt;- or</span>
-}
-
-</pre> <p>In this code, an object of type 
+}</pre> <p>In this code, an object of type 
   <code>derived</code> is created, then an object of type
 
   <code>base</code> is created and the derived object is sliced to form the base object.
@@ -97,8 +94,7 @@ member
 the base pointer.
 
 
-</p> <pre class="code-block">
-<span class="Comment">// C code:</span>
+</p> <pre class="code-block"><span class="Comment">// C code:</span>
 <span class="Type">struct</span> base {
   <span class="Type">char</span> a;
   <span class="Type">int</span> b;
@@ -117,9 +113,7 @@ the base pointer.
   <span class="Type">struct</span> base *bp = (<span class="Type">struct</span> base *)&amp;d;
   bp-&gt;b = d.base.a; <span class="Comment">// &lt;- either (bad)</span>
   bp-&gt;b = ((<span class="Type">struct</span> base *)&amp;d)-&gt;a; <span class="Comment">// &lt;- or</span>
-}
-
-</pre> <p>In long lines with several levels of inheritance, base accesses become
+}</pre> <p>In long lines with several levels of inheritance, base accesses become
 cumbersome and casting is probably the way to go. (Think of
 
   <code>d-&gt;base.base.base.base.base.base.a = 3</code> versus
@@ -127,8 +121,7 @@ cumbersome and casting is probably the way to go. (Think of
   <code>((struct somebase *)d)-&gt;a = 3</code>.
 
 
-</p> <pre>
-</pre> <h4>#include members (is-a)
+</p> <h4>#include members (is-a)
 
 </h4> <p>A more transparent way to simulate the above is to use the preprocessor
 directive 
@@ -137,8 +130,7 @@ that member accesses are completely transparent, the disadvantage is that the
 data members are going to be spread over many small files.
 
 
-</p> <pre class="code-block">
-<span class="Comment">// base-members.h</span>
+</p> <pre class="code-block"><span class="Comment">// base-members.h</span>
   <span class="Type">char</span> a;
   <span class="Type">int</span> b;
 
@@ -163,16 +155,13 @@ data members are going to be spread over many small files.
   <span class="Type">struct</span> base b = *(<span class="Type">struct</span> base *)&amp;d;
   <span class="Type">struct</span> base *bp = (<span class="Type">struct</span> base *)&amp;d;
   bp-&gt;b = d.a; <span class="Comment">// &lt;- works fine for long inheritance lines</span>
-}
-
-</pre> <p>As you can see, the client code for this is cleaner. There is no visible base
+}</pre> <p>As you can see, the client code for this is cleaner. There is no visible base
 object. The casts are all valid, because the beginning of both structs are
 equal. This way, you can easily extend to arbitrary inheritance levels. Data
 members are simply inherited and casting derived pointers to base pointers is
 perfectly valid.
 
-</p> <pre>
-</pre> <h3>Polymorphic data structures
+</p> <h3>Polymorphic data structures
 
 </h3> <p>When writing a programming language compiler, you will likely need an abstract
 syntax tree (AST). Without such a thing, it is hard to impossible to implement
@@ -182,8 +171,7 @@ you need an AST. Such trees are usually directed acyclic graphs consisting of
 many nodes of different types pointing at other nodes in the graph. A simple
 example could be:
 
-</p> <pre class="code-block">
-<span class="Type">struct</span> node {
+</p> <pre class="code-block"><span class="Type">struct</span> node {
 };
 
 <span class="Type">enum</span> op { ADD, SUB, MUL, DIV };
@@ -197,9 +185,7 @@ example could be:
 
 <span class="Type">struct</span> integer : node {
   <span class="Type">int</span> value;
-};
-
-</pre> <p>Now you can build an expression tree from an expression like 
+};</pre> <p>Now you can build an expression tree from an expression like 
   <code>3 + 2 * 7 / 3</code>.
 If you want to evaluate the tree, you need to somehow find out what type of
 node it is that was on the left or right hand side of the operation. It could
@@ -211,8 +197,7 @@ object, rather than the type of the pointer that is currently pointing at it.
 
 </p> <p>TODO: you do it with tags.
 
-</p> <pre>
-</pre> <h3>Links
+</p> <h3>Links
 
 </h3> <ul>
   <li>[1] 

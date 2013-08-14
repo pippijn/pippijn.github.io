@@ -85,12 +85,10 @@ handle, such as:
   <li>global non-constant initialisation
   
   </li>
-</ul> <pre>
-</pre> <p>The already implemented strong static typing means only little work is needed
+</ul> <p>The already implemented strong static typing means only little work is needed
 to implement this.
 
-</p> <pre>
-</pre> <h3>Initialisation
+</p> <h3>Initialisation
 
 </h3> <p>In order to register global pointers as GC roots (see 
   <a href="../runtime/gc">GC</a>), each
@@ -101,13 +99,11 @@ call the initialisation function of every module it uses.
 
 </p> <p>The initialisation function will be emitted in the primary implementation file.
 
-</p> <pre>
-</pre> <h3>Primary implementation file
+</p> <h3>Primary implementation file
 
 </h3> <p>The idea is that a programmer can write something like:
 
-</p> <pre class="code-block">
-<span class="Comment">// buffer.h</span>
+</p> <pre class="code-block"><span class="Comment">// buffer.h</span>
 <span class="Type">namespace</span> Buffer {
    <span class="Type">extern</span> <span class="Type">struct</span> t;
    <span class="Type">typedef</span> <span class="Type">struct</span> t @T;
@@ -123,15 +119,12 @@ call the initialisation function of every module it uses.
    <span class="Type">extern</span> <span class="Type">void</span> clear (T self);
    <span class="Type">extern</span> <span class="Type">void</span> add_char (T self, <span class="Type">char</span> c);
    <span class="Type">extern</span> <span class="Type">void</span> add_str (T self, string_t s);
-}
-
-</pre> <p>and have multiple implementation files, each implementing a semantically
+}</pre> <p>and have multiple implementation files, each implementing a semantically
 associated subset of the above functions.
 
 </p> <p>The internal file exposing the buffer's structure:
 
-</p> <pre class="code-block">
-<span class="Comment">// buffer-internal.h</span>
+</p> <pre class="code-block"><span class="Comment">// buffer-internal.h</span>
 <span class="Include">#include </span><span class="String">&lt;buffer.h&gt;</span>
 <span class="Type">namespace</span> Buffer {
    abstract <span class="Type">struct</span> t {
@@ -139,18 +132,13 @@ associated subset of the above functions.
       <span class="Type">size_t</span> pos;
       <span class="Type">size_t</span> len;
    };
-}
+}</pre> <p>Implementation of constructors:
 
-</pre> <p>Implementation of constructors:
-
-</p> <pre class="code-block">
-<span class="Comment">// buffer-ctors.c</span>
+</p> <pre class="code-block"><span class="Comment">// buffer-ctors.c</span>
 <span class="Include">#include </span><span class="String">&quot;buffer-internal.h&quot;</span>
 <span class="Type">namespace</span> Buffer;
 
-T create (<span class="Type">size_t</span> n) { ... }
-
-</pre> <p>Implementation of accessors and mutators each go into their separate files.
+T create (<span class="Type">size_t</span> n) { ... }</pre> <p>Implementation of accessors and mutators each go into their separate files.
 Now, if we generate more information about the structures, we need a primary
 implementation file. Currently, we have 
   <code>extern</code> datatypes that don't
@@ -167,14 +155,11 @@ all the extras provided by the module system.
 file. I currently don't have a good idea on this, but we could abuse any
 keyword for it (or add a new one).
 
-</p> <pre class="code-block">
-<span class="Comment">// buffer-ctors.c</span>
+</p> <pre class="code-block"><span class="Comment">// buffer-ctors.c</span>
 <span class="Include">#include </span><span class="String">&quot;buffer-internal.h&quot;</span>
 <span class="Type">register</span> <span class="Type">namespace</span> Buffer; <span class="Comment">// primary implementation file</span>
 
-T create (<span class="Type">size_t</span> n) { ... }
-
-</pre> <p>It could be 
+T create (<span class="Type">size_t</span> n) { ... }</pre> <p>It could be 
   <code>do</code>, 
   <code>let</code> or anything else, but I think
 
@@ -182,8 +167,7 @@ T create (<span class="Type">size_t</span> n) { ... }
 function registering GC roots.
 
 
-</p> <pre>
-</pre> <h3>Initialisation function
+</p> <h3>Initialisation function
 
 </h3> <p>The initialisation function does the following:
 

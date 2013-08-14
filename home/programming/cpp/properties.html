@@ -69,8 +69,7 @@ and the mutator (
 much. Consider the following code:
 
 
-</p> <pre class="code-block">
-<span class="Comment">// Public data members</span>
+</p> <pre class="code-block"><span class="Comment">// Public data members</span>
 <span class="Type">struct</span> point
 {
   <span class="Type">int</span> x;
@@ -103,10 +102,7 @@ p.x += <span class="Number">20</span>;
 
 <span class="Comment">// aggregate initialisers won't work anymore</span>
 point p (<span class="Number">1</span>, <span class="Number">2</span>);
-p.x (p.x () + <span class="Number">20</span>); <span class="Comment">// more code to be written for the same effect</span>
-
-</pre> <pre>
-</pre> <h3>Properties
+p.x (p.x () + <span class="Number">20</span>); <span class="Comment">// more code to be written for the same effect</span></pre> <h3>Properties
 
 </h3> <p>Many modern programming languages provide a syntactic construct known as
 
@@ -118,8 +114,7 @@ returned to the user. For instance, you might want to store the value in a
 database and transparently handle database queries using properties.
 
 
-</p> <pre>
-</pre> <h4>Previous attempts
+</p> <h4>Previous attempts
 
 </h4> <p>Many have attempted to implement properties in C++. The common approach is to
 use a nested class. Emad Barsoum has 
@@ -222,8 +217,7 @@ or
   <a href="http://msdn.microsoft.com/en-us/library/z974bes2(VS.71).aspx">Another MSVC hack</a>.
 
 
-</p> <pre>
-</pre> <h4>The new approach
+</p> <h4>The new approach
 
 </h4> <p>I present a zero-overhead approach which even has the very convenient benefit
 of being a trivial standard layout class, also known as Plain Old Data (or
@@ -232,8 +226,7 @@ use the memory required to store their value, non-value properties use the
 mandatory byte of memory that every empty struct is required to have. (This
 is, by the way, required in order to be able to take its address).
 
-</p> <pre>
-</pre> <h5>The prop class template
+</p> <h5>The prop class template
 
 </h5> <p>The 
   <code>prop</code> class template is parametrised by the container type, the value
@@ -245,8 +238,7 @@ a pretty bad job at optimising dereferences of member function pointers, but a
 terrific job when it comes to static functions.
 
 
-</p> <pre class="code-block">
-<span class="Type">template</span>&lt;
+</p> <pre class="code-block"><span class="Type">template</span>&lt;
   <span class="Type">typename</span> Class,
   <span class="Type">typename</span> T,
   T <span class="Type">const</span> &amp; (get) (Class <span class="Type">const</span> &amp;),
@@ -254,9 +246,7 @@ terrific job when it comes to static functions.
   <span class="Type">size_t</span> (offset) ()
 &gt;
 <span class="Type">struct</span> prop
-{
-
-</pre> <p>You may be wondering what the 
+{</pre> <p>You may be wondering what the 
   <code>offset</code> function is for. As I said earlier,
 this property has zero overhead, so it can't store the 
   <code>this</code> pointer of its
@@ -277,8 +267,7 @@ reference to the parent object. Due to
 location being known at compile time, it can easily be inlined.
 
 
-</p> <pre class="code-block">
-Class &amp;self ()
+</p> <pre class="code-block">Class &amp;self ()
 {
   <span class="Statement">return</span> *<span class="Statement">reinterpret_cast</span>&lt;Class *&gt; (<span class="Statement">reinterpret_cast</span>&lt;<span class="Type">char</span> *&gt; (<span class="Statement">this</span>)
                                      - offset ());
@@ -288,9 +277,7 @@ Class <span class="Type">const</span> &amp;self () <span class="Type">const</spa
 {
   <span class="Statement">return</span> *<span class="Statement">reinterpret_cast</span>&lt;Class <span class="Type">const</span> *&gt; (<span class="Statement">reinterpret_cast</span>&lt;<span class="Type">char</span> <span class="Type">const</span> *&gt; (<span class="Statement">this</span>)
                                            - offset ());
-}
-
-</pre> <p>We need all assignment operators (=, +=, -=, *=, /=, %=, ^=, |=, &amp;=,
+}</pre> <p>We need all assignment operators (=, +=, -=, *=, /=, %=, ^=, |=, &amp;=,
 &lt;&lt;= and &gt;&gt;=). We can define them all, because 
   <code>prop</code> is a class
 template and ISO/IEC 14882:2003(E), paragraph 14.7.1, clause 1 states that
@@ -301,28 +288,21 @@ template and ISO/IEC 14882:2003(E), paragraph 14.7.1, clause 1 states that
 on demand.
 
 
-</p> <pre class="code-block">
-prop &amp;<span class="Statement">operator</span>   = (T <span class="Type">const</span> &amp;rhs) { set (self (), rhs); <span class="Statement">return</span> *<span class="Statement">this</span>; }
+</p> <pre class="code-block">prop &amp;<span class="Statement">operator</span>   = (T <span class="Type">const</span> &amp;rhs) { set (self (), rhs); <span class="Statement">return</span> *<span class="Statement">this</span>; }
 prop &amp;<span class="Statement">operator</span>  += (T <span class="Type">const</span> &amp;rhs) { set (self (), get (self ())  + rhs); <span class="Statement">return</span> *<span class="Statement">this</span>; }
-<span class="Comment">// Analogous for the other operators</span>
-
-</pre> <p>These operators define all we need for the mutator, but not for the accessor.
+<span class="Comment">// Analogous for the other operators</span></pre> <p>These operators define all we need for the mutator, but not for the accessor.
 Instead of defining all operators (unary +, unary -, binary +, binary *, etc.),
 we can define 
   <code>operator T const &amp;</code> and the C++ compiler will take care of
 required conversions:
 
 
-</p> <pre class="code-block">
-<span class="Statement">operator</span> T <span class="Type">const</span> &amp; () <span class="Type">const</span>
+</p> <pre class="code-block"><span class="Statement">operator</span> T <span class="Type">const</span> &amp; () <span class="Type">const</span>
 {
   <span class="Statement">return</span> get (self ());
-}
+}</pre> <p>Now, all we need is a way to access members of the property. Then we are done:
 
-</pre> <p>Now, all we need is a way to access members of the property. Then we are done:
-
-</p> <pre class="code-block">
-  T *<span class="Statement">operator</span> -&gt; ()
+</p> <pre class="code-block">  T *<span class="Statement">operator</span> -&gt; ()
   {
     <span class="Statement">return</span> &amp;<span class="Statement">const_cast</span>&lt;T &amp;&gt; (get (self ()));
   }
@@ -331,9 +311,7 @@ required conversions:
   {
     <span class="Statement">return</span> &amp;get (self ());
   }
-};
-
-</pre> <p>The 
+};</pre> <p>The 
   <code>const_cast</code> is strictly considered undefined behaviour, but if the
 property itself is non-const, we know the value is non-const, as well. This is
 a dire hack, but I don't see a better way to solve it. One way would be to
@@ -341,8 +319,7 @@ pass a non-const accessor function as additional template argument, but that
 would probably cause more code bloat than it is worth.
 
 
-</p> <pre>
-</pre> <h5>Value properties
+</p> <h5>Value properties
 
 </h5> <p>The above class template provides support for properties that do not store
 their own value. Often, we want the value to be stored, though, and we do not
@@ -353,8 +330,7 @@ template, called
 types:
 
 
-</p> <pre class="code-block">
-<span class="Type">template</span>&lt;
+</p> <pre class="code-block"><span class="Type">template</span>&lt;
   <span class="Type">typename</span> Class,
   <span class="Type">typename</span> T,
   T <span class="Type">const</span> &amp; (get) (Class <span class="Type">const</span> &amp;, T <span class="Type">const</span> &amp;),
@@ -362,9 +338,7 @@ types:
   <span class="Type">size_t</span> (offset) ()
 &gt;
 <span class="Type">struct</span> value_prop
-{
-
-</pre> <p>Now, in addition to the container's 
+{</pre> <p>Now, in addition to the container's 
   <code>this</code> pointer, the accessor 
   <code>get</code> and
 mutator 
@@ -374,12 +348,9 @@ instantiated property class template.
 Now, the operator definitions look slightly different:
 
 
-</p> <pre class="code-block">
-value_prop &amp;<span class="Statement">operator</span>   = (T <span class="Type">const</span> &amp;rhs) { set (self (), value, rhs); <span class="Statement">return</span> *<span class="Statement">this</span>; }
+</p> <pre class="code-block">value_prop &amp;<span class="Statement">operator</span>   = (T <span class="Type">const</span> &amp;rhs) { set (self (), value, rhs); <span class="Statement">return</span> *<span class="Statement">this</span>; }
 value_prop &amp;<span class="Statement">operator</span>  += (T <span class="Type">const</span> &amp;rhs) { set (self (), value, get (self (), value)  + rhs);
-                                          <span class="Statement">return</span> *<span class="Statement">this</span>; }
-
-</pre> <p>and the class has a public member variable called 
+                                          <span class="Statement">return</span> *<span class="Statement">this</span>; }</pre> <p>and the class has a public member variable called 
   <code>value</code>. I decided to make
 it public so the instantiated class template would remain POD. This means one
 can, by directly accessing 
@@ -387,16 +358,14 @@ can, by directly accessing
 client code will not do that.
 
 
-</p> <pre>
-</pre> <h5>Using properties
+</p> <h5>Using properties
 
 </h5> <p>To use a property in a class, we need four things: the property object, the
 accessor, the mutator and very importantly, the 
   <code>offset</code> function.
 
 
-</p> <pre class="code-block">
-<span class="Type">struct</span> point
+</p> <pre class="code-block"><span class="Type">struct</span> point
 {
   <span class="Comment">// The X-coordinate</span>
   value_prop&lt;point, <span class="Type">int</span>, get_x, set_x, offset_x&gt; x;
@@ -409,9 +378,7 @@ accessor, the mutator and very importantly, the
   <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> &amp;get_y (point <span class="Type">const</span> &amp;self) { <span class="Statement">return</span> self.y_; }
   <span class="Type">static</span> <span class="Type">void</span> set_y (point &amp;self, <span class="Type">int</span> <span class="Type">const</span> &amp;value) { self.y_ = value; }
   <span class="Type">static</span> <span class="Type">size_t</span> offset_y () { <span class="Statement">return</span> offsettof (point, y); }
-};
-
-</pre> <p>The offset returned by the 
+};</pre> <p>The offset returned by the 
   <code>offset_*</code> functions is the number of bytes
 between the location of the property object and the 
   <code>this</code> pointer of the
@@ -466,14 +433,12 @@ compliant.
   <p>The above does not mean POD structs may not have member functions.
   
   </p>
-</p> <pre>
-</pre> <h5>Using macros
+</p> <h5>Using macros
 
 </h5> <p>The above class definition is repetetive and error prone, so we use the
 following macros:
 
-</p> <pre class="code-block">
-<span class="PreProc">#define def_prop(T, Class, name, get, set)                                      \</span>
+</p> <pre class="code-block"><span class="PreProc">#define def_prop(T, Class, name, get, set)                                      \</span>
 <span class="PreProc">  </span><span class="Type">static</span><span class="PreProc"> </span><span class="Type">size_t</span><span class="PreProc"> offset_ ## name () { </span><span class="Statement">return</span><span class="PreProc"> offsetof (Class, name); }           \</span>
 <span class="PreProc">  </span><span class="Type">static</span><span class="PreProc"> T </span><span class="Type">const</span><span class="PreProc"> &amp;get_ ## name (Class </span><span class="Type">const</span><span class="PreProc"> &amp;self) get                          \</span>
 <span class="PreProc">  </span><span class="Type">static</span><span class="PreProc"> </span><span class="Type">void</span><span class="PreProc"> set_ ## name (Class &amp;self, T </span><span class="Type">const</span><span class="PreProc"> &amp;value) set                    \</span>
@@ -483,14 +448,11 @@ following macros:
 <span class="PreProc">  </span><span class="Type">static</span><span class="PreProc"> </span><span class="Type">size_t</span><span class="PreProc"> offset_ ## name () { </span><span class="Statement">return</span><span class="PreProc"> offsetof (Class, name); }           \</span>
 <span class="PreProc">  </span><span class="Type">static</span><span class="PreProc"> T </span><span class="Type">const</span><span class="PreProc"> &amp;get_ ## name (Class </span><span class="Type">const</span><span class="PreProc"> &amp;self, T </span><span class="Type">const</span><span class="PreProc"> &amp;property) get       \</span>
 <span class="PreProc">  </span><span class="Type">static</span><span class="PreProc"> </span><span class="Type">void</span><span class="PreProc"> set_ ## name (Class &amp;self, T &amp;property, T </span><span class="Type">const</span><span class="PreProc"> &amp;value) set       \</span>
-<span class="PreProc">  ::value_prop&lt;Class, T, get_ ## name, set_ ## name, offset_ ## name&gt; name</span>
-
-</pre> <p>Now, we can rewrite the class definition of 
+<span class="PreProc">  ::value_prop&lt;Class, T, get_ ## name, set_ ## name, offset_ ## name&gt; name</span></pre> <p>Now, we can rewrite the class definition of 
   <code>point</code> as follows:
 
 
-</p> <pre class="code-block">
-<span class="Type">struct</span> point
+</p> <pre class="code-block"><span class="Type">struct</span> point
 {
   def_value_prop (<span class="Type">int</span>, point, x,
     <span class="Error">{</span>
@@ -511,9 +473,7 @@ following macros:
       self.y_ = value;
     <span class="Error">}</span>
   );
-};
-
-</pre> <p>We use value properties as well as normal properties here. Extra caution has
+};</pre> <p>We use value properties as well as normal properties here. Extra caution has
 to be taken with aggregate initialisers when doing this. It will generally not
 be an issue, since classes with non-value properties are unlikely to get
 aggregate initialisation.
@@ -534,20 +494,15 @@ delimiters. One solution would be to use GCC's variadic macros to implement an
   <code>UNPAREN</code> macro:
 
 
-</p> <pre class="code-block">
-<span class="PreProc">#define UNPAREN_(x...) x</span>
-<span class="PreProc">#define UNPAREN(x) UNPAREN_ x</span>
-
-</pre> <p>The gained advantage is that commas can be used outside parentheses inside
+</p> <pre class="code-block"><span class="PreProc">#define UNPAREN_(x...) x</span>
+<span class="PreProc">#define UNPAREN(x) UNPAREN_ x</span></pre> <p>The gained advantage is that commas can be used outside parentheses inside
 accessor and mutator code, the disadvantage is that all code needs to be
 enclosed in parentheses, making the other code plain ugly (uglier than it
 already is).
 
-</p> <pre>
-</pre> <h5>A larger example
+</p> <h5>A larger example
 
-</h5> <pre class="code-block">
-<span class="Type">struct</span> point
+</h5> <pre class="code-block"><span class="Type">struct</span> point
 {
   def_value_prop (<span class="Type">int</span>, point, x,
     <span class="Error">{</span>
@@ -612,9 +567,7 @@ main ()
   printf (<span class="String">&quot;p.x-&gt;y == </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, (<span class="Type">int</span>) p.x-&gt;y);
   printf (<span class="String">&quot;p.y-&gt;x == </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, (<span class="Type">int</span>) p.y-&gt;x);
   printf (<span class="String">&quot;p.y-&gt;y == </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, (<span class="Type">int</span>) p.y-&gt;y);
-}
-
-</pre> <p>The output would look something like this:
+}</pre> <p>The output would look something like this:
 
 </p> <pre>  static const point&amp; coordinate::get_x(const coordinate&amp;, const point&amp;)
   static const int&amp; point::get_x(const point&amp;, const int&amp;)
@@ -633,8 +586,7 @@ main ()
   <code>__PRETTY_FUNCTION__</code> to work.
 
 
-</p> <pre>
-</pre> <h5>Performance
+</p> <h5>Performance
 
 </h5> <p>As I mentioned in the introduction, I chose to use static member functions for
 efficiency reasons. Just to give you an idea of how efficient this zero
@@ -643,15 +595,12 @@ simple example:
 
 </p> <p>C++ code:
 
-</p> <pre class="code-block">
-<span class="Type">int</span>
+</p> <pre class="code-block"><span class="Type">int</span>
 main ()
 {
   coordinate p = { { <span class="Number">2</span>, <span class="Number">3</span> }, { <span class="Number">4</span>, <span class="Number">5</span> } };
   <span class="Type">volatile</span> <span class="Type">int</span> x = p.x-&gt;x;
-}
-
-</pre> <p>And the assembler output:
+}</pre> <p>And the assembler output:
 
 </p> <pre class="code-block"><span class="Identifier">main</span>:
         <span class="Identifier">xorl</span>    %<span class="Identifier">eax</span>, %<span class="Identifier">eax</span>    <span class="Comment">; set return value to 0</span>
@@ -669,8 +618,7 @@ configuration where
   <code>offsetof</code> fails is this:
 
 
-</p> <pre class="code-block">
-<span class="Type">struct</span> A
+</p> <pre class="code-block"><span class="Type">struct</span> A
 {
   <span class="Type">virtual</span> ~A () { }
 };
@@ -686,9 +634,7 @@ configuration where
 };
 
 <span class="Type">size_t</span> offset = offsetof (D, i);  <span class="Comment">// This fails</span>
-<span class="Type">size_t</span> offset = offsetof (B1, i); <span class="Comment">// This succeeds and is correct</span>
-
-</pre> <p>so in fact, the property class never fails. However, I have only tested it on
+<span class="Type">size_t</span> offset = offsetof (B1, i); <span class="Comment">// This succeeds and is correct</span></pre> <p>so in fact, the property class never fails. However, I have only tested it on
 the GNU C++ compiler. Other compilers might mess up, but one thing is for
 certain: 
   <code>prop</code> being POD allows for 100% standard compliant properties.
@@ -697,8 +643,7 @@ certain:
 don't really see any reason why any compiler could mess it up.)
 
 
-</p> <pre>
-</pre> <h3>Links
+</p> <h3>Links
 
 </h3> <ul>
   <li>
@@ -731,7 +676,7 @@ don't really see any reason why any compiler could mess it up.)
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Mon Aug 12 03:24:08 MEST 2013</div> 
+			<div id="updated">Last updated Wed Aug 14 05:14:09 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

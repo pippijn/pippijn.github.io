@@ -57,8 +57,7 @@
 targets, by themselves. Templates offer a better structured way to inheriting
 sources and libraries.
 
-</p> <pre class="code-block">
-<span class="Comment"># Build a program that does some math</span>
+</p> <pre class="code-block"><span class="Comment"># Build a program that does some math</span>
 <span class="Type">program</span> prog <span class="Identifier">{</span>
    <span class="Type">sources</span> <span class="Identifier">{</span>
       main.c
@@ -84,12 +83,9 @@ sources and libraries.
       <span class="Comment"># And link against GMP</span>
       -lgmp
    <span class="Identifier">}</span>
-<span class="Identifier">}</span>
+<span class="Identifier">}</span></pre> <p>The above example can be better written as follows:
 
-</pre> <p>The above example can be better written as follows:
-
-</p> <pre class="code-block">
-<span class="Type">template</span> math-program <span class="Identifier">{</span>
+</p> <pre class="code-block"><span class="Type">template</span> math-program <span class="Identifier">{</span>
    <span class="Type">sources</span> <span class="Identifier">{</span>
       main.c
    <span class="Identifier">}</span>
@@ -110,9 +106,7 @@ sources and libraries.
    <span class="Type">link</span> <span class="Identifier">{</span>
       -lgmp
    <span class="Identifier">}</span>
-<span class="Identifier">}</span>
-
-</pre> <p>Both programs inherit the sources and link blocks from 
+<span class="Identifier">}</span></pre> <p>Both programs inherit the sources and link blocks from 
   <code>math-program</code> and add
 their own sources to it. This method is better structured but less flexible.
 Templates can inherit from other templates. It is still possible to import
@@ -138,8 +132,7 @@ serve as a base, so a target or template cannot inherit from another target,
 only from templates. Inheriting from a template more than once, even implicitly
 through another base, is an error.
 
-</p> <pre class="code-block">
-<span class="Type">template</span> math-program <span class="Identifier">{</span>
+</p> <pre class="code-block"><span class="Type">template</span> math-program <span class="Identifier">{</span>
    <span class="Type">sources</span> <span class="Identifier">{</span>
       math-support.c
    <span class="Identifier">}</span>
@@ -159,10 +152,7 @@ through another base, is an error.
    <span class="Type">sources</span> <span class="Identifier">{</span>
       main.c
    <span class="Identifier">}</span>
-<span class="Identifier">}</span>
-
-</pre> <pre>
-</pre> <h3>Filtering
+<span class="Identifier">}</span></pre> <h3>Filtering
 
 </h3> <p>As we learned in 
   <a href="variables">variables</a>, one may filter the 
@@ -171,8 +161,7 @@ locally built libraries. Templates take this one step further by allowing you to
 filter by template.
 
 
-</p> <pre class="code-block">
-<span class="Type">template</span> math-library <span class="Identifier">{</span>
+</p> <pre class="code-block"><span class="Type">template</span> math-library <span class="Identifier">{</span>
    ...
 <span class="Identifier">}</span>
 <span class="Type">library</span> mathsupport <span class="Statement">:</span> math-library <span class="Identifier">{</span>
@@ -187,9 +176,7 @@ filter by template.
       <span class="Comment"># Also link against libm</span>
       -lm
    <span class="Identifier">}</span>
-<span class="Identifier">}</span>
-
-</pre> <p>In the above example, the 
+<span class="Identifier">}</span></pre> <p>In the above example, the 
   <code>$(mathprog.link)</code> variable would expand to
 "
   <code>mathsupport support -lm</code>". The expansion of 

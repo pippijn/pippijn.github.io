@@ -76,8 +76,7 @@ closures cannot be passed as function pointers to C, but a helper function
 could be implemented that calls the C function with the closure as environment
 and a stub invoking the closure as function.
 
-</p> <pre>
-</pre> <h3>Closures
+</p> <h3>Closures
 
 </h3> <p>Normal code calculating the sum of the numbers between 
   <code>from</code> and
@@ -86,8 +85,7 @@ and a stub invoking the closure as function.
   <code>num</code>, thus requiring a closure:
 
 
-</p> <pre class="code-block">
-<span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> (@func) (<span class="Type">int</span> i)) {
+</p> <pre class="code-block"><span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> (@func) (<span class="Type">int</span> i)) {
    <span class="Type">int</span> result = <span class="Number">0</span>;
    <span class="Type">int</span> inc = from &gt; to ? <span class="Number">1</span> : -<span class="Number">1</span>;
    <span class="Statement">while</span> (from != to) {
@@ -100,12 +98,9 @@ and a stub invoking the closure as function.
 <span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
    <span class="Type">int</span> mul (<span class="Type">int</span> i) { <span class="Statement">return</span> i * num; }
    <span class="Statement">return</span> sum (from, to, mul);
-}
+}</pre> <p>Would roughly (the names would be mangled somehow) be compiled to:
 
-</pre> <p>Would roughly (the names would be mangled somehow) be compiled to:
-
-</p> <pre class="code-block">
-<span class="Type">struct</span> sum_clos1 {
+</p> <pre class="code-block"><span class="Type">struct</span> sum_clos1 {
    <span class="Type">void</span> *env;
    <span class="Type">int</span> (*func) (<span class="Type">void</span> *env, <span class="Type">int</span> i);
 };
@@ -139,9 +134,7 @@ and a stub invoking the closure as function.
    clos.func = mul;
 
    <span class="Statement">return</span> sum (from, to, clos);
-}
-
-</pre> <p>This must be done even for simple, non-capturing and global functions, as the
+}</pre> <p>This must be done even for simple, non-capturing and global functions, as the
 called function (in this case 
   <code>sum</code>) cannot know whether it gets a
 closure or a normal function. It is, however, unfeasible to add a parameter
@@ -150,16 +143,12 @@ closure or a normal function. It is, however, unfeasible to add a parameter
 pointer requires the generation of stubs:
 
 
-</p> <pre class="code-block">
-<span class="Type">int</span> identity (<span class="Type">int</span> i) { <span class="Statement">return</span> i; }
+</p> <pre class="code-block"><span class="Type">int</span> identity (<span class="Type">int</span> i) { <span class="Statement">return</span> i; }
 <span class="Type">int</span> identity_sum (<span class="Type">int</span> from, <span class="Type">int</span> to) {
    <span class="Statement">return</span> sum (from, to, identity);
-}
+}</pre> <p>Has to be translated to:
 
-</pre> <p>Has to be translated to:
-
-</p> <pre class="code-block">
-<span class="Type">int</span> identity (<span class="Type">int</span> i) { <span class="Statement">return</span> i; }
+</p> <pre class="code-block"><span class="Type">int</span> identity (<span class="Type">int</span> i) { <span class="Statement">return</span> i; }
 <span class="Type">int</span> identity_stub (<span class="Type">void</span> *env, <span class="Type">int</span> i) { <span class="Statement">return</span> identity (i); }
 <span class="Type">int</span> identity_sum (<span class="Type">int</span> from, <span class="Type">int</span> to) {
    <span class="Type">struct</span> sum_clos1 clos;
@@ -168,13 +157,10 @@ pointer requires the generation of stubs:
    clos.func = identity_stub;
 
    <span class="Statement">return</span> sum (from, to, clos);
-}
-
-</pre> <p>This will cause a performance hit, but has to be done for uniform handling of
+}</pre> <p>This will cause a performance hit, but has to be done for uniform handling of
 global and nested functions.
 
-</p> <pre>
-</pre> <h3>Passing closures to C
+</p> <h3>Passing closures to C
 
 </h3> <p>Another problem is that we can no longer trivially pass functions to C.
 
@@ -186,19 +172,15 @@ dynamically allocated closures. In order to pass a closure to C, we would need
 to generate a libffi closure wrapper.
 
 
-</p> <pre class="code-block">
-<span class="Comment">// Same as above, but somewhere else, implemented in regular C</span>
+</p> <pre class="code-block"><span class="Comment">// Same as above, but somewhere else, implemented in regular C</span>
 <span class="Type">extern</span> <span class="String">&quot;C&quot;</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> (@func) (<span class="Type">int</span> i));
 
 <span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
    <span class="Type">int</span> mul (<span class="Type">int</span> i) { <span class="Statement">return</span> i * num; }
    <span class="Statement">return</span> sum (from, to, <span class="Error">{</span>mul<span class="Error">}</span>); <span class="Comment">// or some other syntax</span>
-}
+}</pre> <p>The above code would be compiled to the following:
 
-</pre> <p>The above code would be compiled to the following:
-
-</p> <pre class="code-block">
-<span class="Include">#include </span><span class="String">&lt;ffi.h&gt;</span>
+</p> <pre class="code-block"><span class="Include">#include </span><span class="String">&lt;ffi.h&gt;</span>
 <span class="Include">#include </span><span class="String">&lt;sys/mman.h&gt;</span>
 
 <span class="Type">extern</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> (*func) (<span class="Type">int</span> i));
@@ -255,9 +237,7 @@ mul_closure_wrapper (ffi_cif *cif, <span class="Type">void</span> *rval,
 
       <span class="Statement">return</span> sum (from, to, clos.fn);
    }
-}
-
-</pre> <p>All the complexity is handled by libffi. However, the memory allocated by
+}</pre> <p>All the complexity is handled by libffi. However, the memory allocated by
 libffi would leak by default, so the garbage collector needs to be aware of
 that memory and free it using 
   <code>ffi_closure_free</code>. Alternatively, the
@@ -290,23 +270,19 @@ along with a generated
   <code>env</code> pointer.
 
 
-</p> <pre class="code-block">
-<span class="Comment">// Expect C API to allow for user data to be passed.</span>
+</p> <pre class="code-block"><span class="Comment">// Expect C API to allow for user data to be passed.</span>
 <span class="Type">extern</span> <span class="String">&quot;C&quot;</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, `t env,
                     <span class="Type">int</span> (@func) (`t env, <span class="Type">int</span> i));
 
 <span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
    <span class="Type">int</span> mul (<span class="Type">int</span> i) { <span class="Statement">return</span> i * num; }
    <span class="Statement">return</span> sum (from, to, mul);
-}
-
-</pre> <p>Passing the 
+}</pre> <p>Passing the 
   <code>mul</code> function would expand to two arguments: the env and the
 function pointer. It would thus be compiled to:
 
 
-</p> <pre class="code-block">
-<span class="Type">extern</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">void</span> *env,
+</p> <pre class="code-block"><span class="Type">extern</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">void</span> *env,
                 <span class="Type">int</span> (*func) (<span class="Type">void</span> *env, <span class="Type">int</span> i));
 
 <span class="Comment">/*</span><span class="Comment"> compile to mul_env + mul like in the first example </span><span class="Comment">*/</span>
@@ -316,10 +292,7 @@ function pointer. It would thus be compiled to:
    <span class="Comment">/*</span><span class="Comment"> construct env like in the first example </span><span class="Comment">*/</span>
    [...]
    <span class="Statement">return</span> sum (from, to, &amp;env, mul);
-}
-
-</pre> <pre>
-</pre> <h3>Lambda expressions
+}</pre> <h3>Lambda expressions
 
 </h3> <p>I really don't like the syntax of C++ lambda expressions. I much prefer the
 C# way, providing type inference and a prettier syntax. Also, why would we
@@ -327,8 +300,7 @@ have to tell it what variables we're going to use? Oh yeah, because C++ has
 references.  Well, we don't and we're not going to have them, so the proposed
 syntax is very similar to the C# syntax.
 
-</p> <pre class="code-block">
-<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
+</p> <pre class="code-block"><span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
    <span class="Comment">// syntax 1:</span>
    <span class="Statement">return</span> sum (from, to, i =&gt; i * num);
    <span class="Comment">// syntax 2 (works for multiple arguments):</span>
@@ -337,9 +309,7 @@ syntax is very similar to the C# syntax.
    <span class="Statement">return</span> sum (from, to, i =&gt; <span class="Error">{</span> <span class="Statement">return</span> i * num; <span class="Error">}</span>);
    <span class="Comment">// syntax 4 (also for multiple arguments):</span>
    <span class="Statement">return</span> sum (from, to, (i) =&gt; <span class="Error">{</span> <span class="Statement">return</span> i * num; <span class="Error">}</span>);
-}
-
-</pre> <p>The type of 
+}</pre> <p>The type of 
   <code>i</code> can easily be inferred with the already implemented type
 inference engine. The expression is first compiled to a nested function and
 then handled the same way as regular nested functions are. So basically, they

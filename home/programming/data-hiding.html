@@ -67,15 +67,12 @@ counted, said to be the least object oriented language.
   </li>
 </ul> <p>A simple example of information hiding would be a string object:
 
-</p> <pre class="code-block">
-<span class="Type">struct</span> string
+</p> <pre class="code-block"><span class="Type">struct</span> string
 {
   <span class="Type">char</span> *rep;
   <span class="Type">size_t</span> len;
   <span class="Type">size_t</span> capacity.
-};
-
-</pre> <p>This 
+};</pre> <p>This 
   <code>struct</code> knows its length and has a data pointer pointing at the
 in-memory string representation. It also knows its maximum capacity, so it can
 allocate more memory on demand. In order to avoid corruption of the internal
@@ -83,25 +80,19 @@ state (in this case, the len member), we write accessor functions, for
 example:
 
 
-</p> <pre class="code-block">
-<span class="Type">size_t</span> strLength (<span class="Type">struct</span> string <span class="Type">const</span> *str);
+</p> <pre class="code-block"><span class="Type">size_t</span> strLength (<span class="Type">struct</span> string <span class="Type">const</span> *str);
 <span class="Type">char</span> <span class="Type">const</span> *strToCStr (<span class="Type">struct</span> string <span class="Type">const</span> *str);
 <span class="Type">char</span> strCharAt (<span class="Type">struct</span> string <span class="Type">const</span> *str, <span class="Type">size_t</span> pos);
 <span class="Type">void</span> strSetCharAt (<span class="Type">struct</span> string *str, <span class="Type">size_t</span> pos, <span class="Type">char</span> c);
-<span class="Type">void</span> strAddChars (<span class="Type">struct</span> string *str, <span class="Type">char</span> <span class="Type">const</span> *chars);
-
-</pre> <p>These functions operate on the data structure declared above. Functions
+<span class="Type">void</span> strAddChars (<span class="Type">struct</span> string *str, <span class="Type">char</span> <span class="Type">const</span> *chars);</pre> <p>These functions operate on the data structure declared above. Functions
 that take a pointer-to-const promise not to modify the structure.
 
 </p> <p>Information hiding means to hide as much knowledge as possible. As part
 of this, we could define new type aliases to hide the fact that a string
 is represented by a pointer to a string structure:
 
-</p> <pre class="code-block">
-<span class="Type">typedef</span> <span class="Type">struct</span> string *String;
-<span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString; <span class="Comment">// Immutable string</span>
-
-</pre> <p>By doing this, we allow the representation to change at any time. For
+</p> <pre class="code-block"><span class="Type">typedef</span> <span class="Type">struct</span> string *String;
+<span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString; <span class="Comment">// Immutable string</span></pre> <p>By doing this, we allow the representation to change at any time. For
 example, we could choose to represent String objects by a simple data
 pointer not knowing its size or a data pointer prepended by its size.
 
@@ -112,25 +103,20 @@ pointer not knowing its size or a data pointer prepended by its size.
   </p>
 </p> <p>Now, our accessor functions look like this:
 
-</p> <pre class="code-block">
-<span class="Type">size_t</span> strLength (ConstString str);
+</p> <pre class="code-block"><span class="Type">size_t</span> strLength (ConstString str);
 <span class="Type">char</span> <span class="Type">const</span> *strToCStr (ConstString str);
 <span class="Type">char</span> strCharAt (ConstString str, <span class="Type">size_t</span> pos);
 <span class="Type">void</span> strSetCharAt (String str, <span class="Type">size_t</span> pos, <span class="Type">char</span> c);
-<span class="Type">void</span> strAddChars (String str, <span class="Type">char</span> <span class="Type">const</span> *chars);
-
-</pre> <p>We did not only abstract away some knowledge, we also reduced our required
+<span class="Type">void</span> strAddChars (String str, <span class="Type">char</span> <span class="Type">const</span> *chars);</pre> <p>We did not only abstract away some knowledge, we also reduced our required
 typing.
 
-</p> <pre>
-</pre> <h3>Violations of the principle
+</p> <h3>Violations of the principle
 
 </h3> <p>There are various more or less obvious ways to violate the principle of
 information hiding. An obvious example would be directly accessing the
 structure's members:
 
-</p> <pre class="code-block">
-<span class="Comment">// Wrong:</span>
+</p> <pre class="code-block"><span class="Comment">// Wrong:</span>
 <span class="Type">void</span>
 OnAdded (String str)
 {
@@ -142,9 +128,7 @@ OnAdded (String str)
 OnAdded (String str)
 {
   strAddChars (str, <span class="String">&quot; has been added&quot;</span>);
-}
-
-</pre> <p>The function 
+}</pre> <p>The function 
   <code>strAddChars</code> hides the knowledge about 
   <code>String</code>'s internal
 structure and abstracts away the logic needed to add characters to the string.
@@ -160,8 +144,7 @@ String objects. Consider our String to be defined as
 allows several operations that are built into C:
 
 
-</p> <pre class="code-block">
-<span class="Type">typedef</span> <span class="Type">char</span> *String;
+</p> <pre class="code-block"><span class="Type">typedef</span> <span class="Type">char</span> *String;
 <span class="Type">typedef</span> <span class="Type">char</span> <span class="Type">const</span> *ConstString;
 
 <span class="Type">void</span>
@@ -173,9 +156,7 @@ someFunc (String str)
   printf (<span class="String">&quot;The twenty-first character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, *str); <span class="Comment">// Dereference</span>
   String newStr = str - <span class="Number">10</span>; <span class="Comment">// Subtracting integer</span>
   printf (<span class="String">&quot;The difference between newStr and str is </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, newStr - str); <span class="Comment">// Pointer difference</span>
-}
-
-</pre> <p>All these operations are defined on 
+}</pre> <p>All these operations are defined on 
   <code>char*</code>, and therefore also on 
   <code>String</code>.
 This does not have to be the case, though. If 
@@ -188,8 +169,7 @@ representation of
 hiding principle.
 
 
-</p> <pre>
-</pre> <h3>Enforcing encapsulation in C
+</p> <h3>Enforcing encapsulation in C
 
 </h3> <p>C provides a very good way to enforce information hiding. We call this
 
@@ -200,15 +180,12 @@ the internal structure. C allows us to
 around pointers to them:
 
 
-</p> <pre class="code-block">
-<span class="Type">struct</span> string;
+</p> <pre class="code-block"><span class="Type">struct</span> string;
 <span class="Type">typedef</span> <span class="Type">struct</span> string *String;
 <span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString;
 <span class="Comment">// All of the above accessor functions still work</span>
 <span class="Comment">// The OnAdded function marked with &quot;Right&quot; also still works, but the one</span>
-<span class="Comment">//   marked &quot;Wrong&quot; will cause a compilation error</span>
-
-</pre> <p>
+<span class="Comment">//   marked &quot;Wrong&quot; will cause a compilation error</span></pre> <p>
   <code>String</code> is now what we call a 
   <em>pointer to an incomplete type</em>. Incomplete
 means that it does exist as a type, but its representation is not known to the
@@ -216,8 +193,7 @@ compiler. Using opaque pointers is a good way of preventing direct member
 access in client code.
 
 
-</p> <pre>
-</pre> <h3>Advantages
+</p> <h3>Advantages
 
 </h3> <p>There are definite advantages of information hiding and those are good reasons
 to apply it to your code.
@@ -266,8 +242,7 @@ to apply it to your code.
     
     </p>
   </li>
-</ul> <pre>
-</pre> <h3>Disadvantages
+</ul> <h3>Disadvantages
 
 </h3> <p>This all sounds great and we may ask ourselves, why doesn't everybody
 encapsulate everything. There are also disadvantages to be considered when
@@ -340,8 +315,7 @@ designing software.
     
     </p>
   </li>
-</ul> <pre>
-</pre> <h3>The compromise
+</ul> <h3>The compromise
 
 </h3> <p>In C, there are a few ways to speed up and shrink the code without violating
 information hiding. One of these is the use of macros. Instead of defining a
@@ -361,8 +335,7 @@ macro. It still avoids API breakages, though. This way, you can have some form
 of encapsulation even in speed critical applications.
 
 
-</p> <pre>
-</pre> <h3>Information hiding in other languages
+</p> <h3>Information hiding in other languages
 
 </h3> <p>I chose C, as I said, because it is most suitable as example for
 encapsulation. This does not mean that other languages do not have equally

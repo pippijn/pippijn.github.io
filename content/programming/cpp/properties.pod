@@ -54,7 +54,7 @@ much. Consider the following code:
   point p (1, 2);
   p.x (p.x () + 20); // more code to be written for the same effect
 
-=end code cpp
+=end
 
 
 =head2 Properties
@@ -167,7 +167,7 @@ terrific job when it comes to static functions.
   struct prop
   {
 
-=end code cpp
+=end
 
 You may be wondering what the C<offset> function is for. As I said earlier,
 this property has zero overhead, so it can't store the C<this> pointer of its
@@ -178,7 +178,7 @@ calculate the location of the container's C<this> in memory.
 
 It is very important that this is a function, as we will see later.
 
-=end small
+=end
 
 The following two functions calculate the C<this> pointer and return a
 reference to the parent object. Due to C<offset> being a function and its
@@ -198,7 +198,7 @@ location being known at compile time, it can easily be inlined.
                                                - offset ());
     }
 
-=end code cpp
+=end
 
 We need all assignment operators (=, +=, -=, *=, /=, %=, ^=, |=, &amp;=,
 &lt;&lt;= and &gt;&gt;=). We can define them all, because C<prop> is a class
@@ -214,7 +214,7 @@ on demand.
     prop &operator  += (T const &rhs) { set (self (), get (self ())  + rhs); return *this; }
     // Analogous for the other operators
 
-=end code cpp
+=end
 
 These operators define all we need for the mutator, but not for the accessor.
 Instead of defining all operators (unary +, unary -, binary +, binary *, etc.),
@@ -228,7 +228,7 @@ required conversions:
       return get (self ());
     }
 
-=end code cpp
+=end
 
 Now, all we need is a way to access members of the property. Then we are done:
 
@@ -245,7 +245,7 @@ Now, all we need is a way to access members of the property. Then we are done:
     }
   };
 
-=end code cpp
+=end
 
 The C<const_cast> is strictly considered undefined behaviour, but if the
 property itself is non-const, we know the value is non-const, as well. This is
@@ -275,7 +275,7 @@ types:
   struct value_prop
   {
 
-=end code cpp
+=end
 
 Now, in addition to the container's C<this> pointer, the accessor C<get> and
 mutator C<set> also receive a reference to the value stored in the
@@ -288,7 +288,7 @@ Now, the operator definitions look slightly different:
     value_prop &operator  += (T const &rhs) { set (self (), value, get (self (), value)  + rhs);
                                               return *this; }
 
-=end code cpp
+=end
 
 and the class has a public member variable called C<value>. I decided to make
 it public so the instantiated class template would remain POD. This means one
@@ -318,7 +318,7 @@ accessor, the mutator and very importantly, the C<offset> function.
     static size_t offset_y () { return offsettof (point, y); }
   };
 
-=end code cpp
+=end
 
 The offset returned by the C<offset_*> functions is the number of bytes
 between the location of the property object and the C<this> pointer of the
@@ -348,7 +348,7 @@ ISO/IEC 14882:2003(E): 18.1 Types, clause 5:
 The macro offsetof accepts a restricted set of type arguments in this
 International Standard. type shall be a POD structure or a POD union (clause 9).
 
-=end small
+=end
 
 =begin small
 
@@ -359,13 +359,13 @@ type non-POD-struct, non-POD-union (or array of such types) or reference,
 and has no user-defined copy assignment operator and no user-defined
 destructor.
 
-=end small
+=end
 
 =begin small
 
 The above does not mean POD structs may not have member functions.
 
-=end small
+=end
 
 
 =head4 Using macros
@@ -387,7 +387,7 @@ following macros:
     static void set_ ## name (Class &self, T &property, T const &value) set       \
     ::value_prop<Class, T, get_ ## name, set_ ## name, offset_ ## name> name
 
-=end code cpp
+=end
 
 Now, we can rewrite the class definition of C<point> as follows:
 
@@ -416,7 +416,7 @@ Now, we can rewrite the class definition of C<point> as follows:
     );
   };
 
-=end code cpp
+=end
 
 We use value properties as well as normal properties here. Extra caution has
 to be taken with aggregate initialisers when doing this. It will generally not
@@ -438,7 +438,7 @@ C<UNPAREN> macro:
   #define UNPAREN_(x...) x
   #define UNPAREN(x) UNPAREN_ x
 
-=end code cpp
+=end
 
 The gained advantage is that commas can be used outside parentheses inside
 accessor and mutator code, the disadvantage is that all code needs to be
@@ -517,7 +517,7 @@ already is).
     printf ("p.y->y == %d\n", (int) p.y->y);
   }
 
-=end code cpp
+=end
 
 The output would look something like this:
 
@@ -555,7 +555,7 @@ C++ code:
     volatile int x = p.x->x;
   }
 
-=end code cpp
+=end
 
 And the assembler output:
 
@@ -566,7 +566,7 @@ And the assembler output:
           movl    $2, -4(%rsp)  ; set the variable 'x' to 2
           ret                   ; return
 
-=end code asm
+=end
 
 You can see, how the compiler completely inlined the calls to the accessors
 and then constant folded the expression, simply copying an immediate integer
@@ -598,7 +598,7 @@ configuration where C<offsetof> fails is this:
   size_t offset = offsetof (D, i);  // This fails
   size_t offset = offsetof (B1, i); // This succeeds and is correct
 
-=end code cpp
+=end
 
 so in fact, the property class never fails. However, I have only tested it on
 the GNU C++ compiler. Other compilers might mess up, but one thing is for

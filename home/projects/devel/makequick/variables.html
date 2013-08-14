@@ -57,37 +57,27 @@
 but everybody always calls them variables, so here they shall be called
 variables, as well.
 
-</p> <pre class="code-block">
-<span class="Identifier">SRCEXTS</span> <span class="Statement">=</span> c h
+</p> <pre class="code-block"><span class="Identifier">SRCEXTS</span> <span class="Statement">=</span> c h
 <span class="Identifier">OBJEXTS</span> <span class="Statement">=</span> o obj
-<span class="Identifier">EXTS</span> <span class="Statement">=</span> <span class="Identifier">$(SRCEXTS)</span> <span class="Identifier">$(OBJEXTS)</span>
-
-</pre> <pre>
-</pre> <h3>Scopes
+<span class="Identifier">EXTS</span> <span class="Statement">=</span> <span class="Identifier">$(SRCEXTS)</span> <span class="Identifier">$(OBJEXTS)</span></pre> <h3>Scopes
 
 </h3> <p>Variable definitions may be scoped. These are not visible outside the scope of
 the enclosing target, project or template.
 
-</p> <pre class="code-block">
-<span class="Type">program</span> prog <span class="Identifier">{</span>
+</p> <pre class="code-block"><span class="Type">program</span> prog <span class="Identifier">{</span>
 <span class="Identifier">   VARIABLE</span> <span class="Statement">=</span> a b c d
-<span class="Identifier">}</span>
-
-</pre> <h3>Line continuations
+<span class="Identifier">}</span></pre> <h3>Line continuations
 
 </h3> <p>Variable definitions may span multiple lines. The line continues as long as the
 indentation level is higher than the variable definition.
 
-</p> <pre class="code-block">
-<span class="Identifier">VARIABLE</span> <span class="Statement">=</span> some values
+</p> <pre class="code-block"><span class="Identifier">VARIABLE</span> <span class="Statement">=</span> some values
    the values
       continue
    until here
 <span class="Identifier">   OTHERVAR</span> <span class="Statement">=</span> this line is still part of
    the variable definition
-<span class="Identifier">OTHERVAR</span> <span class="Statement">=</span> this is a new variable definition
-
-</pre> <h3>Expansion
+<span class="Identifier">OTHERVAR</span> <span class="Statement">=</span> this is a new variable definition</pre> <h3>Expansion
 
 </h3> <p>Variables are not expanded unless they really have to be. Eager contexts include
 
@@ -101,8 +91,7 @@ expanded in an eager context. Variables are not expanded in rule bodies.
 
 </h3> <p>Pseudo-variables can be used to query declarations or to call functions on data.
 
-</p> <pre class="code-block">
-<span class="Type">program</span> prog <span class="Identifier">{</span>
+</p> <pre class="code-block"><span class="Type">program</span> prog <span class="Identifier">{</span>
    <span class="Type">sources</span> <span class="Identifier">{</span>
       ...
    <span class="Identifier">}</span>
@@ -115,9 +104,7 @@ expanded in an eager context. Variables are not expanded in rule bodies.
 
 <span class="Identifier">PROGLINK</span> <span class="Statement">=</span> <span class="Identifier">$(prog.link)</span>
 <span class="Comment"># filter by locally built libraries</span>
-<span class="Identifier">PROGLIBS</span> <span class="Statement">=</span> <span class="Identifier">$(prog.link:library)</span>
-
-</pre> <p>The above filter syntax can be used to filter out system libraries such as, in
+<span class="Identifier">PROGLIBS</span> <span class="Statement">=</span> <span class="Identifier">$(prog.link:library)</span></pre> <p>The above filter syntax can be used to filter out system libraries such as, in
 this example, 
   <code>-lm</code>. Thus, the 
   <code>PROGLIBS</code> variable would be expanded to

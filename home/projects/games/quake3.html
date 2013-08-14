@@ -52,8 +52,7 @@ a few callbacks from C/QVM to Perl functions. This allowed me to add an IRC
 logging backend and a client hack for weapon selection.
 
 
-</p> <pre>
-</pre> <h3>IRC Logging
+</p> <h3>IRC Logging
 
 </h3> <p>The IRC logging captures game events and produces a message to be sent to IRC.
 The current implementation uses Net::IRC3 but this is soon going to change to
@@ -164,8 +163,7 @@ are converted to IRC colours and vice versa.
     
     </p>
   </li>
-</ul> <pre>
-</pre> <h3>Client-Perl
+</ul> <h3>Client-Perl
 
 </h3> <p>The Quake 3 client has been enhanced to allow for prioritising weapon
 selection on pickup. That means, if 
@@ -180,8 +178,7 @@ implemented. The code for this is absolutely trivial and can be found in
   <span class="filename">Quake3.pm</span>:
 
 
-</p> <pre class="code-block">
-<span class="Statement">my</span> <span class="Identifier">%prefs</span> = (
+</p> <pre class="code-block"><span class="Statement">my</span> <span class="Identifier">%prefs</span> = (
    Quake3::<span class="String">WP_GRAPPLING_HOOK</span>    =&gt; <span class="Number">0</span>,
    Quake3::<span class="String">WP_NONE</span>              =&gt; <span class="Number">0</span>,
 
@@ -200,7 +197,6 @@ implemented. The code for this is absolutely trivial and can be found in
    <span class="Statement">my</span> (<span class="Identifier">$curweap</span>, <span class="Identifier">$newweap</span>) = <span class="Identifier">@_</span>;
    <span class="Identifier">$prefs{$newweap}</span> &gt;= <span class="Identifier">$prefs{$curweap}</span> ? <span class="Number">1</span> : <span class="Number">0</span>
 }
-</pre> <pre>
 </pre> <h3>Future
 
 </h3> <p>The current implementation and API design is below all standards (except for

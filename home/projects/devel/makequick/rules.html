@@ -62,12 +62,9 @@ syntax is basically the same as GNU Make pattern rules with some extensions, but
 the way they are expanded makes them much more useful.
 
 
-</p> <pre class="code-block">
-%.o<span class="Statement">:</span> %.c <span class="Identifier">{</span>
+</p> <pre class="code-block">%.o<span class="Statement">:</span> %.c <span class="Identifier">{</span>
    <span class="Identifier">$(CC)</span> <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
-<span class="Identifier">}</span>
-
-</pre> <p>The above example is a simple rule to build object files from C sources. The
+<span class="Identifier">}</span></pre> <p>The above example is a simple rule to build object files from C sources. The
 rule is instantiated for each match, so that the resulting Makefile has only
 explicit rules.
 
@@ -85,14 +82,11 @@ this case, the
   <code>$(builddir)/msgcat$(EXEEXT)</code>
 
 
-</p> <pre class="code-block">
-<span class="Type">program</span> msgcat <span class="Identifier">{</span>
+</p> <pre class="code-block"><span class="Type">program</span> msgcat <span class="Identifier">{</span>
    %.c<span class="Statement">:</span> %.msg <span class="Identifier">{</span>
       <span class="Identifier">$(THIS)</span> -c <span class="Identifier">$&lt;</span> <span class="Identifier">$@</span>
    <span class="Identifier">}</span>
-<span class="Identifier">}</span>
-
-</pre> <p>Rules inside programs are always considered for match, but are disabled in the
+<span class="Identifier">}</span></pre> <p>Rules inside programs are always considered for match, but are disabled in the
 resulting Makefile, if the program was conditional and disabled at configure
 time.
 
@@ -104,30 +98,25 @@ slightly more advanced than in GNU Make. There is a set of rules defining which
 pattern is matched. Simply speaking, the most special pattern is matched.
 
 
-</p> <pre class="code-block">
-%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
+</p> <pre class="code-block">%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
    ...
 <span class="Identifier">}</span>
 src/%.c<span class="Statement">:</span> src/%.y <span class="Identifier">{</span>
    ...
-<span class="Identifier">}</span>
-
-</pre> <p>In the above example, the second rule is matched for all 
+<span class="Identifier">}</span></pre> <p>In the above example, the second rule is matched for all 
   <code>.y</code> files under
 
   <code>src/</code>. All other 
   <code>.y</code> files are matched by the first rule.
 
 
-</p> <pre>
-</pre> <h3>Code continuations
+</p> <h3>Code continuations
 
 </h3> <p>Rules can span multiple lines, just like 
   <a href="variables">variables</a>.
 
 
-</p> <pre class="code-block">
-%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
+</p> <pre class="code-block">%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
    echo This is the first line
    bison
       -y
@@ -135,10 +124,7 @@ src/%.c<span class="Statement">:</span> src/%.y <span class="Identifier">{</span
       <span class="Identifier">$&lt;</span>
    echo This is
       the third line
-<span class="Identifier">}</span>
-
-</pre> <pre>
-</pre> <h3>Special variables in rules
+<span class="Identifier">}</span></pre> <h3>Special variables in rules
 
 </h3> <ul>
   <li>$&lt;
@@ -200,8 +186,7 @@ src/%.c<span class="Statement">:</span> src/%.y <span class="Identifier">{</span
     
     </p>
   </li>
-</ul> <pre>
-</pre> <h3>Target-specific variables
+</ul> <h3>Target-specific variables
 
 </h3> <p>For a generic rule, it is often useful to let targets define an additional set
 of flags for the tool. The variable syntax 
@@ -214,8 +199,7 @@ of flags for the tool. The variable syntax
   <code>library</code> the target file is being built for.
 
 
-</p> <pre class="code-block">
-%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
+</p> <pre class="code-block">%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
    <span class="Identifier">$(YACC)</span> <span class="Identifier">$[YFLAGS]</span> -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
 <span class="Identifier">}</span>
 
@@ -223,18 +207,13 @@ of flags for the tool. The variable syntax
    <span class="Type">sources</span> <span class="Identifier">{</span>
       src/parser.y
    <span class="Identifier">}</span>
-<span class="Identifier">}</span>
-
-</pre> <p>The pattern rule in the above example might be expanded to roughly the following
+<span class="Identifier">}</span></pre> <p>The pattern rule in the above example might be expanded to roughly the following
 make code:
 
-</p> <pre class="code-block">
-src/parser.c<span class="Statement">:</span> src/parser.y
+</p> <pre class="code-block">src/parser.c<span class="Statement">:</span> src/parser.y
    <span class="Identifier">$(MKDIR_P)</span> src/
    <span class="Identifier">$(YACC)</span> <span class="Identifier">$(AM_YFLAGS)</span> <span class="Identifier">$(YFLAGS)</span> <span class="Identifier">$(myparser_YFLAGS)</span> -o src/parser.c \
-      <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y
-
-</pre> <p>The 
+      <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y</pre> <p>The 
   <code>test</code> makes sure that vpath builds work correctly. The first line will
 make the target directory, if it does not yet exist.
 
@@ -248,8 +227,7 @@ described in
   <a href="variables">variables</a>.
 
 
-</p> <pre class="code-block">
-%.c<span class="Statement">:</span> %.cx <span class="Identifier">{</span>
+</p> <pre class="code-block">%.c<span class="Statement">:</span> %.cx <span class="Identifier">{</span>
    <span class="Identifier">$(CPP)</span>
       -DTARGET<span class="Statement">=</span><span class="String">'&quot;</span><span class="Identifier">$(TARGET)</span><span class="String">&quot;'</span>
       -DLIBRARIES<span class="Statement">=</span><span class="String">'&quot;</span><span class="Identifier">$(TARGET.link : library)</span><span class="String">&quot;'</span>
@@ -264,15 +242,12 @@ described in
       mylib1
       -lm
    <span class="Identifier">}</span>
-<span class="Identifier">}</span>
-
-</pre> <p>In the above example, 
+<span class="Identifier">}</span></pre> <p>In the above example, 
   <code>$(TARGET.link : library)</code> will be expanded to 
   <code>mylib1</code>.
 
 
-</p> <pre>
-</pre> <h3>Output in $(builddir)
+</p> <h3>Output in $(builddir)
 
 </h3> <p>You may want to output the resulting files directly into the 
   <code>$(builddir)</code>,
@@ -280,12 +255,9 @@ instead of a subdirectory. For this use case, the
   <code>%%</code> pattern may be used.
 
 
-</p> <pre class="code-block">
-%%.c<span class="Statement">:</span> %%.y <span class="Identifier">{</span>
+</p> <pre class="code-block">%%.c<span class="Statement">:</span> %%.y <span class="Identifier">{</span>
    <span class="Identifier">$(YACC)</span> <span class="Identifier">$[YFLAGS]</span> -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
-<span class="Identifier">}</span>
-
-</pre> <p>The 
+<span class="Identifier">}</span></pre> <p>The 
   <code>%%</code> pattern on the left will match exactly one path segment, i.e. without
 any path separators (
   <code>/</code>). A 
@@ -295,18 +267,14 @@ matched by the
   <code>%%</code> on the left. The above example might be expanded to:
 
 
-</p> <pre class="code-block">
-parser.c<span class="Statement">:</span> src/parser.y
+</p> <pre class="code-block">parser.c<span class="Statement">:</span> src/parser.y
    <span class="Identifier">$(YACC)</span> <span class="Identifier">$(AM_YFLAGS)</span> <span class="Identifier">$(YFLAGS)</span> <span class="Identifier">$(myparser_YFLAGS)</span> -o parser.c \
-      <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y
-
-</pre> <p>As you can see, a 
+      <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y</pre> <p>As you can see, a 
   <code>mkdir</code> is no longer necessary and the output is now in the
 current directory.
 
 
-</p> <pre>
-</pre> <h3>Silencing rules
+</p> <h3>Silencing rules
 
 </h3> <p>Similar to 
   <code>make</code>, lines of a recipe may be silenced by prepending them with
@@ -316,13 +284,10 @@ current directory.
   <code>silent-rules</code>.
 
 
-</p> <pre class="code-block">
-%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
+</p> <pre class="code-block">%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
    @echo Calling bison
    @(YACC)bison <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
-<span class="Identifier">}</span>
-
-</pre> <p>The 
+<span class="Identifier">}</span></pre> <p>The 
   <code>@(NAME)</code> syntax emits an 
   <code>$(AM_V_GEN)</code>-like variable that prints 
   <code>YACC</code>
@@ -333,8 +298,7 @@ and the target (
 print the actual command instead of the single-line message.
 
 
-</p> <pre>
-</pre> <h3>External rules
+</p> <h3>External rules
 
 </h3> <p>If 
   <code>MakeQuick</code> is not flexible enough for the use case, external rules may be
@@ -345,23 +309,18 @@ implemented. Note that these rules are not special and more exact rules can
 still be matched.
 
 
-</p> <pre class="code-block">
-extern <span class="String">'lex-rules.am'</span> %.c<span class="Statement">:</span> %.l
+</p> <pre class="code-block">extern <span class="String">'lex-rules.am'</span> %.c<span class="Statement">:</span> %.l
 extern <span class="String">'yacc-rules.am'</span> <span class="Identifier">{</span>
    %.c<span class="Statement">:</span> %.y ;
    %.h<span class="Statement">:</span> %.y ;
 <span class="Identifier">}</span>
-extern <span class="String">'more-rules.am'</span>
-
-</pre> <pre>
-</pre> <h3>Replacing automake rules
+extern <span class="String">'more-rules.am'</span></pre> <h3>Replacing automake rules
 
 </h3> <p>The power gained with the introduction of these pattern rules can be used to
 replace large parts of automake. E.g. a simplified automake rule for building
 object files from C sources can be written as follows:
 
-</p> <pre class="code-block">
-%%.o<span class="Statement">:</span> %%.c <span class="Identifier">{</span>
+</p> <pre class="code-block">%%.o<span class="Statement">:</span> %%.c <span class="Identifier">{</span>
    @(CC)<span class="Identifier">$(CC)</span> <span class="Identifier">$[CPPFLAGS]</span> <span class="Identifier">$[CFLAGS]</span> -MT <span class="Identifier">$@</span> -MD -MP -MF <span class="Identifier">$(DEPDIR)</span>/<span class="Identifier">$*</span>.Tpo -c -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
 <span class="Identifier">}</span>
 </pre> <p>Automake still provides many useful tools, such as its 

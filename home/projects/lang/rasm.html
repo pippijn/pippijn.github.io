@@ -63,8 +63,7 @@ is a working parser and assembler for things like this:
   <a href="https://github.com/pippijn/rasm">Git repository</a>
 
 
-</p> <pre class="code-block">
-<span class="Comment"># mnemonic    op1             op2             op3     ret</span>
+</p> <pre class="code-block"><span class="Comment"># mnemonic    op1             op2             op3     ret</span>
 prolog        <span class="Number">1</span>
 <span class="String">arg</span>                                                   =&gt; <span class="Identifier">$in</span>
 getarg        <span class="Identifier">%v0</span>             <span class="Identifier">$in</span>                                   <span class="Comment"># V0 = n</span>
@@ -90,9 +89,7 @@ ret                                                 <span class="Comment"># Retu
 
 patch         <span class="Identifier">@ref</span>                                  <span class="Comment"># Patch jump</span>
 mov           <span class="Identifier">%ret</span>            <span class="Number">1</span>                     <span class="Comment"># RET = 1</span>
-ret                                                 <span class="Comment"># Return</span>
-
-</pre> <p>This example is a function that takes one integer argument 
+ret                                                 <span class="Comment"># Return</span></pre> <p>This example is a function that takes one integer argument 
   <code>N</code> and calculates
 the 
   <code>N</code>-th Fibonacci number.
