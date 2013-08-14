@@ -140,27 +140,27 @@ C functions.
 </p> <p>This can be solved by doing something like
 
 </p> <pre class="code-block">
-   <span class="Type">struct</span> foo { <span class="Comment">// alignment=2 (x86)</span>
-      <span class="Type">char</span> a;
-      <span class="Type">short</span> b;
-   };
+<span class="Type">struct</span> foo { <span class="Comment">// alignment=2 (x86)</span>
+   <span class="Type">char</span> a;
+   <span class="Type">short</span> b;
+};
 
 </pre> <p>is compiled to:
 
 </p> <pre class="code-block">
-   <span class="Type">struct</span> foo_data { <span class="Comment">// alignment still 2</span>
-      <span class="Type">char</span> a;
-      <span class="Type">short</span> b;
-   };
-   <span class="Type">struct</span> foo { <span class="Comment">// alignment=4 (x86)</span>
-      type_info <span class="Type">const</span> *ti;
-      foo_data data;
-   };
+<span class="Type">struct</span> foo_data { <span class="Comment">// alignment still 2</span>
+   <span class="Type">char</span> a;
+   <span class="Type">short</span> b;
+};
+<span class="Type">struct</span> foo { <span class="Comment">// alignment=4 (x86)</span>
+   type_info <span class="Type">const</span> *ti;
+   foo_data data;
+};
 
 </pre> <p>and passing foo* to an extern C function looks like:
 
 </p> <pre class="code-block">
-   cfun (&amp;foo-&gt;data);
+cfun (&amp;foo-&gt;data);
 
 </pre> <p>Similarly, a struct foo can be passed as 
   <code>cfun (foo.data)</code>.

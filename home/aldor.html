@@ -32,350 +32,350 @@
 		<div id="content">
 			<h2>Aldor source highlighting
 
-</h2> <pre class="code-block"><span class="Include">  #include </span><span class="String">&quot;aldor.as&quot;</span>
-<span class="Include">  #include </span><span class="String">&quot;aldorio&quot;</span>
+</h2> <pre class="code-block"><span class="Include">#include </span><span class="String">&quot;aldor.as&quot;</span>
+<span class="Include">#include </span><span class="String">&quot;aldorio&quot;</span>
 
-<span class="Include">  #library GenLib</span> <span class="String">&quot;mygen.ao&quot;</span>
-<span class="Include">  #library XMLBLib</span> <span class="String">&quot;xmlbase.ao&quot;</span>
-<span class="Include">  #library XMLLib</span> <span class="String">&quot;xmlbasics.ao&quot;</span>
-<span class="Include">  #library UCL</span> <span class="String">&quot;unicode.ao&quot;</span>
-<span class="Include">  #library XMLB3Lib</span> <span class="String">&quot;xmlbasiccats.ao&quot;</span>
-<span class="Include">  #library XMLD0</span> <span class="String">&quot;xmlDom0.ao&quot;</span>
-<span class="Include">  #library XMLD1</span> <span class="String">&quot;xmlDom1.ao&quot;</span>
-<span class="Include">  #library XMLO</span> <span class="String">&quot;xmlOut.ao&quot;</span>
-<span class="Include">  #library XMLDocL</span> <span class="String">&quot;xmlDoc.ao&quot;</span>
+<span class="Include">#library GenLib</span> <span class="String">&quot;mygen.ao&quot;</span>
+<span class="Include">#library XMLBLib</span> <span class="String">&quot;xmlbase.ao&quot;</span>
+<span class="Include">#library XMLLib</span> <span class="String">&quot;xmlbasics.ao&quot;</span>
+<span class="Include">#library UCL</span> <span class="String">&quot;unicode.ao&quot;</span>
+<span class="Include">#library XMLB3Lib</span> <span class="String">&quot;xmlbasiccats.ao&quot;</span>
+<span class="Include">#library XMLD0</span> <span class="String">&quot;xmlDom0.ao&quot;</span>
+<span class="Include">#library XMLD1</span> <span class="String">&quot;xmlDom1.ao&quot;</span>
+<span class="Include">#library XMLO</span> <span class="String">&quot;xmlOut.ao&quot;</span>
+<span class="Include">#library XMLDocL</span> <span class="String">&quot;xmlDoc.ao&quot;</span>
 
-  <span class="Include">import</span> <span class="Include">from</span> <span class="Type">GenLib</span>,<span class="Type">XMLBLib</span>, <span class="Type">XMLLib</span>, <span class="Type">UCL</span>, <span class="Type">XMLB3Lib</span>, <span class="Type">XMLD0</span>, <span class="Type">XMLD1</span>,<span class="Type">XMLO</span>,<span class="Type">XMLDocL</span>;
+<span class="Include">import</span> <span class="Include">from</span> <span class="Type">GenLib</span>,<span class="Type">XMLBLib</span>, <span class="Type">XMLLib</span>, <span class="Type">UCL</span>, <span class="Type">XMLB3Lib</span>, <span class="Type">XMLD0</span>, <span class="Type">XMLD1</span>,<span class="Type">XMLO</span>,<span class="Type">XMLDocL</span>;
 
-  <span class="Type">A</span> <span class="Statement">==&gt;</span> <span class="Type">Array</span>;
-  <span class="Type">B</span> <span class="Statement">==&gt;</span> <span class="Type">Boolean</span>;
-  <span class="Type">T</span> <span class="Statement">==&gt;</span> <span class="Type">Tuple</span>;
-  <span class="Type">L</span> <span class="Statement">==&gt;</span> <span class="Type">List</span>;
-  <span class="Type">U</span> <span class="Statement">==&gt;</span> <span class="Type">Union</span>;
-  <span class="Type">MI</span> <span class="Statement">==&gt;</span> <span class="Type">MachineInteger</span>;
-  <span class="Type">BY</span> <span class="Statement">==&gt;</span> <span class="Type">Byte</span>;
-  <span class="Comment">--GEN ==&gt; Generator;</span>
-  <span class="Type">GEN</span> <span class="Statement">==&gt;</span> <span class="Type">MyGen</span>;
-  <span class="Type">PTR</span> <span class="Statement">==&gt;</span> <span class="Type">Pointer</span>;
-  <span class="Type">CHAR</span> <span class="Statement">==&gt;</span> <span class="Type">Character</span>;
-  <span class="Type">DOMS</span> <span class="Statement">==&gt;</span> <span class="Type">DOMString</span>;
+<span class="Type">A</span> <span class="Statement">==&gt;</span> <span class="Type">Array</span>;
+<span class="Type">B</span> <span class="Statement">==&gt;</span> <span class="Type">Boolean</span>;
+<span class="Type">T</span> <span class="Statement">==&gt;</span> <span class="Type">Tuple</span>;
+<span class="Type">L</span> <span class="Statement">==&gt;</span> <span class="Type">List</span>;
+<span class="Type">U</span> <span class="Statement">==&gt;</span> <span class="Type">Union</span>;
+<span class="Type">MI</span> <span class="Statement">==&gt;</span> <span class="Type">MachineInteger</span>;
+<span class="Type">BY</span> <span class="Statement">==&gt;</span> <span class="Type">Byte</span>;
+<span class="Comment">--GEN ==&gt; Generator;</span>
+<span class="Type">GEN</span> <span class="Statement">==&gt;</span> <span class="Type">MyGen</span>;
+<span class="Type">PTR</span> <span class="Statement">==&gt;</span> <span class="Type">Pointer</span>;
+<span class="Type">CHAR</span> <span class="Statement">==&gt;</span> <span class="Type">Character</span>;
+<span class="Type">DOMS</span> <span class="Statement">==&gt;</span> <span class="Type">DOMString</span>;
 
-  <span class="Comment">+++ A package containing usefull functions</span>
-  <span class="Type">FileToDOMString</span>(<span class="Type">UCH</span><span class="Statement">:</span><span class="Type">UniCodeCharacter</span>) <span class="Statement">:</span> <span class="Statement">with</span> {
-    fileToDOM <span class="Statement">:</span> <span class="Type">String</span> <span class="Statement">-&gt;</span> <span class="Type">DOMString</span>(<span class="Type">UCH</span>);
-      <span class="Comment">++ function for taking a text file and</span>
-      <span class="Comment">++ converting its characters to DOMString objects</span>
-  } <span class="Statement">==</span> <span class="Statement">add</span> {
-    fileToDOM(fn<span class="Statement">:</span><span class="Type">String</span>)<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">MI</span>;
-      charL<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">Character</span>) <span class="Statement">:=</span> [];
-      file<span class="Statement">:</span><span class="Type">File</span> <span class="Statement">:=</span> open(fn); eof<span class="Statement">:</span><span class="Type">Character</span> <span class="Statement">:=</span> <span class="Statement">char</span>(<span class="Number">255</span>);
-      fileTR<span class="Statement">:</span><span class="Type">TextReader</span> <span class="Statement">:=</span> file<span class="Statement">::</span><span class="Type">TextReader</span>;
-      <span class="Statement">while</span> ((ch <span class="Statement">:=</span> <span class="Identifier">read!</span>(fileTR)) <span class="Statement">~=</span> eof) <span class="Statement">repeat</span> {
-        charL <span class="Statement">:=</span> cons(ch,charL);
-      }
-      ca<span class="Statement">:</span><span class="Type">A</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> new(#charL);
-      <span class="Statement">for</span> i <span class="Statement">in</span> (#charL<span class="Number">-1</span>).<span class="Number">.0</span> by <span class="Number">-1</span> <span class="Statement">for</span> c <span class="Statement">in</span> charL <span class="Statement">repeat</span> ca.i <span class="Statement">:=</span> fromChar c;
-      construct(ca)
+<span class="Comment">+++ A package containing usefull functions</span>
+<span class="Type">FileToDOMString</span>(<span class="Type">UCH</span><span class="Statement">:</span><span class="Type">UniCodeCharacter</span>) <span class="Statement">:</span> <span class="Statement">with</span> {
+  fileToDOM <span class="Statement">:</span> <span class="Type">String</span> <span class="Statement">-&gt;</span> <span class="Type">DOMString</span>(<span class="Type">UCH</span>);
+    <span class="Comment">++ function for taking a text file and</span>
+    <span class="Comment">++ converting its characters to DOMString objects</span>
+} <span class="Statement">==</span> <span class="Statement">add</span> {
+  fileToDOM(fn<span class="Statement">:</span><span class="Type">String</span>)<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">MI</span>;
+    charL<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">Character</span>) <span class="Statement">:=</span> [];
+    file<span class="Statement">:</span><span class="Type">File</span> <span class="Statement">:=</span> open(fn); eof<span class="Statement">:</span><span class="Type">Character</span> <span class="Statement">:=</span> <span class="Statement">char</span>(<span class="Number">255</span>);
+    fileTR<span class="Statement">:</span><span class="Type">TextReader</span> <span class="Statement">:=</span> file<span class="Statement">::</span><span class="Type">TextReader</span>;
+    <span class="Statement">while</span> ((ch <span class="Statement">:=</span> <span class="Identifier">read!</span>(fileTR)) <span class="Statement">~=</span> eof) <span class="Statement">repeat</span> {
+      charL <span class="Statement">:=</span> cons(ch,charL);
     }
+    ca<span class="Statement">:</span><span class="Type">A</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> new(#charL);
+    <span class="Statement">for</span> i <span class="Statement">in</span> (#charL<span class="Number">-1</span>).<span class="Number">.0</span> by <span class="Number">-1</span> <span class="Statement">for</span> c <span class="Statement">in</span> charL <span class="Statement">repeat</span> ca.i <span class="Statement">:=</span> fromChar c;
+    construct(ca)
   }
+}
 
-  <span class="Type">Parse</span>(<span class="Type">UCH</span><span class="Statement">:</span><span class="Type">UniCodeCharacter</span>) <span class="Statement">:</span> <span class="Statement">with</span> {
-    convertToXML <span class="Statement">:</span> <span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">-&gt;</span> <span class="Type">Node</span>(<span class="Type">UCH</span>);
-      <span class="Comment">++ parse a DOMString which represents an XML Element(UCH) object</span>
-  } <span class="Statement">==</span> <span class="Statement">add</span> {
+<span class="Type">Parse</span>(<span class="Type">UCH</span><span class="Statement">:</span><span class="Type">UniCodeCharacter</span>) <span class="Statement">:</span> <span class="Statement">with</span> {
+  convertToXML <span class="Statement">:</span> <span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">-&gt;</span> <span class="Type">Node</span>(<span class="Type">UCH</span>);
+    <span class="Comment">++ parse a DOMString which represents an XML Element(UCH) object</span>
+} <span class="Statement">==</span> <span class="Statement">add</span> {
 
-    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Character</span>,<span class="Type">UCH</span>,<span class="Type">Tuple</span>(<span class="Type">UCH</span>),<span class="Type">BY</span>,<span class="Type">T</span>(<span class="Type">BY</span>),<span class="Type">MI</span>;
-    <span class="Statement">default</span> stack<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">DOMString</span>(<span class="Type">UCH</span>)) <span class="Statement">:=</span> [];
-    starttag <span class="Statement">==</span> fromChar(<span class="Statement">char</span>(<span class="String">&quot;&lt;&quot;</span>));
+  <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Character</span>,<span class="Type">UCH</span>,<span class="Type">Tuple</span>(<span class="Type">UCH</span>),<span class="Type">BY</span>,<span class="Type">T</span>(<span class="Type">BY</span>),<span class="Type">MI</span>;
+  <span class="Statement">default</span> stack<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">DOMString</span>(<span class="Type">UCH</span>)) <span class="Statement">:=</span> [];
+  starttag <span class="Statement">==</span> fromChar(<span class="Statement">char</span>(<span class="String">&quot;&lt;&quot;</span>));
 
-    convertToXML(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Node</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
+  convertToXML(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Node</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
 
-      <span class="Comment">-- clear stack</span>
-      <span class="Statement">free</span> stack <span class="Statement">:=</span> [];
-      <span class="Statement">free</span> starttag;
-      g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> generator(str);<span class="Identifier">step!</span> g;<span class="Comment">--step! g;</span>
-      <span class="Comment">-- find first &quot;&lt;&quot;</span>
-      <span class="Statement">while</span> value(g) <span class="Statement">~=</span> starttag <span class="Statement">repeat</span> {
-        <span class="Identifier">step!</span> g;
-      }
-      getNode(g)
-    }
-
-    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">MI</span>,<span class="Type">Machine</span>;
-    <span class="Statement">default</span> nullaryOp<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">:=</span> <span class="Constant">true</span>;
-
-    <span class="Comment">-- put a tag name (possibly with prefix) on stack</span>
-    put(preLocal<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul')))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul');
-      <span class="Statement">free</span> stack;
-      <span class="Statement">if</span> element(preLocal,<span class="Number">2</span>) case nul <span class="Statement">then</span>
-        error <span class="String">&quot;local name unspecified&quot;</span>;
-      <span class="Comment">-- we do have prefix</span>
-      <span class="Statement">if</span> element(preLocal,<span class="Number">1</span>) case str <span class="Statement">then</span> {
-        str2<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> append(element(preLocal,<span class="Number">1</span>).str,construct <span class="String">&quot;:&quot;</span>);
-        str2 <span class="Statement">:=</span> append(str2,element(preLocal,<span class="Number">2</span>).str);
-        stack <span class="Statement">:=</span> cons(str2,stack);
-      } <span class="Statement">else</span> { <span class="Comment">-- we have no prefix</span>
-        stack <span class="Statement">:=</span> cons(element(preLocal,<span class="Number">2</span>).str,stack);
-      }
-      <span class="Constant">nil</span>@<span class="Type">Ptr</span>
-    }
-
-    pop()<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
-      <span class="Statement">if</span> <span class="Identifier">empty?</span> stack <span class="Statement">then</span>
-        error <span class="String">&quot;pop attempted on an empty stack&quot;</span>;
-      ret <span class="Statement">:=</span> first stack;<span class="Statement">free</span> stack <span class="Statement">:=</span> rest stack;
-      ret
-    }
-
-    tupleEq(t1<span class="Statement">:</span><span class="Type">T</span>(<span class="Type">Byte</span>),t2<span class="Statement">:</span><span class="Type">T</span>(<span class="Type">Byte</span>))<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">==</span> {
-      element(t1,<span class="Number">1</span>) <span class="Statement">=</span> element(t2,<span class="Number">1</span>) <span class="Statement">and</span> element(t1,<span class="Number">2</span>) <span class="Statement">=</span> element(t2,<span class="Number">2</span>)
-    }
-
-    getNode(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Node</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Document</span>(<span class="Type">UCH</span>);
-      <span class="Statement">free</span> nullaryOp,starttag;
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Element</span>(<span class="Type">UCH</span>),<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul');
-      <span class="Statement">if</span> value(g) <span class="Statement">~=</span> starttag <span class="Statement">then</span> <span class="Comment">-- node is a string</span>
-        <span class="Statement">return</span> getString(g);
-      <span class="Statement">else</span> {
-        preLocal<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul')) <span class="Statement">:=</span> getName(g);
-        attributes<span class="Statement">:</span><span class="Type">NamedNodeMap</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> getAttributes(g);
-        <span class="Comment">-- only put tags for nonnullary operators on the stack</span>
-        <span class="Statement">if</span> <span class="Statement">not</span> nullaryOp <span class="Statement">then</span> put(preLocal);
-        removeClosing(g)}
-      children<span class="Statement">:</span><span class="Type">NodeList</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> new();
-      <span class="Statement">if</span> <span class="Statement">not</span> nullaryOp <span class="Statement">then</span> children <span class="Statement">:=</span> getChildren(g);
-      <span class="Statement">if</span> element(preLocal,<span class="Number">2</span>) case nul <span class="Statement">then</span> error <span class="String">&quot;cannot have nul local part&quot;</span>;
-
-      <span class="Statement">if</span> element(preLocal,<span class="Number">1</span>) case str <span class="Statement">then</span> {
-        elt <span class="Statement">:=</span> cast createElementNS(element(preLocal,<span class="Number">1</span>).str,element(preLocal,<span class="Number">2</span>).str,
-                  attributes,children)
-      }
-      <span class="Statement">else</span> {
-        elt <span class="Statement">:=</span> cast createElement(element(preLocal,<span class="Number">2</span>).str,attributes,children)
-      }
-      elt
-    }
-
-    getString(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Node</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Text</span>(<span class="Type">UCH</span>),<span class="Type">UCH</span>,<span class="Type">Document</span>(<span class="Type">UCH</span>);
-      <span class="Statement">free</span> starttag;
-
-      retl<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> [];
-  <span class="Comment">--    while (not(tupleEq(c := value(g),starttag))) repeat {</span>
-      <span class="Statement">while</span> (c <span class="Statement">:=</span> value(g)) <span class="Statement">~=</span> starttag <span class="Statement">repeat</span> {
-        <span class="Identifier">step!</span> g;
-        retl <span class="Statement">:=</span> cons(c,retl);
-      }
-      str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> construct(reverse retl);
-      cast createTextNode str;
-    }
-
-    endtag<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot;&gt;&quot;</span>;
-    colon<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot;:&quot;</span>;
-    slash<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot;/&quot;</span>;
-
-    getName(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul')) <span class="Statement">==</span> {
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">UCH</span>,<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul');
-      <span class="Statement">local</span> prefx,loclNm,tmpNm<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">UCH</span>);
-      <span class="Statement">free</span> endtag,colon,slash;
-
-      preFlag<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">:=</span> <span class="Constant">true</span>;prefx <span class="Statement">:=</span> [];loclNm <span class="Statement">:=</span> [];tmpNm <span class="Statement">:=</span> [];
-      <span class="Identifier">step!</span> g; <span class="Comment">-- remove the opening &quot;&lt;&quot;</span>
-      <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
-        <span class="Statement">if</span> whiteSpace(value(g)) <span class="Statement">or</span> value(g) <span class="Statement">=</span> endtag <span class="Statement">or</span>
-           value(g) <span class="Statement">=</span> slash <span class="Statement">then</span> <span class="Statement">break</span>;
-        <span class="Statement">if</span> preFlag <span class="Statement">then</span> {
-          <span class="Statement">if</span> value(g) <span class="Statement">=</span> colon <span class="Statement">then</span> {
-            preFlag <span class="Statement">:=</span> <span class="Constant">false</span>; prefx <span class="Statement">:=</span> tmpNm;
-          }
-          tmpNm <span class="Statement">:=</span> cons(value(g),tmpNm);
-        } <span class="Statement">else</span> loclNm <span class="Statement">:=</span> cons(value(g),loclNm);
-        <span class="Identifier">step!</span> g
-      }
-      <span class="Statement">if</span> preFlag <span class="Statement">then</span> {
-        <span class="Statement">return</span>([nul],[construct reverse tmpNm])}
-      <span class="Statement">else</span> {
-        <span class="Statement">return</span>([construct reverse prefx],[construct reverse loclNm])}
-      <span class="Statement">never</span>
-    }
-
-    equal<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot;=&quot;</span>;
-
-    <span class="Comment">-- this getName is specifically for attributes</span>
-    getNameAttrib(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul')) <span class="Statement">==</span> {
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">UCH</span>,<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul');
-      <span class="Statement">local</span> prefx,loclNm,tmpNm<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">UCH</span>);
-  <span class="Comment">--    local prefx,loclNm,tmpNm:DOMString(UCH);</span>
-      <span class="Statement">free</span> endtag,colon,slash,equal;
-
-      preFlag<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">:=</span> <span class="Constant">true</span>;prefx <span class="Statement">:=</span> [];loclNm <span class="Statement">:=</span> [];tmpNm <span class="Statement">:=</span> [];
-
-      <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
-        <span class="Statement">if</span> (value(g)<span class="Statement">=</span> endtag <span class="Statement">or</span> value(g) <span class="Statement">=</span> slash) <span class="Statement">then</span>
-          error <span class="String">&quot;attribute has been given no value&quot;</span>;
-        <span class="Statement">if</span> value(g) <span class="Statement">=</span> equal <span class="Statement">or</span> whiteSpace(value(g)) <span class="Statement">then</span> <span class="Statement">break</span>;
-        <span class="Statement">if</span> preFlag <span class="Statement">then</span> {
-          <span class="Statement">if</span> value(g) <span class="Statement">=</span> colon <span class="Statement">then</span> {
-            preFlag <span class="Statement">:=</span> <span class="Constant">false</span>; prefx <span class="Statement">:=</span> tmpNm;
-          }
-          tmpNm <span class="Statement">:=</span> cons(value(g),tmpNm);
-        } <span class="Statement">else</span> loclNm <span class="Statement">:=</span> cons(value(g),loclNm);
-        <span class="Identifier">step!</span> g
-      }
-      <span class="Statement">if</span> preFlag <span class="Statement">then</span> {
-        <span class="Statement">return</span>([nul],[construct reverse tmpNm])}
-      <span class="Statement">else</span> {
-        <span class="Statement">return</span>([construct reverse prefx],[construct reverse loclNm])}
-      <span class="Statement">never</span>
-    }
-
-    <span class="Constant">space</span><span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot; &quot;</span>;
-    cr<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="Number">13</span>@<span class="Type">MI</span>); <span class="Comment">-- the code for carriage return</span>
-    nl<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="Number">10</span>@<span class="Type">MI</span>); <span class="Comment">-- the code for newline</span>
-    <span class="Constant">tab</span><span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="Number">9</span>@<span class="Type">MI</span>); <span class="Comment">-- the code for tab</span>
-    whiteSpace(c<span class="Statement">:</span><span class="Type">UCH</span>)<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">==</span>
-      c <span class="Statement">=</span> <span class="Constant">space</span> <span class="Statement">or</span> c <span class="Statement">=</span> cr <span class="Statement">or</span> c <span class="Statement">=</span> nl <span class="Statement">or</span> c <span class="Statement">=</span> <span class="Constant">tab</span>;
-
-    <span class="Comment">-- function to remove white space</span>
-    remW(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
-      <span class="Statement">while</span> whiteSpace value g <span class="Statement">and</span> <span class="Statement">not</span> <span class="Identifier">empty?</span> g <span class="Statement">repeat</span> {
-        <span class="Identifier">step!</span> g}<span class="Constant">nil</span>}
-
-    <span class="Comment">-- the codes for the two types of quotes</span>
-    quote1<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="String">&quot;'&quot;</span>);
-    quote2<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="Number">34</span>@<span class="Type">MI</span>); <span class="Comment">--  the code for '&quot;'</span>
-
-    getAttributes(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">NamedNodeMap</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
-      <span class="Statement">free</span> nullaryOp;
-      <span class="Statement">free</span> endtag,slash,equal,quote1,quote2;
-
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Attr</span>(<span class="Type">UCH</span>),<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul'),<span class="Type">Document</span>(<span class="Type">UCH</span>);
-      <span class="Statement">local</span> tup<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul'));
-
-  <span class="Comment">--    retList:List(Attr(UCH)) := [];</span>
-      retList<span class="Statement">:</span><span class="Type">NamedNodeMap</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> new(<span class="Number">0</span>);
-      nullaryOp <span class="Statement">:=</span> <span class="Constant">false</span>;
-      <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> { <span class="Comment">-- N.B. there may be many attributes</span>
-
-        <span class="Comment">-- remove leading white space</span>
-        remW(g);
-        <span class="Statement">while</span> whiteSpace value g <span class="Statement">repeat</span> <span class="Identifier">step!</span> g;
-        <span class="Comment">-- check to see if we are at the end of the &quot;&lt; ... &gt;&quot;</span>
-        <span class="Statement">if</span> <span class="Statement">not</span>(value g <span class="Statement">=</span> endtag <span class="Statement">or</span> value g <span class="Statement">=</span> slash) <span class="Statement">then</span> {
-          tup <span class="Statement">:=</span> getNameAttrib g; <span class="Comment">-- get the name of the attribute</span>
-
-          <span class="Comment">-- remove &quot; = '&quot; or ' = &quot;', with any intervening white space</span>
-          remW(g);
-          <span class="Statement">if</span> value(g) <span class="Statement">=</span> equal <span class="Statement">then</span> <span class="Identifier">step!</span> g;remW(g);
-          <span class="Statement">if</span> ((quote <span class="Statement">:=</span> value g) <span class="Statement">=</span> quote1 <span class="Statement">or</span>
-             (quote <span class="Statement">:=</span> value g) <span class="Statement">=</span> quote2) <span class="Statement">then</span> <span class="Identifier">step!</span> g
-          <span class="Statement">else</span> {
-  <span class="Comment">--          printGen(g);printStack();</span>
-            error <span class="String">&quot;malformed attribute form&quot;</span>;
-          }
-
-          <span class="Comment">-- now get the value</span>
-          val <span class="Statement">:=</span> getValue(g,quote);
-          <span class="Comment">-- now make attribute and put in the return value</span>
-          <span class="Statement">if</span> element(tup,<span class="Number">1</span>) case str <span class="Statement">then</span> <span class="Comment">-- we have a prefix to the attribute</span>
-            setNamedItemNS(retList,cast createAttributeNS(element(tup,<span class="Number">1</span>).str,element(tup,<span class="Number">2</span>).str,val));
-          <span class="Statement">else</span> setNamedItemNS(retList,cast createAttribute(element(tup,<span class="Number">2</span>).str,val));
-        } <span class="Statement">else</span> {
-          <span class="Statement">if</span> value(g) <span class="Statement">=</span> endtag <span class="Statement">then</span> <span class="Statement">break</span>;
-          <span class="Statement">if</span> value g <span class="Statement">=</span> slash <span class="Statement">then</span> {
-            nullaryOp <span class="Statement">:=</span> <span class="Constant">true</span>;<span class="Statement">break</span>
-          }
-        }
-      }
-      retList
-    }
-
-    getValue(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>),quote<span class="Statement">:</span><span class="Type">UCH</span>)<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
-      <span class="Statement">free</span> endtag,equal;
-
-      val<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> [];
-      <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
-        <span class="Statement">if</span> value(g) <span class="Statement">~=</span> quote <span class="Statement">then</span> {
-          val <span class="Statement">:=</span> cons(value g,val);<span class="Identifier">step!</span> g;
-        } <span class="Statement">else</span> {<span class="Identifier">step!</span> g;<span class="Statement">break</span>;}
-      }
-      construct reverse val
-    }
-
-    removeClosing(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
-      <span class="Statement">free</span> endtag,slash;
-
-      remW g;
-
-      <span class="Statement">if</span> value(g) <span class="Statement">=</span> slash <span class="Statement">then</span> { <span class="Identifier">step!</span> g;
-        <span class="Statement">if</span> value(g) <span class="Statement">=</span> endtag <span class="Statement">then</span> {<span class="Identifier">step!</span> g}
-        <span class="Statement">else</span> error <span class="String">&quot;bad closing tag1&quot;</span>
-      } <span class="Statement">else</span> <span class="Statement">if</span> value(g) <span class="Statement">=</span> endtag <span class="Statement">then</span> <span class="Identifier">step!</span> g
-      <span class="Statement">else</span> error <span class="String">&quot;bad closing tag2&quot;</span>;
-      remW(g);
-      <span class="Constant">nil</span>
-    }
-
-    getChildren(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">NodeList</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
-
-      ret<span class="Statement">:</span><span class="Type">NodeList</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> new();
-      <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
-        <span class="Statement">if</span> value(g) <span class="Statement">=</span> starttag <span class="Statement">and</span>
-           secondVal(g) <span class="Statement">=</span> slash <span class="Statement">then</span> <span class="Statement">break</span>;
-        addChild(getNode(g),ret);
-      }
-      remove(g,pop());
-      ret
-    }
-
-    remove(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>),matchStr<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
-
-      <span class="Comment">-- we must remove &quot;&lt;/&quot; from g</span>
-      <span class="Identifier">step!</span> g;<span class="Identifier">step!</span> g;
-      g2<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> generator matchStr;
-      <span class="Identifier">step!</span> g2; <span class="Comment">-- need to remove null from start of generator -- step! g2;</span>
-      <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
-        <span class="Statement">if</span> <span class="Statement">not</span>(value(g2) <span class="Statement">=</span> value(g)) <span class="Statement">then</span> {
-          error <span class="String">&quot;invalid XML1&quot;</span>;
-        }
-        <span class="Identifier">step!</span> g;<span class="Identifier">step!</span> g2;
-        <span class="Statement">if</span> <span class="Identifier">empty?</span> g2 <span class="Statement">then</span> <span class="Statement">break</span>;
-      }
-      remW g;
-      <span class="Statement">if</span> value g <span class="Statement">~=</span> endtag <span class="Statement">then</span> {
-          printGen g;
-          printGen g2;
-          error <span class="String">&quot;invalid XML2&quot;</span>;
-      }
+    <span class="Comment">-- clear stack</span>
+    <span class="Statement">free</span> stack <span class="Statement">:=</span> [];
+    <span class="Statement">free</span> starttag;
+    g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> generator(str);<span class="Identifier">step!</span> g;<span class="Comment">--step! g;</span>
+    <span class="Comment">-- find first &quot;&lt;&quot;</span>
+    <span class="Statement">while</span> value(g) <span class="Statement">~=</span> starttag <span class="Statement">repeat</span> {
       <span class="Identifier">step!</span> g;
-      remW g;
-      <span class="Constant">nil</span>@<span class="Type">Ptr</span>
     }
-
-    printGen(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Character</span>;
-      <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span>;
-      <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
-        <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span>value g;<span class="Identifier">step!</span> g;
-        <span class="Statement">if</span> <span class="Identifier">empty?</span> g <span class="Statement">then</span> <span class="Statement">break</span>
-      }
-      <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span>;
-      <span class="Constant">nil</span>@<span class="Type">Ptr</span>
-    }
-
-    printStack()<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
-      <span class="Include">import</span> <span class="Include">from</span> <span class="Type">DOMString</span>(<span class="Type">UCH</span>);
-      <span class="Statement">free</span> stack;
-      <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span><span class="Statement">&lt;&lt;</span><span class="String">&quot;stack is:&quot;</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span>;
-      <span class="Statement">for</span> w <span class="Statement">in</span> stack <span class="Statement">repeat</span> {
-        <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span><span class="String">&quot;element :&quot;</span><span class="Statement">&lt;&lt;</span>w<span class="Statement">&lt;&lt;</span><span class="String">&quot;:&quot;</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span>;
-      }
-      <span class="Constant">nil</span>@<span class="Type">Ptr</span>
-    }
+    getNode(g)
   }
+
+  <span class="Include">import</span> <span class="Include">from</span> <span class="Type">MI</span>,<span class="Type">Machine</span>;
+  <span class="Statement">default</span> nullaryOp<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">:=</span> <span class="Constant">true</span>;
+
+  <span class="Comment">-- put a tag name (possibly with prefix) on stack</span>
+  put(preLocal<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul')))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul');
+    <span class="Statement">free</span> stack;
+    <span class="Statement">if</span> element(preLocal,<span class="Number">2</span>) case nul <span class="Statement">then</span>
+      error <span class="String">&quot;local name unspecified&quot;</span>;
+    <span class="Comment">-- we do have prefix</span>
+    <span class="Statement">if</span> element(preLocal,<span class="Number">1</span>) case str <span class="Statement">then</span> {
+      str2<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> append(element(preLocal,<span class="Number">1</span>).str,construct <span class="String">&quot;:&quot;</span>);
+      str2 <span class="Statement">:=</span> append(str2,element(preLocal,<span class="Number">2</span>).str);
+      stack <span class="Statement">:=</span> cons(str2,stack);
+    } <span class="Statement">else</span> { <span class="Comment">-- we have no prefix</span>
+      stack <span class="Statement">:=</span> cons(element(preLocal,<span class="Number">2</span>).str,stack);
+    }
+    <span class="Constant">nil</span>@<span class="Type">Ptr</span>
+  }
+
+  pop()<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
+    <span class="Statement">if</span> <span class="Identifier">empty?</span> stack <span class="Statement">then</span>
+      error <span class="String">&quot;pop attempted on an empty stack&quot;</span>;
+    ret <span class="Statement">:=</span> first stack;<span class="Statement">free</span> stack <span class="Statement">:=</span> rest stack;
+    ret
+  }
+
+  tupleEq(t1<span class="Statement">:</span><span class="Type">T</span>(<span class="Type">Byte</span>),t2<span class="Statement">:</span><span class="Type">T</span>(<span class="Type">Byte</span>))<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">==</span> {
+    element(t1,<span class="Number">1</span>) <span class="Statement">=</span> element(t2,<span class="Number">1</span>) <span class="Statement">and</span> element(t1,<span class="Number">2</span>) <span class="Statement">=</span> element(t2,<span class="Number">2</span>)
+  }
+
+  getNode(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Node</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Document</span>(<span class="Type">UCH</span>);
+    <span class="Statement">free</span> nullaryOp,starttag;
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Element</span>(<span class="Type">UCH</span>),<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul');
+    <span class="Statement">if</span> value(g) <span class="Statement">~=</span> starttag <span class="Statement">then</span> <span class="Comment">-- node is a string</span>
+      <span class="Statement">return</span> getString(g);
+    <span class="Statement">else</span> {
+      preLocal<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul')) <span class="Statement">:=</span> getName(g);
+      attributes<span class="Statement">:</span><span class="Type">NamedNodeMap</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> getAttributes(g);
+      <span class="Comment">-- only put tags for nonnullary operators on the stack</span>
+      <span class="Statement">if</span> <span class="Statement">not</span> nullaryOp <span class="Statement">then</span> put(preLocal);
+      removeClosing(g)}
+    children<span class="Statement">:</span><span class="Type">NodeList</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> new();
+    <span class="Statement">if</span> <span class="Statement">not</span> nullaryOp <span class="Statement">then</span> children <span class="Statement">:=</span> getChildren(g);
+    <span class="Statement">if</span> element(preLocal,<span class="Number">2</span>) case nul <span class="Statement">then</span> error <span class="String">&quot;cannot have nul local part&quot;</span>;
+
+    <span class="Statement">if</span> element(preLocal,<span class="Number">1</span>) case str <span class="Statement">then</span> {
+      elt <span class="Statement">:=</span> cast createElementNS(element(preLocal,<span class="Number">1</span>).str,element(preLocal,<span class="Number">2</span>).str,
+                attributes,children)
+    }
+    <span class="Statement">else</span> {
+      elt <span class="Statement">:=</span> cast createElement(element(preLocal,<span class="Number">2</span>).str,attributes,children)
+    }
+    elt
+  }
+
+  getString(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Node</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Text</span>(<span class="Type">UCH</span>),<span class="Type">UCH</span>,<span class="Type">Document</span>(<span class="Type">UCH</span>);
+    <span class="Statement">free</span> starttag;
+
+    retl<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> [];
+<span class="Comment">--    while (not(tupleEq(c := value(g),starttag))) repeat {</span>
+    <span class="Statement">while</span> (c <span class="Statement">:=</span> value(g)) <span class="Statement">~=</span> starttag <span class="Statement">repeat</span> {
+      <span class="Identifier">step!</span> g;
+      retl <span class="Statement">:=</span> cons(c,retl);
+    }
+    str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> construct(reverse retl);
+    cast createTextNode str;
+  }
+
+  endtag<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot;&gt;&quot;</span>;
+  colon<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot;:&quot;</span>;
+  slash<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot;/&quot;</span>;
+
+  getName(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul')) <span class="Statement">==</span> {
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">UCH</span>,<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul');
+    <span class="Statement">local</span> prefx,loclNm,tmpNm<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">UCH</span>);
+    <span class="Statement">free</span> endtag,colon,slash;
+
+    preFlag<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">:=</span> <span class="Constant">true</span>;prefx <span class="Statement">:=</span> [];loclNm <span class="Statement">:=</span> [];tmpNm <span class="Statement">:=</span> [];
+    <span class="Identifier">step!</span> g; <span class="Comment">-- remove the opening &quot;&lt;&quot;</span>
+    <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
+      <span class="Statement">if</span> whiteSpace(value(g)) <span class="Statement">or</span> value(g) <span class="Statement">=</span> endtag <span class="Statement">or</span>
+         value(g) <span class="Statement">=</span> slash <span class="Statement">then</span> <span class="Statement">break</span>;
+      <span class="Statement">if</span> preFlag <span class="Statement">then</span> {
+        <span class="Statement">if</span> value(g) <span class="Statement">=</span> colon <span class="Statement">then</span> {
+          preFlag <span class="Statement">:=</span> <span class="Constant">false</span>; prefx <span class="Statement">:=</span> tmpNm;
+        }
+        tmpNm <span class="Statement">:=</span> cons(value(g),tmpNm);
+      } <span class="Statement">else</span> loclNm <span class="Statement">:=</span> cons(value(g),loclNm);
+      <span class="Identifier">step!</span> g
+    }
+    <span class="Statement">if</span> preFlag <span class="Statement">then</span> {
+      <span class="Statement">return</span>([nul],[construct reverse tmpNm])}
+    <span class="Statement">else</span> {
+      <span class="Statement">return</span>([construct reverse prefx],[construct reverse loclNm])}
+    <span class="Statement">never</span>
+  }
+
+  equal<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot;=&quot;</span>;
+
+  <span class="Comment">-- this getName is specifically for attributes</span>
+  getNameAttrib(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul')) <span class="Statement">==</span> {
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">UCH</span>,<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul');
+    <span class="Statement">local</span> prefx,loclNm,tmpNm<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">UCH</span>);
+<span class="Comment">--    local prefx,loclNm,tmpNm:DOMString(UCH);</span>
+    <span class="Statement">free</span> endtag,colon,slash,equal;
+
+    preFlag<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">:=</span> <span class="Constant">true</span>;prefx <span class="Statement">:=</span> [];loclNm <span class="Statement">:=</span> [];tmpNm <span class="Statement">:=</span> [];
+
+    <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
+      <span class="Statement">if</span> (value(g)<span class="Statement">=</span> endtag <span class="Statement">or</span> value(g) <span class="Statement">=</span> slash) <span class="Statement">then</span>
+        error <span class="String">&quot;attribute has been given no value&quot;</span>;
+      <span class="Statement">if</span> value(g) <span class="Statement">=</span> equal <span class="Statement">or</span> whiteSpace(value(g)) <span class="Statement">then</span> <span class="Statement">break</span>;
+      <span class="Statement">if</span> preFlag <span class="Statement">then</span> {
+        <span class="Statement">if</span> value(g) <span class="Statement">=</span> colon <span class="Statement">then</span> {
+          preFlag <span class="Statement">:=</span> <span class="Constant">false</span>; prefx <span class="Statement">:=</span> tmpNm;
+        }
+        tmpNm <span class="Statement">:=</span> cons(value(g),tmpNm);
+      } <span class="Statement">else</span> loclNm <span class="Statement">:=</span> cons(value(g),loclNm);
+      <span class="Identifier">step!</span> g
+    }
+    <span class="Statement">if</span> preFlag <span class="Statement">then</span> {
+      <span class="Statement">return</span>([nul],[construct reverse tmpNm])}
+    <span class="Statement">else</span> {
+      <span class="Statement">return</span>([construct reverse prefx],[construct reverse loclNm])}
+    <span class="Statement">never</span>
+  }
+
+  <span class="Constant">space</span><span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span> <span class="String">&quot; &quot;</span>;
+  cr<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="Number">13</span>@<span class="Type">MI</span>); <span class="Comment">-- the code for carriage return</span>
+  nl<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="Number">10</span>@<span class="Type">MI</span>); <span class="Comment">-- the code for newline</span>
+  <span class="Constant">tab</span><span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="Number">9</span>@<span class="Type">MI</span>); <span class="Comment">-- the code for tab</span>
+  whiteSpace(c<span class="Statement">:</span><span class="Type">UCH</span>)<span class="Statement">:</span><span class="Type">B</span> <span class="Statement">==</span>
+    c <span class="Statement">=</span> <span class="Constant">space</span> <span class="Statement">or</span> c <span class="Statement">=</span> cr <span class="Statement">or</span> c <span class="Statement">=</span> nl <span class="Statement">or</span> c <span class="Statement">=</span> <span class="Constant">tab</span>;
+
+  <span class="Comment">-- function to remove white space</span>
+  remW(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
+    <span class="Statement">while</span> whiteSpace value g <span class="Statement">and</span> <span class="Statement">not</span> <span class="Identifier">empty?</span> g <span class="Statement">repeat</span> {
+      <span class="Identifier">step!</span> g}<span class="Constant">nil</span>}
+
+  <span class="Comment">-- the codes for the two types of quotes</span>
+  quote1<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="String">&quot;'&quot;</span>);
+  quote2<span class="Statement">:</span><span class="Type">UCH</span> <span class="Statement">==</span> fromChar <span class="Statement">char</span>(<span class="Number">34</span>@<span class="Type">MI</span>); <span class="Comment">--  the code for '&quot;'</span>
+
+  getAttributes(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">NamedNodeMap</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
+    <span class="Statement">free</span> nullaryOp;
+    <span class="Statement">free</span> endtag,slash,equal,quote1,quote2;
+
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Attr</span>(<span class="Type">UCH</span>),<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul'),<span class="Type">Document</span>(<span class="Type">UCH</span>);
+    <span class="Statement">local</span> tup<span class="Statement">:</span><span class="Type">Tuple</span>(<span class="Type">U</span>(str<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>),nul<span class="Statement">:</span>'nul'));
+
+<span class="Comment">--    retList:List(Attr(UCH)) := [];</span>
+    retList<span class="Statement">:</span><span class="Type">NamedNodeMap</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> new(<span class="Number">0</span>);
+    nullaryOp <span class="Statement">:=</span> <span class="Constant">false</span>;
+    <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> { <span class="Comment">-- N.B. there may be many attributes</span>
+
+      <span class="Comment">-- remove leading white space</span>
+      remW(g);
+      <span class="Statement">while</span> whiteSpace value g <span class="Statement">repeat</span> <span class="Identifier">step!</span> g;
+      <span class="Comment">-- check to see if we are at the end of the &quot;&lt; ... &gt;&quot;</span>
+      <span class="Statement">if</span> <span class="Statement">not</span>(value g <span class="Statement">=</span> endtag <span class="Statement">or</span> value g <span class="Statement">=</span> slash) <span class="Statement">then</span> {
+        tup <span class="Statement">:=</span> getNameAttrib g; <span class="Comment">-- get the name of the attribute</span>
+
+        <span class="Comment">-- remove &quot; = '&quot; or ' = &quot;', with any intervening white space</span>
+        remW(g);
+        <span class="Statement">if</span> value(g) <span class="Statement">=</span> equal <span class="Statement">then</span> <span class="Identifier">step!</span> g;remW(g);
+        <span class="Statement">if</span> ((quote <span class="Statement">:=</span> value g) <span class="Statement">=</span> quote1 <span class="Statement">or</span>
+           (quote <span class="Statement">:=</span> value g) <span class="Statement">=</span> quote2) <span class="Statement">then</span> <span class="Identifier">step!</span> g
+        <span class="Statement">else</span> {
+<span class="Comment">--          printGen(g);printStack();</span>
+          error <span class="String">&quot;malformed attribute form&quot;</span>;
+        }
+
+        <span class="Comment">-- now get the value</span>
+        val <span class="Statement">:=</span> getValue(g,quote);
+        <span class="Comment">-- now make attribute and put in the return value</span>
+        <span class="Statement">if</span> element(tup,<span class="Number">1</span>) case str <span class="Statement">then</span> <span class="Comment">-- we have a prefix to the attribute</span>
+          setNamedItemNS(retList,cast createAttributeNS(element(tup,<span class="Number">1</span>).str,element(tup,<span class="Number">2</span>).str,val));
+        <span class="Statement">else</span> setNamedItemNS(retList,cast createAttribute(element(tup,<span class="Number">2</span>).str,val));
+      } <span class="Statement">else</span> {
+        <span class="Statement">if</span> value(g) <span class="Statement">=</span> endtag <span class="Statement">then</span> <span class="Statement">break</span>;
+        <span class="Statement">if</span> value g <span class="Statement">=</span> slash <span class="Statement">then</span> {
+          nullaryOp <span class="Statement">:=</span> <span class="Constant">true</span>;<span class="Statement">break</span>
+        }
+      }
+    }
+    retList
+  }
+
+  getValue(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>),quote<span class="Statement">:</span><span class="Type">UCH</span>)<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
+    <span class="Statement">free</span> endtag,equal;
+
+    val<span class="Statement">:</span><span class="Type">L</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> [];
+    <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
+      <span class="Statement">if</span> value(g) <span class="Statement">~=</span> quote <span class="Statement">then</span> {
+        val <span class="Statement">:=</span> cons(value g,val);<span class="Identifier">step!</span> g;
+      } <span class="Statement">else</span> {<span class="Identifier">step!</span> g;<span class="Statement">break</span>;}
+    }
+    construct reverse val
+  }
+
+  removeClosing(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
+    <span class="Statement">free</span> endtag,slash;
+
+    remW g;
+
+    <span class="Statement">if</span> value(g) <span class="Statement">=</span> slash <span class="Statement">then</span> { <span class="Identifier">step!</span> g;
+      <span class="Statement">if</span> value(g) <span class="Statement">=</span> endtag <span class="Statement">then</span> {<span class="Identifier">step!</span> g}
+      <span class="Statement">else</span> error <span class="String">&quot;bad closing tag1&quot;</span>
+    } <span class="Statement">else</span> <span class="Statement">if</span> value(g) <span class="Statement">=</span> endtag <span class="Statement">then</span> <span class="Identifier">step!</span> g
+    <span class="Statement">else</span> error <span class="String">&quot;bad closing tag2&quot;</span>;
+    remW(g);
+    <span class="Constant">nil</span>
+  }
+
+  getChildren(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">NodeList</span>(<span class="Type">UCH</span>) <span class="Statement">==</span> {
+
+    ret<span class="Statement">:</span><span class="Type">NodeList</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> new();
+    <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
+      <span class="Statement">if</span> value(g) <span class="Statement">=</span> starttag <span class="Statement">and</span>
+         secondVal(g) <span class="Statement">=</span> slash <span class="Statement">then</span> <span class="Statement">break</span>;
+      addChild(getNode(g),ret);
+    }
+    remove(g,pop());
+    ret
+  }
+
+  remove(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>),matchStr<span class="Statement">:</span><span class="Type">DOMString</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
+
+    <span class="Comment">-- we must remove &quot;&lt;/&quot; from g</span>
+    <span class="Identifier">step!</span> g;<span class="Identifier">step!</span> g;
+    g2<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>) <span class="Statement">:=</span> generator matchStr;
+    <span class="Identifier">step!</span> g2; <span class="Comment">-- need to remove null from start of generator -- step! g2;</span>
+    <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
+      <span class="Statement">if</span> <span class="Statement">not</span>(value(g2) <span class="Statement">=</span> value(g)) <span class="Statement">then</span> {
+        error <span class="String">&quot;invalid XML1&quot;</span>;
+      }
+      <span class="Identifier">step!</span> g;<span class="Identifier">step!</span> g2;
+      <span class="Statement">if</span> <span class="Identifier">empty?</span> g2 <span class="Statement">then</span> <span class="Statement">break</span>;
+    }
+    remW g;
+    <span class="Statement">if</span> value g <span class="Statement">~=</span> endtag <span class="Statement">then</span> {
+        printGen g;
+        printGen g2;
+        error <span class="String">&quot;invalid XML2&quot;</span>;
+    }
+    <span class="Identifier">step!</span> g;
+    remW g;
+    <span class="Constant">nil</span>@<span class="Type">Ptr</span>
+  }
+
+  printGen(g<span class="Statement">:</span><span class="Type">GEN</span>(<span class="Type">UCH</span>))<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">Character</span>;
+    <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span>;
+    <span class="Statement">while</span> <span class="Constant">true</span> <span class="Statement">repeat</span> {
+      <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span>value g;<span class="Identifier">step!</span> g;
+      <span class="Statement">if</span> <span class="Identifier">empty?</span> g <span class="Statement">then</span> <span class="Statement">break</span>
+    }
+    <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span>;
+    <span class="Constant">nil</span>@<span class="Type">Ptr</span>
+  }
+
+  printStack()<span class="Statement">:</span><span class="Type">Ptr</span> <span class="Statement">==</span> {
+    <span class="Include">import</span> <span class="Include">from</span> <span class="Type">DOMString</span>(<span class="Type">UCH</span>);
+    <span class="Statement">free</span> stack;
+    <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span><span class="Statement">&lt;&lt;</span><span class="String">&quot;stack is:&quot;</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span>;
+    <span class="Statement">for</span> w <span class="Statement">in</span> stack <span class="Statement">repeat</span> {
+      <span class="Constant">stdout</span><span class="Statement">&lt;&lt;</span><span class="String">&quot;element :&quot;</span><span class="Statement">&lt;&lt;</span>w<span class="Statement">&lt;&lt;</span><span class="String">&quot;:&quot;</span><span class="Statement">&lt;&lt;</span><span class="Constant">newline</span>;
+    }
+    <span class="Constant">nil</span>@<span class="Type">Ptr</span>
+  }
+}
 
 </pre>
 		</div> 

@@ -88,10 +88,10 @@ from.
 </h4> <p>The terminals file contains an ocamlyacc grammar or tokens file amended with
 token names. An extract of this file could look like this:
 
-</p> <pre class="code-block">   %token<span class="Statement">&lt;</span><span class="Type">string</span><span class="Statement">&gt;</span>  <span class="Constant">TkIDENTIFIER</span>    <span class="String">&quot;identifier&quot;</span>
-   %token          <span class="Constant">TkIF</span>            <span class="String">&quot;if&quot;</span>
-   %token          <span class="Constant">TkTHEN</span>          <span class="String">&quot;then&quot;</span>
-   %token          <span class="Constant">TkELSE</span>          <span class="String">&quot;else&quot;</span>
+</p> <pre class="code-block">%token<span class="Statement">&lt;</span><span class="Type">string</span><span class="Statement">&gt;</span>  <span class="Constant">TkIDENTIFIER</span>    <span class="String">&quot;identifier&quot;</span>
+%token          <span class="Constant">TkIF</span>            <span class="String">&quot;if&quot;</span>
+%token          <span class="Constant">TkTHEN</span>          <span class="String">&quot;then&quot;</span>
+%token          <span class="Constant">TkELSE</span>          <span class="String">&quot;else&quot;</span>
 
 </pre> <p>Merr uses these strings when producing default error messages, so that the user
 doesn't see the internal names like "TkIDENTIFIER". Since menhir doesn't
@@ -128,21 +128,20 @@ the
 excerpt from merr's own error description.
 
 </p> <pre class="code-block">
-   <span class="Statement">module</span><span class="Include"> Tokens</span> <span class="Statement">=</span> <span class="Include">Etokens</span>
-   <span class="Statement">open</span> <span class="Include">Etoken</span> <span class="Comment">(* provides string_of_token *)</span>
-   <span class="Statement">open</span> <span class="Include">Tokens</span> <span class="Comment">(* provides the 'token' type *)</span>
+<span class="Statement">module</span><span class="Include"> Tokens</span> <span class="Statement">=</span> <span class="Include">Etokens</span>
+<span class="Statement">open</span> <span class="Include">Etoken</span> <span class="Comment">(* provides string_of_token *)</span>
+<span class="Statement">open</span> <span class="Include">Tokens</span> <span class="Comment">(* provides the 'token' type *)</span>
 
-   <span class="Statement">let</span> message <span class="Statement">=</span> <span class="Conceal">λ</span>
-     <span class="Statement">|</span> <span class="String">&quot;open&quot;</span> <span class="Conceal">→</span> <span class="Conceal">λ</span>
-       <span class="Statement">|</span> <span class="Constant">EOF</span>               <span class="Conceal">→</span> <span class="String">&quot;expected module name after 'open'&quot;</span>
-       <span class="Statement">|</span> <span class="Constant">TkIDENTIFIER</span>      <span class="Conceal">→</span> <span class="String">&quot;unexpected identifier `%s' after 'open'&quot;</span>
-                              <span class="String">&quot;expected module name (capitalised)&quot;</span>
-       <span class="Statement">|</span> <span class="Statement">_</span>                 <span class="Conceal">→</span> <span class="String">&quot;unexpected token '%s' in handler definition&quot;</span>
+<span class="Statement">let</span> message <span class="Statement">=</span> <span class="Conceal">λ</span>
+  <span class="Statement">|</span> <span class="String">&quot;open&quot;</span> <span class="Conceal">→</span> <span class="Conceal">λ</span>
+    <span class="Statement">|</span> <span class="Constant">EOF</span>               <span class="Conceal">→</span> <span class="String">&quot;expected module name after 'open'&quot;</span>
+    <span class="Statement">|</span> <span class="Constant">TkIDENTIFIER</span>      <span class="Conceal">→</span> <span class="String">&quot;unexpected identifier `%s' after 'open'&quot;</span>
+                           <span class="String">&quot;expected module name (capitalised)&quot;</span>
+    <span class="Statement">|</span> <span class="Statement">_</span>                 <span class="Conceal">→</span> <span class="String">&quot;unexpected token '%s' in handler definition&quot;</span>
 
-     <span class="Statement">|</span> <span class="String">&quot;open Foo let message = function&quot;</span> <span class="Conceal">→</span> <span class="Conceal">λ</span>
-       <span class="Statement">|</span> <span class="Constant">EOF</span>                 <span class="Conceal">→</span> <span class="String">&quot;expected '|'-separated code fragments&quot;</span>
-       <span class="Statement">|</span> <span class="Statement">_</span>                   <span class="Conceal">→</span> <span class="String">&quot;unexpected token '%s' where code fragments expected&quot;</span>
-
+  <span class="Statement">|</span> <span class="String">&quot;open Foo let message = function&quot;</span> <span class="Conceal">→</span> <span class="Conceal">λ</span>
+    <span class="Statement">|</span> <span class="Constant">EOF</span>                 <span class="Conceal">→</span> <span class="String">&quot;expected '|'-separated code fragments&quot;</span>
+    <span class="Statement">|</span> <span class="Statement">_</span>                   <span class="Conceal">→</span> <span class="String">&quot;unexpected token '%s' where code fragments expected&quot;</span>
 </pre> <p>One or more 
   <code>open</code> directives are always required, and the opened modules
 should provide the function 

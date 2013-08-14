@@ -139,13 +139,12 @@ used by C++'s
 
 
 </p> <pre class="code-block">
-  <span class="Type">struct</span> string
-  {
-    <span class="Type">char</span> *rep;
-    <span class="Type">size_t</span> len;
-    <span class="Type">size_t</span> max;
-  };
-
+<span class="Type">struct</span> string
+{
+  <span class="Type">char</span> *rep;
+  <span class="Type">size_t</span> len;
+  <span class="Type">size_t</span> max;
+};
 </pre> <p>
   <code>string.rep</code> is the internal representation of the string, which is just a
 data pointer and not necessarily a NUL terminated C string. 

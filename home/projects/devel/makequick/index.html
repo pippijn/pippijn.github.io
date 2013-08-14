@@ -73,9 +73,8 @@ problem with automake. It basically means that the following automake code fails
 during installation:
 
 
-</p> <pre>   lib_LTLIBRARIES = liba.la libb.la
-   liba_la_LIBADD = libb.la
-
+</p> <pre class="code-block"><span class="Statement">lib_LTLIBRARIES</span> = liba.la libb.la
+<span class="Type">liba_la_LIBADD</span> = libb.la
 </pre> <p>
   <code>lib_LTLIBRARIES</code> must list the libraries in topological order, so that a
 definition as 
@@ -191,7 +190,7 @@ pages.
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Sat Aug 10 02:15:02 MEST 2013</div> 
+			<div id="updated">Last updated Wed Aug 14 04:53:02 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

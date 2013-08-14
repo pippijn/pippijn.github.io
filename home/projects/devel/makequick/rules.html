@@ -63,9 +63,9 @@ the way they are expanded makes them much more useful.
 
 
 </p> <pre class="code-block">
-   %.o<span class="Statement">:</span> %.c <span class="Identifier">{</span>
-      <span class="Identifier">$(CC)</span> <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
-   <span class="Identifier">}</span>
+%.o<span class="Statement">:</span> %.c <span class="Identifier">{</span>
+   <span class="Identifier">$(CC)</span> <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
+<span class="Identifier">}</span>
 
 </pre> <p>The above example is a simple rule to build object files from C sources. The
 rule is instantiated for each match, so that the resulting Makefile has only
@@ -86,11 +86,11 @@ this case, the
 
 
 </p> <pre class="code-block">
-   <span class="Type">program</span> msgcat <span class="Identifier">{</span>
-      %.c<span class="Statement">:</span> %.msg <span class="Identifier">{</span>
-         <span class="Identifier">$(THIS)</span> -c <span class="Identifier">$&lt;</span> <span class="Identifier">$@</span>
-      <span class="Identifier">}</span>
+<span class="Type">program</span> msgcat <span class="Identifier">{</span>
+   %.c<span class="Statement">:</span> %.msg <span class="Identifier">{</span>
+      <span class="Identifier">$(THIS)</span> -c <span class="Identifier">$&lt;</span> <span class="Identifier">$@</span>
    <span class="Identifier">}</span>
+<span class="Identifier">}</span>
 
 </pre> <p>Rules inside programs are always considered for match, but are disabled in the
 resulting Makefile, if the program was conditional and disabled at configure
@@ -105,12 +105,12 @@ pattern is matched. Simply speaking, the most special pattern is matched.
 
 
 </p> <pre class="code-block">
-   %.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
-      ...
-   <span class="Identifier">}</span>
-   src/%.c<span class="Statement">:</span> src/%.y <span class="Identifier">{</span>
-      ...
-   <span class="Identifier">}</span>
+%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
+   ...
+<span class="Identifier">}</span>
+src/%.c<span class="Statement">:</span> src/%.y <span class="Identifier">{</span>
+   ...
+<span class="Identifier">}</span>
 
 </pre> <p>In the above example, the second rule is matched for all 
   <code>.y</code> files under
@@ -127,15 +127,15 @@ pattern is matched. Simply speaking, the most special pattern is matched.
 
 
 </p> <pre class="code-block">
-   %.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
-      echo This is the first line
-      bison
-         -y
-         -o <span class="Identifier">$@</span>
-         <span class="Identifier">$&lt;</span>
-      echo This is
-         the third line
-   <span class="Identifier">}</span>
+%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
+   echo This is the first line
+   bison
+      -y
+      -o <span class="Identifier">$@</span>
+      <span class="Identifier">$&lt;</span>
+   echo This is
+      the third line
+<span class="Identifier">}</span>
 
 </pre> <pre>
 </pre> <h3>Special variables in rules
@@ -215,24 +215,24 @@ of flags for the tool. The variable syntax
 
 
 </p> <pre class="code-block">
-   %.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
-      <span class="Identifier">$(YACC)</span> <span class="Identifier">$[YFLAGS]</span> -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
-   <span class="Identifier">}</span>
+%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
+   <span class="Identifier">$(YACC)</span> <span class="Identifier">$[YFLAGS]</span> -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
+<span class="Identifier">}</span>
 
-   <span class="Type">program</span> myparser <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         src/parser.y
-      <span class="Identifier">}</span>
+<span class="Type">program</span> myparser <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      src/parser.y
    <span class="Identifier">}</span>
+<span class="Identifier">}</span>
 
 </pre> <p>The pattern rule in the above example might be expanded to roughly the following
 make code:
 
 </p> <pre class="code-block">
-   src/parser.c<span class="Statement">:</span> src/parser.y
-      <span class="Identifier">$(MKDIR_P)</span> src/
-      <span class="Identifier">$(YACC)</span> <span class="Identifier">$(AM_YFLAGS)</span> <span class="Identifier">$(YFLAGS)</span> <span class="Identifier">$(myparser_YFLAGS)</span> -o src/parser.c \
-         <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y
+src/parser.c<span class="Statement">:</span> src/parser.y
+   <span class="Identifier">$(MKDIR_P)</span> src/
+   <span class="Identifier">$(YACC)</span> <span class="Identifier">$(AM_YFLAGS)</span> <span class="Identifier">$(YFLAGS)</span> <span class="Identifier">$(myparser_YFLAGS)</span> -o src/parser.c \
+      <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y
 
 </pre> <p>The 
   <code>test</code> makes sure that vpath builds work correctly. The first line will
@@ -249,22 +249,22 @@ described in
 
 
 </p> <pre class="code-block">
-   %.c<span class="Statement">:</span> %.cx <span class="Identifier">{</span>
-      <span class="Identifier">$(CPP)</span>
-         -DTARGET<span class="Statement">=</span><span class="String">'&quot;</span><span class="Identifier">$(TARGET)</span><span class="String">&quot;'</span>
-         -DLIBRARIES<span class="Statement">=</span><span class="String">'&quot;</span><span class="Identifier">$(TARGET.link : library)</span><span class="String">&quot;'</span>
-         <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
-   <span class="Identifier">}</span>
+%.c<span class="Statement">:</span> %.cx <span class="Identifier">{</span>
+   <span class="Identifier">$(CPP)</span>
+      -DTARGET<span class="Statement">=</span><span class="String">'&quot;</span><span class="Identifier">$(TARGET)</span><span class="String">&quot;'</span>
+      -DLIBRARIES<span class="Statement">=</span><span class="String">'&quot;</span><span class="Identifier">$(TARGET.link : library)</span><span class="String">&quot;'</span>
+      <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
+<span class="Identifier">}</span>
 
-   <span class="Type">program</span> myprog <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         main.cx
-      <span class="Identifier">}</span>
-      <span class="Type">link</span> <span class="Identifier">{</span>
-         mylib1
-         -lm
-      <span class="Identifier">}</span>
+<span class="Type">program</span> myprog <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      main.cx
    <span class="Identifier">}</span>
+   <span class="Type">link</span> <span class="Identifier">{</span>
+      mylib1
+      -lm
+   <span class="Identifier">}</span>
+<span class="Identifier">}</span>
 
 </pre> <p>In the above example, 
   <code>$(TARGET.link : library)</code> will be expanded to 
@@ -281,9 +281,9 @@ instead of a subdirectory. For this use case, the
 
 
 </p> <pre class="code-block">
-   %%.c<span class="Statement">:</span> %%.y <span class="Identifier">{</span>
-      <span class="Identifier">$(YACC)</span> <span class="Identifier">$[YFLAGS]</span> -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
-   <span class="Identifier">}</span>
+%%.c<span class="Statement">:</span> %%.y <span class="Identifier">{</span>
+   <span class="Identifier">$(YACC)</span> <span class="Identifier">$[YFLAGS]</span> -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
+<span class="Identifier">}</span>
 
 </pre> <p>The 
   <code>%%</code> pattern on the left will match exactly one path segment, i.e. without
@@ -296,9 +296,9 @@ matched by the
 
 
 </p> <pre class="code-block">
-   parser.c<span class="Statement">:</span> src/parser.y
-      <span class="Identifier">$(YACC)</span> <span class="Identifier">$(AM_YFLAGS)</span> <span class="Identifier">$(YFLAGS)</span> <span class="Identifier">$(myparser_YFLAGS)</span> -o parser.c \
-         <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y
+parser.c<span class="Statement">:</span> src/parser.y
+   <span class="Identifier">$(YACC)</span> <span class="Identifier">$(AM_YFLAGS)</span> <span class="Identifier">$(YFLAGS)</span> <span class="Identifier">$(myparser_YFLAGS)</span> -o parser.c \
+      <span class="String">`test -f 'src/parser.y' || echo '</span><span class="Identifier">$(srcdir)</span><span class="String">/'`</span>src/parser.y
 
 </pre> <p>As you can see, a 
   <code>mkdir</code> is no longer necessary and the output is now in the
@@ -317,10 +317,10 @@ current directory.
 
 
 </p> <pre class="code-block">
-   %.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
-      @echo Calling bison
-      @(YACC)bison <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
-   <span class="Identifier">}</span>
+%.c<span class="Statement">:</span> %.y <span class="Identifier">{</span>
+   @echo Calling bison
+   @(YACC)bison <span class="Identifier">$&lt;</span> -o <span class="Identifier">$@</span>
+<span class="Identifier">}</span>
 
 </pre> <p>The 
   <code>@(NAME)</code> syntax emits an 
@@ -346,12 +346,12 @@ still be matched.
 
 
 </p> <pre class="code-block">
-   extern <span class="String">'lex-rules.am'</span> %.c<span class="Statement">:</span> %.l
-   extern <span class="String">'yacc-rules.am'</span> <span class="Identifier">{</span>
-      %.c<span class="Statement">:</span> %.y ;
-      %.h<span class="Statement">:</span> %.y ;
-   <span class="Identifier">}</span>
-   extern <span class="String">'more-rules.am'</span>
+extern <span class="String">'lex-rules.am'</span> %.c<span class="Statement">:</span> %.l
+extern <span class="String">'yacc-rules.am'</span> <span class="Identifier">{</span>
+   %.c<span class="Statement">:</span> %.y ;
+   %.h<span class="Statement">:</span> %.y ;
+<span class="Identifier">}</span>
+extern <span class="String">'more-rules.am'</span>
 
 </pre> <pre>
 </pre> <h3>Replacing automake rules
@@ -361,10 +361,9 @@ replace large parts of automake. E.g. a simplified automake rule for building
 object files from C sources can be written as follows:
 
 </p> <pre class="code-block">
-   %%.o<span class="Statement">:</span> %%.c <span class="Identifier">{</span>
-      @(CC)<span class="Identifier">$(CC)</span> <span class="Identifier">$[CPPFLAGS]</span> <span class="Identifier">$[CFLAGS]</span> -MT <span class="Identifier">$@</span> -MD -MP -MF <span class="Identifier">$(DEPDIR)</span>/<span class="Identifier">$*</span>.Tpo -c -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
-   <span class="Identifier">}</span>
-
+%%.o<span class="Statement">:</span> %%.c <span class="Identifier">{</span>
+   @(CC)<span class="Identifier">$(CC)</span> <span class="Identifier">$[CPPFLAGS]</span> <span class="Identifier">$[CFLAGS]</span> -MT <span class="Identifier">$@</span> -MD -MP -MF <span class="Identifier">$(DEPDIR)</span>/<span class="Identifier">$*</span>.Tpo -c -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
+<span class="Identifier">}</span>
 </pre> <p>Automake still provides many useful tools, such as its 
   <code>distcheck</code> and
 

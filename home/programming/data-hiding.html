@@ -68,12 +68,12 @@ counted, said to be the least object oriented language.
 </ul> <p>A simple example of information hiding would be a string object:
 
 </p> <pre class="code-block">
-  <span class="Type">struct</span> string
-  {
-    <span class="Type">char</span> *rep;
-    <span class="Type">size_t</span> len;
-    <span class="Type">size_t</span> capacity.
-  };
+<span class="Type">struct</span> string
+{
+  <span class="Type">char</span> *rep;
+  <span class="Type">size_t</span> len;
+  <span class="Type">size_t</span> capacity.
+};
 
 </pre> <p>This 
   <code>struct</code> knows its length and has a data pointer pointing at the
@@ -84,11 +84,11 @@ example:
 
 
 </p> <pre class="code-block">
-  <span class="Type">size_t</span> strLength (<span class="Type">struct</span> string <span class="Type">const</span> *str);
-  <span class="Type">char</span> <span class="Type">const</span> *strToCStr (<span class="Type">struct</span> string <span class="Type">const</span> *str);
-  <span class="Type">char</span> strCharAt (<span class="Type">struct</span> string <span class="Type">const</span> *str, <span class="Type">size_t</span> pos);
-  <span class="Type">void</span> strSetCharAt (<span class="Type">struct</span> string *str, <span class="Type">size_t</span> pos, <span class="Type">char</span> c);
-  <span class="Type">void</span> strAddChars (<span class="Type">struct</span> string *str, <span class="Type">char</span> <span class="Type">const</span> *chars);
+<span class="Type">size_t</span> strLength (<span class="Type">struct</span> string <span class="Type">const</span> *str);
+<span class="Type">char</span> <span class="Type">const</span> *strToCStr (<span class="Type">struct</span> string <span class="Type">const</span> *str);
+<span class="Type">char</span> strCharAt (<span class="Type">struct</span> string <span class="Type">const</span> *str, <span class="Type">size_t</span> pos);
+<span class="Type">void</span> strSetCharAt (<span class="Type">struct</span> string *str, <span class="Type">size_t</span> pos, <span class="Type">char</span> c);
+<span class="Type">void</span> strAddChars (<span class="Type">struct</span> string *str, <span class="Type">char</span> <span class="Type">const</span> *chars);
 
 </pre> <p>These functions operate on the data structure declared above. Functions
 that take a pointer-to-const promise not to modify the structure.
@@ -98,8 +98,8 @@ of this, we could define new type aliases to hide the fact that a string
 is represented by a pointer to a string structure:
 
 </p> <pre class="code-block">
-  <span class="Type">typedef</span> <span class="Type">struct</span> string *String;
-  <span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString; <span class="Comment">// Immutable string</span>
+<span class="Type">typedef</span> <span class="Type">struct</span> string *String;
+<span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString; <span class="Comment">// Immutable string</span>
 
 </pre> <p>By doing this, we allow the representation to change at any time. For
 example, we could choose to represent String objects by a simple data
@@ -113,11 +113,11 @@ pointer not knowing its size or a data pointer prepended by its size.
 </p> <p>Now, our accessor functions look like this:
 
 </p> <pre class="code-block">
-  <span class="Type">size_t</span> strLength (ConstString str);
-  <span class="Type">char</span> <span class="Type">const</span> *strToCStr (ConstString str);
-  <span class="Type">char</span> strCharAt (ConstString str, <span class="Type">size_t</span> pos);
-  <span class="Type">void</span> strSetCharAt (String str, <span class="Type">size_t</span> pos, <span class="Type">char</span> c);
-  <span class="Type">void</span> strAddChars (String str, <span class="Type">char</span> <span class="Type">const</span> *chars);
+<span class="Type">size_t</span> strLength (ConstString str);
+<span class="Type">char</span> <span class="Type">const</span> *strToCStr (ConstString str);
+<span class="Type">char</span> strCharAt (ConstString str, <span class="Type">size_t</span> pos);
+<span class="Type">void</span> strSetCharAt (String str, <span class="Type">size_t</span> pos, <span class="Type">char</span> c);
+<span class="Type">void</span> strAddChars (String str, <span class="Type">char</span> <span class="Type">const</span> *chars);
 
 </pre> <p>We did not only abstract away some knowledge, we also reduced our required
 typing.
@@ -130,19 +130,19 @@ information hiding. An obvious example would be directly accessing the
 structure's members:
 
 </p> <pre class="code-block">
-  <span class="Comment">// Wrong:</span>
-  <span class="Type">void</span>
-  OnAdded (String str)
-  {
-    strncat (str-&gt;rep, <span class="String">&quot; has been added&quot;</span>, str-&gt;capacity - str-&gt;len);
-    str-&gt;len = strlen (str-&gt;rep);
-  }
-  <span class="Comment">// Right:</span>
-  <span class="Type">void</span>
-  OnAdded (String str)
-  {
-    strAddChars (str, <span class="String">&quot; has been added&quot;</span>);
-  }
+<span class="Comment">// Wrong:</span>
+<span class="Type">void</span>
+OnAdded (String str)
+{
+  strncat (str-&gt;rep, <span class="String">&quot; has been added&quot;</span>, str-&gt;capacity - str-&gt;len);
+  str-&gt;len = strlen (str-&gt;rep);
+}
+<span class="Comment">// Right:</span>
+<span class="Type">void</span>
+OnAdded (String str)
+{
+  strAddChars (str, <span class="String">&quot; has been added&quot;</span>);
+}
 
 </pre> <p>The function 
   <code>strAddChars</code> hides the knowledge about 
@@ -161,19 +161,19 @@ allows several operations that are built into C:
 
 
 </p> <pre class="code-block">
-  <span class="Type">typedef</span> <span class="Type">char</span> *String;
-  <span class="Type">typedef</span> <span class="Type">char</span> <span class="Type">const</span> *ConstString;
+<span class="Type">typedef</span> <span class="Type">char</span> *String;
+<span class="Type">typedef</span> <span class="Type">char</span> <span class="Type">const</span> *ConstString;
 
-  <span class="Type">void</span>
-  someFunc (String str)
-  {
-    printf (<span class="String">&quot;The second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
-    str += <span class="Number">20</span>; <span class="Comment">// Addition</span>
-    printf (<span class="String">&quot;The twenty-second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
-    printf (<span class="String">&quot;The twenty-first character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, *str); <span class="Comment">// Dereference</span>
-    String newStr = str - <span class="Number">10</span>; <span class="Comment">// Subtracting integer</span>
-    printf (<span class="String">&quot;The difference between newStr and str is </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, newStr - str); <span class="Comment">// Pointer difference</span>
-  }
+<span class="Type">void</span>
+someFunc (String str)
+{
+  printf (<span class="String">&quot;The second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
+  str += <span class="Number">20</span>; <span class="Comment">// Addition</span>
+  printf (<span class="String">&quot;The twenty-second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
+  printf (<span class="String">&quot;The twenty-first character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, *str); <span class="Comment">// Dereference</span>
+  String newStr = str - <span class="Number">10</span>; <span class="Comment">// Subtracting integer</span>
+  printf (<span class="String">&quot;The difference between newStr and str is </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, newStr - str); <span class="Comment">// Pointer difference</span>
+}
 
 </pre> <p>All these operations are defined on 
   <code>char*</code>, and therefore also on 
@@ -201,12 +201,12 @@ around pointers to them:
 
 
 </p> <pre class="code-block">
-  <span class="Type">struct</span> string;
-  <span class="Type">typedef</span> <span class="Type">struct</span> string *String;
-  <span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString;
-  <span class="Comment">// All of the above accessor functions still work</span>
-  <span class="Comment">// The OnAdded function marked with &quot;Right&quot; also still works, but the one</span>
-  <span class="Comment">//   marked &quot;Wrong&quot; will cause a compilation error</span>
+<span class="Type">struct</span> string;
+<span class="Type">typedef</span> <span class="Type">struct</span> string *String;
+<span class="Type">typedef</span> <span class="Type">struct</span> string <span class="Type">const</span> *ConstString;
+<span class="Comment">// All of the above accessor functions still work</span>
+<span class="Comment">// The OnAdded function marked with &quot;Right&quot; also still works, but the one</span>
+<span class="Comment">//   marked &quot;Wrong&quot; will cause a compilation error</span>
 
 </pre> <p>
   <code>String</code> is now what we call a 

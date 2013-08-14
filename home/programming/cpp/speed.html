@@ -57,23 +57,23 @@ inheriting members from other classes. A simple example of this in C++ would
 be:
 
 </p> <pre class="code-block">
-  <span class="Type">struct</span> Base
-  {
-    <span class="Type">int</span> a;
-  };
+<span class="Type">struct</span> Base
+{
+  <span class="Type">int</span> a;
+};
 
-  <span class="Type">struct</span> Derived : Base
-  {
-    <span class="Type">int</span> b;
-  };
+<span class="Type">struct</span> Derived : Base
+{
+  <span class="Type">int</span> b;
+};
 
-  <span class="Comment">// Now, we can have an object of type Derived and modify its data members</span>
-  <span class="Comment">// a and b directly.</span>
-  Derived d;
-  d.a = <span class="Number">3</span>;
-  d.b = <span class="Number">4</span>;
-  <span class="Comment">// This object can be implicitly converted to a Base reference</span>
-  Base &amp;b = d;
+<span class="Comment">// Now, we can have an object of type Derived and modify its data members</span>
+<span class="Comment">// a and b directly.</span>
+Derived d;
+d.a = <span class="Number">3</span>;
+d.b = <span class="Number">4</span>;
+<span class="Comment">// This object can be implicitly converted to a Base reference</span>
+Base &amp;b = d;
 
 </pre> <p>How is this done in C? For inheritance, there are basically two possibilities
 of which one has two variations. The first possibility is to give 
@@ -94,59 +94,59 @@ the body of
 </pre> <h5>Possibility 1
 
 </h5> <pre class="code-block">
-  <span class="Type">struct</span> Base
-  {
-    <span class="Type">int</span> a;
-  };
+<span class="Type">struct</span> Base
+{
+  <span class="Type">int</span> a;
+};
 
-  <span class="Type">struct</span> Derived
-  {
-    <span class="Type">struct</span> Base base;
-    <span class="Type">int</span> b;
-  };
+<span class="Type">struct</span> Derived
+{
+  <span class="Type">struct</span> Base base;
+  <span class="Type">int</span> b;
+};
 
-  <span class="Comment">// Define an object of type Derived</span>
-  <span class="Type">struct</span> Derived d;
-  d.base.a = <span class="Number">3</span>; <span class="Comment">// or: ((struct Base *)&amp;d)-&gt;a = 3;</span>
-  d.b = <span class="Number">4</span>;
-  <span class="Comment">// We can either explicitly convert a pointer to this object to Base</span>
-  <span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;
-  <span class="Comment">// or take the address of the base object</span>
-  <span class="Type">struct</span> Base *b = &amp;d.base;
+<span class="Comment">// Define an object of type Derived</span>
+<span class="Type">struct</span> Derived d;
+d.base.a = <span class="Number">3</span>; <span class="Comment">// or: ((struct Base *)&amp;d)-&gt;a = 3;</span>
+d.b = <span class="Number">4</span>;
+<span class="Comment">// We can either explicitly convert a pointer to this object to Base</span>
+<span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;
+<span class="Comment">// or take the address of the base object</span>
+<span class="Type">struct</span> Base *b = &amp;d.base;
 
 </pre> <pre>
 </pre> <h5>Possibility 2
 
 </h5> <pre class="code-block">
-  <span class="Type">struct</span> Base
-  {
-    <span class="Type">int</span> a;
-  };
+<span class="Type">struct</span> Base
+{
+  <span class="Type">int</span> a;
+};
 
-  <span class="Type">struct</span> Derived
-  {
-    <span class="Type">int</span> a;
-    <span class="Type">int</span> b;
-  };
+<span class="Type">struct</span> Derived
+{
+  <span class="Type">int</span> a;
+  <span class="Type">int</span> b;
+};
 
-  <span class="Comment">// Or:</span>
-  <span class="Type">struct</span> Base
-  {
-<span class="Include">  #include </span><span class="String">&quot;Base_body.h&quot;</span>
-  };
+<span class="Comment">// Or:</span>
+<span class="Type">struct</span> Base
+{
+<span class="Include">#include </span><span class="String">&quot;Base_body.h&quot;</span>
+};
 
-  <span class="Type">struct</span> Derived
-  {
-<span class="Include">  #include </span><span class="String">&quot;Base_body.h&quot;</span>
-<span class="Include">  #include </span><span class="String">&quot;Derived_body.h&quot;</span>
-  };
+<span class="Type">struct</span> Derived
+{
+<span class="Include">#include </span><span class="String">&quot;Base_body.h&quot;</span>
+<span class="Include">#include </span><span class="String">&quot;Derived_body.h&quot;</span>
+};
 
-  <span class="Comment">// Define an object of type Derived</span>
-  <span class="Type">struct</span> Derived d;
-  d.a = <span class="Number">3</span>;
-  d.b = <span class="Number">4</span>;
-  <span class="Comment">// We can explicitly convert a pointer to this object to Base</span>
-  <span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;
+<span class="Comment">// Define an object of type Derived</span>
+<span class="Type">struct</span> Derived d;
+d.a = <span class="Number">3</span>;
+d.b = <span class="Number">4</span>;
+<span class="Comment">// We can explicitly convert a pointer to this object to Base</span>
+<span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;
 
 </pre> <p>Multiple inheritance can be achieved in C, but not by 
   <code>#include</code>ing the
@@ -170,41 +170,41 @@ C, too, except that the syntax looks a bit different:
 
 
 </p> <pre class="code-block">
-  <span class="Comment">// C++</span>
-  <span class="Type">struct</span> Base
-  {
-    <span class="Type">int</span> a;
-    <span class="Type">void</span> foo () { a = <span class="Number">3</span>; }
-  };
+<span class="Comment">// C++</span>
+<span class="Type">struct</span> Base
+{
+  <span class="Type">int</span> a;
+  <span class="Type">void</span> foo () { a = <span class="Number">3</span>; }
+};
 
-  <span class="Type">struct</span> Derived : Base
-  {
-    <span class="Type">int</span> b;
-  };
+<span class="Type">struct</span> Derived : Base
+{
+  <span class="Type">int</span> b;
+};
 
-  Derived d;
-  d.foo ();
-  Base &amp;b = d;
-  b.foo ();
+Derived d;
+d.foo ();
+Base &amp;b = d;
+b.foo ();
 
-  <span class="Comment">// C:</span>
-  <span class="Type">struct</span> Base
-  {
-    <span class="Type">int</span> a;
-  };
+<span class="Comment">// C:</span>
+<span class="Type">struct</span> Base
+{
+  <span class="Type">int</span> a;
+};
 
-  <span class="Type">static</span> <span class="Type">void</span> Base_foo (<span class="Type">struct</span> Base *<span class="Statement">this</span>) { <span class="Statement">this</span>-&gt;a = <span class="Number">3</span>; }
+<span class="Type">static</span> <span class="Type">void</span> Base_foo (<span class="Type">struct</span> Base *<span class="Statement">this</span>) { <span class="Statement">this</span>-&gt;a = <span class="Number">3</span>; }
 
-  <span class="Type">struct</span> Derived
-  {
-    <span class="Type">int</span> a;
-    <span class="Type">int</span> b;
-  };
+<span class="Type">struct</span> Derived
+{
+  <span class="Type">int</span> a;
+  <span class="Type">int</span> b;
+};
 
-  <span class="Type">struct</span> Derived d;
-  Base_foo ((<span class="Type">struct</span> Base *)&amp;d);
-  <span class="Type">struct</span> Base *b = &amp;d;
-  Base_foo (b);
+<span class="Type">struct</span> Derived d;
+Base_foo ((<span class="Type">struct</span> Base *)&amp;d);
+<span class="Type">struct</span> Base *b = &amp;d;
+Base_foo (b);
 
 </pre> <p>If you want to override 
   <code>foo()</code> in 

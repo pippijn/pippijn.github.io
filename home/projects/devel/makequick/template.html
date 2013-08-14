@@ -58,59 +58,59 @@ targets, by themselves. Templates offer a better structured way to inheriting
 sources and libraries.
 
 </p> <pre class="code-block">
-   <span class="Comment"># Build a program that does some math</span>
-   <span class="Type">program</span> prog <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         main.c
-         math.c
-      <span class="Identifier">}</span>
-      <span class="Type">link</span> <span class="Identifier">{</span>
-         -lm
-      <span class="Identifier">}</span>
+<span class="Comment"># Build a program that does some math</span>
+<span class="Type">program</span> prog <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      main.c
+      math.c
    <span class="Identifier">}</span>
-   <span class="Comment"># Build a program that does the same math but with GMP</span>
-   <span class="Type">program</span> gmpprog <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         <span class="Comment"># Import prog's sources</span>
-         <span class="Type">sources</span> (prog)
-         <span class="Comment"># except math.c</span>
-         <span class="Type">exclude</span> <span class="Identifier">{</span> math.c <span class="Identifier">}</span>
-         <span class="Comment"># because we reimplement it using GMP</span>
-         gmpmath.c
-      <span class="Identifier">}</span>
-      <span class="Type">link</span> <span class="Identifier">{</span>
-         <span class="Comment"># Import prog's link section</span>
-         <span class="Type">link</span> (prog)
-         <span class="Comment"># And link against GMP</span>
-         -lgmp
-      <span class="Identifier">}</span>
+   <span class="Type">link</span> <span class="Identifier">{</span>
+      -lm
    <span class="Identifier">}</span>
+<span class="Identifier">}</span>
+<span class="Comment"># Build a program that does the same math but with GMP</span>
+<span class="Type">program</span> gmpprog <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      <span class="Comment"># Import prog's sources</span>
+      <span class="Type">sources</span> (prog)
+      <span class="Comment"># except math.c</span>
+      <span class="Type">exclude</span> <span class="Identifier">{</span> math.c <span class="Identifier">}</span>
+      <span class="Comment"># because we reimplement it using GMP</span>
+      gmpmath.c
+   <span class="Identifier">}</span>
+   <span class="Type">link</span> <span class="Identifier">{</span>
+      <span class="Comment"># Import prog's link section</span>
+      <span class="Type">link</span> (prog)
+      <span class="Comment"># And link against GMP</span>
+      -lgmp
+   <span class="Identifier">}</span>
+<span class="Identifier">}</span>
 
 </pre> <p>The above example can be better written as follows:
 
 </p> <pre class="code-block">
-   <span class="Type">template</span> math-program <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         main.c
-      <span class="Identifier">}</span>
-      <span class="Type">link</span> <span class="Identifier">{</span>
-         -lm
-      <span class="Identifier">}</span>
+<span class="Type">template</span> math-program <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      main.c
    <span class="Identifier">}</span>
-   <span class="Comment"># Inherit from the &quot;math-program&quot; template.</span>
-   <span class="Type">program</span> prog <span class="Statement">:</span> math-program <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         math.c
-      <span class="Identifier">}</span>
+   <span class="Type">link</span> <span class="Identifier">{</span>
+      -lm
    <span class="Identifier">}</span>
-   <span class="Type">program</span> gmpprog <span class="Statement">:</span> math-program <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         gmpmath.c
-      <span class="Identifier">}</span>
-      <span class="Type">link</span> <span class="Identifier">{</span>
-         -lgmp
-      <span class="Identifier">}</span>
+<span class="Identifier">}</span>
+<span class="Comment"># Inherit from the &quot;math-program&quot; template.</span>
+<span class="Type">program</span> prog <span class="Statement">:</span> math-program <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      math.c
    <span class="Identifier">}</span>
+<span class="Identifier">}</span>
+<span class="Type">program</span> gmpprog <span class="Statement">:</span> math-program <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      gmpmath.c
+   <span class="Identifier">}</span>
+   <span class="Type">link</span> <span class="Identifier">{</span>
+      -lgmp
+   <span class="Identifier">}</span>
+<span class="Identifier">}</span>
 
 </pre> <p>Both programs inherit the sources and link blocks from 
   <code>math-program</code> and add
@@ -139,27 +139,27 @@ only from templates. Inheriting from a template more than once, even implicitly
 through another base, is an error.
 
 </p> <pre class="code-block">
-   <span class="Type">template</span> math-program <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         math-support.c
-      <span class="Identifier">}</span>
-      <span class="Type">link</span> <span class="Identifier">{</span>
-         -lm
-      <span class="Identifier">}</span>
+<span class="Type">template</span> math-program <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      math-support.c
    <span class="Identifier">}</span>
-   <span class="Type">template</span> system-program <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         system-support.c
-      <span class="Identifier">}</span>
-      <span class="Type">link</span> <span class="Identifier">{</span>
-         -lutil
-      <span class="Identifier">}</span>
+   <span class="Type">link</span> <span class="Identifier">{</span>
+      -lm
    <span class="Identifier">}</span>
-   <span class="Type">program</span> sysprog <span class="Statement">:</span> math-program, system-program <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span>
-         main.c
-      <span class="Identifier">}</span>
+<span class="Identifier">}</span>
+<span class="Type">template</span> system-program <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      system-support.c
    <span class="Identifier">}</span>
+   <span class="Type">link</span> <span class="Identifier">{</span>
+      -lutil
+   <span class="Identifier">}</span>
+<span class="Identifier">}</span>
+<span class="Type">program</span> sysprog <span class="Statement">:</span> math-program, system-program <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      main.c
+   <span class="Identifier">}</span>
+<span class="Identifier">}</span>
 
 </pre> <pre>
 </pre> <h3>Filtering
@@ -172,22 +172,22 @@ filter by template.
 
 
 </p> <pre class="code-block">
-   <span class="Type">template</span> math-library <span class="Identifier">{</span>
-      ...
+<span class="Type">template</span> math-library <span class="Identifier">{</span>
+   ...
+<span class="Identifier">}</span>
+<span class="Type">library</span> mathsupport <span class="Statement">:</span> math-library <span class="Identifier">{</span>
+   ...
+<span class="Identifier">}</span>
+<span class="Type">program</span> mathprog <span class="Identifier">{</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span> ... <span class="Identifier">}</span>
+   <span class="Type">link</span> <span class="Identifier">{</span>
+      <span class="Comment"># Link against two support libraries</span>
+      mathsupport
+      support
+      <span class="Comment"># Also link against libm</span>
+      -lm
    <span class="Identifier">}</span>
-   <span class="Type">library</span> mathsupport <span class="Statement">:</span> math-library <span class="Identifier">{</span>
-      ...
-   <span class="Identifier">}</span>
-   <span class="Type">program</span> mathprog <span class="Identifier">{</span>
-      <span class="Type">sources</span> <span class="Identifier">{</span> ... <span class="Identifier">}</span>
-      <span class="Type">link</span> <span class="Identifier">{</span>
-         <span class="Comment"># Link against two support libraries</span>
-         mathsupport
-         support
-         <span class="Comment"># Also link against libm</span>
-         -lm
-      <span class="Identifier">}</span>
-   <span class="Identifier">}</span>
+<span class="Identifier">}</span>
 
 </pre> <p>In the above example, the 
   <code>$(mathprog.link)</code> variable would expand to

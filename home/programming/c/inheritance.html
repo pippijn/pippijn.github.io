@@ -63,24 +63,24 @@ part of the object is retained). In C, this implicit construction is not
 possible. Consider the following C++ code:
 
 </p> <pre class="code-block">
-  <span class="Comment">// C++ code:</span>
-  <span class="Type">struct</span> base {
-    <span class="Type">char</span> a;
-    <span class="Type">int</span> b;
-  };
+<span class="Comment">// C++ code:</span>
+<span class="Type">struct</span> base {
+  <span class="Type">char</span> a;
+  <span class="Type">int</span> b;
+};
 
-  <span class="Type">struct</span> derived : base {
-    <span class="Type">int</span> c;
-    <span class="Type">char</span> d;
-  };
+<span class="Type">struct</span> derived : base {
+  <span class="Type">int</span> c;
+  <span class="Type">char</span> d;
+};
 
-  <span class="Type">void</span> function () {
-    derived d;
-    base b = d;
-    base *bp = &amp;d;
-    bp-&gt;b = d.a; <span class="Comment">// &lt;- either</span>
-    bp-&gt;b = d.base::a; <span class="Comment">// &lt;- or</span>
-  }
+<span class="Type">void</span> function () {
+  derived d;
+  base b = d;
+  base *bp = &amp;d;
+  bp-&gt;b = d.a; <span class="Comment">// &lt;- either</span>
+  bp-&gt;b = d.base::a; <span class="Comment">// &lt;- or</span>
+}
 
 </pre> <p>In this code, an object of type 
   <code>derived</code> is created, then an object of type
@@ -98,26 +98,26 @@ the base pointer.
 
 
 </p> <pre class="code-block">
-  <span class="Comment">// C code:</span>
-  <span class="Type">struct</span> base {
-    <span class="Type">char</span> a;
-    <span class="Type">int</span> b;
-  };
+<span class="Comment">// C code:</span>
+<span class="Type">struct</span> base {
+  <span class="Type">char</span> a;
+  <span class="Type">int</span> b;
+};
 
-  <span class="Type">struct</span> derived {
-    <span class="Type">struct</span> base base;
-    <span class="Type">int</span> c;
-    <span class="Type">char</span> d;
-  };
+<span class="Type">struct</span> derived {
+  <span class="Type">struct</span> base base;
+  <span class="Type">int</span> c;
+  <span class="Type">char</span> d;
+};
 
-  <span class="Type">void</span> function () {
-    <span class="Type">struct</span> derived d;
-    <span class="Type">struct</span> base b = d.base; <span class="Comment">// &lt;- either (bad for long inheritance lines)</span>
-    <span class="Type">struct</span> base b2 = *(<span class="Type">struct</span> base *)&amp;d; <span class="Comment">// &lt;- or</span>
-    <span class="Type">struct</span> base *bp = (<span class="Type">struct</span> base *)&amp;d;
-    bp-&gt;b = d.base.a; <span class="Comment">// &lt;- either (bad)</span>
-    bp-&gt;b = ((<span class="Type">struct</span> base *)&amp;d)-&gt;a; <span class="Comment">// &lt;- or</span>
-  }
+<span class="Type">void</span> function () {
+  <span class="Type">struct</span> derived d;
+  <span class="Type">struct</span> base b = d.base; <span class="Comment">// &lt;- either (bad for long inheritance lines)</span>
+  <span class="Type">struct</span> base b2 = *(<span class="Type">struct</span> base *)&amp;d; <span class="Comment">// &lt;- or</span>
+  <span class="Type">struct</span> base *bp = (<span class="Type">struct</span> base *)&amp;d;
+  bp-&gt;b = d.base.a; <span class="Comment">// &lt;- either (bad)</span>
+  bp-&gt;b = ((<span class="Type">struct</span> base *)&amp;d)-&gt;a; <span class="Comment">// &lt;- or</span>
+}
 
 </pre> <p>In long lines with several levels of inheritance, base accesses become
 cumbersome and casting is probably the way to go. (Think of
@@ -138,32 +138,32 @@ data members are going to be spread over many small files.
 
 
 </p> <pre class="code-block">
-  <span class="Comment">// base-members.h</span>
-    <span class="Type">char</span> a;
-    <span class="Type">int</span> b;
+<span class="Comment">// base-members.h</span>
+  <span class="Type">char</span> a;
+  <span class="Type">int</span> b;
 
-  <span class="Comment">// base.h</span>
-  <span class="Type">struct</span> base {
-<span class="Include">  #include </span><span class="String">&quot;base-members.h&quot;</span>
-  };
+<span class="Comment">// base.h</span>
+<span class="Type">struct</span> base {
+<span class="Include">#include </span><span class="String">&quot;base-members.h&quot;</span>
+};
 
-  <span class="Comment">// derived-members.h</span>
-<span class="Include">  #include </span><span class="String">&quot;base-members.h&quot;</span>
-    <span class="Type">int</span> c;
-    <span class="Type">char</span> d;
+<span class="Comment">// derived-members.h</span>
+<span class="Include">#include </span><span class="String">&quot;base-members.h&quot;</span>
+  <span class="Type">int</span> c;
+  <span class="Type">char</span> d;
 
-  <span class="Comment">// derived.h</span>
-  <span class="Type">struct</span> derived {
-<span class="Include">  #include </span><span class="String">&quot;derived-members.h&quot;</span>
-  };
+<span class="Comment">// derived.h</span>
+<span class="Type">struct</span> derived {
+<span class="Include">#include </span><span class="String">&quot;derived-members.h&quot;</span>
+};
 
-  <span class="Comment">// main.c</span>
-  <span class="Type">void</span> function () {
-    <span class="Type">struct</span> derived d;
-    <span class="Type">struct</span> base b = *(<span class="Type">struct</span> base *)&amp;d;
-    <span class="Type">struct</span> base *bp = (<span class="Type">struct</span> base *)&amp;d;
-    bp-&gt;b = d.a; <span class="Comment">// &lt;- works fine for long inheritance lines</span>
-  }
+<span class="Comment">// main.c</span>
+<span class="Type">void</span> function () {
+  <span class="Type">struct</span> derived d;
+  <span class="Type">struct</span> base b = *(<span class="Type">struct</span> base *)&amp;d;
+  <span class="Type">struct</span> base *bp = (<span class="Type">struct</span> base *)&amp;d;
+  bp-&gt;b = d.a; <span class="Comment">// &lt;- works fine for long inheritance lines</span>
+}
 
 </pre> <p>As you can see, the client code for this is cleaner. There is no visible base
 object. The casts are all valid, because the beginning of both structs are
@@ -183,21 +183,21 @@ many nodes of different types pointing at other nodes in the graph. A simple
 example could be:
 
 </p> <pre class="code-block">
-  <span class="Type">struct</span> node {
-  };
+<span class="Type">struct</span> node {
+};
 
-  <span class="Type">enum</span> op { ADD, SUB, MUL, DIV };
+<span class="Type">enum</span> op { ADD, SUB, MUL, DIV };
 
-  <span class="Comment">// a OP b</span>
-  <span class="Type">struct</span> operation : node {
-    node *lhs; <span class="Comment">// a</span>
-    <span class="Type">enum</span> op op; <span class="Comment">// +, -, *, /</span>
-    node *rhs; <span class="Comment">// b</span>
-  };
+<span class="Comment">// a OP b</span>
+<span class="Type">struct</span> operation : node {
+  node *lhs; <span class="Comment">// a</span>
+  <span class="Type">enum</span> op op; <span class="Comment">// +, -, *, /</span>
+  node *rhs; <span class="Comment">// b</span>
+};
 
-  <span class="Type">struct</span> integer : node {
-    <span class="Type">int</span> value;
-  };
+<span class="Type">struct</span> integer : node {
+  <span class="Type">int</span> value;
+};
 
 </pre> <p>Now you can build an expression tree from an expression like 
   <code>3 + 2 * 7 / 3</code>.

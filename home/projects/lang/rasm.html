@@ -64,33 +64,33 @@ is a working parser and assembler for things like this:
 
 
 </p> <pre class="code-block">
-  <span class="Comment"># mnemonic    op1             op2             op3     ret</span>
-  prolog        <span class="Number">1</span>
-  <span class="String">arg</span>                                                   =&gt; <span class="Identifier">$in</span>
-  getarg        <span class="Identifier">%v0</span>             <span class="Identifier">$in</span>                                   <span class="Comment"># V0 = n</span>
-  blt           !forward        <span class="Identifier">%v0</span>             <span class="Number">2</span>       =&gt; <span class="Identifier">@ref</span>
-  <span class="Statement">sub           </span><span class="Error">%</span><span class="String">v</span><span class="String">1</span>             <span class="Identifier">%v0</span>             <span class="Number">1</span>                     <span class="Comment"># V1 = n - 1</span>
-  <span class="Statement">sub           </span><span class="Error">%</span><span class="String">v</span><span class="String">2</span>             <span class="Identifier">%v0</span>             <span class="Number">2</span>                     <span class="Comment"># V2 = n - 2</span>
-  prepare       <span class="Number">1</span>                                                     <span class="Comment"># Prepare for a call with</span>
-                                                                      <span class="Comment"># one argument</span>
-  pusharg       <span class="Identifier">%v1</span>                                                   <span class="Comment"># Push the argument</span>
-  finish        <span class="Identifier">@self</span>         <span class="Comment"># The self-pointer is a pointer to the</span>
-                              <span class="Comment"># beginning of the code block (entry point).</span>
-                              <span class="Comment"># This instruction jumps to the beginning of the</span>
-                              <span class="Comment"># code, causing recursion</span>
+<span class="Comment"># mnemonic    op1             op2             op3     ret</span>
+prolog        <span class="Number">1</span>
+<span class="String">arg</span>                                                   =&gt; <span class="Identifier">$in</span>
+getarg        <span class="Identifier">%v0</span>             <span class="Identifier">$in</span>                                   <span class="Comment"># V0 = n</span>
+blt           !forward        <span class="Identifier">%v0</span>             <span class="Number">2</span>       =&gt; <span class="Identifier">@ref</span>
+<span class="Statement">sub           </span><span class="Error">%</span><span class="String">v</span><span class="String">1</span>             <span class="Identifier">%v0</span>             <span class="Number">1</span>                     <span class="Comment"># V1 = n - 1</span>
+<span class="Statement">sub           </span><span class="Error">%</span><span class="String">v</span><span class="String">2</span>             <span class="Identifier">%v0</span>             <span class="Number">2</span>                     <span class="Comment"># V2 = n - 2</span>
+prepare       <span class="Number">1</span>                                                     <span class="Comment"># Prepare for a call with</span>
+                                                                    <span class="Comment"># one argument</span>
+pusharg       <span class="Identifier">%v1</span>                                                   <span class="Comment"># Push the argument</span>
+finish        <span class="Identifier">@self</span>         <span class="Comment"># The self-pointer is a pointer to the</span>
+                            <span class="Comment"># beginning of the code block (entry point).</span>
+                            <span class="Comment"># This instruction jumps to the beginning of the</span>
+                            <span class="Comment"># code, causing recursion</span>
 
-  retval        <span class="Identifier">%v1</span>                                   <span class="Comment"># Store the result in V1</span>
-  prepare       <span class="Number">1</span>                                     <span class="Comment"># Another</span>
-  pusharg       <span class="Identifier">%v2</span>                                   <span class="Comment"># recursive</span>
-  finish        <span class="Identifier">@self</span>                                 <span class="Comment"># call</span>
-  retval        <span class="Identifier">%v2</span>                                   <span class="Comment"># Store the result in V2</span>
-  add           <span class="Identifier">%v1</span>             <span class="Identifier">%v1</span>             <span class="Number">1</span>     <span class="Comment"># V1++</span>
-  add           <span class="Identifier">%ret</span>            <span class="Identifier">%v1</span>             <span class="Identifier">%v2</span>   <span class="Comment"># RET = V1 + V2</span>
-  ret                                                 <span class="Comment"># Return</span>
+retval        <span class="Identifier">%v1</span>                                   <span class="Comment"># Store the result in V1</span>
+prepare       <span class="Number">1</span>                                     <span class="Comment"># Another</span>
+pusharg       <span class="Identifier">%v2</span>                                   <span class="Comment"># recursive</span>
+finish        <span class="Identifier">@self</span>                                 <span class="Comment"># call</span>
+retval        <span class="Identifier">%v2</span>                                   <span class="Comment"># Store the result in V2</span>
+add           <span class="Identifier">%v1</span>             <span class="Identifier">%v1</span>             <span class="Number">1</span>     <span class="Comment"># V1++</span>
+add           <span class="Identifier">%ret</span>            <span class="Identifier">%v1</span>             <span class="Identifier">%v2</span>   <span class="Comment"># RET = V1 + V2</span>
+ret                                                 <span class="Comment"># Return</span>
 
-  patch         <span class="Identifier">@ref</span>                                  <span class="Comment"># Patch jump</span>
-  mov           <span class="Identifier">%ret</span>            <span class="Number">1</span>                     <span class="Comment"># RET = 1</span>
-  ret                                                 <span class="Comment"># Return</span>
+patch         <span class="Identifier">@ref</span>                                  <span class="Comment"># Patch jump</span>
+mov           <span class="Identifier">%ret</span>            <span class="Number">1</span>                     <span class="Comment"># RET = 1</span>
+ret                                                 <span class="Comment"># Return</span>
 
 </pre> <p>This example is a function that takes one integer argument 
   <code>N</code> and calculates

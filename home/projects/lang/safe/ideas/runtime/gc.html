@@ -116,15 +116,15 @@ the time being, I expect it to be reasonably fast).
 </h4> <p>In C, it is possible to have pointers to members of a struct. For example:
 
 </p> <pre class="code-block">
-   <span class="Type">struct</span> buffer {
-      string_t data;
-      <span class="Type">size_t</span> pos;
-      <span class="Type">size_t</span> len;
-   };
+<span class="Type">struct</span> buffer {
+   string_t data;
+   <span class="Type">size_t</span> pos;
+   <span class="Type">size_t</span> len;
+};
 
-   <span class="Type">size_t</span> @foo (buffer @buf) {
-      <span class="Statement">return</span> &amp;buf-&gt;len;
-   }
+<span class="Type">size_t</span> @foo (buffer @buf) {
+   <span class="Statement">return</span> &amp;buf-&gt;len;
+}
 
 </pre> <p>When all references to 
   <code>buf</code> have gone out of scope, the pointer to its

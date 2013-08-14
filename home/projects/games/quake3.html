@@ -181,26 +181,25 @@ implemented. The code for this is absolutely trivial and can be found in
 
 
 </p> <pre class="code-block">
-  <span class="Statement">my</span> <span class="Identifier">%prefs</span> = (
-     Quake3::<span class="String">WP_GRAPPLING_HOOK</span>    =&gt; <span class="Number">0</span>,
-     Quake3::<span class="String">WP_NONE</span>              =&gt; <span class="Number">0</span>,
+<span class="Statement">my</span> <span class="Identifier">%prefs</span> = (
+   Quake3::<span class="String">WP_GRAPPLING_HOOK</span>    =&gt; <span class="Number">0</span>,
+   Quake3::<span class="String">WP_NONE</span>              =&gt; <span class="Number">0</span>,
 
-     Quake3::<span class="String">WP_GAUNTLET</span>          =&gt; <span class="Number">0</span>,
-     Quake3::<span class="String">WP_GRENADE_LAUNCHER</span>  =&gt; <span class="Number">0</span>,
-     Quake3::<span class="String">WP_MACHINEGUN</span>        =&gt; <span class="Number">1</span>,
-     Quake3::<span class="String">WP_RAILGUN</span>           =&gt; <span class="Number">1</span>,
-     Quake3::<span class="String">WP_SHOTGUN</span>           =&gt; <span class="Number">2</span>,
-     Quake3::<span class="String">WP_LIGHTNING</span>         =&gt; <span class="Number">2</span>,
-     Quake3::<span class="String">WP_PLASMAGUN</span>         =&gt; <span class="Number">2</span>,
-     Quake3::<span class="String">WP_ROCKET_LAUNCHER</span>   =&gt; <span class="Number">3</span>,
-     Quake3::<span class="String">WP_BFG</span>               =&gt; <span class="Number">4</span>,
-  );
+   Quake3::<span class="String">WP_GAUNTLET</span>          =&gt; <span class="Number">0</span>,
+   Quake3::<span class="String">WP_GRENADE_LAUNCHER</span>  =&gt; <span class="Number">0</span>,
+   Quake3::<span class="String">WP_MACHINEGUN</span>        =&gt; <span class="Number">1</span>,
+   Quake3::<span class="String">WP_RAILGUN</span>           =&gt; <span class="Number">1</span>,
+   Quake3::<span class="String">WP_SHOTGUN</span>           =&gt; <span class="Number">2</span>,
+   Quake3::<span class="String">WP_LIGHTNING</span>         =&gt; <span class="Number">2</span>,
+   Quake3::<span class="String">WP_PLASMAGUN</span>         =&gt; <span class="Number">2</span>,
+   Quake3::<span class="String">WP_ROCKET_LAUNCHER</span>   =&gt; <span class="Number">3</span>,
+   Quake3::<span class="String">WP_BFG</span>               =&gt; <span class="Number">4</span>,
+);
 
-  <span class="Statement">sub </span><span class="Identifier">item_pickup </span>{
-     <span class="Statement">my</span> (<span class="Identifier">$curweap</span>, <span class="Identifier">$newweap</span>) = <span class="Identifier">@_</span>;
-     <span class="Identifier">$prefs{$newweap}</span> &gt;= <span class="Identifier">$prefs{$curweap}</span> ? <span class="Number">1</span> : <span class="Number">0</span>
-  }
-
+<span class="Statement">sub </span><span class="Identifier">item_pickup </span>{
+   <span class="Statement">my</span> (<span class="Identifier">$curweap</span>, <span class="Identifier">$newweap</span>) = <span class="Identifier">@_</span>;
+   <span class="Identifier">$prefs{$newweap}</span> &gt;= <span class="Identifier">$prefs{$curweap}</span> ? <span class="Number">1</span> : <span class="Number">0</span>
+}
 </pre> <pre>
 </pre> <h3>Future
 
