@@ -37,6 +37,7 @@
 			]],
 			[lang => "Languages", [
 				[aldor => "Aldor", [
+					[online => "Online"],
 					[changes => "Changes"],
 					#[install => "Download/Install"],
 					#[testrun => "Test Run"],
