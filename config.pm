@@ -8,6 +8,7 @@
 		[projects => "Projects", [
 			[devel => "Developer tools", [
 				[clangide => "Clang IDE"],
+				[debuglib => "DebugLib"],
 				[makequick => "MakeQuick", [
 					[project => "Project"],
 					[variables => "Variables"],
@@ -15,6 +16,9 @@
 					[template => "Templates"],
 					[rules => "Rules"],
 				]],
+				[mlsmoke => "MLSmoke"],
+				[ucslib => "UCS Library"],
+				[widget => "ML Widgets"],
 			]],
 			[edu => "Education", [
 				[gvoc => "GVoc"],
@@ -22,11 +26,14 @@
 			[games => "Games", [
 				[quake3 => "Quake 3"],
 				[deliantra => "Deliantra"],
+				[spring => "Spring RTS"],
 			]],
 			[net => "Network", [
 				[groovy => "Grooveshark"],
 				[purplebee => "Purplebee"],
 				[website => "This Website"],
+				[json => "pa_json"],
+				[unpack => "pa_unpack"],
 			]],
 			[lang => "Languages", [
 				[aldor => "Aldor", [
@@ -37,10 +44,13 @@
 					#[errorlogs => "Error logs"],
 					#[licence => "Licence"],
 				]],
+				[ccparse => "CParseParse"],
 				[cparser => "C Parser", [
 					[online => "Online"],
 				]],
+				[glr => "GLR Parser"],
 				[jmlc => "JML"],
+				[re2ml => "Re2ML"],
 				[libcdk => "CDK library"],
 				[rasm => "Runtime assembler"],
 				#[reflect => "Reflect"],
@@ -70,6 +80,7 @@
 						]],
 					]],
 				]],
+				[treematch => "Treematch"],
 				[xul => "XUL Projects"],
 				[yaccpp => "YACC Preprocessor"],
 			]],
