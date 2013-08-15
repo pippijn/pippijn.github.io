@@ -1,0 +1,68 @@
+Films I like
+============
+
+- [12 Monkeys (1995)]
+- [1408 (2007)](http://www.imdb.com/title/tt0450385/)
+- [A Beautiful Mind (2001)]
+- [About a Boy (2002)]
+- [Ace Ventura: Pet Detective (1994)](http://www.imdb.com/title/tt0109040/)
+- [Ace Ventura: When Nature Calls (1995)](http://www.imdb.com/title/tt0112281/)
+- [Aeon Flux (2005)]
+- [A Good Year (2006)]
+- [American Beauty (1999)]
+- [American History X (1998)](http://www.imdb.com/title/tt0120586/)
+- [American Psycho (2000)](http://www.imdb.com/title/tt0144084/)
+- [Batman Begins (2005)](http://www.imdb.com/title/tt0372784/)
+- [Blood Diamond (2006)]
+- [Catch Me If You Can (2002)](http://www.imdb.com/title/tt0264464/)
+- [Constantine (2005)]
+- [Cruel Intentions (1999)]
+- [Das Leben der Anderen (2006)](http://www.imdb.com/title/tt0405094/)
+- [Der Untergang (2004)]
+- [Detachment (2011)](http://www.imdb.com/title/tt1683526/)
+- [Donnie Darko (2001)]
+- [Equilibrium (2002)]
+- [Eternal Sunshine of the Spotless Mind (2004)](http://www.imdb.com/title/tt0338013/)
+- [Forrest Gump (1994)](http://www.imdb.com/title/tt0109830/)
+- [Good Will Hunting (1997)]
+- [Groundhog Day (1993)]
+- [Hancock (2008)]
+- [If Only (2004)](http://www.imdb.com/title/tt0332136/)
+- [Jumper (2008)]
+- [Le fabuleux destin d'Amélie Poulain (2001)](http://www.imdb.com/title/tt0211915/)
+- [Little Miss Sunshine (2006)]
+- [Lock, Stock and Two Smoking Barrels (1998)](http://www.imdb.com/title/tt0120735/)
+- [Lord of War (2005)]
+- [Matrix (1999)]
+- [Max Payne (2008)]
+- [Memento (2000)]
+- [No Country for Old Men (2007)]
+- [Perfume: Story of a Murderer (2006)]
+- [Premonition (2007)](http://www.imdb.com/title/tt0477071/)
+- [Pride & Prejudice (2005)]
+- [Pulp Fiction (1994)]
+- [Remember Me (2010)](http://www.imdb.com/title/tt1403981/)
+- [Seven Pounds (2008)]
+- [Snatch (2000)]
+- [Sophie Scholl - Die letzten Tage (2005)](http://www.imdb.com/title/tt0426578/)
+- [Spy Game (2001)]
+- [Stardust (2007)]
+- [Star Trek (2009)]
+- [Taken (2008)](http://www.imdb.com/title/tt0936501/)
+- [The Dark Knight (2008)](http://www.imdb.com/title/tt0468569/)
+- [The Godfather (1972)]
+- [The Green Mile (1999)](http://www.imdb.com/title/tt0120689/)
+- [The Hitchhiker's Guide to the Galaxy (2005)]
+- [The Hours (2002)](http://www.imdb.com/title/tt0274558/)
+- [The Man Who Knew Too Little (1997)](http://www.imdb.com/title/tt0120483/)
+- [The Nightmare Before Christmas (1993)](http://www.imdb.com/title/tt0107688/)
+- [The Pianist (2002)](http://www.imdb.com/title/tt0253474/)
+- [The Prestige (2006)]
+- [The Pursuit of Happiness (2006)]
+- [The Reader (2008)]
+- [The Transporter (2002)]
+- [Trainspotting (1996)]
+- [V for Vendetta (2005)](http://www.imdb.com/title/tt0434409/)
+- [Wanted (2008)]
+- [Watchmen (2009)](http://www.imdb.com/title/tt0409459/)
+- [Yes Man (2008)]
