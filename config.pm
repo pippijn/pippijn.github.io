@@ -45,11 +45,15 @@
 					#[errorlogs => "Error logs"],
 					#[licence => "Licence"],
 				]],
-				[ccparse => "CParseParse"],
+				[ccparse => "CParseParse", [
+					[bugs => "Bugs"],
+				]],
 				[cparser => "C Parser", [
 					[online => "Online"],
 				]],
-				[glr => "GLR Parser"],
+				[glr => "GLR Parser", [
+					[bugs => "Bugs"],
+				]],
 				[hm => "Hindley-Milner", [
 					[online => "Online"],
 				]],
@@ -85,7 +89,9 @@
 						]],
 					]],
 				]],
-				[treematch => "Treematch"],
+				[treematch => "Treematch", [
+					[bugs => "Bugs"],
+				]],
 				[xul => "XUL Projects"],
 				[yaccpp => "YACC Preprocessor"],
 			]],
