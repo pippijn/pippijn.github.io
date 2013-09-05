@@ -46,6 +46,7 @@
 					#[licence => "Licence"],
 				]],
 				[ccparse => "CParseParse", [
+					[online => "Online"],
 					[bugs => "Bugs"],
 				]],
 				[cparser => "C Parser", [
