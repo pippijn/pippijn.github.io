@@ -10,9 +10,11 @@ Films I like
 - [Ace Ventura: When Nature Calls (1995)](http://www.imdb.com/title/tt0112281/)
 - [Aeon Flux (2005)]
 - [A Good Year (2006)]
+- [A.I. Artificial Intelligence (2001)](http://www.imdb.com/title/tt0212720/)
 - [American Beauty (1999)](http://www.imdb.com/title/tt0169547/)
 - [American History X (1998)](http://www.imdb.com/title/tt0120586/)
 - [American Psycho (2000)](http://www.imdb.com/title/tt0144084/)
+- [As Good as It Gets (1997)](http://www.imdb.com/title/tt0119822/)
 - [Back to the Future (1985)](http://www.imdb.com/title/tt0088763/)
 - [Batman Begins (2005)](http://www.imdb.com/title/tt0372784/)
 - [Black Swan (2010)](http://www.imdb.com/title/tt0947798/)
@@ -33,6 +35,7 @@ Films I like
 - [Finding Nemo (2003)](http://www.imdb.com/title/tt0266543/)
 - [For a Few Dollars More (1965)](http://www.imdb.com/title/tt0059578/)
 - [Forrest Gump (1994)](http://www.imdb.com/title/tt0109830/)
+- [Gattaca (1997)](http://www.imdb.com/title/tt0119177/)
 - [Gladiator (2000)](http://www.imdb.com/title/tt0172495/)
 - [Good Will Hunting (1997)](http://www.imdb.com/title/tt0119217/)
 - [Gran Torino (2008)](http://www.imdb.com/title/tt1205489/)
@@ -61,6 +64,7 @@ Films I like
 - [Once Upon a Time in America (1984)](http://www.imdb.com/title/tt0087843/)
 - [Once Upon a Time in the West (1968)](http://www.imdb.com/title/tt0064116/)
 - [Pan's Labyrinth (2006)](http://www.imdb.com/title/tt0457430/)
+- [Pay It Forward (2000)](http://www.imdb.com/title/tt0223897/)
 - [Perfume: Story of a Murderer (2006)]
 - [Premonition (2007)](http://www.imdb.com/title/tt0477071/)
 - [Pride & Prejudice (2005)]
