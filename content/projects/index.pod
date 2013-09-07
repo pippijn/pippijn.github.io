@@ -52,6 +52,8 @@ integration system. Here are the projects' build statuses:
 
 =item N<https://api.travis-ci.org/pippijn/deliantra.png> L<deliantra|https://github.com/pippijn/deliantra>
 
+=item N<https://api.travis-ci.org/pippijn/dreml.png> L<dreml|https://github.com/pippijn/dreml>
+
 =item N<https://api.travis-ci.org/pippijn/glr.png> L<glr|https://github.com/pippijn/glr>
 
 =item N<https://api.travis-ci.org/pippijn/hm-infer.png> L<hm-infer|https://github.com/pippijn/hm-infer>
