@@ -74,9 +74,9 @@ integration system. Here are the projects' build statuses:
 
 =item N<https://api.travis-ci.org/pippijn/pa_json.png> L<pa_json|https://github.com/pippijn/pa_json>
 
-=item N<https://api.travis-ci.org/pippijn/parmap.png> L<parmap|https://github.com/pippijn/parmap>
-
 =item N<https://api.travis-ci.org/pippijn/pa_unpack.png> L<pa_unpack|https://github.com/pippijn/pa_unpack>
+
+=item N<https://api.travis-ci.org/pippijn/parmap.png> L<parmap|https://github.com/pippijn/parmap>
 
 =item N<https://api.travis-ci.org/pippijn/re2ml.png> L<re2ml|https://github.com/pippijn/re2ml>
 
