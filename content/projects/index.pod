@@ -40,50 +40,50 @@ integration system. Here are the projects' build statuses:
 
 =over
 
-=item N<https://api.travis-ci.org/pippijn/aldor.png> L<aldor|https://github.com/pippijn/aldor>
+=item L<< N<https://api.travis-ci.org/pippijn/aldor.png>|https://travis-ci.org/pippijn/aldor >> L<aldor|https://github.com/pippijn/aldor>
 
-=item N<https://api.travis-ci.org/pippijn/baselib.png> L<baselib|https://github.com/pippijn/baselib>
+=item L<< N<https://api.travis-ci.org/pippijn/baselib.png>|https://travis-ci.org/pippijn/baselib >> L<baselib|https://github.com/pippijn/baselib>
 
-=item N<https://api.travis-ci.org/pippijn/codegen.png> L<codegen|https://github.com/pippijn/codegen>
+=item L<< N<https://api.travis-ci.org/pippijn/codegen.png>|https://travis-ci.org/pippijn/codegen >> L<codegen|https://github.com/pippijn/codegen>
 
-=item N<https://api.travis-ci.org/pippijn/cparseparse.png> L<cparseparse|https://github.com/pippijn/cparseparse>
+=item L<< N<https://api.travis-ci.org/pippijn/cparseparse.png>|https://travis-ci.org/pippijn/cparseparse >> L<cparseparse|https://github.com/pippijn/cparseparse>
 
-=item N<https://api.travis-ci.org/pippijn/cparser.png> L<cparser|https://github.com/pippijn/cparser>
+=item L<< N<https://api.travis-ci.org/pippijn/cparser.png>|https://travis-ci.org/pippijn/cparser >> L<cparser|https://github.com/pippijn/cparser>
 
-=item N<https://api.travis-ci.org/pippijn/deliantra.png> L<deliantra|https://github.com/pippijn/deliantra>
+=item L<< N<https://api.travis-ci.org/pippijn/deliantra.png>|https://travis-ci.org/pippijn/deliantra >> L<deliantra|https://github.com/pippijn/deliantra>
 
-=item N<https://api.travis-ci.org/pippijn/dreml.png> L<dreml|https://github.com/pippijn/dreml>
+=item L<< N<https://api.travis-ci.org/pippijn/dreml.png>|https://travis-ci.org/pippijn/dreml >> L<dreml|https://github.com/pippijn/dreml>
 
-=item N<https://api.travis-ci.org/pippijn/glr.png> L<glr|https://github.com/pippijn/glr>
+=item L<< N<https://api.travis-ci.org/pippijn/glr.png>|https://travis-ci.org/pippijn/glr >> L<glr|https://github.com/pippijn/glr>
 
-=item N<https://api.travis-ci.org/pippijn/hm-infer.png> L<hm-infer|https://github.com/pippijn/hm-infer>
+=item L<< N<https://api.travis-ci.org/pippijn/hm-infer.png>|https://travis-ci.org/pippijn/hm-infer >> L<hm-infer|https://github.com/pippijn/hm-infer>
 
-=item N<https://api.travis-ci.org/pippijn/jmlc.png> L<jmlc|https://github.com/pippijn/jmlc>
+=item L<< N<https://api.travis-ci.org/pippijn/jmlc.png>|https://travis-ci.org/pippijn/jmlc >> L<jmlc|https://github.com/pippijn/jmlc>
 
-=item N<https://api.travis-ci.org/pippijn/makequick.png> L<makequick|https://github.com/pippijn/makequick>
+=item L<< N<https://api.travis-ci.org/pippijn/makequick.png>|https://travis-ci.org/pippijn/makequick >> L<makequick|https://github.com/pippijn/makequick>
 
-=item N<https://api.travis-ci.org/pippijn/menhir.png> L<menhir|https://github.com/pippijn/menhir>
+=item L<< N<https://api.travis-ci.org/pippijn/menhir.png>|https://travis-ci.org/pippijn/menhir >> L<menhir|https://github.com/pippijn/menhir>
 
-=item N<https://api.travis-ci.org/pippijn/merr.png> L<merr|https://github.com/pippijn/merr>
+=item L<< N<https://api.travis-ci.org/pippijn/merr.png>|https://travis-ci.org/pippijn/merr >> L<merr|https://github.com/pippijn/merr>
 
-=item N<https://api.travis-ci.org/pippijn/mlspring.png> L<mlspring|https://github.com/pippijn/mlspring>
+=item L<< N<https://api.travis-ci.org/pippijn/mlspring.png>|https://travis-ci.org/pippijn/mlspring >> L<mlspring|https://github.com/pippijn/mlspring>
 
-=item N<https://api.travis-ci.org/pippijn/mlwidgets.png> L<mlwidgets|https://github.com/pippijn/mlwidgets>
+=item L<< N<https://api.travis-ci.org/pippijn/mlwidgets.png>|https://travis-ci.org/pippijn/mlwidgets >> L<mlwidgets|https://github.com/pippijn/mlwidgets>
 
-=item N<https://api.travis-ci.org/pippijn/oink-stack.png> L<oink-stack|https://github.com/pippijn/oink-stack>
+=item L<< N<https://api.travis-ci.org/pippijn/oink-stack.png>|https://travis-ci.org/pippijn/oink >> L<oink-stack|https://github.com/pippijn/oink-stack>
 
-=item N<https://api.travis-ci.org/pippijn/pa_json.png> L<pa_json|https://github.com/pippijn/pa_json>
+=item L<< N<https://api.travis-ci.org/pippijn/pa_json.png>|https://travis-ci.org/pippijn/pa_json >> L<pa_json|https://github.com/pippijn/pa_json>
 
-=item N<https://api.travis-ci.org/pippijn/pa_unpack.png> L<pa_unpack|https://github.com/pippijn/pa_unpack>
+=item L<< N<https://api.travis-ci.org/pippijn/pa_unpack.png>|https://travis-ci.org/pippijn/pa_unpack >> L<pa_unpack|https://github.com/pippijn/pa_unpack>
 
-=item N<https://api.travis-ci.org/pippijn/parmap.png> L<parmap|https://github.com/pippijn/parmap>
+=item L<< N<https://api.travis-ci.org/pippijn/parmap.png>|https://travis-ci.org/pippijn/parmap >> L<parmap|https://github.com/pippijn/parmap>
 
-=item N<https://api.travis-ci.org/pippijn/re2ml.png> L<re2ml|https://github.com/pippijn/re2ml>
+=item L<< N<https://api.travis-ci.org/pippijn/re2ml.png>|https://travis-ci.org/pippijn/re2ml >> L<re2ml|https://github.com/pippijn/re2ml>
 
-=item N<https://api.travis-ci.org/danmey/treematch.png> L<treematch|https://github.com/danmey/treematch>
+=item L<< N<https://api.travis-ci.org/danmey/treematch.png>|https://travis-ci.org/danmey/treematch >> L<treematch|https://github.com/danmey/treematch>
 
-=item N<https://api.travis-ci.org/pippijn/ucslib.png> L<ucslib|https://github.com/pippijn/ucslib>
+=item L<< N<https://api.travis-ci.org/pippijn/ucslib.png>|https://travis-ci.org/pippijn/ucslib >> L<ucslib|https://github.com/pippijn/ucslib>
 
-=item N<https://api.travis-ci.org/pippijn/yaccpp.png> L<yaccpp|https://github.com/pippijn/yaccpp>
+=item L<< N<https://api.travis-ci.org/pippijn/yaccpp.png>|https://travis-ci.org/pippijn/yaccpp >> L<yaccpp|https://github.com/pippijn/yaccpp>
 
 =back
