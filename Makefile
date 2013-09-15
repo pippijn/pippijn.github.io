@@ -2,7 +2,7 @@ FLAGS = --projects
 
 upload: build
 	@sed -i -e 's|"/home/|"/~pippijn/home/|g' $(HTML)
-	rsync -avP --delete home ra:public_html/
+	rsync -avP --delete home isis:public_html/
 	@sed -i -e 's|"/~pippijn/home/|"/home/|g' $(HTML)
 
 include ../generator/generator.mk
