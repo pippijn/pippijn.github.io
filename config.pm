@@ -8,6 +8,7 @@
 		[projects => "Projects", [
 			[devel => "Developer tools", [
 				[clangide => "Clang IDE"],
+				[codegen => "Codegen Library"],
 				[debuglib => "DebugLib"],
 				[perltypes => "PerlTypes"],
 				[makequick => "MakeQuick", [
@@ -17,9 +18,10 @@
 					[template => "Templates"],
 					[rules => "Rules"],
 				]],
-				[mlsmoke => "MLSmoke"],
+				[obuild => "OBuild"],
+				[mlsmoke => "OCaml Smoke"],
+				[widget => "OCaml Widgets"],
 				[ucslib => "UCS Library"],
-				[widget => "ML Widgets"],
 			]],
 			[edu => "Education", [
 				[gvoc => "GVoc"],
