@@ -146,9 +146,9 @@ the same order and comparisons are easier.
 target is a program with a single source file.
 
 </p> <pre class="code-block"><span class="Type">program</span> make <span class="Identifier">{</span>
-<span class="Type">sources</span> <span class="Identifier">{</span>
-   make.c
-<span class="Identifier">}</span>
+   <span class="Type">sources</span> <span class="Identifier">{</span>
+      make.c
+   <span class="Identifier">}</span>
 <span class="Identifier">}</span></pre> <p>If you wanted to build a library called 
   <code>libmake.la</code>, instead, you would
 substitute 
@@ -185,12 +185,12 @@ specifically the source directory. It does not match built files. If you want to
 distribute built sources, you need to list them, explicitly.
 
 </p> <pre class="code-block"><span class="Type">sources</span> <span class="Identifier">{</span>
-<span class="Comment"># All .c files in the current directory and descendants</span>
-**.c
-<span class="Comment"># Match ac.cc ad.cc bc.cc bd.cc</span>
-<span class="Identifier">{</span>a b<span class="Identifier">}{</span>c d<span class="Identifier">}</span>.cc
-<span class="Comment"># Explicit source</span>
-main.cpp
+   <span class="Comment"># All .c files in the current directory and descendants</span>
+   **.c
+   <span class="Comment"># Match ac.cc ad.cc bc.cc bd.cc</span>
+   <span class="Identifier">{</span>a b<span class="Identifier">}{</span>c d<span class="Identifier">}</span>.cc
+   <span class="Comment"># Explicit source</span>
+   main.cpp
 <span class="Identifier">}</span></pre> <p>Explicitly listed sources must either exist in the file system or be buildable
 via an explicit or pattern rule. Filenames can either be specified relative to
 the currently processed rules file or relative to the source root.
@@ -216,13 +216,13 @@ just with the base name.
 
 </p> <pre class="code-block"><span class="Comment"># sources for the math lib with emulated SSE</span>
 <span class="Type">sources</span> <span class="Identifier">{</span>
-<span class="Type">sources</span> (mathlib)
-<span class="Type">exclude</span> <span class="Identifier">{</span>
-   <span class="Comment"># do not import the SSE implementation</span>
-   math_sse.c
-<span class="Identifier">}</span>
-<span class="Comment"># we have an emulation</span>
-math_see_emu.c
+   <span class="Type">sources</span> (mathlib)
+   <span class="Type">exclude</span> <span class="Identifier">{</span>
+      <span class="Comment"># do not import the SSE implementation</span>
+      math_sse.c
+   <span class="Identifier">}</span>
+   <span class="Comment"># we have an emulation</span>
+   math_see_emu.c
 <span class="Identifier">}</span></pre> <p>A warning is issued if the imported set is empty after exclusions. It is an
 error to list the same file twice or to list a file that was already imported.
 It is, in fact, even an error to list two different files that ultimately target
@@ -247,8 +247,8 @@ This directive may also appear outside a target description.
 
 </p> <pre class="code-block"><span class="Comment"># include/Rules</span>
 <span class="Type">extra_dist</span> <span class="Identifier">{</span>
-<span class="Comment"># Distribute all header files (recursively matched)</span>
-**.h
+   <span class="Comment"># Distribute all header files (recursively matched)</span>
+   **.h
 <span class="Identifier">}</span></pre> <h4>link
 
 </h4> <p>In the 
@@ -266,9 +266,11 @@ add those checks, manually.
 
 
 </p> <pre class="code-block"><span class="Type">link</span> <span class="Identifier">{</span>
-<span class="Comment"># Link against the locally built libmylib.la</span>
-mylib   <span class="Comment"># Also link against GMP</span>
--lgmp
+   <span class="Comment"># Link against the locally built libmylib.la</span>
+   mylib
+
+   <span class="Comment"># Also link against GMP</span>
+   -lgmp
 <span class="Identifier">}</span></pre> <p>You may import 
   <code>link</code> sections the same way as sources can be imported. Global
 
@@ -282,12 +284,12 @@ link section.
 
 
 </p> <pre class="code-block"><span class="Type">link</span> <span class="Identifier">{</span>
-<span class="Comment"># Import global libraries</span>
-<span class="Type">link</span> ()
-<span class="Comment"># But don't link against GMP</span>
-<span class="Type">exclude</span> <span class="Identifier">{</span>
-   -lgmp
-<span class="Identifier">}</span>
+   <span class="Comment"># Import global libraries</span>
+   <span class="Type">link</span> ()
+   <span class="Comment"># But don't link against GMP</span>
+   <span class="Type">exclude</span> <span class="Identifier">{</span>
+      -lgmp
+   <span class="Identifier">}</span>
 <span class="Identifier">}</span></pre> <p>If the global link section links against a locally built library, that library
 excludes itself, automatically. Care must be taken with locally built libraries
 in the global link section. It is very easy to introduce dependency cycles, this
@@ -305,10 +307,10 @@ import global
 
 
 </p> <pre class="code-block"><span class="Type">cppflags</span> <span class="Identifier">{</span>
-<span class="Comment"># Import global CPPFLAGS</span>
-<span class="Type">cppflags</span> ()
-<span class="Comment"># Add target-specific CPPFLAGS</span>
--D_GNU_SOURCE
+   <span class="Comment"># Import global CPPFLAGS</span>
+   <span class="Type">cppflags</span> ()
+   <span class="Comment"># Add target-specific CPPFLAGS</span>
+   -D_GNU_SOURCE
 <span class="Identifier">}</span></pre> <h3>Conditions
 
 </h3> <p>All sections in a target description may be conditionalised. The condition must
@@ -321,14 +323,14 @@ the
 
 </p> <pre class="code-block"><span class="Comment"># Add these sources iff GMP is available and enabled</span>
 <span class="Type">sources</span> <span class="Statement">if</span> GMP <span class="Identifier">{</span>
-gmp_math.c
+   gmp_math.c
 <span class="Identifier">}</span></pre> <p>You may even conditionalise the entire target. Then all sections inside the
 target, except 
   <code>extra_dist</code>, are implicitly conditionalised.
 
 
 </p> <pre class="code-block"><span class="Type">program</span> pcregrep <span class="Statement">if</span> PCRE <span class="Identifier">{</span>
-...
+   ...
 <span class="Identifier">}</span></pre> <h3>Install targets
 
 </h3> <p>By default, programs are installed into 
@@ -339,7 +341,7 @@ into
 
 </p> <pre class="code-block"><span class="Comment"># install to $pkglibexecdir</span>
 <span class="Type">program</span> cc1plus <span class="Statement">-&gt;</span> pkglibexec <span class="Identifier">{</span>
-...
+   ...
 <span class="Identifier">}</span></pre> <p>TODO: There is no way to define custom install directories, for now.
 </p>
 		</div> 

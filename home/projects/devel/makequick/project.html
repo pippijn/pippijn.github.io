@@ -144,10 +144,14 @@ by the translator.
 
 
 </p> <pre class="code-block"><span class="Type">project</span> <span class="String">'MakePP'</span> <span class="Identifier">{</span>
-version<span class="Statement">:</span> <span class="String">'0.1'</span>
-contact<span class="Statement">:</span> <span class="String">'makepp@xinutec.org'</span>config_header<span class="Statement">:</span> config.h   <span class="Type">section</span> <span class="String">'some checks'</span> <span class="Identifier">{</span>
-   ...
-<span class="Identifier">}</span>
+   version<span class="Statement">:</span> <span class="String">'0.1'</span>
+   contact<span class="Statement">:</span> <span class="String">'makepp@xinutec.org'</span>
+
+   config_header<span class="Statement">:</span> config.h
+
+   <span class="Type">section</span> <span class="String">'some checks'</span> <span class="Identifier">{</span>
+      ...
+   <span class="Identifier">}</span>
 <span class="Identifier">}</span></pre> <h4>section
 
 </h4> <p>Configure time checks are grouped in sections for better readability. Each
@@ -164,11 +168,11 @@ program can be linked against it.
 </p> <pre class="code-block"><span class="Comment"># GNU Multiprecision Library, can be disabled with --without-gmp,</span>
 <span class="Comment"># if all targets defined in Rules files that link to it are optional.</span>
 <span class="Type">library</span> gmp <span class="Identifier">{</span>
-symbol<span class="Statement">:</span> mpz_init
-header<span class="Statement">:</span> gmp.h
-<span class="Comment"># You may optionally add a description to each check. This will cause it</span>
-<span class="Comment"># to appear in the summary at the end of a configure run.</span>
-<span class="String">'Build with GNU Multiprecision Library support'</span>
+   symbol<span class="Statement">:</span> mpz_init
+   header<span class="Statement">:</span> gmp.h
+   <span class="Comment"># You may optionally add a description to each check. This will cause it</span>
+   <span class="Comment"># to appear in the summary at the end of a configure run.</span>
+   <span class="String">'Build with GNU Multiprecision Library support'</span>
 <span class="Identifier">}</span></pre> <p>The above 
   <code>library</code> directive defines the following variables:
 
@@ -218,12 +222,12 @@ checks whether a list of functions is available.
 
 
 </p> <pre class="code-block"><span class="Type">headers</span> <span class="Identifier">{</span>
-<span class="Comment"># Valgrind runtime support</span>
-valgrind/valgrind.h
+   <span class="Comment"># Valgrind runtime support</span>
+   valgrind/valgrind.h
 <span class="Identifier">}</span>
 <span class="Type">functions</span> <span class="Identifier">{</span>
-<span class="Comment"># New POSIX signal handling</span>
-sigaction
+   <span class="Comment"># New POSIX signal handling</span>
+   sigaction
 <span class="Identifier">}</span></pre> <p>This directive only defines 
   <code>HAVE_</code> variables in the config header.
 
@@ -287,22 +291,22 @@ variables:
 </h5> <p>Instead of a yes/no, you can define your own options.
 
 </p> <pre class="code-block"><span class="Type">arg_enable</span> app <span class="Statement">=</span> iphone <span class="Identifier">{</span>
-<span class="String">'Build an app for this software. Only one app can be chosen'</span>
-<span class="Type">options</span> <span class="Identifier">{</span>
-   android <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
-      <span class="Comment"># check for additional libraries</span>
+   <span class="String">'Build an app for this software. Only one app can be chosen'</span>
+   <span class="Type">options</span> <span class="Identifier">{</span>
+      android <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
+         <span class="Comment"># check for additional libraries</span>
+      <span class="Identifier">}</span>
+      iphone <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
+         warning <span class="String">'Support for iPhones is unstable.'</span>
+      <span class="Identifier">}</span>
+      no <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
+         <span class="Comment"># no app is being built</span>
+      <span class="Identifier">}</span>
+      <span class="Comment"># optional catch-all option</span>
+<span class="Identifier">      _</span> <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
+         error <span class="String">'No support for the $app phone planned.'</span>
+      <span class="Identifier">}</span>
    <span class="Identifier">}</span>
-   iphone <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
-      warning <span class="String">'Support for iPhones is unstable.'</span>
-   <span class="Identifier">}</span>
-   no <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
-      <span class="Comment"># no app is being built</span>
-   <span class="Identifier">}</span>
-   <span class="Comment"># optional catch-all option</span>
-<span class="Identifier">   _</span> <span class="Statement">=&gt;</span> <span class="Identifier">{</span>
-      error <span class="String">'No support for the $app phone planned.'</span>
-   <span class="Identifier">}</span>
-<span class="Identifier">}</span>
 <span class="Identifier">}</span></pre> <p>The defined variables and macros are the same as with the normal yes/no
 
   <code>arg_enable</code>, except that the config header gets one macro per option, which is
@@ -322,14 +326,14 @@ and adds them to the named variable or
 
 </p> <pre class="code-block"><span class="Comment"># Adds to CFLAGS</span>
 <span class="Type">cflags</span> <span class="Identifier">{</span>
--pipe
--ggdb3
--pedantic
--ansi
+   -pipe
+   -ggdb3
+   -pedantic
+   -ansi
 <span class="Identifier">}</span>
 <span class="Comment"># Adds to HIDDEN_CFLAGS</span>
 <span class="Type">cflags</span> HIDDEN_CFLAGS <span class="Identifier">{</span>
--fvisibility<span class="Statement">=</span>hidden
+   -fvisibility<span class="Statement">=</span>hidden
 <span class="Identifier">}</span></pre> <p>Each of the flags is tested separately in the order listed. The set added to the
 variable is the subset of flags that work together.
 

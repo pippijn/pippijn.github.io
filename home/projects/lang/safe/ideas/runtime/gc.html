@@ -221,18 +221,20 @@ implemented in a smart way, but I have no clue about memory managers, so for
 the time being, I expect it to be reasonably fast).
 
 
-</p> <pre class="verbatim"></pre> <h3>Problems
+</p> <h3>Problems
 
 </h3> <h4>Interior pointers
 
 </h4> <p>In C, it is possible to have pointers to members of a struct. For example:
 
 </p> <pre class="code-block"><span class="Type">struct</span> buffer {
-string_t data;
-<span class="Type">size_t</span> pos;
-<span class="Type">size_t</span> len;
-};<span class="Type">size_t</span> @foo (buffer @buf) {
-<span class="Statement">return</span> &amp;buf-&gt;len;
+   string_t data;
+   <span class="Type">size_t</span> pos;
+   <span class="Type">size_t</span> len;
+};
+
+<span class="Type">size_t</span> @foo (buffer @buf) {
+   <span class="Statement">return</span> &amp;buf-&gt;len;
 }</pre> <p>When all references to 
   <code>buf</code> have gone out of scope, the pointer to its
 
@@ -248,7 +250,7 @@ reasons to keep them?). Either way, this has to be handled, somehow.
 the stack, something that looks like a pointer) points into and not just onto
 an object. This requirement prevents a simple hash lookup.
 
-</p> <pre class="verbatim"></pre> <h3>Scanning the stack
+</p> <h3>Scanning the stack
 
 </h3> <p>When scanning the stack, we need to iterate over it in pointer-size steps.  If
 we manage our own heap then each such candidate pointer should first be
@@ -260,7 +262,7 @@ that if we have a list of pointers to the beginning of our objects, then an
 interior pointer will cause a false negative, because it does not match any
 pointers, directly.
 
-</p> <pre class="verbatim"></pre> <h3>Interior pointers
+</p> <h3>Interior pointers
 
 </h3> <p>One possible solution would be to just generally store pointers as pointer +
 offset, but that would make everything slower and more complicated and it
@@ -291,11 +293,11 @@ us with less and less pointers as we scan the stack.
 some more intelligent ideas, we'll have to try the naive method as described
 above.
 
-</p> <pre class="verbatim"></pre> <h3>Collection algorithm
+</p> <h3>Collection algorithm
 
 </h3> <p>Currently, two solutions are up for debate:
 
-</p> <pre class="verbatim"></pre> <h4>Binary search on collection
+</p> <h4>Binary search on collection
 
 </h4> <p>This solution assumes a hash table or other kind of sparse array as pointer
 set so registering pointers on allocation and unregistering them on
@@ -382,7 +384,7 @@ allocated in the managed heap.
 </p> <p>Regions do not need to be scanned separately for pointers. Scanning global
 pointers, registers and the call stack is sufficient.
 
-</p> <pre class="verbatim"></pre> <h4>Interval tree as pointer set
+</p> <h4>Interval tree as pointer set
 
 </h4> <p>Another option is to use an interval tree instead of a hash table as data
 structure for the pointer set. This would increase the cost of allocation from
@@ -407,7 +409,7 @@ of over the pointer set size.
 </p> <p>It has to be evaluated, which alternative will be faster. The current belief is
 that the first one is more efficient.
 
-</p> <pre class="verbatim"></pre> <h3>Precise GC
+</p> <h3>Precise GC
 
 </h3> <p>In order to produce a completely precise garbage collector, code needs to be
 generated that registers all local pointers as roots on function entry and

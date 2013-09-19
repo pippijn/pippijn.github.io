@@ -116,19 +116,19 @@ fibonacci, you have to write code like this:
 <span class="Type">template</span>&lt;<span class="Type">int</span> N&gt;
 <span class="Type">struct</span> fibonacci
 {
-<span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> value = fibonacci&lt;N - <span class="Number">1</span>&gt;::value + fibonacci&lt;N - <span class="Number">2</span>&gt;::value;
+  <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> value = fibonacci&lt;N - <span class="Number">1</span>&gt;::value + fibonacci&lt;N - <span class="Number">2</span>&gt;::value;
 }
 <span class="Comment">// Specialise it for N == 0</span>
 <span class="Type">template</span>&lt;&gt;
 <span class="Type">struct</span> fibonacci&lt;<span class="Number">0</span>&gt;
 {
-<span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> value = <span class="Number">1</span>;
+  <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> value = <span class="Number">1</span>;
 }
 <span class="Comment">// Specialise it for N == 1</span>
 <span class="Type">template</span>&lt;&gt;
 <span class="Type">struct</span> fibonacci&lt;<span class="Number">1</span>&gt;
 {
-<span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> value = <span class="Number">1</span>;
+  <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> value = <span class="Number">1</span>;
 }
 <span class="Comment">// USe it like this:</span>
 <span class="Type">static</span> <span class="Type">int</span> <span class="Type">const</span> fib4 = fibonacci&lt;<span class="Number">4</span>&gt;::value;</pre> <p>In languages such as Lisp and D, which have compile-time code execution built
@@ -136,11 +136,11 @@ in, writing such an expression is equal to writing normal code:
 
 </p> <pre class="code-block"><span class="Comment">; Macro to calculate fibonacci numbers</span>
 <span class="Special">(</span><span class="Statement">defmacro</span> fib <span class="Special">(</span>n<span class="Special">)</span>
-<span class="Special">(</span><span class="Statement">labels</span> <span class="Special">((</span>fib <span class="Special">(</span>n<span class="Special">)</span>
-           <span class="Special">(</span><span class="Statement">if</span> <span class="Special">(</span><span class="Statement">&lt;=</span> n <span class="Number">1</span><span class="Special">)</span>
-             n
-             <span class="Special">(</span><span class="Statement">+</span> <span class="Special">(</span>fib <span class="Special">(</span><span class="Statement">-</span> n <span class="Number">1</span><span class="Special">))</span> <span class="Special">(</span>fib <span class="Special">(</span><span class="Statement">-</span> n <span class="Number">2</span><span class="Special">))))))</span>
-  <span class="Special">(</span>fib n<span class="Special">)))</span>
+  <span class="Special">(</span><span class="Statement">labels</span> <span class="Special">((</span>fib <span class="Special">(</span>n<span class="Special">)</span>
+             <span class="Special">(</span><span class="Statement">if</span> <span class="Special">(</span><span class="Statement">&lt;=</span> n <span class="Number">1</span><span class="Special">)</span>
+               n
+               <span class="Special">(</span><span class="Statement">+</span> <span class="Special">(</span>fib <span class="Special">(</span><span class="Statement">-</span> n <span class="Number">1</span><span class="Special">))</span> <span class="Special">(</span>fib <span class="Special">(</span><span class="Statement">-</span> n <span class="Number">2</span><span class="Special">))))))</span>
+    <span class="Special">(</span>fib n<span class="Special">)))</span>
 <span class="Comment">; Use it like this:</span>
 <span class="Special">(</span><span class="Statement">print</span> <span class="Special">(</span>fib <span class="Number">4</span><span class="Special">))</span></pre> <p>The macro is expanded at compile-time. The D programming language has static
 evaluation of complex constant functions. The new C++ standard allows for these,
@@ -157,7 +157,7 @@ raitsT = adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt
 :hash_policy&gt;::type&gt;::type&lt;<span class="Type">int</span>, <span class="Type">int</span>&gt;]’
 /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">1248</span>:   instantiated from ‘<span class="Type">typename</span> adt::detail::choose_tr
 aits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt;::value_type&amp; adt::hash_table&lt;KeyT, ValueT, Policy, PairT,
-FullTraitsT, TraitsT&gt;::<span class="Statement">operator</span>[](<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
+ FullTraitsT, TraitsT&gt;::<span class="Statement">operator</span>[](<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
 &lt;KeyT, ValueT&gt;::key_type&amp;) [with KeyT = <span class="Type">int</span>, ValueT = <span class="Type">int</span>, adt::rp::resize_policy Policy = DEFAULT, PairT = std::pair,
 FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type]’
 /home/pippijn/rona/devel/librona/run.cc:<span class="Number">20</span>:   instantiated from here
@@ -173,7 +173,7 @@ raitsT = adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt
 :hash_policy&gt;::type&gt;::type&lt;<span class="Type">long</span> <span class="Type">int</span>, <span class="Type">long</span> <span class="Type">int</span>&gt;]’
 /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">1248</span>:   instantiated from ‘<span class="Type">typename</span> adt::detail::choose_tr
 aits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt;::value_type&amp; adt::hash_table&lt;KeyT, ValueT, Policy, PairT,
-FullTraitsT, TraitsT&gt;::<span class="Statement">operator</span>[](<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
+ FullTraitsT, TraitsT&gt;::<span class="Statement">operator</span>[](<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
 &lt;KeyT, ValueT&gt;::key_type&amp;) [with KeyT = <span class="Type">long</span> <span class="Type">int</span>, ValueT = <span class="Type">long</span> <span class="Type">int</span>, adt::rp::resize_policy Policy = DEFAULT, PairT = s
 td::pair, FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::type]’
 /home/pippijn/rona/devel/librona/run.cc:<span class="Number">127</span>:   instantiated from here
@@ -190,7 +190,7 @@ raitsT = adt::detail::choose_traits&lt;DEFAULT, std::pair, adt::hash_policy, adt
 :hash_policy&gt;::type&gt;::type&lt;adt::scalar, adt::scalar&gt;]’
 /home/pippijn/rona/devel/librona/include/AD/hash/hashtable.h:<span class="Number">1248</span>:   instantiated from ‘<span class="Type">typename</span> adt::detail::choose_tr
 aits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type&lt;KeyT, ValueT&gt;::value_type&amp; adt::hash_table&lt;KeyT, ValueT, Policy, PairT,
-FullTraitsT, TraitsT&gt;::<span class="Statement">operator</span>[](<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
+ FullTraitsT, TraitsT&gt;::<span class="Statement">operator</span>[](<span class="Type">const</span> <span class="Type">typename</span> adt::detail::choose_traits&lt;Policy, PairT, FullTraitsT, TraitsT&gt;::type
 &lt;KeyT, ValueT&gt;::key_type&amp;) [with KeyT = adt::scalar, ValueT = adt::scalar, adt::rp::resize_policy Policy = DEFAULT, Pai
 rT = std::pair, FullTraitsT = adt::hash_policy, TraitsT = adt::detail::fill_in&lt;DEFAULT, std::pair, adt::hash_policy&gt;::t
 ype]’
@@ -243,12 +243,12 @@ to, you can still do it:
 <span class="Type">class</span> point
 {
 <span class="Statement">private</span>:
-<span class="Type">int</span> <span class="Type">const</span> x_;
-<span class="Type">int</span> <span class="Type">const</span> y_;
+  <span class="Type">int</span> <span class="Type">const</span> x_;
+  <span class="Type">int</span> <span class="Type">const</span> y_;
 <span class="Statement">public</span>:
-point (<span class="Type">int</span> x, <span class="Type">int</span> y) : x_ (x), y_ (y) { }
-<span class="Type">int</span> x () { <span class="Statement">return</span> x_; }
-<span class="Type">int</span> y () { <span class="Statement">return</span> y_; }
+  point (<span class="Type">int</span> x, <span class="Type">int</span> y) : x_ (x), y_ (y) { }
+  <span class="Type">int</span> x () { <span class="Statement">return</span> x_; }
+  <span class="Type">int</span> y () { <span class="Statement">return</span> y_; }
 };</pre> <p>Now we can just define the exact same class but with the 
   <code>public</code> keyword moved
 up two lines, get rid of the 
@@ -387,24 +387,24 @@ like this:
 
 </p> <pre class="code-block"><span class="Type">struct</span> equality_predicate
 {
-equality_predicate (<span class="Type">char</span> <span class="Type">const</span> *key) : key_ (key) { }
-<span class="Type">bool</span> <span class="Statement">operator</span> () (<span class="Type">char</span> <span class="Type">const</span> *key)
-{
-  <span class="Statement">return</span> !strcmp (key, key_);
-}
+  equality_predicate (<span class="Type">char</span> <span class="Type">const</span> *key) : key_ (key) { }
+  <span class="Type">bool</span> <span class="Statement">operator</span> () (<span class="Type">char</span> <span class="Type">const</span> *key)
+  {
+    <span class="Statement">return</span> !strcmp (key, key_);
+  }
 <span class="Statement">private</span>:
-<span class="Type">char</span> <span class="Type">const</span> *key_;
+  <span class="Type">char</span> <span class="Type">const</span> *key_;
 };
 std::find (c.begin (), c.end (), equality_predicate (key)); <span class="Comment">// c is a linear container</span></pre> <p>In Java, this code becomes a little less verbose, if the Collection was sorted:
 
 </p> <pre class="code-block">Collections.binarySearch(c, key, <span class="Statement">new</span> Comparator&lt;String&gt;() {
-<span class="Type">public</span> <span class="Type">int</span> compare(String a, String b) {
-    <span class="Statement">return</span> a.compareTo(b);
-}
+    <span class="Type">public</span> <span class="Type">int</span> compare(String a, String b) {
+        <span class="Statement">return</span> a.compareTo(b);
+    }
 });</pre> <p>Or, in languages with functional elements such as Perl:
 
 </p> <pre class="code-block"><span class="Identifier">$c</span><span class="Identifier">-&gt;find</span> (<span class="Identifier">$key</span>, <span class="Statement">sub </span>{
-<span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span> <span class="Statement">eq</span> <span class="Identifier">$_[</span><span class="Number">1</span><span class="Identifier">]</span>
+   <span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span> <span class="Statement">eq</span> <span class="Identifier">$_[</span><span class="Number">1</span><span class="Identifier">]</span>
 });</pre> <h3>Operator overloading can make code complicated (@overload)
 
 </h3> <p>In C++, almost every operator can be overloaded. This includes 
@@ -436,32 +436,32 @@ to be understood.
 
 </p> <pre class="code-block"><span class="Type">class</span> Point
 {
-<span class="Type">int</span> x, y;
-Point(<span class="Type">int</span> x, <span class="Type">int</span> y)
-{
-    <span class="Type">this</span>.x = x;
-    <span class="Type">this</span>.y = y;
-}
-Point(<span class="Type">int</span> xAndY)
-{
-    <span class="Type">this</span>(xAndY, xAndY);
-}
+    <span class="Type">int</span> x, y;
+    Point(<span class="Type">int</span> x, <span class="Type">int</span> y)
+    {
+        <span class="Type">this</span>.x = x;
+        <span class="Type">this</span>.y = y;
+    }
+    Point(<span class="Type">int</span> xAndY)
+    {
+        <span class="Type">this</span>(xAndY, xAndY);
+    }
 }
 </pre> <p>this is not possible at all in C++. One can not chain constructors (this has
 been fixed in C++11). Trying it like this:
 
 </p> <pre class="code-block"><span class="Type">class</span> Point
 {
-<span class="Type">int</span> x, y;
-Point (<span class="Type">int</span> x, <span class="Type">int</span> y)
-{
-    <span class="Statement">this</span>-&gt;x = x;
-    <span class="Statement">this</span>-&gt;y = y;
-}
-Point (<span class="Type">int</span> xAndY)
-{
-    Point (xAndY, xAndY); <span class="Comment">// The other constructor is indeed called, but not for 'this'</span>
-}
+    <span class="Type">int</span> x, y;
+    Point (<span class="Type">int</span> x, <span class="Type">int</span> y)
+    {
+        <span class="Statement">this</span>-&gt;x = x;
+        <span class="Statement">this</span>-&gt;y = y;
+    }
+    Point (<span class="Type">int</span> xAndY)
+    {
+        Point (xAndY, xAndY); <span class="Comment">// The other constructor is indeed called, but not for 'this'</span>
+    }
 };</pre> <p>does call the other constructor but creates an anonymous 
   <code>Point</code> on the stack
 and discards it right away. Trying to copy the Java syntax 

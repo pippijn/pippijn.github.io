@@ -79,7 +79,7 @@ usually represented by a
 well be represented by an octet string or a 32 bit integer string.
 
 
-</p> <pre class="verbatim"></pre> <h3>Different representations
+</p> <h3>Different representations
 
 </h3> <h4>NUL terminated
 
@@ -155,7 +155,7 @@ represented in memory.
     
     </p>
   </li>
-</ul> <pre class="verbatim"></pre> <h4>struct string
+</ul> <h4>struct string
 
 </h4> <p>A more sophisticated string representation is the following struct, frequently
 used by C++'s 
@@ -164,9 +164,9 @@ used by C++'s
 
 </p> <pre class="code-block"><span class="Type">struct</span> string
 {
-<span class="Type">char</span> *rep;
-<span class="Type">size_t</span> len;
-<span class="Type">size_t</span> max;
+  <span class="Type">char</span> *rep;
+  <span class="Type">size_t</span> len;
+  <span class="Type">size_t</span> max;
 };
 </pre> <p>
   <code>string.rep</code> is the internal representation of the string, which is just a
@@ -216,7 +216,7 @@ it needs a reallocation.
     
     </p>
   </li>
-</ul> <pre class="verbatim"></pre> <h4>Netstring
+</ul> <h4>Netstring
 
 </h4> <p>
   <a href="http://cr.yp.to/proto/netstrings.txt">Netstrings</a> are strings in the form
@@ -265,7 +265,7 @@ it needs a reallocation.
     
     </p>
   </li>
-</ul> <pre class="verbatim"></pre> <h4>String with size prepended
+</ul> <h4>String with size prepended
 
 </h4> <p>This is a 
   <code>char*</code> object that looks just like any normal C string, except
