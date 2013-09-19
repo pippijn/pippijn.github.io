@@ -131,17 +131,17 @@
 </h3> <p>Perl code:
 
 </p> <pre class="code-block"><span class="Statement">sub </span><span class="Identifier">say </span>{
-  <span class="Statement">print</span> <span class="String">&quot;</span><span class="Identifier">$_</span><span class="String">: </span><span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span><span class="String"> and </span><span class="Identifier">$_[</span><span class="Number">1</span><span class="Identifier">]</span><span class="Special">\n</span><span class="String">&quot;</span>
-     <span class="Statement">for</span> <span class="Number">1</span> .. <span class="Identifier">$_[</span><span class="Number">2</span><span class="Identifier">]</span>;
-  <span class="Number">300</span>
+   <span class="Statement">print</span> <span class="String">&quot;</span><span class="Identifier">$_</span><span class="String">: </span><span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span><span class="String"> and </span><span class="Identifier">$_[</span><span class="Number">1</span><span class="Identifier">]</span><span class="Special">\n</span><span class="String">&quot;</span>
+      <span class="Statement">for</span> <span class="Number">1</span> .. <span class="Identifier">$_[</span><span class="Number">2</span><span class="Identifier">]</span>;
+   <span class="Number">300</span>
 }
 
 <span class="Statement">sub </span><span class="Identifier">test_invoke1 </span>{
-  <span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span>-&gt;(<span class="String">'</span><span class="String">world</span><span class="String">'</span>)
+   <span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span>-&gt;(<span class="String">'</span><span class="String">world</span><span class="String">'</span>)
 }
 
 <span class="Statement">sub </span><span class="Identifier">test_invoke2 </span>{
-  <span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span>-&gt;(<span class="String">'</span><span class="String">world</span><span class="String">'</span>)-&gt;(<span class="String">'</span><span class="String">hehe</span><span class="String">'</span>)
+   <span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span>-&gt;(<span class="String">'</span><span class="String">world</span><span class="String">'</span>)-&gt;(<span class="String">'</span><span class="String">hehe</span><span class="String">'</span>)
 }</pre> <p>OCaml code:
 
 </p> <pre class="code-block"><span class="Statement">open</span> <span class="Include">Perl.Foreign</span>
@@ -186,7 +186,7 @@ closure call returned: hello world, hehe</pre>
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu Sep 19 19:23:55 MEST 2013</div> 
+			<div id="updated">Last updated Thu Sep 19 19:48:57 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 
