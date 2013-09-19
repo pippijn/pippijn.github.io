@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Programming / Cpp / Speed"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -80,7 +80,7 @@ C++ is faster than C and pointed at templates. In this article, I will try to
 evaluate the truth of both opinions. In order to do this, I will present a few
 C++ features and possible implementations of them in C.
 
-</p> <h3>Inheritance
+</p> <pre class="verbatim"></pre> <h3>Inheritance
 
 </h3> <p>In C++, there is the possibility of &lt;acronym title="Classes are user defined
  types defined with the 'class' or 'struct' keyword"&gt;class&lt;/acronym&gt;es
@@ -89,15 +89,11 @@ be:
 
 </p> <pre class="code-block"><span class="Type">struct</span> Base
 {
-  <span class="Type">int</span> a;
-};
-
-<span class="Type">struct</span> Derived : Base
+<span class="Type">int</span> a;
+};<span class="Type">struct</span> Derived : Base
 {
-  <span class="Type">int</span> b;
-};
-
-<span class="Comment">// Now, we can have an object of type Derived and modify its data members</span>
+<span class="Type">int</span> b;
+};<span class="Comment">// Now, we can have an object of type Derived and modify its data members</span>
 <span class="Comment">// a and b directly.</span>
 Derived d;
 d.a = <span class="Number">3</span>;
@@ -118,52 +114,40 @@ the body of
   <code>Derived</code>.
 
 
-</p> <h5>Possibility 1
+</p> <pre class="verbatim"></pre> <h5>Possibility 1
 
 </h5> <pre class="code-block"><span class="Type">struct</span> Base
 {
-  <span class="Type">int</span> a;
-};
-
-<span class="Type">struct</span> Derived
+<span class="Type">int</span> a;
+};<span class="Type">struct</span> Derived
 {
-  <span class="Type">struct</span> Base base;
-  <span class="Type">int</span> b;
-};
-
-<span class="Comment">// Define an object of type Derived</span>
+<span class="Type">struct</span> Base base;
+<span class="Type">int</span> b;
+};<span class="Comment">// Define an object of type Derived</span>
 <span class="Type">struct</span> Derived d;
 d.base.a = <span class="Number">3</span>; <span class="Comment">// or: ((struct Base *)&amp;d)-&gt;a = 3;</span>
 d.b = <span class="Number">4</span>;
 <span class="Comment">// We can either explicitly convert a pointer to this object to Base</span>
 <span class="Type">struct</span> Base *b = (<span class="Type">struct</span> Base *)&amp;d;
 <span class="Comment">// or take the address of the base object</span>
-<span class="Type">struct</span> Base *b = &amp;d.base;</pre> <h5>Possibility 2
+<span class="Type">struct</span> Base *b = &amp;d.base;</pre> <pre class="verbatim"></pre> <h5>Possibility 2
 
 </h5> <pre class="code-block"><span class="Type">struct</span> Base
 {
-  <span class="Type">int</span> a;
-};
-
-<span class="Type">struct</span> Derived
+<span class="Type">int</span> a;
+};<span class="Type">struct</span> Derived
 {
-  <span class="Type">int</span> a;
-  <span class="Type">int</span> b;
-};
-
-<span class="Comment">// Or:</span>
+<span class="Type">int</span> a;
+<span class="Type">int</span> b;
+};<span class="Comment">// Or:</span>
 <span class="Type">struct</span> Base
 {
 <span class="Include">#include </span><span class="String">&quot;Base_body.h&quot;</span>
-};
-
-<span class="Type">struct</span> Derived
+};<span class="Type">struct</span> Derived
 {
 <span class="Include">#include </span><span class="String">&quot;Base_body.h&quot;</span>
 <span class="Include">#include </span><span class="String">&quot;Derived_body.h&quot;</span>
-};
-
-<span class="Comment">// Define an object of type Derived</span>
+};<span class="Comment">// Define an object of type Derived</span>
 <span class="Type">struct</span> Derived d;
 d.a = <span class="Number">3</span>;
 d.b = <span class="Number">4</span>;
@@ -178,7 +162,7 @@ because it has to know intimate details about the class layout or use accessor
 and mutator functions all the time.
 
 
-</p> <h3>Member functions
+</p> <pre class="verbatim"></pre> <h3>Member functions
 
 </h3> <p>C++ has the notion of (non-static) member functions, which are like normal
 functions except they are called "on" an object. By calling a non-static
@@ -191,35 +175,23 @@ C, too, except that the syntax looks a bit different:
 </p> <pre class="code-block"><span class="Comment">// C++</span>
 <span class="Type">struct</span> Base
 {
-  <span class="Type">int</span> a;
-  <span class="Type">void</span> foo () { a = <span class="Number">3</span>; }
-};
-
-<span class="Type">struct</span> Derived : Base
+<span class="Type">int</span> a;
+<span class="Type">void</span> foo () { a = <span class="Number">3</span>; }
+};<span class="Type">struct</span> Derived : Base
 {
-  <span class="Type">int</span> b;
-};
-
-Derived d;
+<span class="Type">int</span> b;
+};Derived d;
 d.foo ();
 Base &amp;b = d;
-b.foo ();
-
-<span class="Comment">// C:</span>
+b.foo ();<span class="Comment">// C:</span>
 <span class="Type">struct</span> Base
 {
-  <span class="Type">int</span> a;
-};
-
-<span class="Type">static</span> <span class="Type">void</span> Base_foo (<span class="Type">struct</span> Base *<span class="Statement">this</span>) { <span class="Statement">this</span>-&gt;a = <span class="Number">3</span>; }
-
-<span class="Type">struct</span> Derived
+<span class="Type">int</span> a;
+};<span class="Type">static</span> <span class="Type">void</span> Base_foo (<span class="Type">struct</span> Base *<span class="Statement">this</span>) { <span class="Statement">this</span>-&gt;a = <span class="Number">3</span>; }<span class="Type">struct</span> Derived
 {
-  <span class="Type">int</span> a;
-  <span class="Type">int</span> b;
-};
-
-<span class="Type">struct</span> Derived d;
+<span class="Type">int</span> a;
+<span class="Type">int</span> b;
+};<span class="Type">struct</span> Derived d;
 Base_foo ((<span class="Type">struct</span> Base *)&amp;d);
 <span class="Type">struct</span> Base *b = &amp;d;
 Base_foo (b);</pre> <p>If you want to override 
@@ -233,7 +205,7 @@ callers, as well as adding a
 function calls are used.
 
 
-</p> <h3>Virtual function calls
+</p> <pre class="verbatim"></pre> <h3>Virtual function calls
 
 </h3> <p>Until now, the C and C++ implementation have been reasonably equal in both
 development time and execution time. With compiler optimisation, both generate

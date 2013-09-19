@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Aldor"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -165,9 +165,7 @@
   <a href="http://pippijn.github.io/aldor/eval/">Try it online</a>
 
 
-</p> <pre class="code-block"><span class="Include">#include </span><span class="String">&quot;aldor&quot;</span>
-
-<span class="Constant">stderr</span> <span class="Statement">&lt;&lt;</span> <span class="String">&quot;Hello world&quot;</span> <span class="Statement">&lt;&lt;</span> <span class="Constant">newline</span>;</pre> <h3>The Language
+</p> <pre class="code-block"><span class="Include">#include </span><span class="String">&quot;aldor&quot;</span><span class="Include">stderr</span> <span class="Statement">&lt;&lt;</span> <span class="String">&quot;Hello world&quot;</span> <span class="Statement">&lt;&lt;</span> <span class="Constant">newline</span>;</pre> <pre class="verbatim"></pre> <h3>The Language
 
 </h3> <p>From 
   <a href="http://en.wikipedia.org/wiki/Aldor">Wikipedia</a>:
@@ -182,7 +180,7 @@ types to be used as first-class values. Aldor's syntax is heavily influenced by
 Pascal, but it is optionally indentation-sensitive, like Python. In its current
 implementation, it is compiled, but an interactive listener is provided.
 
-</p> <h3>Why Aldor?
+</p> <pre class="verbatim"></pre> <h3>Why Aldor?
 
 </h3> <p>This is of course the question every language developer is asked: Why do we need
 another language? Can't we do all that with other languages, already? What about
@@ -257,10 +255,8 @@ the community, the library support, etc? Why do I even bother developing Aldor?
     <p>The output from the above code would be:
     
     </p>
-    <pre>  4
-      2
-    
-    </pre>
+    <pre class="verbatim">4
+    2</pre>
     <p>The value a type depends on may be any constant value of any type, unlike in
     C++, where only types, integers, templates and pointers are allowed. Since types
     are values in Aldor, you can also have types depending on other types, which

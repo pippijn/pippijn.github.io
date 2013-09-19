@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Language / Iterators"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -196,17 +196,17 @@
 
 </p> <pre class="code-block">let i = string_iterator (<span class="String">&quot;hello&quot;</span>);
 <span class="Statement">while</span> (i) {       <span class="Comment">// conversion to bool acts like hasNext</span>
-   putchar (*i);  <span class="Comment">// * operator yields the current item</span>
-   ++i;           <span class="Comment">// perhaps, similar to C++ iterators,</span>
-                  <span class="Comment">// skips to the next element</span>
-   i += <span class="Number">2</span>;        <span class="Comment">// skips 2 elements</span>
+putchar (*i);  <span class="Comment">// * operator yields the current item</span>
+++i;           <span class="Comment">// perhaps, similar to C++ iterators,</span>
+               <span class="Comment">// skips to the next element</span>
+i += <span class="Number">2</span>;        <span class="Comment">// skips 2 elements</span>
 }</pre> <p>The decrement and subtraction operators can be implemented analogically.
 
 </p> <p>Or we could take some ideas from the Sather programming language.
 
 </p> <pre class="code-block"><span class="Statement">while</span> {
-   let c = string_iterator! (<span class="String">&quot;hello&quot;</span>);
-   putchar (c);
+let c = string_iterator! (<span class="String">&quot;hello&quot;</span>);
+putchar (c);
 }</pre> <p>In this example, incrementing or decrementing the iterator is not possible.
 Maybe we don't need that. How to do this in Sather? This needs some thought.
 </p>

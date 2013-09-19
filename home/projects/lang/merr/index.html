@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Merr"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -160,18 +160,16 @@ paper introducing the concepts.
   <a href="https://github.com/pippijn/merr">Git repository</a>
 
 
-</p> <h3>Usage
+</p> <pre class="verbatim"></pre> <pre class="verbatim"></pre> <h3>Usage
 
 </h3> <p>The merr program takes several inputs to produce its error message function
 from.
 
-</p> <pre>   -t &lt;terminals&gt;
-   -e &lt;errors.ml.in&gt;
-   -a &lt;automaton&gt;
-   -p &lt;parser command&gt;
-   -o &lt;output.ml&gt;
-
-</pre> <h4>Terminal names
+</p> <pre class="verbatim">-t &lt;terminals&gt;
+-e &lt;errors.ml.in&gt;
+-a &lt;automaton&gt;
+-p &lt;parser command&gt;
+-o &lt;output.ml&gt;</pre> <h4>Terminal names
 
 </h4> <p>The terminals file contains an ocamlyacc grammar or tokens file amended with
 token names. An extract of this file could look like this:
@@ -191,7 +189,7 @@ like
   <code>%.mly: %.mly.in</code>.
 
 
-</p> <h4>Sample file
+</p> <pre class="verbatim"></pre> <h4>Sample file
 
 </h4> <p>The second input expected by merr is the sample file. Merr works by passing each
 sample input to the parser, which should be instrumented to print a pair of
@@ -214,18 +212,14 @@ excerpt from merr's own error description.
 
 </p> <pre class="code-block"><span class="Statement">module</span><span class="Include"> Tokens</span> <span class="Statement">=</span> <span class="Include">Etokens</span>
 <span class="Statement">open</span> <span class="Include">Etoken</span> <span class="Comment">(* provides string_of_token *)</span>
-<span class="Statement">open</span> <span class="Include">Tokens</span> <span class="Comment">(* provides the 'token' type *)</span>
-
-<span class="Statement">let</span> message <span class="Statement">=</span> <span class="Conceal">λ</span>
-  <span class="Statement">|</span> <span class="String">&quot;open&quot;</span> <span class="Conceal">→</span> <span class="Conceal">λ</span>
-    <span class="Statement">|</span> <span class="Constant">EOF</span>               <span class="Conceal">→</span> <span class="String">&quot;expected module name after 'open'&quot;</span>
-    <span class="Statement">|</span> <span class="Constant">TkIDENTIFIER</span>      <span class="Conceal">→</span> <span class="String">&quot;unexpected identifier `%s' after 'open'&quot;</span>
-                           <span class="String">&quot;expected module name (capitalised)&quot;</span>
-    <span class="Statement">|</span> <span class="Statement">_</span>                 <span class="Conceal">→</span> <span class="String">&quot;unexpected token '%s' in handler definition&quot;</span>
-
-  <span class="Statement">|</span> <span class="String">&quot;open Foo let message = function&quot;</span> <span class="Conceal">→</span> <span class="Conceal">λ</span>
-    <span class="Statement">|</span> <span class="Constant">EOF</span>                 <span class="Conceal">→</span> <span class="String">&quot;expected '|'-separated code fragments&quot;</span>
-    <span class="Statement">|</span> <span class="Statement">_</span>                   <span class="Conceal">→</span> <span class="String">&quot;unexpected token '%s' where code fragments expected&quot;</span>
+<span class="Statement">open</span> <span class="Include">Tokens</span> <span class="Comment">(* provides the 'token' type *)</span><span class="Statement">let</span> message <span class="Statement">=</span> <span class="Conceal">λ</span>
+<span class="Statement">|</span> <span class="String">&quot;open&quot;</span> <span class="Conceal">→</span> <span class="Conceal">λ</span>
+  <span class="Statement">|</span> <span class="Constant">EOF</span>               <span class="Conceal">→</span> <span class="String">&quot;expected module name after 'open'&quot;</span>
+  <span class="Statement">|</span> <span class="Constant">TkIDENTIFIER</span>      <span class="Conceal">→</span> <span class="String">&quot;unexpected identifier `%s' after 'open'&quot;</span>
+                         <span class="String">&quot;expected module name (capitalised)&quot;</span>
+  <span class="Statement">|</span> <span class="Statement">_</span>                 <span class="Conceal">→</span> <span class="String">&quot;unexpected token '%s' in handler definition&quot;</span><span class="Statement">|</span> <span class="String">&quot;open Foo let message = function&quot;</span> <span class="Conceal">→</span> <span class="Conceal">λ</span>
+<span class="Statement">|</span> <span class="Constant">EOF</span>                 <span class="Conceal">→</span> <span class="String">&quot;expected '|'-separated code fragments&quot;</span>
+<span class="Statement">|</span> <span class="Statement">_</span>                   <span class="Conceal">→</span> <span class="String">&quot;unexpected token '%s' where code fragments expected&quot;</span>
 </pre> <p>One or more 
   <code>open</code> directives are always required, and the opened modules
 should provide the function 
@@ -265,7 +259,7 @@ handling for multiple distinct code samples (and therefore states).
 different states in the parser, so that there can be no ambiguities about which
 error message to display for a given error.
 
-</p> <h4>Automaton file
+</p> <pre class="verbatim"></pre> <h4>Automaton file
 
 </h4> <p>As a secondary source of error messages, the merr program will try to find out
 what tokens would allow a shift action in the parser. It will present the user
@@ -275,7 +269,7 @@ description parseable by merr, using the option
   <code>-dump</code>.
 
 
-</p> <h4>Using the function
+</p> <pre class="verbatim"></pre> <h4>Using the function
 
 </h4> <p>After the parser has been run on the inputs and the error message function has
 been generated, it can be called when an error occurs in the parser. The

@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Language / Modules"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -208,10 +208,10 @@ handle, such as:
   <li>global non-constant initialisation
   
   </li>
-</ul> <p>The already implemented strong static typing means only little work is needed
+</ul> <pre class="verbatim"></pre> <p>The already implemented strong static typing means only little work is needed
 to implement this.
 
-</p> <h3>Initialisation
+</p> <pre class="verbatim"></pre> <h3>Initialisation
 
 </h3> <p>In order to register global pointers as GC roots (see 
   <a href="../runtime/gc">GC</a>), each
@@ -222,26 +222,20 @@ call the initialisation function of every module it uses.
 
 </p> <p>The initialisation function will be emitted in the primary implementation file.
 
-</p> <h3>Primary implementation file
+</p> <pre class="verbatim"></pre> <h3>Primary implementation file
 
 </h3> <p>The idea is that a programmer can write something like:
 
 </p> <pre class="code-block"><span class="Comment">// buffer.h</span>
 <span class="Type">namespace</span> Buffer {
-   <span class="Type">extern</span> <span class="Type">struct</span> t;
-   <span class="Type">typedef</span> <span class="Type">struct</span> t @T;
-
-   <span class="Comment">// constructor</span>
-   <span class="Type">extern</span> T create (<span class="Type">size_t</span> n);
-
-   <span class="Comment">// accessors</span>
-   <span class="Type">extern</span> mstring_t data (T self);
-   <span class="Type">extern</span> <span class="Type">size_t</span> length (T self);
-
-   <span class="Comment">// mutators</span>
-   <span class="Type">extern</span> <span class="Type">void</span> clear (T self);
-   <span class="Type">extern</span> <span class="Type">void</span> add_char (T self, <span class="Type">char</span> c);
-   <span class="Type">extern</span> <span class="Type">void</span> add_str (T self, string_t s);
+<span class="Type">extern</span> <span class="Type">struct</span> t;
+<span class="Type">typedef</span> <span class="Type">struct</span> t @T;<span class="Comment">// constructor</span>
+<span class="Type">extern</span> T create (<span class="Type">size_t</span> n);<span class="Comment">// accessors</span>
+<span class="Type">extern</span> mstring_t data (T self);
+<span class="Type">extern</span> <span class="Type">size_t</span> length (T self);   <span class="Comment">// mutators</span>
+<span class="Type">extern</span> <span class="Type">void</span> clear (T self);
+<span class="Type">extern</span> <span class="Type">void</span> add_char (T self, <span class="Type">char</span> c);
+<span class="Type">extern</span> <span class="Type">void</span> add_str (T self, string_t s);
 }</pre> <p>and have multiple implementation files, each implementing a semantically
 associated subset of the above functions.
 
@@ -250,18 +244,16 @@ associated subset of the above functions.
 </p> <pre class="code-block"><span class="Comment">// buffer-internal.h</span>
 <span class="Include">#include </span><span class="String">&lt;buffer.h&gt;</span>
 <span class="Type">namespace</span> Buffer {
-   abstract <span class="Type">struct</span> t {
-      mstring_t buffer;
-      <span class="Type">size_t</span> pos;
-      <span class="Type">size_t</span> len;
-   };
+abstract <span class="Type">struct</span> t {
+   mstring_t buffer;
+   <span class="Type">size_t</span> pos;
+   <span class="Type">size_t</span> len;
+};
 }</pre> <p>Implementation of constructors:
 
 </p> <pre class="code-block"><span class="Comment">// buffer-ctors.c</span>
 <span class="Include">#include </span><span class="String">&quot;buffer-internal.h&quot;</span>
-<span class="Type">namespace</span> Buffer;
-
-T create (<span class="Type">size_t</span> n) { ... }</pre> <p>Implementation of accessors and mutators each go into their separate files.
+<span class="Type">namespace</span> Buffer;T create (<span class="Type">size_t</span> n) { ... }</pre> <p>Implementation of accessors and mutators each go into their separate files.
 Now, if we generate more information about the structures, we need a primary
 implementation file. Currently, we have 
   <code>extern</code> datatypes that don't
@@ -280,9 +272,7 @@ keyword for it (or add a new one).
 
 </p> <pre class="code-block"><span class="Comment">// buffer-ctors.c</span>
 <span class="Include">#include </span><span class="String">&quot;buffer-internal.h&quot;</span>
-<span class="Type">register</span> <span class="Type">namespace</span> Buffer; <span class="Comment">// primary implementation file</span>
-
-T create (<span class="Type">size_t</span> n) { ... }</pre> <p>It could be 
+<span class="Type">register</span> <span class="Type">namespace</span> Buffer; <span class="Comment">// primary implementation fileT create (size_t n) { ... }</span></pre> <p>It could be 
   <code>do</code>, 
   <code>let</code> or anything else, but I think
 
@@ -290,7 +280,7 @@ T create (<span class="Type">size_t</span> n) { ... }</pre> <p>It could be
 function registering GC roots.
 
 
-</p> <h3>Initialisation function
+</p> <pre class="verbatim"></pre> <h3>Initialisation function
 
 </h3> <p>The initialisation function does the following:
 

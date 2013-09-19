@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Aldor / Install"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -169,7 +169,7 @@ and
   <a href="aldor-sha1.txt">SHA1</a> sums.
 
 
-</p> <h3>Linux
+</p> <pre class="verbatim"></pre> <h3>Linux
 
 </h3> <h4>Installing pre-built packages (@packages)
 
@@ -178,28 +178,20 @@ and
   <span class="filename">/etc/apt/sources.list</span>:
 
 
-</p> <pre>   deb http://debian.xinutec.org/ etch main non-free
-
-</pre> <p>Currently, only Debian etch packages are provided. These should work with
+</p> <pre class="verbatim">deb http://debian.xinutec.org/ etch main non-free</pre> <p>Currently, only Debian etch packages are provided. These should work with
 newer releases, though. Ubuntu users may also have luck with this package.
 To install, issue the following command as root:
 
-</p> <pre>   # aptitude install aldor
-
-</pre> <p>If you want the package signatures to be checked, you need to accept my key.
+</p> <pre class="verbatim"># aptitude install aldor</pre> <p>If you want the package signatures to be checked, you need to accept my key.
 The easiest way to do this is by installing the 
   <code>xinutec-archive-keyring</code>
 package from my repository:
 
 
-</p> <pre>   # aptitude install xinutec-archive-keyring
+</p> <pre class="verbatim"># aptitude install xinutec-archive-keyring</pre> <p>Alternatively, you can manually add the key to the trusted keyring:
 
-</pre> <p>Alternatively, you can manually add the key to the trusted keyring:
-
-</p> <pre>   # gpg --keyserver pgp.mit.edu --recv-keys 0x635D0E0A
-   # gpg --armor --export 0x635D0E0A | apt-key add -
-
-</pre> <h4>Installing from sources (@source)
+</p> <pre class="verbatim"># gpg --keyserver pgp.mit.edu --recv-keys 0x635D0E0A
+# gpg --armor --export 0x635D0E0A | apt-key add -</pre> <pre class="verbatim"></pre> <h4>Installing from sources (@source)
 
 </h4> <p>
   <strong>This is currently disabled due to licence uncertainness.</strong>
@@ -211,32 +203,24 @@ package from my repository:
     <a href="aldor-1.1.0-1_apl.tar.gz">APL source package</a>
   
   
-    <pre>   % wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_agpl.tar.gz
-       % wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_apl.tar.gz
-    
-    </pre>
+    <pre class="verbatim">% wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_agpl.tar.gz
+    % wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_apl.tar.gz</pre>
   </li>
   <li>2. Extract the package.
   
   
-    <pre>   % gunzip -c aldor-1.1.0-1_agpl.tar.gz | tar x
-       % gunzip -c aldor-1.1.0-1_apl.tar.gz | tar x
-    
-    </pre>
+    <pre class="verbatim">% gunzip -c aldor-1.1.0-1_agpl.tar.gz | tar x
+    % gunzip -c aldor-1.1.0-1_apl.tar.gz | tar x</pre>
   </li>
   <li>3. Enter the source directory.
   
   
-    <pre>   % cd aldor-1.1.0-1
-    
-    </pre>
+    <pre class="verbatim">% cd aldor-1.1.0-1</pre>
   </li>
   <li>4. Run the configure script.
   
   
-    <pre>   % ./configure
-    
-    </pre>
+    <pre class="verbatim">% ./configure</pre>
     <p>This script takes a few options controlling compile-time options of the C
     compiler and the source files and run-time behaviour of the Aldor compiler.
     Most interesting for you should be the options controlling debugging and
@@ -246,9 +230,7 @@ package from my repository:
     
     
     </p>
-    <pre>   % ./configure --help
-    
-    </pre>
+    <pre class="verbatim">% ./configure --help</pre>
     <p>If you want to install it anywhere else than the default installation path
     (usually 
       <span class="filename">/usr/local</span>), you need to provide a 
@@ -258,9 +240,7 @@ package from my repository:
     
     
     </p>
-    <pre>   % ./configure --prefix=$HOME/aldor
-    
-    </pre>
+    <pre class="verbatim">% ./configure --prefix=$HOME/aldor</pre>
     <p>This will look for required functions and libraries and prepare makefiles for
     the build.
     
@@ -277,9 +257,7 @@ package from my repository:
     
     
     </p>
-    <pre>   % source setenv.sh
-    
-    </pre>
+    <pre class="verbatim">% source setenv.sh</pre>
     <p>For C shell and equivalents (
       <code>csh</code>, 
       <code>tcsh</code>, those that use 
@@ -289,17 +267,13 @@ package from my repository:
     
     
     </p>
-    <pre>   % source setenv.csh
-    
-    </pre>
+    <pre class="verbatim">% source setenv.csh</pre>
     <p>If both of those fail, make sure you have the following environment setup:
     
     </p>
-    <pre>   ALDORROOT       = $PWD/obj
-       PATH            = $PWD/obj/bin:$PATH
-       LD_LIBRARY_PATH = $PWD/obj/lib
-    
-    </pre>
+    <pre class="verbatim">ALDORROOT       = $PWD/obj
+    PATH            = $PWD/obj/bin:$PATH
+    LD_LIBRARY_PATH = $PWD/obj/lib</pre>
     <p class="small">
       <p>If you open the file setenv.sh, you will notice that LD_LIBRARY_PATH
       also contains something with icc. This is something I use on my system
@@ -311,18 +285,14 @@ package from my repository:
   <li>6. Build the compiler
   
   
-    <pre>   % make
-    
-    </pre>
+    <pre class="verbatim">% make</pre>
     <p>Parallel building is not supported by all parts of the build, but you can
     speed up compilation by building in steps:
     
     </p>
-    <pre>   % make prepare -j4
-       % make compiler -j4
-       % make libraries3
-    
-    </pre>
+    <pre class="verbatim">% make prepare -j4
+    % make compiler -j4
+    % make libraries3</pre>
     <p>You can also use 
       <code>make libraries2</code>. This will limit the library building to
     at most two jobs at a time. No more than three jobs are supported at this
@@ -346,17 +316,13 @@ package from my repository:
       
       </p>
     </p>
-    <pre>   % make testcases -j4
-       % make check -j4
-    
-    </pre>
+    <pre class="verbatim">% make testcases -j4
+    % make check -j4</pre>
   </li>
   <li>7. Install aldor
   
   
-    <pre>   % make install
-    
-    </pre>
+    <pre class="verbatim">% make install</pre>
   </li>
 </ul> <p>Now you should have a directory at 
   <span class="filename">$HOME/aldor</span> containing the Aldor
@@ -377,18 +343,17 @@ given as
 
 </p> <p>Here is the entire script without the prompt (%):
 
-</p> <pre>   wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_agpl.tar.gz
-   wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_apl.tar.gz
-   gunzip -c aldor-1.1.0-1_agpl.tar.gz | tar x
-   gunzip -c aldor-1.1.0-1_apl.tar.gz | tar x
-   cd aldor-1.1.0-1
-   ./configure --prefix=$HOME/aldor
-   source setenv.sh
-   make prepare -j4
-   make compiler -j4
-   make libraries3
-   make install
-</pre>
+</p> <pre class="verbatim">wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_agpl.tar.gz
+wget http://xinutec.org/~pippijn/en/aldor-1.1.0-1_apl.tar.gz
+gunzip -c aldor-1.1.0-1_agpl.tar.gz | tar x
+gunzip -c aldor-1.1.0-1_apl.tar.gz | tar x
+cd aldor-1.1.0-1
+./configure --prefix=$HOME/aldor
+source setenv.sh
+make prepare -j4
+make compiler -j4
+make libraries3
+make install</pre>
 		</div> 
 
 		<div id="footer"> 

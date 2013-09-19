@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Opinions / Negative / Perl"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -90,13 +90,13 @@ type of exception was the one thrown and rethrow the exception if not:
 
 
 </p> <pre class="code-block"><span class="Statement">eval</span> {
-   function_that_throws_exception <span class="Identifier">$arg1</span>, <span class="Identifier">$arg2</span>
+function_that_throws_exception <span class="Identifier">$arg1</span>, <span class="Identifier">$arg2</span>
 };
 <span class="Statement">if</span> (<span class="Identifier">$@</span>) {
-   <span class="Statement">if</span> (<span class="Statement">ref</span> <span class="Identifier">$@</span> <span class="Statement">eq</span> <span class="String">&quot;</span><span class="String">My::Exception</span><span class="String">&quot;</span>) {
-      handle_error
-   }
-   <span class="Statement">die</span>; <span class="Comment"># rethrow</span>
+<span class="Statement">if</span> (<span class="Statement">ref</span> <span class="Identifier">$@</span> <span class="Statement">eq</span> <span class="String">&quot;</span><span class="String">My::Exception</span><span class="String">&quot;</span>) {
+   handle_error
+}
+<span class="Statement">die</span>; <span class="Comment"># rethrow</span>
 }</pre> <p>This does not even work when 
   <code>ref $@</code> is an empty string, meaning 
   <code>$@</code> was

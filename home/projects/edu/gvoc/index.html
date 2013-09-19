@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Edu / Gvoc"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -103,7 +103,7 @@ than that, at the moment.  Modifying it to support other languages and word
 lists is trivial. By keeping it simple, QVoc has a neglegible startup time and
 can therefore be started anytime you want to study your foreign language.
 
-</p> <h3>Using QVoc
+</p> <pre class="verbatim"></pre> <h3>Using QVoc
 
 </h3> <p>After loading the word lists, which are the Chinese word lists for the HSK level
 1 and 2 exams, the words are shuffled and you will be confronted with a Chinese
@@ -139,7 +139,7 @@ myself against cheating).
 
 </p> <div class="centered-image">
   <div>
-    <img alt="Doing" src="images/mistake.png" />
+    <img src="images/mistake.png" alt="Doing" />
   </div>Doing
 </div> <p>Some words also have a hint attached to them. You may click the 
   <code>Hint</code> button
@@ -167,9 +167,9 @@ you didn't know the first time.
 
 </p> <div class="centered-image">
   <div>
-    <img alt="Score" src="images/report.png" />
+    <img src="images/report.png" alt="Score" />
   </div>Score
-</div> <h3>About the implementation
+</div> <pre class="verbatim"></pre> <h3>About the implementation
 
 </h3> <h4>Word and hint lists
 
@@ -180,29 +180,23 @@ names, currently at
 following format:
 
 
-</p> <pre>   # comments start with #
-   # Chinese word,         pinyin,        primary translation; secondary translations
-   ÂÆ∂,                     jiƒ,           home
-   ‰∏,                     sh√†ng,         up; on; on top of
-   ‰∏,                     xi√†,           down; under; below
-
-</pre> <p>The hints are stored in a single file called 
+</p> <pre class="verbatim"># comments start with #
+# Chinese word,         pinyin,        primary translation; secondary translations
+ÂÆ∂,                     jiƒ,           home
+‰∏,                     sh√†ng,         up; on; on top of
+‰∏,                     xi√†,           down; under; below</pre> <p>The hints are stored in a single file called 
   <code>"hints.txt"</code> with the following
 format:
 
 
-</p> <pre>   # comments again start with #
-   # Chinese word, hint text, hint text in pinyin
-   Ê¨¢Ëø
-   ,       Ê¨¢ËøÊ•‰∏Êµ∑„
-   ,       huƒny√≠ng l√°i sh√†ngh«i.
-
-</pre> <pre>   # You may add more hints to a single word by repeating the word:
-   Ê¨¢Ëø
-   ,       Ê¨¢Ëø‰Ω†‰ª¨Ê•Âæ∑ÂΩ„
-   ,       huƒny√≠ng n«men l√°i d√©gu√≥.
-
-</pre> <p>The files are line- and comma-based. In the current implementation, that means
+</p> <pre class="verbatim"># comments again start with #
+# Chinese word, hint text, hint text in pinyin
+Ê¨¢Ëø
+,       Ê¨¢ËøÊ•‰∏Êµ∑„
+,       huƒny√≠ng l√°i sh√†ngh«i.</pre> <pre class="verbatim"># You may add more hints to a single word by repeating the word:
+Ê¨¢Ëø
+,       Ê¨¢Ëø‰Ω†‰ª¨Ê•Âæ∑ÂΩ„
+,       huƒny√≠ng n«men l√°i d√©gu√≥.</pre> <p>The files are line- and comma-based. In the current implementation, that means
 that in the word lists, the Chinese word is the text until the first comma, the
 pinyin is the text until the second comma and the English translations are the
 text after the second comma and before a newline. The hints file is read

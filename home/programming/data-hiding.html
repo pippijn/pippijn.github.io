@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Programming / Data-Hiding"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -98,9 +98,9 @@ counted, said to be the least object oriented language.
 
 </p> <pre class="code-block"><span class="Type">struct</span> string
 {
-  <span class="Type">char</span> *rep;
-  <span class="Type">size_t</span> len;
-  <span class="Type">size_t</span> capacity.
+<span class="Type">char</span> *rep;
+<span class="Type">size_t</span> len;
+<span class="Type">size_t</span> capacity.
 };</pre> <p>This 
   <code>struct</code> knows its length and has a data pointer pointing at the
 in-memory string representation. It also knows its maximum capacity, so it can
@@ -139,7 +139,7 @@ pointer not knowing its size or a data pointer prepended by its size.
 <span class="Type">void</span> strAddChars (String str, <span class="Type">char</span> <span class="Type">const</span> *chars);</pre> <p>We did not only abstract away some knowledge, we also reduced our required
 typing.
 
-</p> <h3>Violations of the principle
+</p> <pre class="verbatim"></pre> <h3>Violations of the principle
 
 </h3> <p>There are various more or less obvious ways to violate the principle of
 information hiding. An obvious example would be directly accessing the
@@ -149,14 +149,14 @@ structure's members:
 <span class="Type">void</span>
 OnAdded (String str)
 {
-  strncat (str-&gt;rep, <span class="String">&quot; has been added&quot;</span>, str-&gt;capacity - str-&gt;len);
-  str-&gt;len = strlen (str-&gt;rep);
+strncat (str-&gt;rep, <span class="String">&quot; has been added&quot;</span>, str-&gt;capacity - str-&gt;len);
+str-&gt;len = strlen (str-&gt;rep);
 }
 <span class="Comment">// Right:</span>
 <span class="Type">void</span>
 OnAdded (String str)
 {
-  strAddChars (str, <span class="String">&quot; has been added&quot;</span>);
+strAddChars (str, <span class="String">&quot; has been added&quot;</span>);
 }</pre> <p>The function 
   <code>strAddChars</code> hides the knowledge about 
   <code>String</code>'s internal
@@ -174,17 +174,15 @@ allows several operations that are built into C:
 
 
 </p> <pre class="code-block"><span class="Type">typedef</span> <span class="Type">char</span> *String;
-<span class="Type">typedef</span> <span class="Type">char</span> <span class="Type">const</span> *ConstString;
-
-<span class="Type">void</span>
+<span class="Type">typedef</span> <span class="Type">char</span> <span class="Type">const</span> *ConstString;<span class="Type">void</span>
 someFunc (String str)
 {
-  printf (<span class="String">&quot;The second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
-  str += <span class="Number">20</span>; <span class="Comment">// Addition</span>
-  printf (<span class="String">&quot;The twenty-second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
-  printf (<span class="String">&quot;The twenty-first character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, *str); <span class="Comment">// Dereference</span>
-  String newStr = str - <span class="Number">10</span>; <span class="Comment">// Subtracting integer</span>
-  printf (<span class="String">&quot;The difference between newStr and str is </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, newStr - str); <span class="Comment">// Pointer difference</span>
+printf (<span class="String">&quot;The second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
+str += <span class="Number">20</span>; <span class="Comment">// Addition</span>
+printf (<span class="String">&quot;The twenty-second character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, str[<span class="Number">1</span>]); <span class="Comment">// Index</span>
+printf (<span class="String">&quot;The twenty-first character is `</span><span class="SpecialChar">%d</span><span class="String">'</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, *str); <span class="Comment">// Dereference</span>
+String newStr = str - <span class="Number">10</span>; <span class="Comment">// Subtracting integer</span>
+printf (<span class="String">&quot;The difference between newStr and str is </span><span class="SpecialChar">%d</span><span class="SpecialChar">\n</span><span class="String">&quot;</span>, newStr - str); <span class="Comment">// Pointer difference</span>
 }</pre> <p>All these operations are defined on 
   <code>char*</code>, and therefore also on 
   <code>String</code>.
@@ -198,7 +196,7 @@ representation of
 hiding principle.
 
 
-</p> <h3>Enforcing encapsulation in C
+</p> <pre class="verbatim"></pre> <h3>Enforcing encapsulation in C
 
 </h3> <p>C provides a very good way to enforce information hiding. We call this
 
@@ -222,7 +220,7 @@ compiler. Using opaque pointers is a good way of preventing direct member
 access in client code.
 
 
-</p> <h3>Advantages
+</p> <pre class="verbatim"></pre> <h3>Advantages
 
 </h3> <p>There are definite advantages of information hiding and those are good reasons
 to apply it to your code.
@@ -271,7 +269,7 @@ to apply it to your code.
     
     </p>
   </li>
-</ul> <h3>Disadvantages
+</ul> <pre class="verbatim"></pre> <h3>Disadvantages
 
 </h3> <p>This all sounds great and we may ask ourselves, why doesn't everybody
 encapsulate everything. There are also disadvantages to be considered when
@@ -329,9 +327,7 @@ designing software.
     
     
     </p>
-    <pre>  #define MEW_LOCAL(TYPE, NAME) TYPE NAME##_; TYPE *NAME = NAME##_
-    
-    </pre>
+    <pre class="verbatim">#define MEW_LOCAL(TYPE, NAME) TYPE NAME##_; TYPE *NAME = NAME##_</pre>
     <p>Or one could just declare the variable locally and pass its address to its
     operations,
     
@@ -344,19 +340,15 @@ designing software.
     
     </p>
   </li>
-</ul> <h3>The compromise
+</ul> <pre class="verbatim"></pre> <h3>The compromise
 
 </h3> <p>In C, there are a few ways to speed up and shrink the code without violating
 information hiding. One of these is the use of macros. Instead of defining a
 function:
 
-</p> <pre>  size_t strLength (ConstString str);
+</p> <pre class="verbatim">size_t strLength (ConstString str);</pre> <p>we define a macro doing the same:
 
-</pre> <p>we define a macro doing the same:
-
-</p> <pre>  #define strLength(s)  (s)-&gt;len
-
-</pre> <p>This has disadvantages, as well. Now, you cannot use opaque pointers anymore,
+</p> <pre class="verbatim">#define strLength(s)  (s)-&gt;len</pre> <p>This has disadvantages, as well. Now, you cannot use opaque pointers anymore,
 no longer avoiding ABI breakages and speeding up incremental builds. It is no
 longer type-safe, as you could pass any structure with a 
   <code>len</code> member to this
@@ -364,7 +356,7 @@ macro. It still avoids API breakages, though. This way, you can have some form
 of encapsulation even in speed critical applications.
 
 
-</p> <h3>Information hiding in other languages
+</p> <pre class="verbatim"></pre> <h3>Information hiding in other languages
 
 </h3> <p>I chose C, as I said, because it is most suitable as example for
 encapsulation. This does not mean that other languages do not have equally

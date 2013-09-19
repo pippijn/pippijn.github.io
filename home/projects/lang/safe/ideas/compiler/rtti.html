@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Compiler / Rtti"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -263,17 +263,17 @@ C functions.
 </p> <p>This can be solved by doing something like
 
 </p> <pre class="code-block"><span class="Type">struct</span> foo { <span class="Comment">// alignment=2 (x86)</span>
-   <span class="Type">char</span> a;
-   <span class="Type">short</span> b;
+<span class="Type">char</span> a;
+<span class="Type">short</span> b;
 };</pre> <p>is compiled to:
 
 </p> <pre class="code-block"><span class="Type">struct</span> foo_data { <span class="Comment">// alignment still 2</span>
-   <span class="Type">char</span> a;
-   <span class="Type">short</span> b;
+<span class="Type">char</span> a;
+<span class="Type">short</span> b;
 };
 <span class="Type">struct</span> foo { <span class="Comment">// alignment=4 (x86)</span>
-   type_info <span class="Type">const</span> *ti;
-   foo_data data;
+type_info <span class="Type">const</span> *ti;
+foo_data data;
 };</pre> <p>and passing foo* to an extern C function looks like:
 
 </p> <pre class="code-block">cfun (&amp;foo-&gt;data);</pre> <p>Similarly, a struct foo can be passed as 

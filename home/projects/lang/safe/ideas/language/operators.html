@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Language / Operators"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -194,11 +194,11 @@
 
 </h2> <p>Pass operators to functions, for example (pseudo-code):
 
-</p> <pre class="code-block">  apply ((+), <span class="Number">2</span>, <span class="Number">3</span>) == <span class="Number">5</span>;
+</p> <pre class="code-block">apply ((+), <span class="Number">2</span>, <span class="Number">3</span>) == <span class="Number">5</span>;
 where
-  <span class="Type">long</span> <span class="Statement">operator</span>+ (<span class="Type">long</span>, <span class="Type">long</span>);
-  <span class="Type">long</span> apply (<span class="Type">long</span> (@f)(<span class="Type">long</span>, <span class="Type">long</span>), <span class="Type">long</span> v1, <span class="Type">long</span> v2)
-  { <span class="Statement">return</span> f (v1, v2); }</pre> <p>For this, operator stubs need to be generated.
+<span class="Type">long</span> <span class="Statement">operator</span>+ (<span class="Type">long</span>, <span class="Type">long</span>);
+<span class="Type">long</span> apply (<span class="Type">long</span> (@f)(<span class="Type">long</span>, <span class="Type">long</span>), <span class="Type">long</span> v1, <span class="Type">long</span> v2)
+{ <span class="Statement">return</span> f (v1, v2); }</pre> <p>For this, operator stubs need to be generated.
 
 </p> <p>Parse things like 
   <code>a-&gt;[3]</code> into 

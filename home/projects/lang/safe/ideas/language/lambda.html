@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Safe / Ideas / Language / Lambda"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -199,7 +199,7 @@ closures cannot be passed as function pointers to C, but a helper function
 could be implemented that calls the C function with the closure as environment
 and a stub invoking the closure as function.
 
-</p> <h3>Closures
+</p> <pre class="verbatim"></pre> <h3>Closures
 
 </h3> <p>Normal code calculating the sum of the numbers between 
   <code>from</code> and
@@ -209,54 +209,42 @@ and a stub invoking the closure as function.
 
 
 </p> <pre class="code-block"><span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> (@func) (<span class="Type">int</span> i)) {
-   <span class="Type">int</span> result = <span class="Number">0</span>;
-   <span class="Type">int</span> inc = from &gt; to ? <span class="Number">1</span> : -<span class="Number">1</span>;
-   <span class="Statement">while</span> (from != to) {
-      result += func (from);
-      from += inc;
-   }
-   <span class="Statement">return</span> result;
+<span class="Type">int</span> result = <span class="Number">0</span>;
+<span class="Type">int</span> inc = from &gt; to ? <span class="Number">1</span> : -<span class="Number">1</span>;
+<span class="Statement">while</span> (from != to) {
+   result += func (from);
+   from += inc;
 }
-
-<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
-   <span class="Type">int</span> mul (<span class="Type">int</span> i) { <span class="Statement">return</span> i * num; }
-   <span class="Statement">return</span> sum (from, to, mul);
+<span class="Statement">return</span> result;
+}<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
+<span class="Type">int</span> mul (<span class="Type">int</span> i) { <span class="Statement">return</span> i * num; }
+<span class="Statement">return</span> sum (from, to, mul);
 }</pre> <p>Would roughly (the names would be mangled somehow) be compiled to:
 
 </p> <pre class="code-block"><span class="Type">struct</span> sum_clos1 {
-   <span class="Type">void</span> *env;
-   <span class="Type">int</span> (*func) (<span class="Type">void</span> *env, <span class="Type">int</span> i);
+<span class="Type">void</span> *env;
+<span class="Type">int</span> (*func) (<span class="Type">void</span> *env, <span class="Type">int</span> i);
 };
 <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">struct</span> sum_clos1 func) {
-   <span class="Type">int</span> result = <span class="Number">0</span>;
-   <span class="Type">int</span> inc = from &lt; to ? <span class="Number">1</span> : -<span class="Number">1</span>;
-   <span class="Statement">while</span> (from != to) {
-      result += func.func (func.env, from);
-      from += inc;
-   }
-   <span class="Statement">return</span> result;
+<span class="Type">int</span> result = <span class="Number">0</span>;
+<span class="Type">int</span> inc = from &lt; to ? <span class="Number">1</span> : -<span class="Number">1</span>;
+<span class="Statement">while</span> (from != to) {
+   result += func.func (func.env, from);
+   from += inc;
 }
-
-<span class="Type">struct</span> mul_env {
-   <span class="Type">int</span> num;
+<span class="Statement">return</span> result;
+}<span class="Type">struct</span> mul_env {
+<span class="Type">int</span> num;
 };
 <span class="Type">int</span> mul (<span class="Type">void</span> *venv, <span class="Type">int</span> i) {
-   <span class="Type">struct</span> mul_env *env = venv;
-   <span class="Statement">return</span> i * env-&gt;num;
-}
-
-<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
-   <span class="Type">struct</span> mul_env env;
-   <span class="Type">struct</span> sum_clos1 clos;
-
-   <span class="Comment">/*</span><span class="Comment"> initialise the environment for the function </span><span class="Comment">*/</span>
-   env.num = num;
-
-   <span class="Comment">/*</span><span class="Comment"> initialise the closure </span><span class="Comment">*/</span>
-   clos.env = &amp;env;
-   clos.func = mul;
-
-   <span class="Statement">return</span> sum (from, to, clos);
+<span class="Type">struct</span> mul_env *env = venv;
+<span class="Statement">return</span> i * env-&gt;num;
+}<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
+<span class="Type">struct</span> mul_env env;
+<span class="Type">struct</span> sum_clos1 clos;<span class="Comment">/*</span><span class="Comment"> initialise the environment for the function </span><span class="Comment">*/</span>
+env.num = num;<span class="Comment">/*</span><span class="Comment"> initialise the closure </span><span class="Comment">*/</span>
+clos.env = &amp;env;
+clos.func = mul;   <span class="Statement">return</span> sum (from, to, clos);
 }</pre> <p>This must be done even for simple, non-capturing and global functions, as the
 called function (in this case 
   <code>sum</code>) cannot know whether it gets a
@@ -268,22 +256,18 @@ pointer requires the generation of stubs:
 
 </p> <pre class="code-block"><span class="Type">int</span> identity (<span class="Type">int</span> i) { <span class="Statement">return</span> i; }
 <span class="Type">int</span> identity_sum (<span class="Type">int</span> from, <span class="Type">int</span> to) {
-   <span class="Statement">return</span> sum (from, to, identity);
+<span class="Statement">return</span> sum (from, to, identity);
 }</pre> <p>Has to be translated to:
 
 </p> <pre class="code-block"><span class="Type">int</span> identity (<span class="Type">int</span> i) { <span class="Statement">return</span> i; }
 <span class="Type">int</span> identity_stub (<span class="Type">void</span> *env, <span class="Type">int</span> i) { <span class="Statement">return</span> identity (i); }
 <span class="Type">int</span> identity_sum (<span class="Type">int</span> from, <span class="Type">int</span> to) {
-   <span class="Type">struct</span> sum_clos1 clos;
-
-   clos.env = <span class="Constant">NULL</span>; <span class="Comment">// could be left out, since it is provably unused</span>
-   clos.func = identity_stub;
-
-   <span class="Statement">return</span> sum (from, to, clos);
+<span class="Type">struct</span> sum_clos1 clos;clos.env = <span class="Constant">NULL</span>; <span class="Comment">// could be left out, since it is provably unused</span>
+clos.func = identity_stub;   <span class="Statement">return</span> sum (from, to, clos);
 }</pre> <p>This will cause a performance hit, but has to be done for uniform handling of
 global and nested functions.
 
-</p> <h3>Passing closures to C
+</p> <pre class="verbatim"></pre> <h3>Passing closures to C
 
 </h3> <p>Another problem is that we can no longer trivially pass functions to C.
 
@@ -296,70 +280,46 @@ to generate a libffi closure wrapper.
 
 
 </p> <pre class="code-block"><span class="Comment">// Same as above, but somewhere else, implemented in regular C</span>
-<span class="Type">extern</span> <span class="String">&quot;C&quot;</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> (@func) (<span class="Type">int</span> i));
-
-<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
-   <span class="Type">int</span> mul (<span class="Type">int</span> i) { <span class="Statement">return</span> i * num; }
-   <span class="Statement">return</span> sum (from, to, <span class="Error">{</span>mul<span class="Error">}</span>); <span class="Comment">// or some other syntax</span>
+<span class="Type">extern</span> <span class="String">&quot;C&quot;</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> (@func) (<span class="Type">int</span> i));<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
+<span class="Type">int</span> mul (<span class="Type">int</span> i) { <span class="Statement">return</span> i * num; }
+<span class="Statement">return</span> sum (from, to, <span class="Error">{</span>mul<span class="Error">}</span>); <span class="Comment">// or some other syntax</span>
 }</pre> <p>The above code would be compiled to the following:
 
 </p> <pre class="code-block"><span class="Include">#include </span><span class="String">&lt;ffi.h&gt;</span>
-<span class="Include">#include </span><span class="String">&lt;sys/mman.h&gt;</span>
-
-<span class="Type">extern</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> (*func) (<span class="Type">int</span> i));
-
-<span class="Type">struct</span> mul_env {
-   <span class="Type">int</span> num;
+<span class="Include">#include </span><span class="String">&lt;sys/mman.h&gt;</span><span class="Type">extern</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> (*func) (<span class="Type">int</span> i));<span class="Type">struct</span> mul_env {
+<span class="Type">int</span> num;
 };
 <span class="Type">int</span> mul (<span class="Type">void</span> *venv, <span class="Type">int</span> i) {
-   <span class="Type">struct</span> mul_env *env = venv;
-   <span class="Statement">return</span> i * env-&gt;num;
-}
-
-<span class="Type">static</span> <span class="Type">void</span>
+<span class="Type">struct</span> mul_env *env = venv;
+<span class="Statement">return</span> i * env-&gt;num;
+}<span class="Type">static</span> <span class="Type">void</span>
 mul_closure_wrapper (ffi_cif *cif, <span class="Type">void</span> *rval,
-                     <span class="Type">void</span> **avals, <span class="Type">void</span> *data) {
-   *(ffi_arg *)rval = mul (data
-      , *(<span class="Type">int</span> *)avals[<span class="Number">0</span>]
-   );
+                  <span class="Type">void</span> **avals, <span class="Type">void</span> *data) {
+*(ffi_arg *)rval = mul (data
+   , *(<span class="Type">int</span> *)avals[<span class="Number">0</span>]
+);
+}<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
+<span class="Type">struct</span> mul_env env;<span class="Comment">/*</span><span class="Comment"> initialise the environment for the function </span><span class="Comment">*/</span>
+env.num = num;<span class="Comment">/*</span><span class="Comment"> initialise closure </span><span class="Comment">*/</span>
+{
+ffi_cif cif;
+<span class="Type">union</span> {
+   ffi_closure *cl;
+   <span class="Type">int</span> (*fn) (<span class="Type">int</span>);
+} clos;<span class="Comment">/*</span><span class="Comment"> argument types of the generated function </span><span class="Comment">*/</span>
+ffi_type *arg_types[<span class="Number">2</span>] = {
+&amp;ffi_type_sint,
+<span class="Constant">NULL</span>,
+};<span class="Comment">/*</span><span class="Comment"> return type of the generated function </span><span class="Comment">*/</span>
+ffi_type *ret_type = &amp;ffi_type_sint;<span class="Comment">/*</span><span class="Comment"> allocate executable memory for the closure </span><span class="Comment">*/</span>
+clos.cl = ffi_closure_alloc ();<span class="Statement">if</span> (ffi_prep_cif (&amp;cif, FFI_DEFAULT_ABI,
+               <span class="Statement">sizeof</span> arg_types / <span class="Statement">sizeof</span> *arg_types - <span class="Number">1</span>,
+               ret_type, arg_types) != FFI_OK)
+perror (<span class="String">&quot;ffi_prep_cif&quot;</span>);
+<span class="Statement">if</span> (ffi_prep_closure (clos.cl, &amp;cif, mul_closure_wrapper, &amp;env)
+ != FFI_OK)
+perror (<span class="String">&quot;ffi_prep_closure&quot;</span>);      <span class="Statement">return</span> sum (from, to, clos.fn);
 }
-
-<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
-   <span class="Type">struct</span> mul_env env;
-
-   <span class="Comment">/*</span><span class="Comment"> initialise the environment for the function </span><span class="Comment">*/</span>
-   env.num = num;
-
-   <span class="Comment">/*</span><span class="Comment"> initialise closure </span><span class="Comment">*/</span>
-   {
-      ffi_cif cif;
-      <span class="Type">union</span> {
-         ffi_closure *cl;
-         <span class="Type">int</span> (*fn) (<span class="Type">int</span>);
-      } clos;
-
-      <span class="Comment">/*</span><span class="Comment"> argument types of the generated function </span><span class="Comment">*/</span>
-      ffi_type *arg_types[<span class="Number">2</span>] = {
-         &amp;ffi_type_sint,
-         <span class="Constant">NULL</span>,
-      };
-
-      <span class="Comment">/*</span><span class="Comment"> return type of the generated function </span><span class="Comment">*/</span>
-      ffi_type *ret_type = &amp;ffi_type_sint;
-
-      <span class="Comment">/*</span><span class="Comment"> allocate executable memory for the closure </span><span class="Comment">*/</span>
-      clos.cl = ffi_closure_alloc ();
-
-      <span class="Statement">if</span> (ffi_prep_cif (&amp;cif, FFI_DEFAULT_ABI,
-                        <span class="Statement">sizeof</span> arg_types / <span class="Statement">sizeof</span> *arg_types - <span class="Number">1</span>,
-                        ret_type, arg_types) != FFI_OK)
-         perror (<span class="String">&quot;ffi_prep_cif&quot;</span>);
-      <span class="Statement">if</span> (ffi_prep_closure (clos.cl, &amp;cif, mul_closure_wrapper, &amp;env)
-          != FFI_OK)
-         perror (<span class="String">&quot;ffi_prep_closure&quot;</span>);
-
-      <span class="Statement">return</span> sum (from, to, clos.fn);
-   }
 }</pre> <p>All the complexity is handled by libffi. However, the memory allocated by
 libffi would leak by default, so the garbage collector needs to be aware of
 that memory and free it using 
@@ -395,27 +355,21 @@ along with a generated
 
 </p> <pre class="code-block"><span class="Comment">// Expect C API to allow for user data to be passed.</span>
 <span class="Type">extern</span> <span class="String">&quot;C&quot;</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, `t env,
-                    <span class="Type">int</span> (@func) (`t env, <span class="Type">int</span> i));
-
-<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
-   <span class="Type">int</span> mul (<span class="Type">int</span> i) { <span class="Statement">return</span> i * num; }
-   <span class="Statement">return</span> sum (from, to, mul);
+                 <span class="Type">int</span> (@func) (`t env, <span class="Type">int</span> i));<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
+<span class="Type">int</span> mul (<span class="Type">int</span> i) { <span class="Statement">return</span> i * num; }
+<span class="Statement">return</span> sum (from, to, mul);
 }</pre> <p>Passing the 
   <code>mul</code> function would expand to two arguments: the env and the
 function pointer. It would thus be compiled to:
 
 
 </p> <pre class="code-block"><span class="Type">extern</span> <span class="Type">int</span> sum (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">void</span> *env,
-                <span class="Type">int</span> (*func) (<span class="Type">void</span> *env, <span class="Type">int</span> i));
-
-<span class="Comment">/*</span><span class="Comment"> compile to mul_env + mul like in the first example </span><span class="Comment">*/</span>
+             <span class="Type">int</span> (*func) (<span class="Type">void</span> *env, <span class="Type">int</span> i));<span class="Comment">/*</span><span class="Comment"> compile to mul_env + mul like in the first example </span><span class="Comment">*/</span>
+[...]<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
+<span class="Comment">/*</span><span class="Comment"> construct env like in the first example </span><span class="Comment">*/</span>
 [...]
-
-<span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
-   <span class="Comment">/*</span><span class="Comment"> construct env like in the first example </span><span class="Comment">*/</span>
-   [...]
-   <span class="Statement">return</span> sum (from, to, &amp;env, mul);
-}</pre> <h3>Lambda expressions
+<span class="Statement">return</span> sum (from, to, &amp;env, mul);
+}</pre> <pre class="verbatim"></pre> <h3>Lambda expressions
 
 </h3> <p>I really don't like the syntax of C++ lambda expressions. I much prefer the
 C# way, providing type inference and a prettier syntax. Also, why would we
@@ -424,14 +378,14 @@ references.  Well, we don't and we're not going to have them, so the proposed
 syntax is very similar to the C# syntax.
 
 </p> <pre class="code-block"><span class="Type">int</span> sum_of_muls (<span class="Type">int</span> from, <span class="Type">int</span> to, <span class="Type">int</span> num) {
-   <span class="Comment">// syntax 1:</span>
-   <span class="Statement">return</span> sum (from, to, i =&gt; i * num);
-   <span class="Comment">// syntax 2 (works for multiple arguments):</span>
-   <span class="Statement">return</span> sum (from, to, (i) =&gt; i * num;);
-   <span class="Comment">// syntax 3:</span>
-   <span class="Statement">return</span> sum (from, to, i =&gt; <span class="Error">{</span> <span class="Statement">return</span> i * num; <span class="Error">}</span>);
-   <span class="Comment">// syntax 4 (also for multiple arguments):</span>
-   <span class="Statement">return</span> sum (from, to, (i) =&gt; <span class="Error">{</span> <span class="Statement">return</span> i * num; <span class="Error">}</span>);
+<span class="Comment">// syntax 1:</span>
+<span class="Statement">return</span> sum (from, to, i =&gt; i * num);
+<span class="Comment">// syntax 2 (works for multiple arguments):</span>
+<span class="Statement">return</span> sum (from, to, (i) =&gt; i * num;);
+<span class="Comment">// syntax 3:</span>
+<span class="Statement">return</span> sum (from, to, i =&gt; <span class="Error">{</span> <span class="Statement">return</span> i * num; <span class="Error">}</span>);
+<span class="Comment">// syntax 4 (also for multiple arguments):</span>
+<span class="Statement">return</span> sum (from, to, (i) =&gt; <span class="Error">{</span> <span class="Statement">return</span> i * num; <span class="Error">}</span>);
 }</pre> <p>The type of 
   <code>i</code> can easily be inferred with the already implemented type
 inference engine. The expression is first compiled to a nested function and

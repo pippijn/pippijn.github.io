@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Aldor / Profile"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -160,14 +160,12 @@ but until now I was unable to get profiling data that backs this up. Using
 several tools, I collected data about Aldor running with different allocators.
 Each of the following tests was executing
 
-</p> <pre>  aldor -ginterp sieve.as
-
-</pre> <p>With the sieve example from the
+</p> <pre class="verbatim">aldor -ginterp sieve.as</pre> <p>With the sieve example from the
 
   <a href="http://www.aldor.org/docs/HTML/index.html">Aldor User Guide</a>.
 
 
-</p> <h4>oprofile
+</p> <pre class="verbatim"></pre> <h4>oprofile
 
 </h4> <p>
   <a href="http://oprofile.sourceforge.net/news/">oprofile</a> is a kernel-space profiler
@@ -179,19 +177,18 @@ that yields high resolution with almost zero overhead.
     <code>boehm</code>
   
   
-    <pre>  CPU: Core 2, speed 1995 MHz (estimated)
-      Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
-      CPU_CLK_UNHALT...|
-        samples|      %|
-      ------------------
-         209129 65.3469 libstruct.so
-          48470 15.1455 libgc.so.1.0.2
-          25435  7.9477 libpthread-2.3.6.so
-          19431  6.0716 libc-2.3.6.so
-           8457  2.6426 no-vmlinux
-           2514  0.7856 libgeneral.so
-    
-    </pre>
+    <pre class="verbatim">CPU: Core 2, speed 1995 MHz (estimated)
+    Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
+    CPU_CLK_UNHALT...|
+      samples|      %|
+    ------------------
+       209129 65.3469 libstruct.so
+        48470 15.1455 libgc.so.1.0.2
+        25435  7.9477 libpthread-2.3.6.so
+        19431  6.0716 libc-2.3.6.so
+         8457  2.6426 no-vmlinux
+         2514  0.7856 libgeneral.so</pre>
+    <pre class="verbatim"></pre>
     <p>You can see how the Boehm garbage collector uses about 15% of CPU time. 8%
     goes to threading. This is due to the fact that Boehm's GC is threaded.
     
@@ -206,18 +203,16 @@ that yields high resolution with almost zero overhead.
     
     
     </p>
-    <pre>  CPU: Core 2, speed 1995 MHz (estimated)
-      Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
-      samples  %        symbol name
-      160231   76.6183  fintEval
-      35231    16.8465  fintStmt
-      12315     5.8887  fintGetReference
-      638       0.3051  .plt
-      116       0.0555  fintSetMFmt
-      82        0.0392  skipProg
-      80        0.0383  symeIndex
-    
-    </pre>
+    <pre class="verbatim">CPU: Core 2, speed 1995 MHz (estimated)
+    Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
+    samples  %        symbol name
+    160231   76.6183  fintEval
+    35231    16.8465  fintStmt
+    12315     5.8887  fintGetReference
+    638       0.3051  .plt
+    116       0.0555  fintSetMFmt
+    82        0.0392  skipProg
+    80        0.0383  symeIndex</pre>
     <p>Indeed, the FOAM interpreter (
       <code>fintEval</code>) is the function that interprets
     FOAM bytecode. It would probably not make sense to further investigate what
@@ -231,15 +226,13 @@ that yields high resolution with almost zero overhead.
     
     
     </p>
-    <pre>  CPU: Core 2, speed 1995 MHz (estimated)
-      Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
-      samples  %        symbol name
-      382      47.3358  stoDAlloc
-      199      24.6592  .plt
-      45        5.5762  fiArrNew_Word
-      37        4.5849  tblElt
-    
-    </pre>
+    <pre class="verbatim">CPU: Core 2, speed 1995 MHz (estimated)
+    Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
+    samples  %        symbol name
+    382      47.3358  stoDAlloc
+    199      24.6592  .plt
+    45        5.5762  fiArrNew_Word
+    37        4.5849  tblElt</pre>
     <p>
       <code>stoDAlloc</code> is the function that calls the system allocation routines, in this
     
@@ -252,19 +245,17 @@ that yields high resolution with almost zero overhead.
     <code>aldor</code>
   
   
-    <pre>  CPU: Core 2, speed 1995 MHz (estimated)
-      Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
-      CPU_CLK_UNHALT...|
-        samples|      %|
-      ------------------
-        1659809 90.7706 libgeneral.so
-          77243  4.2242 no-vmlinux
-          24524  1.3412 libvorbis.so.0.3.1
-          12010  0.6568 libncursesw.so.5.5
-          [...]
-           1688  0.0923 libstruct.so
-    
-    </pre>
+    <pre class="verbatim">CPU: Core 2, speed 1995 MHz (estimated)
+    Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
+    CPU_CLK_UNHALT...|
+      samples|      %|
+    ------------------
+      1659809 90.7706 libgeneral.so
+        77243  4.2242 no-vmlinux
+        24524  1.3412 libvorbis.so.0.3.1
+        12010  0.6568 libncursesw.so.5.5
+        [...]
+         1688  0.0923 libstruct.so</pre>
     <p>With the B-Tree based garbage collector as provided by the Aldor compiler, 90%
     of all CPU time goes into the memory management and other general utilities.
     In 
@@ -272,18 +263,16 @@ that yields high resolution with almost zero overhead.
     
     
     </p>
-    <pre>  CPU: Core 2, speed 1995 MHz (estimated)
-      Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
-      samples  %        symbol name
-      867      51.3626  fintEval
-      167       9.8934  fintStmt
-      89        5.2725  fintGetReference
-      72        4.2654  symeIndex
-      71        4.2062  skipProg
-      58        3.4360  .plt
-      28        1.6588  symeEqual0
-    
-    </pre>
+    <pre class="verbatim">CPU: Core 2, speed 1995 MHz (estimated)
+    Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
+    samples  %        symbol name
+    867      51.3626  fintEval
+    167       9.8934  fintStmt
+    89        5.2725  fintGetReference
+    72        4.2654  symeIndex
+    71        4.2062  skipProg
+    58        3.4360  .plt
+    28        1.6588  symeEqual0</pre>
     <p>This should be no surprise in this, the distribution of CPU time is about the
     same. Note that I interrupted the execution after five minutes because it
     wasn't leading anywhere.
@@ -294,18 +283,16 @@ that yields high resolution with almost zero overhead.
     
     
     </p>
-    <pre>  CPU: Core 2, speed 1995 MHz (estimated)
-      Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
-      samples  %        symbol name
-      1658425  99.9166  stoGcMarkAndSweep
-      1039      0.0626  stoGcMarkRange
-      120       0.0072  stoDAlloc
-      32        0.0019  stoDFree
-      30        0.0018  tblElt
-      20        0.0012  .plt
-      12       7.2e-04  ptrlistNConcat
-    
-    </pre>
+    <pre class="verbatim">CPU: Core 2, speed 1995 MHz (estimated)
+    Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
+    samples  %        symbol name
+    1658425  99.9166  stoGcMarkAndSweep
+    1039      0.0626  stoGcMarkRange
+    120       0.0072  stoDAlloc
+    32        0.0019  stoDFree
+    30        0.0018  tblElt
+    20        0.0012  .plt
+    12       7.2e-04  ptrlistNConcat</pre>
     <p>Now 99.9% (almost all) of the CPU time goes into the garbage collection
     routine. This is likely the memory scanning. Why is it, though, that the Aldor
     GC takes 90% where Boehm's GC takes 15%?
@@ -321,18 +308,16 @@ that yields high resolution with almost zero overhead.
     interesting result.
     
     </p>
-    <pre>  CPU: Core 2, speed 1995 MHz (estimated)
-      Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
-      CPU_CLK_UNHALT...|
-        samples|      %|
-      ------------------
-          98090 73.4894 libstruct.so
-          26084 19.5422 libgeneral.so
-           6857  5.1373 no-vmlinux
-            632  0.4735 libncursesw.so.5.5
-            484  0.3626 libc-2.3.6.so
-    
-    </pre>
+    <pre class="verbatim">CPU: Core 2, speed 1995 MHz (estimated)
+    Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
+    CPU_CLK_UNHALT...|
+      samples|      %|
+    ------------------
+        98090 73.4894 libstruct.so
+        26084 19.5422 libgeneral.so
+         6857  5.1373 no-vmlinux
+          632  0.4735 libncursesw.so.5.5
+          484  0.3626 libc-2.3.6.so</pre>
     <p>As you can see from the table above, 
       <code>libstruct.so</code> is now using more CPU
     time than even using Boehm's GC. This can only be good, since most of the time
@@ -340,18 +325,16 @@ that yields high resolution with almost zero overhead.
     
     
     </p>
-    <pre>  CPU: Core 2, speed 1995 MHz (estimated)
-      Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
-      samples  %        symbol name
-      12318    47.2244  stoGcMarkRange
-      3503     13.4297  isInHeap
-      3096     11.8693  stoDAlloc
-      2256      8.6490  stoGcSweepFixed
-      1458      5.5896  piecesGetFixed
-      1283      4.9187  qmDivNo
-      386       1.4798  pgOf
-    
-    </pre>
+    <pre class="verbatim">CPU: Core 2, speed 1995 MHz (estimated)
+    Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
+    samples  %        symbol name
+    12318    47.2244  stoGcMarkRange
+    3503     13.4297  isInHeap
+    3096     11.8693  stoDAlloc
+    2256      8.6490  stoGcSweepFixed
+    1458      5.5896  piecesGetFixed
+    1283      4.9187  qmDivNo
+    386       1.4798  pgOf</pre>
     <p>
       <code>libgeneral.so</code> shows that the GC function 
       <code>stoGcMarkRange</code> is using most of
@@ -363,22 +346,20 @@ that yields high resolution with almost zero overhead.
     
     
     </p>
-    <pre>  CPU: Core 2, speed 1995 MHz (estimated)
-      Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
-      samples  %        symbol name
-      75996    77.4758  fintEval
-      15743    16.0495  fintStmt
-      5517      5.6244  fintGetReference
-      323       0.3293  .plt
-      68        0.0693  skipProg
-    
-    </pre>
+    <pre class="verbatim">CPU: Core 2, speed 1995 MHz (estimated)
+    Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (Unhalted core cycles) count 100000
+    samples  %        symbol name
+    75996    77.4758  fintEval
+    15743    16.0495  fintStmt
+    5517      5.6244  fintGetReference
+    323       0.3293  .plt
+    68        0.0693  skipProg</pre>
     <p>The results are very similar to the ones yielded from the tests with Boehm's
     GC. This is nothing surprising.
     
     </p>
   </li>
-</ul> <h4>callgrind
+</ul> <pre class="verbatim"></pre> <h4>callgrind
 
 </h4> <p>
   <code>callgrind</code> is part of 
@@ -409,27 +390,23 @@ Cache profiling is done by simulating the I1, D1 and L2 caches. In contrast to
     <p>Callgrind shows the number of instruction fetches, not the cost of each fetch.
     
     </p>
-    <pre>  --------------------------------------------------------
-                 Ir
-      --------------------------------------------------------
-      2,263,424,641  PROGRAM TOTALS
-    
-    </pre>
-    <pre>  --------------------------------------------------------
-               Ir  file:function
-      --------------------------------------------------------
-      893,422,322  store.c:stoGcMarkRange [libgeneral.so]
-      561,961,088  store.c:isInHeap [libgeneral.so]
-      300,471,582  fint.c:fintEval'2 [libstruct.so]
-      200,995,825  store.c:stoGcMarkRange'2 [libgeneral.so]
-       50,342,347  fint.c:fintStmt'2 [libstruct.so]
-       27,747,760  fint.c:fintGetReference [libstruct.so]
-       27,526,300  store.c:stoDAlloc [libgeneral.so]
-       20,873,701  store.c:stoGcSweepFixed [libgeneral.so]
-       16,840,111  syme.c:symeIndex [libstruct.so]
-       10,816,357  fint.c:skipProg'2 [libstruct.so]
-    
-    </pre>
+    <pre class="verbatim">--------------------------------------------------------
+               Ir
+    --------------------------------------------------------
+    2,263,424,641  PROGRAM TOTALS</pre>
+    <pre class="verbatim">--------------------------------------------------------
+             Ir  file:function
+    --------------------------------------------------------
+    893,422,322  store.c:stoGcMarkRange [libgeneral.so]
+    561,961,088  store.c:isInHeap [libgeneral.so]
+    300,471,582  fint.c:fintEval'2 [libstruct.so]
+    200,995,825  store.c:stoGcMarkRange'2 [libgeneral.so]
+     50,342,347  fint.c:fintStmt'2 [libstruct.so]
+     27,747,760  fint.c:fintGetReference [libstruct.so]
+     27,526,300  store.c:stoDAlloc [libgeneral.so]
+     20,873,701  store.c:stoGcSweepFixed [libgeneral.so]
+     16,840,111  syme.c:symeIndex [libstruct.so]
+     10,816,357  fint.c:skipProg'2 [libstruct.so]</pre>
     <p>The results look similar to the ones from 
       <code>oprofile</code>. It seems that about 48%
     of the instruction fetches goes into 
@@ -442,26 +419,22 @@ Cache profiling is done by simulating the I1, D1 and L2 caches. In contrast to
     <code>aldor</code>
   
   
-    <pre>  --------------------------------------------------------
-                 Ir 
-      --------------------------------------------------------
-      1,506,123,564  PROGRAM TOTALS
-    
-    </pre>
-    <pre>  --------------------------------------------------------
-               Ir  file:function
-      --------------------------------------------------------
-      727,450,808  store.c:stoGcMarkRange [libgeneral.so]
-      300,471,582  fint.c:fintEval'2 [libstruct.so]
-      198,328,024  store.c:stoGcMarkRange'2 [libgeneral.so]
-       50,342,347  fint.c:fintStmt'2 [libstruct.so]
-       35,131,895  store.c:stoDAlloc [libgeneral.so]
-       27,747,760  fint.c:fintGetReference [libstruct.so]
-       21,504,263  store.c:stoGcMarkAndSweep [libgeneral.so]
-       16,840,111  syme.c:symeIndex [libstruct.so]
-       10,816,357  fint.c:skipProg'2 [libstruct.so]
-    
-    </pre>
+    <pre class="verbatim">--------------------------------------------------------
+               Ir 
+    --------------------------------------------------------
+    1,506,123,564  PROGRAM TOTALS</pre>
+    <pre class="verbatim">--------------------------------------------------------
+             Ir  file:function
+    --------------------------------------------------------
+    727,450,808  store.c:stoGcMarkRange [libgeneral.so]
+    300,471,582  fint.c:fintEval'2 [libstruct.so]
+    198,328,024  store.c:stoGcMarkRange'2 [libgeneral.so]
+     50,342,347  fint.c:fintStmt'2 [libstruct.so]
+     35,131,895  store.c:stoDAlloc [libgeneral.so]
+     27,747,760  fint.c:fintGetReference [libstruct.so]
+     21,504,263  store.c:stoGcMarkAndSweep [libgeneral.so]
+     16,840,111  syme.c:symeIndex [libstruct.so]
+     10,816,357  fint.c:skipProg'2 [libstruct.so]</pre>
     <p>This result is not particularly surprising. The total number of instruction
     fetches has reduced considerably due to inlining and therefore heavier
     optimisation. When comparing this to the 
@@ -471,7 +444,7 @@ Cache profiling is done by simulating the I1, D1 and L2 caches. In contrast to
     
     </p>
   </li>
-</ul> <h4>Real time measurement
+</ul> <pre class="verbatim"></pre> <h4>Real time measurement
 
 </h4> <p>I also measured real time with the zsh built-in 
   <code>time</code> command.
@@ -481,9 +454,7 @@ Cache profiling is done by simulating the I1, D1 and L2 caches. In contrast to
   <li>Aldor GC, not inlined
   
   
-    <pre>  aldor -ginterp sieve.as  25.08s user 0.08s system 99% cpu 25.338 total
-    
-    </pre>
+    <pre class="verbatim">aldor -ginterp sieve.as  25.08s user 0.08s system 99% cpu 25.338 total</pre>
   </li>
   <li>Aldor GC, inlined
   
@@ -496,11 +467,9 @@ Cache profiling is done by simulating the I1, D1 and L2 caches. In contrast to
   <li>Boehm GC
   
   
-    <pre>  aldor -ginterp sieve.as  29.32s user 0.06s system 99% cpu 29.404 total
-    
-    </pre>
+    <pre class="verbatim">aldor -ginterp sieve.as  29.32s user 0.06s system 99% cpu 29.404 total</pre>
   </li>
-</ul> <h4>Conclusion
+</ul> <pre class="verbatim"></pre> <h4>Conclusion
 
 </h4> <ul>
   <li>In 

@@ -6,7 +6,7 @@
 		<meta http-equiv="content-style-type" content="text/css"/> 
 		<meta name="description" content="Pippijn van Steenhoven - Projects / Games / Quake3"/> 
 		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
-		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+		<link rel="shortcut icon" type="image/x-icon" href="/home/favicon.ico"/>
 	</head> 
 
 	<body> 
@@ -106,7 +106,7 @@ a few callbacks from C/QVM to Perl functions. This allowed me to add an IRC
 logging backend and a client hack for weapon selection.
 
 
-</p> <h3>IRC Logging
+</p> <pre class="verbatim"></pre> <h3>IRC Logging
 
 </h3> <p>The IRC logging captures game events and produces a message to be sent to IRC.
 The current implementation uses Net::IRC3 but this is soon going to change to
@@ -125,42 +125,32 @@ to the channel
   <li>Player connected
   
   
-    <pre>  12:49 &lt; q3a&gt; Jules_Vernes connected
-    
-    </pre>
+    <pre class="verbatim">12:49 &lt; q3a&gt; Jules_Vernes connected</pre>
   </li>
   <li>Player disconnected
   
   
-    <pre>  13:20 &lt; q3a&gt; Jules_Vernes disconnected
-    
-    </pre>
+    <pre class="verbatim">13:20 &lt; q3a&gt; Jules_Vernes disconnected</pre>
   </li>
   <li>Player was killed
   
   
-    <pre>  12:54 &lt; q3a&gt; Jules_Vernes was squished
-      13:00 &lt; q3a&gt; LucY was railed by Jules_Vernes
-      13:18 &lt; q3a&gt; Jules_Vernes was in the wrong place
-    
-    </pre>
+    <pre class="verbatim">12:54 &lt; q3a&gt; Jules_Vernes was squished
+    13:00 &lt; q3a&gt; LucY was railed by Jules_Vernes
+    13:18 &lt; q3a&gt; Jules_Vernes was in the wrong place</pre>
   </li>
   <li>Round finished
   
   
-    <pre>  22:16 &lt; q3a&gt; Round finished:
-      22:16 &lt; q3a&gt; 1. LucY score: 20  ping 33
-      22:16 &lt; q3a&gt; 2. peter lustich score: 3  ping 61
-      22:16 &lt; q3a&gt; 3. Jules_Vernes score: -2  ping 91
-    
-    </pre>
+    <pre class="verbatim">22:16 &lt; q3a&gt; Round finished:
+    22:16 &lt; q3a&gt; 1. LucY score: 20  ping 33
+    22:16 &lt; q3a&gt; 2. peter lustich score: 3  ping 61
+    22:16 &lt; q3a&gt; 3. Jules_Vernes score: -2  ping 91</pre>
   </li>
   <li>Player said something
   
   
-    <pre>  22:17 &lt; q3a&gt; &lt;peter lustich&gt; lol
-    
-    </pre>
+    <pre class="verbatim">22:17 &lt; q3a&gt; &lt;peter lustich&gt; lol</pre>
   </li>
 </ul> <p>IRC users can chat back into the game and it will look like it origined from
 
@@ -217,7 +207,7 @@ are converted to IRC colours and vice versa.
     
     </p>
   </li>
-</ul> <h3>Client-Perl
+</ul> <pre class="verbatim"></pre> <h3>Client-Perl
 
 </h3> <p>The Quake 3 client has been enhanced to allow for prioritising weapon
 selection on pickup. That means, if 
@@ -233,25 +223,21 @@ implemented. The code for this is absolutely trivial and can be found in
 
 
 </p> <pre class="code-block"><span class="Statement">my</span> <span class="Identifier">%prefs</span> = (
-   Quake3::<span class="String">WP_GRAPPLING_HOOK</span>    =&gt; <span class="Number">0</span>,
-   Quake3::<span class="String">WP_NONE</span>              =&gt; <span class="Number">0</span>,
-
-   Quake3::<span class="String">WP_GAUNTLET</span>          =&gt; <span class="Number">0</span>,
-   Quake3::<span class="String">WP_GRENADE_LAUNCHER</span>  =&gt; <span class="Number">0</span>,
-   Quake3::<span class="String">WP_MACHINEGUN</span>        =&gt; <span class="Number">1</span>,
-   Quake3::<span class="String">WP_RAILGUN</span>           =&gt; <span class="Number">1</span>,
-   Quake3::<span class="String">WP_SHOTGUN</span>           =&gt; <span class="Number">2</span>,
-   Quake3::<span class="String">WP_LIGHTNING</span>         =&gt; <span class="Number">2</span>,
-   Quake3::<span class="String">WP_PLASMAGUN</span>         =&gt; <span class="Number">2</span>,
-   Quake3::<span class="String">WP_ROCKET_LAUNCHER</span>   =&gt; <span class="Number">3</span>,
-   Quake3::<span class="String">WP_BFG</span>               =&gt; <span class="Number">4</span>,
-);
-
-<span class="Statement">sub </span><span class="Identifier">item_pickup </span>{
-   <span class="Statement">my</span> (<span class="Identifier">$curweap</span>, <span class="Identifier">$newweap</span>) = <span class="Identifier">@_</span>;
-   <span class="Identifier">$prefs{$newweap}</span> &gt;= <span class="Identifier">$prefs{$curweap}</span> ? <span class="Number">1</span> : <span class="Number">0</span>
+Quake3::<span class="String">WP_GRAPPLING_HOOK</span>    =&gt; <span class="Number">0</span>,
+Quake3::<span class="String">WP_NONE</span>              =&gt; <span class="Number">0</span>,   Quake3::<span class="String">WP_GAUNTLET</span>          =&gt; <span class="Number">0</span>,
+Quake3::<span class="String">WP_GRENADE_LAUNCHER</span>  =&gt; <span class="Number">0</span>,
+Quake3::<span class="String">WP_MACHINEGUN</span>        =&gt; <span class="Number">1</span>,
+Quake3::<span class="String">WP_RAILGUN</span>           =&gt; <span class="Number">1</span>,
+Quake3::<span class="String">WP_SHOTGUN</span>           =&gt; <span class="Number">2</span>,
+Quake3::<span class="String">WP_LIGHTNING</span>         =&gt; <span class="Number">2</span>,
+Quake3::<span class="String">WP_PLASMAGUN</span>         =&gt; <span class="Number">2</span>,
+Quake3::<span class="String">WP_ROCKET_LAUNCHER</span>   =&gt; <span class="Number">3</span>,
+Quake3::<span class="String">WP_BFG</span>               =&gt; <span class="Number">4</span>,
+);<span class="Statement">sub </span><span class="Identifier">item_pickup </span>{
+<span class="Statement">my</span> (<span class="Identifier">$curweap</span>, <span class="Identifier">$newweap</span>) = <span class="Identifier">@_</span>;
+<span class="Identifier">$prefs{$newweap}</span> &gt;= <span class="Identifier">$prefs{$curweap}</span> ? <span class="Number">1</span> : <span class="Number">0</span>
 }
-</pre> <h3>Future
+</pre> <pre class="verbatim"></pre> <h3>Future
 
 </h3> <p>The current implementation and API design is below all standards (except for
 maybe the irssiperl one) and requires some real thinking. This interface was
