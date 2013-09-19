@@ -2,6 +2,7 @@
 	name			=> 'Pippijn van Steenhoven',
 	slogan		=> 'I doubt, therefore I might be',
 	shortname	=> 'Pippijn',
+	copyright	=> 'Pippijn van Steenhoven',
 
 	menubar => [
 		["Home"],
