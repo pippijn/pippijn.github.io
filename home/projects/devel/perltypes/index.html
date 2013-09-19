@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head> 
+		<title>Pippijn - Projects / Devel / Perltypes</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Devel / Perltypes"/> 
+		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Clean Blue" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+  <li>
+    <a href="/home/">Home</a>
+  </li>
+  <li>
+    <a href="/home/projects">Projects
+      <span class="small">[-]</span>
+    </a>
+    <ul>
+      <li>
+        <a href="/home/projects/devel">Developer tools
+          <span class="small">[-]</span>
+        </a>
+        <ul>
+          <li>
+            <a href="/home/projects/devel/clangide">Clang IDE</a>
+          </li>
+          <li>
+            <a href="/home/projects/devel/debuglib">DebugLib</a>
+          </li>
+          <li>
+            <a id="actmenu">PerlTypes</a>
+          </li>
+          <li>
+            <a href="/home/projects/devel/makequick">MakeQuick
+              <span class="small">[+]</span>
+            </a>
+          </li>
+          <li>
+            <a href="/home/projects/devel/mlsmoke">MLSmoke</a>
+          </li>
+          <li>
+            <a href="/home/projects/devel/ucslib">UCS Library</a>
+          </li>
+          <li>
+            <a href="/home/projects/devel/widget">ML Widgets</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="/home/projects/edu">Education
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/games">Games
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/net">Network
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/lang">Languages
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/robotics">Robotics
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/system">Systems
+          <span class="small">[+]</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="/home/opinions">Opinions
+      <span class="small">[+]</span>
+    </a>
+  </li>
+  <li>
+    <a href="/home/programming">Programming
+      <span class="small">[+]</span>
+    </a>
+  </li>
+  <li>
+    <a href="/home/links">Links</a>
+  </li>
+  <li>
+    <a href="/home/contact">Contact</a>
+  </li>
+</ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>PerlTypes
+
+</h2> <p>These are some bindings of OCaml and Perl in the style of 
+  <code>ctypes</code>.
+
+
+</p> <h3>Example
+
+</h3> <p>Perl code:
+
+</p> <pre class="code-block"><span class="Statement">sub </span><span class="Identifier">say </span>{
+  <span class="Statement">print</span> <span class="String">&quot;</span><span class="Identifier">$_</span><span class="String">: </span><span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span><span class="String"> and </span><span class="Identifier">$_[</span><span class="Number">1</span><span class="Identifier">]</span><span class="Special">\n</span><span class="String">&quot;</span>
+     <span class="Statement">for</span> <span class="Number">1</span> .. <span class="Identifier">$_[</span><span class="Number">2</span><span class="Identifier">]</span>;
+  <span class="Number">300</span>
+}
+
+<span class="Statement">sub </span><span class="Identifier">test_invoke1 </span>{
+  <span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span>-&gt;(<span class="String">'</span><span class="String">world</span><span class="String">'</span>)
+}
+
+<span class="Statement">sub </span><span class="Identifier">test_invoke2 </span>{
+  <span class="Identifier">$_[</span><span class="Number">0</span><span class="Identifier">]</span>-&gt;(<span class="String">'</span><span class="String">world</span><span class="String">'</span>)-&gt;(<span class="String">'</span><span class="String">hehe</span><span class="String">'</span>)
+}</pre> <p>OCaml code:
+
+</p> <pre class="code-block"><span class="Statement">open</span> <span class="Include">Perl.Foreign</span>
+
+<span class="Comment">(* new stuff using Foreign *)</span>
+<span class="Statement">let</span> say <span class="Statement">=</span>
+  foreign <span class="String">&quot;say&quot;</span> <span class="Statement">(</span><span class="Type">string</span> <span class="Conceal">⊕</span><span class="Conceal">→</span> <span class="Type">float</span> <span class="Conceal">⊕</span><span class="Conceal">→</span> <span class="Type">int</span> <span class="Conceal">⊕</span><span class="Conceal">→</span> <span class="Type">int</span><span class="Statement">)</span>
+
+<span class="Statement">let</span> test_invoke1 <span class="Statement">=</span>
+  foreign <span class="String">&quot;test_invoke1&quot;</span> <span class="Statement">((</span><span class="Type">string</span> <span class="Conceal">⊕</span><span class="Conceal">→</span> <span class="Type">string</span><span class="Statement">)</span> <span class="Conceal">⊕</span><span class="Conceal">→</span> <span class="Type">string</span><span class="Statement">)</span>
+
+<span class="Statement">let</span> test_invoke2 <span class="Statement">=</span>
+  foreign <span class="String">&quot;test_invoke2&quot;</span> <span class="Statement">((</span><span class="Type">string</span> <span class="Conceal">⊕</span><span class="Conceal">→</span> <span class="Type">string</span> <span class="Conceal">⊕</span><span class="Conceal">→</span> <span class="Type">string</span><span class="Statement">)</span> <span class="Conceal">⊕</span><span class="Conceal">→</span> <span class="Type">string</span><span class="Statement">)</span>
+
+
+<span class="Statement">let</span> <span class="Constant">()</span> <span class="Statement">=</span>
+  <span class="Include">Printf</span>.printf <span class="String">&quot;say returned %d\n&quot;</span>
+    <span class="Statement">(</span>say <span class="String">&quot;hello&quot;</span> <span class="Number">123.456</span> <span class="Number">3</span><span class="Statement">)</span><span class="Statement">;</span>
+
+  <span class="Include">Printf</span>.printf <span class="String">&quot;closure call returned: %s\n&quot;</span>
+    <span class="Statement">(</span>test_invoke1 <span class="Statement">(</span><span class="Conceal">λ</span> x <span class="Conceal">→</span>
+      <span class="String">&quot;hello &quot;</span> <span class="Statement">^</span> x
+    <span class="Statement">))</span><span class="Statement">;</span>
+
+  <span class="Include">Printf</span>.printf <span class="String">&quot;closure call returned: %s\n&quot;</span>
+    <span class="Statement">(</span>test_invoke2 <span class="Statement">(</span><span class="Conceal">λ</span> x y <span class="Conceal">→</span>
+      <span class="String">&quot;hello &quot;</span> <span class="Statement">^</span> x <span class="Statement">^</span> <span class="String">&quot;, &quot;</span> <span class="Statement">^</span> y
+    <span class="Statement">))</span><span class="Statement">;</span>
+<span class="Conceal">♢</span></pre> <p>Output:
+
+</p> <pre>   call say (hello, 123.456, 3)
+   1: hello and 123.456
+   2: hello and 123.456
+   3: hello and 123.456
+   say returned 300
+   call test_invoke1 (CODE(0x906fe8))
+   closure call returned: hello world
+   call test_invoke2 (CODE(0x92dee0))
+   hello
+   closure call returned: hello world, hehe
+</pre>
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Thu Sep 19 04:24:33 MEST 2013</div> 
+		</div> 
+	</body> 
+</html> 

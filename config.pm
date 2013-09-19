@@ -9,6 +9,7 @@
 			[devel => "Developer tools", [
 				[clangide => "Clang IDE"],
 				[debuglib => "DebugLib"],
+				[perltypes => "PerlTypes"],
 				[makequick => "MakeQuick", [
 					[project => "Project"],
 					[variables => "Variables"],
