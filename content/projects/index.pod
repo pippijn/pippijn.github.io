@@ -56,6 +56,8 @@ integration system. Here are the projects' build statuses:
 
 =item L<< N<https://api.travis-ci.org/pippijn/glr.png>|https://travis-ci.org/pippijn/glr >> L<glr|https://github.com/pippijn/glr>
 
+=item L<< N<https://api.travis-ci.org/pippijn/gvoc.png>|https://travis-ci.org/pippijn/gvoc >> L<gvoc|https://github.com/pippijn/gvoc>
+
 =item L<< N<https://api.travis-ci.org/pippijn/hm-infer.png>|https://travis-ci.org/pippijn/hm-infer >> L<hm-infer|https://github.com/pippijn/hm-infer>
 
 =item L<< N<https://api.travis-ci.org/xinutec/irssi.png>|https://travis-ci.org/xinutec/irssi >> L<irssi|https://github.com/xinutec/irssi>
