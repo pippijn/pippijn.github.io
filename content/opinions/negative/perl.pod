@@ -4,9 +4,7 @@ Perl is a highly dynamic language in which complex tasks can be solved within
 a few lines of elegant code. It has downsides, however, and I will elaborate
 on a few of them here.
 
-=over
-
-=item Errors caught at runtime
+=head2 Errors caught at runtime
 
 Since Perl is a dynamic language, it has no type checking aside from the
 syntax errors that result from incorrectly using scalars, arrays or hashes.
@@ -20,7 +18,7 @@ C<$a = hello; print $a;> and it writes "hello" to C<stdout>.
 When changing an existing program erroneously, the error may not be caught
 right away and may cause problems in areas where none are expected.
 
-=item C<eval>-blocks catch I<all> errors
+=head2 C<eval>-blocks catch I<all> errors
 
 In Perl, exceptions are caught with C<eval> blocks. These catch all errors, so
 if you want to catch only a few, you need to catch all, find out whether your
@@ -47,7 +45,7 @@ be localised, making it even harder to catch exactly the error you need.
 By the way, C<eval> is not only an exception handling keyword, it is also a
 string evaluation keyword. This may cause confusion to beginners.
 
-=item Easy to write bad code
+=head2 Easy to write bad code
 
 Perl makes it very easy to write code and APIs. Where strictly object oriented
 languages such as Java enforce a certain paradigm, Perl allows one to design
@@ -55,12 +53,12 @@ APIs like the Irssi scripting API. There is an awful lot of crappy Perl code
 out there, people tend to call "line noise". While it is possible to write
 crappy code with Java, it is much harder to do so than in Perl.
 
-=item Many pitfalls
+=head2 Many pitfalls
 
 There are many areas in the language that can bite you if you don't know about
 them.
 
-=item Features built into the language
+=head2 Features built into the language
 
 Perl has many more or less known features that are built into the language.
 One of them is L<formats|http://perldoc.perl.org/perlform.html>. The problem
@@ -68,7 +66,7 @@ with this is that there is no easy way of replacing or enhancing the
 functionality provided by them. Perl formats cannot be returned from functions
 nor can they be manipulated after their creation.
 
-=item Arrays or array references
+=head2 Arrays or array references
 
 Arrays of arrays do not exist in Perl and an attempt to create one yields a
 flattened array such that C<((1, 2, 3), 2, 3)> becomes C<(1, 2, 3, 2, 3)>.
@@ -97,7 +95,7 @@ But in Perl, the same code requires:
 The reason for this is that it makes it possible to C<push> a list of items
 onto an array.
 
-=item Implicit behaviour
+=head2 Implicit behaviour
 
 Simple, machine oriented languages such as C contain very little magic. Perl
 does. An example is the ability to assign an array to a hash:
@@ -105,7 +103,7 @@ C<my %hash = (1, 2, 3, 4)>. The resulting hash contains:
 C<< (1 => 2, 3 => 4) >>. The language is full of implicit behaviour, which I
 call "magic".
 
-=item Functions interfaces
+=head2 Functions interfaces
 
 In Perl, functions do not need to provide prototypes and a lot of code indeed
 does not. If it does, C<perl> can check whether the provided number of
@@ -115,10 +113,8 @@ thing in a function like: C<my ($a, $b, $c) = @_;>. This is not required,
 though, and it is not rare that code uses C<@_> directly with subscript
 access. That makes the code unreadable.
 
-=item Circular references
+=head2 Circular references
 
 Perl has no cycle breaking system in its reference counting. This means you
 can introduce memory leaks with circular references. For this, Perl provides
 C<Scalar::Util::weaken>, but you still have to do it.
-
-=back

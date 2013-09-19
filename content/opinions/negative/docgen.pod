@@ -7,9 +7,7 @@ documentation with inheritance- and callgraphs. These tools are often praised
 and are said to force programmers to write useful documentation. This is a
 document on why such tools are overrated and overused.
 
-=over
-
-=item Annoying
+=head2 Annoying
 
 I think that often, documentation tools force programmers to get annoyed at the
 tools due to them expecting documentation for self-explaining functions.  See
@@ -20,7 +18,7 @@ precision. It also returns the X coordinate of a point". Just the fact that
 CheckStyle requires you to write a description and an C<@returns> directive
 causes these redundant comments.
 
-=item Bloated documentation
+=head2 Bloated documentation
 
 The tools generate large HTML pages with fancy links and graphs all over the
 place, hiding the bits and pieces of valuable code documentation. In order to
@@ -32,7 +30,7 @@ explained in greatest detail. You might think this is a good thing, but what
 happens is that the valuable pieces of information you might need are hidden
 somewhere in a novel of code documentation.
 
-=item Lazy
+=head2 Lazy
 
 Documentation generators, if they do not get the programmers to write
 documentation for their code, makes those lazy. It may make them think they can
@@ -41,14 +39,14 @@ the docs for them. As a result, the produced documentation is entirely useless.
 Everything such a tool can do can more or less easily be seen in the code
 itself.
 
-=item Bad presentation
+=head2 Bad presentation
 
 Even if the idea of doclets in code is not that bad, the presentation of written
 documentation is often very bad. As mentioned in the point on bloated
 documentation, the HTML pages are huge and the documentation is barely visible.
 This is a problem with the presentation of information.
 
-=back
+=head2 Conclusion
 
 Overall, I do not think that documentation systems such as JavaDoc or Doxygen
 add to the value of code documentation. I have yet to see a library that I can

@@ -4,9 +4,7 @@ C++ is a powerful object oriented and usually compiled language with a large set
 of features. This large set is hard to understand and you need to understand
 most of it to be able to use even a subset of it.
 
-=over
-
-=item No defined ABI (@abi)
+=head2 No defined ABI (@abi)
 
 This is a huge issue with C++. It is rarely possible to compile code with one
 compiler and use the linked machine code library with another. Even compiler
@@ -17,7 +15,7 @@ handling mechanisms, different ways of storing member function pointers,
 different virtual call tables, different class layout of polymorphic types and
 more.
 
-=item Low performance memory allocation (@malloc)
+=head2 Low performance memory allocation (@malloc)
 
 By default, new allocations in C++ need operating system calls. Usually, the
 memory allocator (C<malloc> and C<operator new>) do memory pooling and
@@ -34,7 +32,7 @@ bump allocator providing allocation speeds near that of the system stack.
 
 =end small
 
-=item Everything has to be done manually (@manual)
+=head2 Everything has to be done manually (@manual)
 
 C++ as a language can't do much. Pointers have no idea how large the memory
 chunk is they point at. As soon as arrays decay into pointers, there is no way
@@ -43,13 +41,13 @@ know the size of their memory block, you have to implement memory management
 yourself and store the block size before the returned memory chunk. This is what
 C<malloc(3)> already does in most cases, so it would be redundant.
 
-=item Unable to modify compiled code (@modify)
+=head2 Unable to modify compiled code (@modify)
 
 In C++, it is not possible to modify the compiled code at runtime. In standard
 C++, it is not even possible to generate machine code and execute that at
 runtime.
 
-=item Template metaprogramming is complicated (@templates)
+=head2 Template metaprogramming is complicated (@templates)
 
 Templates are a different language with a different syntax than the rest of C++.
 The verbose and different syntax make template metaprogramming cumbersome.  If
@@ -102,7 +100,7 @@ The macro is expanded at compile-time. The D programming language has static
 evaluation of complex constant functions. The new C++ standard allows for these,
 but in a severely limited form.
 
-=item Compiler diagnostics are often unreadable (@diag)
+=head2 Compiler diagnostics are often unreadable (@diag)
 
 =begin code cpp toggle
 
@@ -187,7 +185,7 @@ but in a severely limited form.
 The error here is that I was trying to convert a C<node_base> pointer to a
 derived C<node> pointer without a cast.
 
-=item Bad support for data hiding (@datahiding)
+=head2 Bad support for data hiding (@datahiding)
 
 The C++ programming language requires you to provide the complete class
 description, including private members, in the interface file. In C, you can
@@ -224,7 +222,7 @@ violate it.
 In C++, a workaround for this exists and it is called the
 L<pimpl idiom|http://en.wikipedia.org/wiki/Opaque_pointer#C.2B.2B>.
 
-=item Undefined behaviour (@ub)
+=head2 Undefined behaviour (@ub)
 
 C++ has a set of lowlevel features such as pointer arithmetics and memory
 functions (C<memcpy> and friends). With these features, it is very easy to
@@ -265,7 +263,7 @@ is insufficiently skilled, these actions may cause serious astonishment.
 Astonishment is something Java tries to avoid by following the "Principle of
 Least Astonishment".
 
-=item In production, only usable with skilled programmers (@skills)
+=head2 In production, only usable with skilled programmers (@skills)
 
 Languages such as Java also allow mediumly skilled programmers to join a
 development team. C++ programmers, in contrast, require a high level of
@@ -301,7 +299,7 @@ range indices. All of that makes the language a dangerous tool. As a Java
 programmer once told me: "C++ is useful only for cases where your programmers
 ALL KICK ASS".
 
-=item Verbose "lambda expression" (@verbose)
+=head2 Verbose "lambda expression" (@verbose)
 
 In order to emulate lambda expressions in C++, you have to write verbose code
 like this:
@@ -344,7 +342,7 @@ Or, in languages with functional elements such as Perl:
 
 =end code perl
 
-=item Operator overloading can make code complicated (@overload)
+=head2 Operator overloading can make code complicated (@overload)
 
 In C++, almost every operator can be overloaded. This includes C<operator||> and
 C<operator,>. Overloading them can lead to confusion. There are a few rules of
@@ -353,18 +351,18 @@ is bad practice. Overloading the sequential evaluation operator is bad practice.
 Overloading C<operator&amp;&amp;> and C<operator||> are bad practice. Compilers
 will unlikely warn about it, though.
 
-=item Very idiomatic (@idiom)
+=head2 Very idiomatic (@idiom)
 
 Writing solid C++ code requires mastery of almost the whole language and many of
 its idioms.
 
-=item Complex grammar (@grammar)
+=head2 Complex grammar (@grammar)
 
 C++ can not be expressed in an LR(1) grammar. It is context-dependent and as
 such requires considerable effort from both the machine parser and the human eye
 to be understood.
 
-=item Impossible to chain constructors (@chained_ctor)
+=head2 Impossible to chain constructors (@chained_ctor)
 
 Where in Java one could write
 
@@ -410,5 +408,3 @@ been fixed in C++11). Trying it like this:
 does call the other constructor but creates an anonymous C<Point> on the stack
 and discards it right away. Trying to copy the Java syntax C<this()> results in
 a compile-time error.
-
-=back

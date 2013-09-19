@@ -4,9 +4,7 @@ Java is a fast byte-code compiled language with garbage collection and a simple
 syntax. Its simplicity, though, leads to many inelegancies, some of which I will
 describe here.
 
-=over
-
-=item No undefined behaviour? (@ub)
+=head2 No undefined behaviour? (@ub)
 
 Actually, there is. If you create objects of a class with finalisers that create
 objects with finalisers and call C<System.runFinalizersOnExit(true)> before
@@ -14,34 +12,34 @@ exiting, the behaviour is undefined. Will the JVM exit? Will it keep on creating
 objects and destroying them right away due to the JVM exiting? The JLS (Java
 Language Specification) does not specify this.
 
-=item Overuse of inheritance (@inheritance)
+=head2 Overuse of inheritance (@inheritance)
 
 Due to Java's lack of proper generics or templates, programmers are forced to
 use inheritance for everything. Where in C++, one could write
 
-=begin code CPP
+=begin code cpp
 
-   template<typename CollectionT, typename T>
-   void add_item (CollectionT collection, T element)
-   {
-     collection.add (element);
-   }
+  template<typename CollectionT, typename T>
+  void add_item (CollectionT collection, T element)
+  {
+    collection.add (element);
+  }
 
-=end code cpp
+=end
 
 and it would work for all types that provide a member function called C<add(T)>,
 in Java, we have to inherit from C<java.util.Collection&lt;T&gt;> and write
 
 =begin code java
 
-   public <T> void addItem(Collection<T> collection, T element)
-   {
-       collection.add(element);
-   }
+  public <T> void addItem(Collection<T> collection, T element)
+  {
+      collection.add(element);
+  }
 
-=end code java
+=end
 
-=item No proper generics (@generics)
+=head2 No proper generics (@generics)
 
 Apart from the issue explained in the point above, generics in Java are pretty
 useless. The only thing they add to the language is some sort of type-safety.
@@ -51,11 +49,11 @@ use enormously. Think about the following simple factory function:
 
 =begin code java
 
-   public <T> T create() {
-       return new T();
-   }
+  public <T> T create() {
+      return new T();
+  }
 
-=end code java
+=end
 
 This code does not compile, because T can not be instantiated. The reason for
 this is explained in 4.6 of the JLS. Types are erased. They do not exist at
@@ -67,15 +65,15 @@ The code could be written like this:
 
 =begin code java
 
-   public <T> T create(Class<T> cls) {
-       return cls.newInstance();
-   }
-   // Or, for arrays:
-   public <T> T[] createArray(Class<T[]> arraytype, int size) {
-       return arraytype.cast(Array.newInstance(arraytype.getComponentType(), size));
-   }
+  public <T> T create(Class<T> cls) {
+      return cls.newInstance();
+  }
+  // Or, for arrays:
+  public <T> T[] createArray(Class<T[]> arraytype, int size) {
+      return arraytype.cast(Array.newInstance(arraytype.getComponentType(), size));
+  }
 
-=end code java
+=end
 
 Note that you can not create arrays of primitive types this way, only of the
 boxed versions. Another issue with Java generics is that due to type erasure,
@@ -88,27 +86,27 @@ It is also not possible to write code like this:
 
 =begin code java
 
-   public <T> void func(T o) {
-       o.method();
-   }
+  public <T> void func(T o) {
+      o.method();
+  }
 
-=end code java
+=end
 
 While using C++ templates, this would be possible for all types T that define a
 member function C<method()>. In Java, the solution to this is:
 
 =begin code java
 
-   public <T extends TypeWithMethod> void func(T o) {
-       o.method();
-   }
+  public <T extends TypeWithMethod> void func(T o) {
+      o.method();
+  }
 
-=end code java
+=end
 
 This pretty much repeats the point above, but emphasises more on the generics
 part of the issue whereas the other point emphasises on the inheritance part.
 
-=item Garbage collection (@gc)
+=head2 Garbage collection (@gc)
 
 Garbage collection is often used as the killer argument for modern imperative
 languages such as Java and C#. In such languages, programmers tend to think that
@@ -121,31 +119,31 @@ the stack, so this space is not reused. Consider the following code:
 
 =begin code java
 
-   for (Collection<Item> c : collections) {
-      Vector<Item> v = new Vector<Item>();
-      for (Item i : c) {
-         v.add(i);
-      }
-      doSomething(v);
-   }
+  for (Collection<Item> c : collections) {
+     Vector<Item> v = new Vector<Item>();
+     for (Item i : c) {
+        v.add(i);
+     }
+     doSomething(v);
+  }
 
-=end code java
+=end
 
 In this code, a new C<Vector&lt;Item&gt;> object is created every time and
 discarded for the next outer loop iteration. This code could be rewritten as
 
 =begin code java
 
-   Vector<Item> v = new Vector<Item>();
-   for (Collection<Item> c : collections) {
-      for (Item i : c) {
-         v.add(i);
-      }
-      doSomething(v);
-      v.clear();
-   }
+  Vector<Item> v = new Vector<Item>();
+  for (Collection<Item> c : collections) {
+     for (Item i : c) {
+        v.add(i);
+     }
+     doSomething(v);
+     v.clear();
+  }
 
-=end code java
+=end
 
 This is not by itself bad about Java but it shows a problem many don't
 acknowledge: Even with a GC'd language, you need to take care of memory
@@ -171,7 +169,7 @@ does and is therefore more usable for such applications.
 
 Also see the point on RAII later on why garbage collection is bad.
 
-=item Object orientation (@oop)
+=head2 Object orientation (@oop)
 
 A language like Java is supposed to propagate object-oriented design. What it
 really does it make people think that when you write buzzwords like C<class>,
@@ -189,7 +187,7 @@ can't I do C<i.toString()>? I have to do C<Integer.valueOf(i).toString()> or
 C<Integer.toString(i)>. So much for consistency in the language. I thought
 everything had a C<toString()>. No, primitives don't.
 
-=item Slow (@slow)
+=head2 Slow (@slow)
 
 I once had a discussion with a Java advocate on Java's speed. He said, Java can
 lock and unlock a mutex much faster than pthreads. Funny thing, since Java's
@@ -212,7 +210,7 @@ A few numbers from local tests with Sun's JDK 1.6.0_06:
 
 Note that Java L<can be fast|why-use_java.xhtml#jvm>.
 
-=item "Fail-Safe" (@failsafe)
+=head2 "Fail-Safe" (@failsafe)
 
 It is impossible to disable a method or code block by adding a C<return> or
 C<continue> statement due to I<14.21 Unreachable Statements>: "It is a
@@ -244,16 +242,12 @@ from being called on a C<const> object.
 Note that "top-level" const in C means "Object* const x". The pointer itself can
 not be modified, but the pointee (the object being pointed at) can.
 
-=end small
-
-=begin small
-
 Also note that even though "final" is <em>like</em> "const", it is not exactly
 the same. In Java, you can leave a final variable uninitialised on declaration
 and assign it <em>once</em> later. For example, a static final field can be
 assigned once in a static { } block but then it works like C's top-level const.
 
-=end small
+=end
 
 =back
 
@@ -261,15 +255,15 @@ Also, consider the following code snippet:
 
 =begin code java
 
-    public static void main (String[] argv) {
-        int i;
-        if (argv.length >= 0) {
-            i = 5;
-        }
-        System.out.println(i);
-    }
+   public static void main (String[] argv) {
+       int i;
+       if (argv.length >= 0) {
+           i = 5;
+       }
+       System.out.println(i);
+   }
 
-=end code java
+=end
 
 The compiler errors out, saying that i "may not have been initialised". Is that
 so? Array lengths can never be less than 0. If our compiler is smart enough to
@@ -286,9 +280,9 @@ Admittedly, this is a rather useless condition for setting i, but there are
 real-world examples where this imposes a really annoying issue. Java programmers
 will know.
 
-=end small
+=end
 
-=item It compiles? Ship it!
+=head2 It compiles? Ship it!
 
 The above mentioned "fail-safety" makes programmers think that if their compiler
 does not complain (and even Eclipse shuts up), their code is correct.  This may
@@ -296,7 +290,7 @@ be true from a syntax point of view, even some semantic checks may have been
 performed, but the code may still not do what they expected. Even a seemingly
 fail-safe language such as Java is not a mind-reader.
 
-=item Inconsistent (@inconsistent)
+=head2 Inconsistent (@inconsistent)
 
 Java has several inconsistencies in its design. Whether to call them
 inconsistencies, inelegancies or features is up to the reader. I consider these
@@ -357,20 +351,20 @@ exception does not hold for C<while (false) { }>.  Consider code like this:
 
 =begin code java
 
-   while (true) return;
-   System.out.println("Unreachable"); // this statement is unreachable and an error
-   // but
-   if (true) return;
-   System.out.println("Unreachable"); // this statement is unreachable but not an error
+  while (true) return;
+  System.out.println("Unreachable"); // this statement is unreachable and an error
+  // but
+  if (true) return;
+  System.out.println("Unreachable"); // this statement is unreachable but not an error
 
-=end code java
+=end
 
 Note that this behaviour is specified by the JLS. I do think, though, that this
 is inconsistent.
 
 =back
 
-=item No RAII possible (@raii)
+=head2 No RAII possible (@raii)
 
 An important pattern in languages such as Perl and C++ is RAII, which stands for
 "Resource Acquisition Is Initialisation". It basically means that objects
@@ -379,14 +373,14 @@ good example of this is lock acquisition and release:
 
 =begin code cpp
 
-   void function (int i)
-   {
-     mutex::locker mlock (this->mtx);
-     check (i);
-     this->number += i;
-   }
+  void function (int i)
+  {
+    mutex::locker mlock (this->mtx);
+    check (i);
+    this->number += i;
+  }
 
-=end code cpp
+=end
 
 This code locks a mutex and unlocks it whenever the function returns. This may
 happen on exceptions or on normal return. The C<check> function may throw an
@@ -397,23 +391,23 @@ do:
 
   void function(int i) throws Exception
   {
-      this.mtx.lock ();
-      try {
-          check(i);
-      } finally {
-          this.mtx.unlock();
-      }
-      this.number += i;
+     this.mtx.lock ();
+     try {
+         check(i);
+     } finally {
+         this.mtx.unlock();
+     }
+     this.number += i;
   }
 
-=end code java
+=end
 
 In the code above, the issue is not that apparent, but when you start playing
 with file I/O, you may need a cascade of up to three C<try>'s and C<catch>es in
 order to catch all exceptions thrown. Opening, writing and closing may throw. A
 lot of typing work that could have been saved by RAII.
 
-=item No proper compiler diagnostics (@diag)
+=head2 No proper compiler diagnostics (@diag)
 
 The default Java compiler's diagnostics are pretty sparse. You have to ask for
 specific warnings using -Xlint:(unchecked|path|serial|finally|fallthrough).
@@ -424,23 +418,23 @@ unclear what exaclty needs to be done to fix the warning. "unchecked call to
 add(E) as a member of the raw type java.util.ArrayList". If you want decent
 diagnostics, you need to use something like the Eclipse compiler.
 
-=item Almost enforced writing of documentation (@javadoc)
+=head2 Almost forced writing of documentation (@javadoc)
 
 This may by itself not sound bad, but it leads to comments such as these:
 
 =begin code java
 
-   /**
-    * Returns the X coordinate of this <code>Point2D</code> in
-    * <code>double</code> precision.
-    * @return the X coordinate of this <code>Point2D</code>.
-    * @since 1.2
-    */
-   public abstract double getX();
+  /**
+   * Returns the X coordinate of this <code>Point2D</code> in
+   * <code>double</code> precision.
+   * @return the X coordinate of this <code>Point2D</code>.
+   * @since 1.2
+   */
+  public abstract double getX();
 
-=end code Java
+=end
 
-Breaking up the description:
+Breaking down the description:
 
 =over
 
@@ -475,7 +469,7 @@ The only piece of information that might be of value to us is the @since
 directive. The rest is 100% redundant. Why didn't they say it was C<abstract>?
 That's I<really> important, since we can't read method signatures, right?
 
-=item "Write once, run everywhere" (@wore)
+=head2 "Write once, run everywhere" (@wore)
 
 This is not true at all, especially when using JNI. Even without JNI, Java code
 behaves differently on different platforms. Most notably is the GUI with AWT
@@ -483,7 +477,7 @@ where closing a window on Linux needs different code than for Windows.  Right
 clicking elements in a Swing GUI also behaves differently on Linux than on
 Windows.
 
-=item No auto-expanding heap (@heap)
+=head2 No auto-expanding heap (@heap)
 
 Unlike applications on POSIX systems (and possibly on Windows, as well), the
 amount of memory granted to the application is limited and not auto-expanding.
@@ -501,39 +495,39 @@ Note: starting with Sun HotSpot Java 1.4, it is possible to enabled
 auto-expanding heap using the <span class="code">-XX:+AggressiveHeap</span>
 option on startup.
 
-=end small
+=end
 
-=item No "rethrow" (@rethrow)
+=head2 No "rethrow" (@rethrow)
 
 In Java, it is not possible to throw the same exception, preserving the stack
 trace. In C++, we could do:
 
-=begin code CPP
+=begin code cpp
 
-   try {
-     function ();
-   } catch (exception const &e) {
-     do_some_cleanups ();
-     throw;
-   }
+  try {
+    function ();
+  } catch (exception const &e) {
+    do_some_cleanups ();
+    throw;
+  }
 
-=end code CPP
+=end
 
 In Java, we have to create a new C<Exception> object and pass the old one as
 argument:
 
-=begin code Java
+=begin code java
 
-   try {
-       method();
-   } catch (Exception e) {
-       doSomeCleanups();
-       throw new Exception(e);
-   }
+  try {
+      method();
+  } catch (Exception e) {
+      doSomeCleanups();
+      throw new Exception(e);
+  }
 
-=end code Java
+=end
 
-=item Everything passed by value (@pass_by_value)
+=head2 Everything passed by value (@pass_by_value)
 
 This means you cannot pass an C<int> and expect it to be modified. Neither can
 you pass a reference to an object and expect it to be modified. Returning an
@@ -543,7 +537,7 @@ and increments it. You can of course work around this by letting the increment
 function return the value incremented. This, however, creates a new object each
 time, making it unfeasible to use.
 
-=item Backwards compatibility limits innovation (@compat)
+=head2 Backwards compatibility limits innovation (@compat)
 
 Due to the fact that Java needs to be binary compatible with at least JDK 1.1.x,
 new technologies are often braked down. Generics cannot be properly implemented
@@ -552,19 +546,17 @@ order to preserve backwards compatibility. The reflection API must remain
 compatible with 1.1.x. Classes from Java 1.4 need to be able to load classes
 from Java 7.
 
-=item C<javac> optimises poorly (@opt)
+=head2 C<javac> optimises poorly (@opt)
 
 The Java compiler has a very poor optimiser. It leaves all heavy optimisation to
 the runtime environment, which does peep-hole optimisation on bytecode and code
 inlining.
 
-=item Programcode is not a data structure (@codestruct)
+=head2 Program code is not a data structure (@codestruct)
 
 In Java, it is not possible to modify the code on the fly, for example by
 changing the AST at runtime as it is possible in languages such as Lisp. This is
 a problem with many curly-bracket languages.
-
-=back
 
 =head2 Links
 
