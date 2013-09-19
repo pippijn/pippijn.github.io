@@ -33,6 +33,7 @@
 			]],
 			[net => "Network", [
 				[groovy => "Grooveshark"],
+				['lina-irc' => "Lina IRC"],
 				[purplebee => "Purplebee"],
 				[website => "This Website"],
 				[json => "pa_json"],

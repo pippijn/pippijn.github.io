@@ -64,6 +64,8 @@ integration system. Here are the projects' build statuses:
 
 =item L<< N<https://api.travis-ci.org/pippijn/jmlc.png>|https://travis-ci.org/pippijn/jmlc >> L<jmlc|https://github.com/pippijn/jmlc>
 
+=item L<< N<https://api.travis-ci.org/pippijn/lina-irc.png>|https://travis-ci.org/pippijn/lina-irc >> L<lina-irc|https://github.com/pippijn/lina-irc>
+
 =item L<< N<https://api.travis-ci.org/pippijn/makequick.png>|https://travis-ci.org/pippijn/makequick >> L<makequick|https://github.com/pippijn/makequick>
 
 =item L<< N<https://api.travis-ci.org/pippijn/menhir.png>|https://travis-ci.org/pippijn/menhir >> L<menhir|https://github.com/pippijn/menhir>
