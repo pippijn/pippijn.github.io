@@ -35,9 +35,11 @@
 				[groovy => "Grooveshark"],
 				['lina-irc' => "Lina IRC"],
 				[purplebee => "Purplebee"],
-				[website => "This Website"],
 				[json => "pa_json"],
 				[unpack => "pa_unpack"],
+				[web => "Website", [
+					[generator => "Generator"],
+				]],
 			]],
 			[lang => "Languages", [
 				[aldor => "Aldor", [
