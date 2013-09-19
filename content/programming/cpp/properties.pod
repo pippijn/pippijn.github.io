@@ -613,12 +613,10 @@ don't really see any reason why any compiler could mess it up.)
 
 =item L<Properties on Wikipedia|http://en.wikipedia.org/wiki/Property_(programming)>
 
-=item L<Properties in C++|http://www.codeproject.com/KB/cpp/cppproperties.aspx>
+=item L<Properties in C++|http://www.codeproject.com/Articles/3900/Implementing-Properties-In-C>
 
-=item L<FastDelegate|http://www.codeproject.com/KB/cpp/FastDelegate.aspx>
+=item L<FastDelegate|http://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible>
 
-=item L<The MSVC properties hack|http://blogs.msdn.com/ericflee/archive/2008/04/17/how-to-do-object-properties-in-c.aspx>
-
-=item L<Another MSVC properties hack|http://msdn.microsoft.com/en-us/library/z974bes2(VS.71).aspx>
+=item L<MSVC properties hack|http://msdn.microsoft.com/en-us/library/z974bes2(VS.71).aspx>
 
 =back
