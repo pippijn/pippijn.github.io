@@ -142,7 +142,8 @@ in, writing such an expression is equal to writing normal code:
                <span class="Special">(</span><span class="Statement">+</span> <span class="Special">(</span>fib <span class="Special">(</span><span class="Statement">-</span> n <span class="Number">1</span><span class="Special">))</span> <span class="Special">(</span>fib <span class="Special">(</span><span class="Statement">-</span> n <span class="Number">2</span><span class="Special">))))))</span>
     <span class="Special">(</span>fib n<span class="Special">)))</span>
 <span class="Comment">; Use it like this:</span>
-<span class="Special">(</span><span class="Statement">print</span> <span class="Special">(</span>fib <span class="Number">4</span><span class="Special">))</span></pre> <p>The macro is expanded at compile-time. The D programming language has static
+<span class="Special">(</span><span class="Statement">print</span> <span class="Special">(</span>fib <span class="Number">4</span><span class="Special">))</span>
+</pre> <p>The macro is expanded at compile-time. The D programming language has static
 evaluation of complex constant functions. The new C++ standard allows for these,
 but in a severely limited form.
 
@@ -446,8 +447,7 @@ to be understood.
     {
         <span class="Type">this</span>(xAndY, xAndY);
     }
-}
-</pre> <p>this is not possible at all in C++. One can not chain constructors (this has
+}</pre> <p>this is not possible at all in C++. One can not chain constructors (this has
 been fixed in C++11). Trying it like this:
 
 </p> <pre class="code-block"><span class="Type">class</span> Point
@@ -473,7 +473,7 @@ a compile-time error.
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Thu Sep 19 06:51:03 MEST 2013</div> 
+			<div id="updated">Last updated Wed Sep 25 03:01:33 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 

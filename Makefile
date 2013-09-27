@@ -1,4 +1,5 @@
-FLAGS = --projects
+FLAGS	= --projects
+TARGET	= home
 
 upload: build
 	@sed -i -e 's|"/home/|"/~pippijn/home/|g' $(HTML)

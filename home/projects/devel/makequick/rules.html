@@ -404,8 +404,7 @@ object files from C sources can be written as follows:
 
 </p> <pre class="code-block">%%.o<span class="Statement">:</span> %%.c <span class="Identifier">{</span>
    @(CC)<span class="Identifier">$(CC)</span> <span class="Identifier">$[CPPFLAGS]</span> <span class="Identifier">$[CFLAGS]</span> -MT <span class="Identifier">$@</span> -MD -MP -MF <span class="Identifier">$(DEPDIR)</span>/<span class="Identifier">$*</span>.Tpo -c -o <span class="Identifier">$@</span> <span class="Identifier">$&lt;</span>
-<span class="Identifier">}</span>
-</pre> <p>Automake still provides many useful tools, such as its 
+<span class="Identifier">}</span></pre> <p>Automake still provides many useful tools, such as its 
   <code>distcheck</code> and
 
   <code>parallel-tests</code> facilities. These tools are the reason 
@@ -423,7 +422,7 @@ lower level than
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Mon Aug 12 04:30:35 MEST 2013</div> 
+			<div id="updated">Last updated Wed Sep 25 03:00:10 MEST 2013</div> 
 		</div> 
 	</body> 
 </html> 
