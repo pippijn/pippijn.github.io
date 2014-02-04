@@ -1,6 +1,8 @@
-Recommendable films
-===================
+Watched films
+=============
 
+- [Colossus: The Forbin Project (1970)](http://www.imdb.com/title/tt0064177/)
+- [The Cook, the Thief, His Wife & Her Lover (1989)](http://www.imdb.com/title/tt0097108/)
 - [1408 (2007)](http://www.imdb.com/title/tt0450385/)
 - [28 Days Later... (2002)](http://www.imdb.com/title/tt0289043/)
 - [3 Idiots (2009)](http://www.imdb.com/title/tt1187043/)
@@ -17,6 +19,7 @@ Recommendable films
 - [As Good as It Gets (1997)](http://www.imdb.com/title/tt0119822/)
 - [Back to the Future (1985)](http://www.imdb.com/title/tt0088763/)
 - [Batman Begins (2005)](http://www.imdb.com/title/tt0372784/)
+- [Beginners](http://www.imdb.com/title/tt1532503/)
 - [Black Swan (2010)](http://www.imdb.com/title/tt0947798/)
 - [Blade (1998)](http://www.imdb.com/title/tt0120611/)
 - [Blood Diamond (2006)](http://www.imdb.com/title/tt0450259/)
@@ -50,6 +53,7 @@ Recommendable films
 - [Jurassic Park (1993)](http://www.imdb.com/title/tt0107290/)
 - [Kick-Ass (2010)](http://www.imdb.com/title/tt1250777/)
 - [L.A. Confidential (1997)](http://www.imdb.com/title/tt0119488/)
+- [L'aile ou la cuisse (1976)](http://www.imdb.com/title/tt0074103/)
 - [Le fabuleux destin d'Amélie Poulain (2001)](http://www.imdb.com/title/tt0211915/)
 - [Léon: The Professional (1994)](http://www.imdb.com/title/tt0110413/)
 - [Liar Liar (1997)](http://www.imdb.com/title/tt0119528/)
@@ -63,6 +67,7 @@ Recommendable films
 - [Memento (2000)](http://www.imdb.com/title/tt0209144/)
 - [Metropolis (1927)](http://www.imdb.com/title/tt0017136/)
 - [Monty Python and the Holy Grail (1975)](http://www.imdb.com/title/tt0071853/)
+- [Mulholland Drive (2001)](http://www.imdb.com/title/tt0166924/)
 - [No Country for Old Men (2007)](http://www.imdb.com/title/tt0477348/)
 - [Once Upon a Time in America (1984)](http://www.imdb.com/title/tt0087843/)
 - [Once Upon a Time in the West (1968)](http://www.imdb.com/title/tt0064116/)
@@ -119,9 +124,37 @@ Recommendable films
 - [The World's Fastest Indian (2005)](http://www.imdb.com/title/tt0412080/)
 - [Tinker Tailor Soldier Spy (2011)](http://www.imdb.com/title/tt1340800/)
 - [Trainspotting (1996)](http://www.imdb.com/title/tt0117951/)
+- [True Grit]()
 - [Twelve Monkeys (1995)](http://www.imdb.com/title/tt0114746/)
 - [Up (2009)](http://www.imdb.com/title/tt1049413/)
 - [V for Vendetta (2005)](http://www.imdb.com/title/tt0434409/)
 - [Wanted (2008)](http://www.imdb.com/title/tt0493464/)
 - [Watchmen (2009)](http://www.imdb.com/title/tt0409459/)
 - [Yes Man (2008)](http://www.imdb.com/title/tt1068680/)
+
+
+Films to watch
+==============
+
+- Szenen einer Ehe
+- Claire's Knie
+- Letztes Jahr im Marienbad
+- Eraserhead
+- Suna no Ona
+- Der Mann ohne Vergangenheit
+- Exotica
+- Playtime
+- The Kingdom
+- Breaking the Waves
+- Punishment Park
+- [Jane Eyre (2006)](http://www.imdb.com/title/tt0780362/)
+- Flipped
+- Love Me If You Dare
+- Schlussmacher
+- A very long engagement
+- Der Rote Baron
+- The Young Victoria
+- Unknown (2011)
+
+Directors:
+- lars fontrier
