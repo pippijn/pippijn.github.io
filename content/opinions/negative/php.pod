@@ -1,8 +1,8 @@
 =head1 Why not to use PHP
 
-PHP is a widely used web programming language. This does not necessarily mean
-it is a good web programming language. I will not say anything about this.
-Other people have done a better job on this.
+PHP is a widely used web programming language. This does not necessarily mean it
+is a good web programming language. I will not say anything about this.  Other
+people have done a better job on this.
 
 =head2 Links
 

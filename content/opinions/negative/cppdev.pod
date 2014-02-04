@@ -1,0 +1,29 @@
+=head1 Experiences with C++ Software Development
+
+=head2 Positive about working with C++
+
+When I write C++ programs, I use the GNU build system, better known as the
+C<autotools>. I wrote some C<m4> and C<automake> utilities to make my life
+easier when maintaining or enhancing existing projects and when creating new
+projects (see L<autoproj|http://xinutec.org/git/devel/autoproj.git>). I usually
+spend a few minutes setting up a new project (C<autoproj $projectname>). Then, I
+can start developing, right away. My editor loads its plugins based on file type
+and it does so very quickly. My IDE is C<zsh>, C<mc>, C<vim> and all those
+smaller UNIX utilities along with some other utilities I or other people wrote.
+
+I spend most of my time writing programs.
+
+=head2 Negative about working with C++
+
+Automake is very limited in its language support. It has good support for
+several different languages, but if you need support for another language, it is
+very weak. A simple example: I have a tool called "producer" that produces a .c
+file from a .p file. The rule for this .c file is:
+
+    .p.c:
+            $(builddir)/producer$(EXEEXT) $< $@
+
+Easy enough. However, it has one problem: it has no dependency on C<producer>,
+so parallel builds may (and do) fail. There is also no good way to introduce
+this dependency to make. You could use GNU make, but then automake doesn't
+understand it, anymore. This is all not optimal, and there is more.

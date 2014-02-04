@@ -45,6 +45,11 @@
 			[lang => "Languages", [
 				[aldor => "Aldor", [
 					[online => "Online"],
+					[doc => "Documentation", [
+						[build => "Build process"],
+						[compiler => "Compiler internals"],
+						[hier => "Directory hierarchy"],
+					]],
 					[changes => "Changes"],
 					#[install => "Download/Install"],
 					#[testrun => "Test Run"],
@@ -114,7 +119,7 @@
 		[opinions => "Opinions", [
 			[buildsys => "Build systems"],
 		]],
-		["programming" => "Programming", [
+		[programming => "Programming", [
 			['data-hiding' => "Data hiding"],
 			[c => "C", [
 				[strings => "Strings"],
