@@ -55,11 +55,11 @@
 		<div id="content">
 			<h2>Experiences with Java Software Development
 
-</h2> <p>I work at a small software company that primarily uses the Java programming
-language for its development. While I have come to appreciate many features of
-Java and its tooling, there are several things about the workflow I am
-very unhappy about. On this page, I will describe some recent experience I have
-had with web application development in Java.
+</h2> <p>I used to work at a small software company that primarily uses the Java
+programming language for its development. While I have come to appreciate many
+features of Java and its tooling, there are several things about the workflow I
+am very unhappy about. On this page, I will describe some recent experience I
+have had with web application development in Java.
 
 </p> <h3>Development itself
 
@@ -228,45 +228,7 @@ tomcat in Eclipse might just hose your IDE completely, requiring a restart.
 
 </h3> <p>People are generally very convinced of the technology they use. Be it a car, a
 phone or a programming language. Programmers are no different and one of the
-demigods Java developers worship is Eclipse (another is Maven). Personally, I
-tend to see the positive and negative sides of each piece of technology I use.
-
-</p> <h4>Positive about working with C++
-
-</h4> <p>When I write C++ programs, I use the GNU build system, better known as the
-
-  <code>autotools</code>. I wrote some 
-  <code>m4</code> and 
-  <code>automake</code> utilities to make my life
-easier when maintaining or enhancing existing projects and when creating new
-projects (see 
-  <a href="http://xinutec.org/git/devel/autoproj.git">autoproj</a>). I usually
-spend a few minutes setting up a new project (
-  <code>autoproj $projectname</code>). Then, I
-can start developing, right away. My editor loads its plugins based on file type
-and it does so very quickly. My IDE is 
-  <code>zsh</code>, 
-  <code>mc</code>, 
-  <code>vim</code> and all those
-smaller UNIX utilities along with some other utilities I or other people wrote.
-
-
-</p> <p>I spend most of my time writing programs.
-
-</p> <h4>Negative about working with C++
-
-</h4> <p>Automake is very limited in its language support. It has good support for
-several different languages, but if you need support for another language, it is
-very weak. A simple example: I have a tool called "producer" that produces a .c
-file from a .p file. The rule for this .c file is:
-
-</p> <pre class="verbatim">.p.c:
-        $(builddir)/producer$(EXEEXT) $&lt; $@</pre> <p>Easy enough. However, it has one problem: it has no dependency on 
-  <code>producer</code>,
-so parallel builds may (and do) fail. There is also no good way to introduce
-this dependency to make. You could use GNU make, but then automake doesn't
-understand it, anymore. This is all not optimal, and there is more.
-
+demigods Java developers worship is Eclipse (another is Maven).
 
 </p> <h4>Java developers' view of Java
 
@@ -319,7 +281,7 @@ what makes a tool user a tool zealot.
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Wed Sep 25 03:01:33 MEST 2013</div> 
+			<div id="updated">Last updated Tue Feb  4 19:19:36 CET 2014</div> 
 		</div> 
 	</body> 
 </html> 

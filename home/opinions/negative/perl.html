@@ -55,28 +55,28 @@
 		<div id="content">
 			<h2>Why not to use Perl
 
-</h2> <p>Perl is a highly dynamic language in which complex tasks can be solved within
-a few lines of elegant code. It has downsides, however, and I will elaborate
-on a few of them here.
+</h2> <p>Perl is a highly dynamic language in which complex tasks can be solved within a
+few lines of elegant code. It has downsides, however, and I will elaborate on a
+few of them here.
 
 </p> <h3>Errors caught at runtime
 
-</h3> <p>Since Perl is a dynamic language, it has no type checking aside from the
-syntax errors that result from incorrectly using scalars, arrays or hashes.
-This means that errors in code can only be caught at runtime.
+</h3> <p>Since Perl is a dynamic language, it has no type checking aside from the syntax
+errors that result from incorrectly using scalars, arrays or hashes.  This means
+that most errors in code can only be caught at runtime.
 
 </p> <p>Unless you explicitly ask for it using 
   <code>strict</code>, things can go wrong and they
 may not at all be obvious. For instance, without the 
   <code>strict</code> pragma, Perl
-allows programmers to use "bare words" as string literals. You can write
-
-  <code>$a = hello; print $a;</code> and it writes "hello" to 
+allows programmers to use "bare words" as string literals. You can write 
+  <code>$a =
+  hello; print $a;</code> and it writes "hello" to 
   <code>stdout</code>.
 
 
-</p> <p>When changing an existing program erroneously, the error may not be caught
-right away and may cause problems in areas where none are expected.
+</p> <p>When changing an existing program erroneously, the error may not be caught right
+away and may cause problems in areas where none are expected.
 
 </p> <h3>
   <code>eval</code>-blocks catch 
@@ -99,9 +99,9 @@ type of exception was the one thrown and rethrow the exception if not:
    <span class="Statement">die</span>; <span class="Comment"># rethrow</span>
 }</pre> <p>This does not even work when 
   <code>ref $@</code> is an empty string, meaning 
-  <code>$@</code> was
-a plain scalar. In that case, you have to compare the error strings, which may
-be localised, making it even harder to catch exactly the error you need.
+  <code>$@</code> was a
+plain scalar. In that case, you have to compare the error strings, which may be
+localised, making it even harder to catch exactly the error you need.
 
 
 </p> <p>By the way, 
@@ -113,9 +113,9 @@ string evaluation keyword. This may cause confusion to beginners.
 
 </h3> <p>Perl makes it very easy to write code and APIs. Where strictly object oriented
 languages such as Java enforce a certain paradigm, Perl allows one to design
-APIs like the Irssi scripting API. There is an awful lot of crappy Perl code
-out there, people tend to call "line noise". While it is possible to write
-crappy code with Java, it is much harder to do so than in Perl.
+APIs like the Irssi scripting API. There is an awful lot of crappy Perl code out
+there, people tend to call "line noise". While it is possible to write crappy
+code with Java, it is much harder to do so than in Perl.
 
 </p> <h3>Many pitfalls
 
@@ -124,12 +124,12 @@ them.
 
 </p> <h3>Features built into the language
 
-</h3> <p>Perl has many more or less known features that are built into the language.
-One of them is 
-  <a href="http://perldoc.perl.org/perlform.html">formats</a>. The problem
-with this is that there is no easy way of replacing or enhancing the
-functionality provided by them. Perl formats cannot be returned from functions
-nor can they be manipulated after their creation.
+</h3> <p>Perl has many more or less known features that are built into the language.  One
+of them is 
+  <a href="http://perldoc.perl.org/perlform.html">formats</a>. The problem with
+this is that there is no easy way of replacing or enhancing the functionality
+provided by them. Perl formats cannot be returned from functions nor can they be
+manipulated after their creation.
 
 
 </p> <h3>Arrays or array references
@@ -137,12 +137,12 @@ nor can they be manipulated after their creation.
 </h3> <p>Arrays of arrays do not exist in Perl and an attempt to create one yields a
 flattened array such that 
   <code>((1, 2, 3), 2, 3)</code> becomes 
-  <code>(1, 2, 3, 2, 3)</code>.
-In order to create an array of arrays, you need to create an array of
-references to arrays like this: 
-  <code>([1, 2, 3], 2, 3)</code>. But then getting the
-array back out of the reference, it is necessary to dereference it, so that
-where in Lisp one can do:
+  <code>(1, 2, 3, 2, 3)</code>.  In
+order to create an array of arrays, you need to create an array of references to
+arrays like this: 
+  <code>([1, 2, 3], 2, 3)</code>. But then getting the array back out of
+the reference, it is necessary to dereference it, so that where in Lisp one can
+do:
 
 
 </p> <pre class="code-block"><span class="Special">(</span><span class="Statement">setq</span> <span class="Statement">array</span> <span class="Special">'</span><span class="Special">((</span>1, 2, 3<span class="Special">)</span>, 2, 3<span class="Special">)</span><span class="Special">)</span>
@@ -151,8 +151,8 @@ where in Lisp one can do:
 </p> <pre class="code-block"><span class="Statement">my</span> <span class="Identifier">@array</span> = ([<span class="Number">1</span>, <span class="Number">2</span>, <span class="Number">3</span>], <span class="Number">2</span>, <span class="Number">3</span>);
 <span class="Identifier">$array[</span><span class="Number">0</span><span class="Identifier">]</span>; <span class="Comment"># Yields &quot;ARRAY(0xdeadbeef)&quot; or similar</span>
 <span class="Identifier">@{</span> <span class="Identifier">$array[</span><span class="Number">0</span><span class="Identifier">]</span> <span class="Identifier">}</span>; <span class="Comment"># Dereferencing it yields our array (1, 2, 3)</span></pre> <p>The reason for this is that it makes it possible to 
-  <code>push</code> a list of items
-onto an array.
+  <code>push</code> a list of items onto
+an array.
 
 
 </p> <h3>Implicit behaviour
@@ -170,21 +170,21 @@ call "magic".
 
 </h3> <p>In Perl, functions do not need to provide prototypes and a lot of code indeed
 does not. If it does, 
-  <code>perl</code> can check whether the provided number of
-arguments is correct, but the callee still has to manually decode the argument
-list from 
-  <code>@_</code>, the argument stack. The usual way is to do this as the first
-thing in a function like: 
-  <code>my ($a, $b, $c) = @_;</code>. This is not required,
-though, and it is not rare that code uses 
-  <code>@_</code> directly with subscript
-access. That makes the code unreadable.
+  <code>perl</code> can check whether the provided number of arguments
+is correct, but the callee still has to manually decode the argument list from
+
+  <code>@_</code>, the argument stack. The usual way is to do this as the first thing in a
+function like: 
+  <code>my ($a, $b, $c) = @_;</code>. This is not required, though, and it is
+not rare that code uses 
+  <code>@_</code> directly with subscript access. That makes the
+code more difficult to read.
 
 
 </p> <h3>Circular references
 
-</h3> <p>Perl has no cycle breaking system in its reference counting. This means you
-can introduce memory leaks with circular references. For this, Perl provides
+</h3> <p>Perl has no cycle breaking system in its reference counting. This means you can
+introduce memory leaks with circular references. For this, Perl provides
 
   <code>Scalar::Util::weaken</code>, but you still have to do it.
 
@@ -193,7 +193,7 @@ can introduce memory leaks with circular references. For this, Perl provides
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Wed Sep 25 03:01:33 MEST 2013</div> 
+			<div id="updated">Last updated Tue Feb  4 19:19:09 CET 2014</div> 
 		</div> 
 	</body> 
 </html> 

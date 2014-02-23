@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head profile="http://www.w3.org/2005/10/profile"> 
+		<title>Pippijn - Opinions / Negative / Cppdev</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Opinions / Negative / Cppdev"/> 
+		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Default" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+  <li>
+    <a href="/home/">Home</a>
+  </li>
+  <li>
+    <a href="/home/projects">Projects
+      <span class="small">[+]</span>
+    </a>
+  </li>
+  <li>
+    <a href="/home/opinions">Opinions
+      <span class="small">[-]</span>
+    </a>
+    <ul>
+      <li>
+        <a href="/home/opinions/buildsys">Build systems</a>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="/home/programming">Programming
+      <span class="small">[+]</span>
+    </a>
+  </li>
+  <li>
+    <a href="/home/links">Links</a>
+  </li>
+  <li>
+    <a href="/home/contact">Contact</a>
+  </li>
+</ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>Experiences with C++ Software Development
+
+</h2> <h3>Positive about working with C++
+
+</h3> <p>When I write C++ programs, I use the GNU build system, better known as the
+
+  <code>autotools</code>. I wrote some 
+  <code>m4</code> and 
+  <code>automake</code> utilities to make my life
+easier when maintaining or enhancing existing projects and when creating new
+projects (see 
+  <a href="http://xinutec.org/git/devel/autoproj.git">autoproj</a>). I usually
+spend a few minutes setting up a new project (
+  <code>autoproj $projectname</code>). Then, I
+can start developing, right away. My editor loads its plugins based on file type
+and it does so very quickly. My IDE is 
+  <code>zsh</code>, 
+  <code>mc</code>, 
+  <code>vim</code> and all those
+smaller UNIX utilities along with some other utilities I or other people wrote.
+
+
+</p> <p>I spend most of my time writing programs.
+
+</p> <h3>Negative about working with C++
+
+</h3> <p>Automake is very limited in its language support. It has good support for
+several different languages, but if you need support for another language, it is
+very weak. A simple example: I have a tool called "producer" that produces a .c
+file from a .p file. The rule for this .c file is:
+
+</p> <pre class="verbatim">.p.c:
+        $(builddir)/producer$(EXEEXT) $&lt; $@</pre> <p>Easy enough. However, it has one problem: it has no dependency on 
+  <code>producer</code>,
+so parallel builds may (and do) fail. There is also no good way to introduce
+this dependency to make. You could use GNU make, but then automake doesn't
+understand it, anymore. This is all not optimal, and there is more.
+
+</p>
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Tue Feb  4 19:15:51 CET 2014</div> 
+		</div> 
+	</body> 
+</html> 
