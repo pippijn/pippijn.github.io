@@ -177,12 +177,14 @@ to impose a common pattern on all library authors. This pattern can then be
 used by scripts and automated tools to perform actions with little or no
 configuration.
 </p> <h3>Compiler
-</h3> <p>The Aldor compiler has a layered design (see structure.md for more details).
-This layering is represented in the build process by putting the object files
-(.o) for each layer in a separate convenience library (.a/.lib file). In
-general, code from one layer should not use code from a layer above it, and
-not include headers from that layer. Currently, this is violated in several
-instances.
+</h3> <p>The Aldor compiler has a layered design (see 
+  <a href="compiler">compiler internals</a>
+for more details).  This layering is represented in the build process by
+putting the object files (.o) for each layer in a separate convenience library
+(.a/.lib file). In general, code from one layer should not use code from a
+layer above it, and not include headers from that layer. Currently, this is
+violated in several instances.
+
 </p> <p>The compiler is written in C and uses a LALR(1) macro-grammar to generate its
 parser. The tool 
   <code>zacc</code> in 
@@ -202,25 +204,25 @@ produces
 </p> <h3>Libraries
 </h3> <p>The structure of an Aldor library follows a pattern:
 </p> <ul>
-  <li>Makefile.am:          Dispatches into include, src and test.
+  <li>Makefile.am:    	Dispatches into include, src and test.
   </li>
-  <li>include:              Aldor header files installed along with the library.
+  <li>include:    	Aldor header files installed along with the library.
   </li>
-  <li>Makefile.am:        Installs Aldor header files.
+  <li>Makefile.am:    Installs Aldor header files.
   </li>
-  <li>src:                  Aldor and C code for the library.
+  <li>src:    		Aldor and C code for the library.
   </li>
-  <li>Makefile.am:        Dispatches sub-library builds and builds main library.
+  <li>Makefile.am:    Dispatches sub-library builds and builds main library.
   </li>
-  <li>common.mk:          Common variables for all sub-libraries.
+  <li>common.mk:  	Common variables for all sub-libraries.
   </li>
-  <li>*/:                Subdirs containing Aldor sources.
+  <li>*/: 	Subdirs containing Aldor sources.
   </li>
-  <li>test:                 Test programs for the library.
+  <li>test:   		Test programs for the library.
   </li>
-  <li>Makefile.am:        List of test programs and their expected outcome.
+  <li>Makefile.am:    List of test programs and their expected outcome.
   </li>
-  <li>*/:                Subdirs containing test program sources.
+  <li>*/: 	Subdirs containing test program sources.
   </li>
 </ul> <p>Other subdirectories can be added, but the build scripts expect at least the
 three above to exist. By convention, we recommend the following names for
@@ -248,18 +250,18 @@ section.
 </h4> <p>The root Makefile.am should be mostly empty, and only dispatch into
 sub-directories. For most complete libraries with documentation, it will look
 similar to this:
-</p> <pre class="code-block">SUBDIRS = doc include src test</pre> <h4>Sources: src/Makefile.am
+</p> <pre class="code-block"><span class="Statement">SUBDIRS</span> = doc include src test</pre> <h4>Sources: src/Makefile.am
 </h4> <p>Each Aldor library consists of one or more sub-libraries that are built in
 dependency order. This order must be stated explicitly in the source
 
   <code>src/Makefile.am</code> for the library by listing them in the 
   <code>SUBDIRS</code> variable.
 
-</p> <pre class="code-block">SUBDIRS = part1 part2</pre> <p>Second in the Automake file should be the file name of the library being
+</p> <pre class="code-block"><span class="Statement">SUBDIRS</span> = part1 part2</pre> <p>Second in the Automake file should be the file name of the library being
 built. We call our demo library here 
   <code>libsample.a</code>.
 
-</p> <pre class="code-block">lib_LIBRARIES = libsample.a</pre> <p>After this, we list all the C sources, including those generated from Aldor
+</p> <pre class="code-block"><span class="Statement">lib_LIBRARIES</span> = libsample.a</pre> <p>After this, we list all the C sources, including those generated from Aldor
 code. Extra support code for the C side should also be listed in this
 variable. The variable name is the above library name with non-alphanumeric
 characters such as 
@@ -267,12 +269,12 @@ characters such as
   <code>.</code> replaced by underscores 
   <code>_</code>.
 
-</p> <pre class="code-block">libsample_a_SOURCES =   \
-        part1/doma.c    \
-        part1/domb.c    \
-        part2/domc.c    \
-        part2/domd.c    \
-        #</pre> <p>Note that Automake does not accept trailing backslashes, so you may either end
+</p> <pre class="code-block"><span class="Type">libsample_a_SOURCES</span> =   <span class="Special">\</span>
+        part1/doma.c    <span class="Special">\</span>
+        part1/domb.c    <span class="Special">\</span>
+        part2/domc.c    <span class="Special">\</span>
+        part2/domd.c    <span class="Special">\</span>
+        <span class="Comment">#</span></pre> <p>Note that Automake does not accept trailing backslashes, so you may either end
 the list with a comment or omit the last backslash. The order of this list is
 irrelevant, as there are no dependencies between these files; they can be
 built in parallel.
@@ -289,7 +291,7 @@ This name is used to build the Aldor side of the library, i.e. the .al file,
 in this case 
   <code>libsample.al</code>.
 
-</p> <pre class="code-block">libraryname = sample</pre> <p>Due to Automake limitations, it is not possible to use 
+</p> <pre class="code-block"><span class="Identifier">libraryname </span>= sample</pre> <p>Due to Automake limitations, it is not possible to use 
   <code>$(libraryname)</code> in the
 definition of 
   <code>lib_LIBRARIES</code>.
@@ -314,7 +316,7 @@ be
   <code>Libraryname</code>.
 
 </p> <p>E.g.:
-</p> <pre class="code-block">Libraryname = Demo</pre> <p>will define 
+</p> <pre class="code-block"><span class="Identifier">Libraryname </span>= Demo</pre> <p>will define 
   <code>BuildDemoLib</code>, and not 
   <code>BuildSampleLib</code> while compiling Aldor
 code for this library.
@@ -326,7 +328,7 @@ produces and installs the Aldor library. This file resides in the
 the 
   <code>aldor</code> build root.
 
-</p> <pre class="code-block">include ../../buildlib.am</pre> <p>Usually, this will be the last line of your 
+</p> <pre class="code-block"><span class="Include">include</span> ../../buildlib.am</pre> <p>Usually, this will be the last line of your 
   <code>src/Makefile.am</code>. Other rules and
 variables can follow it. The following variables are defined by 
   <code>buildlib.am</code>,
@@ -335,30 +337,30 @@ and thus additions to them must be done with
 
 </p> <ul>
   <li>
-    <code>datalibdir</code>:         Installation directory for 
+    <code>datalibdir</code>:   	Installation directory for 
     <code>.al</code> file.
   
   </li>
   <li>
-    <code>datalib_DATA</code>:       Files to be installed into 
+    <code>datalib_DATA</code>:   Files to be installed into 
     <code>$(datalibdir)</code>.
   
   </li>
   <li>
-    <code>aldorsrcdir</code>:        Aldor compiler source directory with runtime headers.
+    <code>aldorsrcdir</code>:   Aldor compiler source directory with runtime headers.
   
   </li>
   <li>
-    <code>aldorexedir</code>:        Contains built Aldor compiler binary 
+    <code>aldorexedir</code>:   Contains built Aldor compiler binary 
     <code>aldor</code>.
   
   </li>
   <li>
-    <code>AM_CFLAGS</code>:          C compiler flags.
+    <code>AM_CFLAGS</code>:   	C compiler flags.
   
   </li>
   <li>
-    <code>CLEANFILES</code>:         Removes the 
+    <code>CLEANFILES</code>:   	Removes the 
     <code>.al</code> file on 
     <code>make clean</code>.
   
@@ -381,41 +383,41 @@ we want to be integrated with the Automake-based build.
 
   <code>prelude.mk.in</code>), so it can be updated automatically)
 
-</p> <pre class="code-block">@SET_MAKE@
-VPATH = @srcdir@
+</p> <pre class="code-block"><span class="PreProc">@SET_MAKE@</span>
+<span class="Identifier">VPATH </span>= <span class="PreProc">@srcdir@</span>
 
-# For AM_V_*
-AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
+<span class="Comment"># For AM_V_*</span>
+<span class="Identifier">AM_DEFAULT_VERBOSITY </span>= <span class="PreProc">@AM_DEFAULT_VERBOSITY@</span>
 
-builddir        := @builddir@
-abs_builddir    := @abs_builddir@
-top_builddir    := @top_builddir@
-abs_top_builddir:= @abs_top_builddir@
-srcdir          := @srcdir@
-abs_srcdir      := @abs_srcdir@
-top_srcdir      := @top_srcdir@
-abs_top_srcdir  := @abs_top_srcdir@</pre> <p>The boilerplate is followed by a list of Aldor source files without the 
+<span class="Identifier">builddir        </span>:= <span class="PreProc">@builddir@</span>
+<span class="Identifier">abs_builddir    </span>:= <span class="PreProc">@abs_builddir@</span>
+<span class="Identifier">top_builddir    </span>:= <span class="PreProc">@top_builddir@</span>
+<span class="Identifier">abs_top_builddir</span>:= <span class="PreProc">@abs_top_builddir@</span>
+<span class="Identifier">srcdir          </span>:= <span class="PreProc">@srcdir@</span>
+<span class="Identifier">abs_srcdir      </span>:= <span class="PreProc">@abs_srcdir@</span>
+<span class="Identifier">top_srcdir      </span>:= <span class="PreProc">@top_srcdir@</span>
+<span class="Identifier">abs_top_srcdir  </span>:= <span class="PreProc">@abs_top_srcdir@</span></pre> <p>The boilerplate is followed by a list of Aldor source files without the 
   <code>.as</code>
 suffix.
 
-</p> <pre class="code-block">library = doma domb</pre> <p>Lastly, the common build variables for the library are included. A relative
+</p> <pre class="code-block"><span class="Identifier">library </span>= doma domb</pre> <p>Lastly, the common build variables for the library are included. A relative
 path using explicit 
   <code>../..</code> should not be used, as that would break vpath (out
 of tree) builds.
 
-</p> <pre class="code-block">include $(top_srcdir)/lib/sample/src/common.mk</pre> <h5>src/common.am
+</p> <pre class="code-block"><span class="Include">include</span> <span class="Identifier">$(top_srcdir)</span>/lib/sample/src/common.mk</pre> <h5>src/common.am
 </h5> <p>The purpose of this extraction is to minimise reduncancy by defining common
 variables only once. The only required variable in this file is 
   <code>libraryname</code>,
 whose purpose was described in the earlier section "Library name".
 
-</p> <pre class="code-block">libraryname     := sample</pre> <p>Commonly, libraries will want to define their Aldor optimisation and debug
+</p> <pre class="code-block"><span class="Identifier">libraryname     </span>:= sample</pre> <p>Commonly, libraries will want to define their Aldor optimisation and debug
 flags, more generally speaking its compiler flags.
-</p> <pre class="code-block">AXLFLAGS        := -Q8 -Zdb</pre> <p>Finally, at the end of a library's 
+</p> <pre class="code-block"><span class="Identifier">AXLFLAGS        </span>:= -Q8 -Zdb</pre> <p>Finally, at the end of a library's 
   <code>common.mk</code>, the main build machinery for
 Aldor sub-libraries is included.
 
-</p> <pre class="code-block">include $(top_srcdir)/lib/buildlib.mk</pre> <p>This file is always included, unless you have very specific needs, which
+</p> <pre class="code-block"><span class="Include">include</span> <span class="Identifier">$(top_srcdir)</span>/lib/buildlib.mk</pre> <p>This file is always included, unless you have very specific needs, which
 require you to completely define your own. We recommend against this, and
 rather file a feature request describing your special needs. Although our
 design is purposefully inflexible and based on convention, we do want to be
@@ -446,11 +448,11 @@ on part1, and in which
 part2 may depend on files in part1, these dependencies are not listed
 explicitly, but rather the complete part1 is imported.
 
-</p> <pre class="code-block"># Intra-sublib dependencies
-domd_deps       := domc
+</p> <pre class="code-block"><span class="Comment"># Intra-sublib dependencies</span>
+<span class="Identifier">domd_deps       </span>:= domc
 
-# Sublib dependencies
-library_deps    := part1</pre> <h4>Testing
+<span class="Comment"># Sublib dependencies</span>
+<span class="Identifier">library_deps    </span>:= part1</pre> <h4>Testing
 </h4> <p>Libraries are tested using test programs whose return value signals the
 success or failure of a test. Each program with name 
   <code>$P</code> is in its own
@@ -467,30 +469,30 @@ this format:
 /$P-aldormain.c</pre> <p>Makefile.am contains a list of libraries required for the tests, a list of
 test directories, a list of tests known to fail, and an include directive for
 the common test code.
-</p> <pre class="code-block">libraries = aldor sample
+</p> <pre class="code-block"><span class="Identifier">libraries </span>= aldor sample
 
-AXLTESTS =              \
-        domatest1       \
-        domatest2       \
-        #
+<span class="Identifier">AXLTESTS </span>=              <span class="Special">\</span>
+<span class="Special">        </span>domatest1       <span class="Special">\</span>
+<span class="Special">        </span>domatest2       <span class="Special">\</span>
+<span class="Special">        </span><span class="Comment">#</span>
 
-# Known to fail:
-XFAIL_TESTS =           \
-        domatest2       \
-        #
+<span class="Comment"># Known to fail:</span>
+<span class="Statement">XFAIL_TESTS</span> =           <span class="Special">\</span>
+<span class="Special">        </span>domatest2       <span class="Special">\</span>
+<span class="Special">        </span><span class="Comment">#</span>
 
-# Common code
-include ../../testprog.am</pre> <p>After the include, one may add other C sources required for the tests to run,
+<span class="Comment"># Common code</span>
+<span class="Include">include</span> ../../testprog.am</pre> <p>After the include, one may add other C sources required for the tests to run,
 as well as dependencies between tests, if one test uses the Aldor object of
 another.
-</p> <pre class="code-block">domatest2_domatest2_SOURCES += domatest2/support.c
+</p> <pre class="code-block"><span class="Type">domatest2_domatest2_SOURCES </span>+= domatest2/support.c
 
-domatest2/domatest2.c: domatest1/domatest1.c</pre>
+<span class="Identifier">domatest2/domatest2.c:</span> domatest1/domatest1.c</pre>
 		</div> 
 
 		<div id="footer"> 
 			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
-			<div id="updated">Last updated Fri Mar  7 03:14:50 CET 2014</div> 
+			<div id="updated">Last updated Fri Mar  7 03:49:35 CET 2014</div> 
 		</div> 
 	</body> 
 </html> 
