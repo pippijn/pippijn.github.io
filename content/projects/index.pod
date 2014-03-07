@@ -76,7 +76,9 @@ integration system. Here are the projects' build statuses:
 
 =item L<< N<https://api.travis-ci.org/pippijn/mlwidgets.png>|https://travis-ci.org/pippijn/mlwidgets >> L<mlwidgets|https://github.com/pippijn/mlwidgets>
 
-=item L<< N<https://api.travis-ci.org/pippijn/obuild.png>|https://travis-ci.org/pippijn/oink >> L<obuild|https://github.com/pippijn/obuild>
+=item L<< N<https://api.travis-ci.org/pippijn/obuild.png>|https://travis-ci.org/pippijn/obuild >> L<obuild|https://github.com/pippijn/obuild>
+
+=item L<< N<https://api.travis-ci.org/pippijn/obuild-aldor.png>|https://travis-ci.org/pippijn/obuild-aldor >> L<obuild-aldor|https://github.com/pippijn/obuild-aldor>
 
 =item L<< N<https://api.travis-ci.org/pippijn/oink-stack.png>|https://travis-ci.org/pippijn/oink >> L<oink-stack|https://github.com/pippijn/oink-stack>
 
