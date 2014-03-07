@@ -1,0 +1,496 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"> 
+	<head profile="http://www.w3.org/2005/10/profile"> 
+		<title>Pippijn - Projects / Lang / Aldor / Doc / Build</title> 
+		<meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8"/> 
+		<meta http-equiv="content-style-type" content="text/css"/> 
+		<meta name="description" content="Pippijn van Steenhoven - Projects / Lang / Aldor / Doc / Build"/> 
+		<link rel="stylesheet" href="/home/css/home.css" type="text/css" title="Default" media="screen"/> 
+		<link rel="icon" type="image/x-icon" href="/home/favicon.ico"/>
+	</head> 
+
+	<body> 
+		<div id="header"> 
+			<h1>Pippijn van Steenhoven</h1> 
+			<p id="slogan">I doubt, therefore I might be</p> 
+		</div> 
+
+		<div id="sidebar"> 
+			<h2>Menu</h2> 
+			<div id="menubar">
+				<ul>
+  <li>
+    <a href="/home/">Home</a>
+  </li>
+  <li>
+    <a href="/home/projects">Projects
+      <span class="small">[-]</span>
+    </a>
+    <ul>
+      <li>
+        <a href="/home/projects/devel">Developer tools
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/edu">Education
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/games">Games
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/net">Network
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/lang">Languages
+          <span class="small">[-]</span>
+        </a>
+        <ul>
+          <li>
+            <a href="/home/projects/lang/aldor">Aldor
+              <span class="small">[-]</span>
+            </a>
+            <ul>
+              <li>
+                <a href="/home/projects/lang/aldor/online">Online</a>
+              </li>
+              <li>
+                <a href="/home/projects/lang/aldor/doc">Documentation
+                  <span class="small">[-]</span>
+                </a>
+                <ul>
+                  <li>
+                    <a id="actmenu">Build process</a>
+                  </li>
+                  <li>
+                    <a href="/home/projects/lang/aldor/doc/compiler">Compiler internals</a>
+                  </li>
+                  <li>
+                    <a href="/home/projects/lang/aldor/doc/hier">Directory hierarchy</a>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <a href="/home/projects/lang/aldor/changes">Changes</a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="/home/projects/lang/ccparse">CParseParse
+              <span class="small">[+]</span>
+            </a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/cparser">C Parser
+              <span class="small">[+]</span>
+            </a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/glr">GLR Parser
+              <span class="small">[+]</span>
+            </a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/hm">Hindley-Milner
+              <span class="small">[+]</span>
+            </a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/jmlc">JML</a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/merr">Meta-Error</a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/re2ml">Re2ML</a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/libcdk">CDK library</a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/rasm">Runtime assembler</a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/safe">Safe C
+              <span class="small">[+]</span>
+            </a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/treematch">Treematch
+              <span class="small">[+]</span>
+            </a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/xul">XUL Projects</a>
+          </li>
+          <li>
+            <a href="/home/projects/lang/yaccpp">YACC Preprocessor</a>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a href="/home/projects/robotics">Robotics
+          <span class="small">[+]</span>
+        </a>
+      </li>
+      <li>
+        <a href="/home/projects/system">Systems
+          <span class="small">[+]</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <a href="/home/opinions">Opinions
+      <span class="small">[+]</span>
+    </a>
+  </li>
+  <li>
+    <a href="/home/programming">Programming
+      <span class="small">[+]</span>
+    </a>
+  </li>
+  <li>
+    <a href="/home/links">Links</a>
+  </li>
+  <li>
+    <a href="/home/contact">Contact</a>
+  </li>
+</ul>
+			</div> 
+		</div> 
+
+		<div id="content">
+			<h2>Build system
+</h2> <p>This document describes the Aldor build process, i.e. the Makefiles and
+scripts used to build the supporting tools, the Aldor compiler, and its
+libraries.
+</p> <p>First of all, it should be noted that in general, convention is chosen over
+flexibility. The directory structure requirements are rather strict, in order
+to impose a common pattern on all library authors. This pattern can then be
+used by scripts and automated tools to perform actions with little or no
+configuration.
+</p> <h3>Compiler
+</h3> <p>The Aldor compiler has a layered design (see structure.md for more details).
+This layering is represented in the build process by putting the object files
+(.o) for each layer in a separate convenience library (.a/.lib file). In
+general, code from one layer should not use code from a layer above it, and
+not include headers from that layer. Currently, this is violated in several
+instances.
+</p> <p>The compiler is written in C and uses a LALR(1) macro-grammar to generate its
+parser. The tool 
+  <code>zacc</code> in 
+  <code>aldor/tools/unix</code> expands macros in 
+  <code>axl.z</code> and
+produces 
+  <code>axl_y.c</code> by calling 
+  <code>yacc</code> on the expanded grammar.
+
+</p> <p>Compiler messages databases are generated by 
+  <code>aldor/tools/unix/msgcat</code>, which
+produces 
+  <code>comsgdb.c</code> and 
+  <code>comsgdb.h</code> from 
+  <code>comsgdb.msg</code>.
+
+</p> <h3>Libraries
+</h3> <p>The structure of an Aldor library follows a pattern:
+</p> <ul>
+  <li>Makefile.am:          Dispatches into include, src and test.
+  </li>
+  <li>include:              Aldor header files installed along with the library.
+  </li>
+  <li>Makefile.am:        Installs Aldor header files.
+  </li>
+  <li>src:                  Aldor and C code for the library.
+  </li>
+  <li>Makefile.am:        Dispatches sub-library builds and builds main library.
+  </li>
+  <li>common.mk:          Common variables for all sub-libraries.
+  </li>
+  <li>*/:                Subdirs containing Aldor sources.
+  </li>
+  <li>test:                 Test programs for the library.
+  </li>
+  <li>Makefile.am:        List of test programs and their expected outcome.
+  </li>
+  <li>*/:                Subdirs containing test program sources.
+  </li>
+</ul> <p>Other subdirectories can be added, but the build scripts expect at least the
+three above to exist. By convention, we recommend the following names for
+optional directories:
+</p> <ul>
+  <li>doc:                  Library documentation, usually in LaTeX form.
+  </li>
+  <li>tools:                Extra programs, not installed with the library, but
+                      used to generate sources or perform more complex build
+                      tasks. These must be built 
+    <em>before</em> 
+    <code>src</code>.
+  
+  </li>
+  <li>utility:              Extra programs built for and/or with the library. Must
+                      be built 
+    <em>after</em> 
+    <code>src</code>.
+  
+  </li>
+</ul> <p>The following is a high level view of the library build. A more in-depth
+explanation of what the build scripts and helpers do will follow in another
+section.
+</p> <h4>Root: Makefile.am
+</h4> <p>The root Makefile.am should be mostly empty, and only dispatch into
+sub-directories. For most complete libraries with documentation, it will look
+similar to this:
+</p> <pre class="code-block">SUBDIRS = doc include src test</pre> <h4>Sources: src/Makefile.am
+</h4> <p>Each Aldor library consists of one or more sub-libraries that are built in
+dependency order. This order must be stated explicitly in the source
+
+  <code>src/Makefile.am</code> for the library by listing them in the 
+  <code>SUBDIRS</code> variable.
+
+</p> <pre class="code-block">SUBDIRS = part1 part2</pre> <p>Second in the Automake file should be the file name of the library being
+built. We call our demo library here 
+  <code>libsample.a</code>.
+
+</p> <pre class="code-block">lib_LIBRARIES = libsample.a</pre> <p>After this, we list all the C sources, including those generated from Aldor
+code. Extra support code for the C side should also be listed in this
+variable. The variable name is the above library name with non-alphanumeric
+characters such as 
+  <code>-</code> and 
+  <code>.</code> replaced by underscores 
+  <code>_</code>.
+
+</p> <pre class="code-block">libsample_a_SOURCES =   \
+        part1/doma.c    \
+        part1/domb.c    \
+        part2/domc.c    \
+        part2/domd.c    \
+        #</pre> <p>Note that Automake does not accept trailing backslashes, so you may either end
+the list with a comment or omit the last backslash. The order of this list is
+irrelevant, as there are no dependencies between these files; they can be
+built in parallel.
+</p> <h5>Library name
+</h5> <p>Next, the library name must be repeated without the 
+  <code>lib</code> prefix and the 
+  <code>.a</code>
+suffix. This name must be equal to the current directory. I.e. if the file you
+are creating is 
+  <code>lib/sample/Makefile.am</code>, then 
+  <code>libraryname</code> must be 
+  <code>sample</code>.
+This name is used to build the Aldor side of the library, i.e. the .al file,
+in this case 
+  <code>libsample.al</code>.
+
+</p> <pre class="code-block">libraryname = sample</pre> <p>Due to Automake limitations, it is not possible to use 
+  <code>$(libraryname)</code> in the
+definition of 
+  <code>lib_LIBRARIES</code>.
+
+</p> <p>Often, the headers provided by and included in the library being built contain
+code that is conditionalised on whether they are used to build the library or
+they are being used to build code against a completed library. The reason for
+this is that the header will import the Aldor Library (.al file) automatically
+when you include it in client code, but while building the library, this file
+does not yet exist.
+</p> <p>By default, the symbol defined by the build system that tells the header
+whether it is currently being built is named 
+  <code>Build</code> followed by the
+capitalised 
+  <code>$(libraryname)</code> and 
+  <code>Lib</code>, so that in our case, the symbol would
+be 
+  <code>BuildSampleLib</code>. If you want to override the name between 
+  <code>Build</code> and
+
+  <code>Lib</code>, you must define 
+  <code>Libraryname</code>.
+
+</p> <p>E.g.:
+</p> <pre class="code-block">Libraryname = Demo</pre> <p>will define 
+  <code>BuildDemoLib</code>, and not 
+  <code>BuildSampleLib</code> while compiling Aldor
+code for this library.
+
+</p> <h5>Default Makefile
+</h5> <p>Most libraries will want to include the default Automake rule file that
+produces and installs the Aldor library. This file resides in the 
+  <code>lib</code> under
+the 
+  <code>aldor</code> build root.
+
+</p> <pre class="code-block">include ../../buildlib.am</pre> <p>Usually, this will be the last line of your 
+  <code>src/Makefile.am</code>. Other rules and
+variables can follow it. The following variables are defined by 
+  <code>buildlib.am</code>,
+and thus additions to them must be done with 
+  <code>+=</code>.
+
+</p> <ul>
+  <li>
+    <code>datalibdir</code>:         Installation directory for 
+    <code>.al</code> file.
+  
+  </li>
+  <li>
+    <code>datalib_DATA</code>:       Files to be installed into 
+    <code>$(datalibdir)</code>.
+  
+  </li>
+  <li>
+    <code>aldorsrcdir</code>:        Aldor compiler source directory with runtime headers.
+  
+  </li>
+  <li>
+    <code>aldorexedir</code>:        Contains built Aldor compiler binary 
+    <code>aldor</code>.
+  
+  </li>
+  <li>
+    <code>AM_CFLAGS</code>:          C compiler flags.
+  
+  </li>
+  <li>
+    <code>CLEANFILES</code>:         Removes the 
+    <code>.al</code> file on 
+    <code>make clean</code>.
+  
+  </li>
+</ul> <h5>Extra files
+</h5> <p>The library is automatically installed in the appropriate place for the Aldor
+compiler to be able to find it with 
+  <code>#library</code>. If you would like to install
+other files in the same directory, 
+
+</p> <h4>Sub-libraries: src/*/Makefile.in
+</h4> <p>A sub-library Makefile is not an Automake file, but rather a simple Makefile
+preprocessed by 
+  <code>config.status</code>, generated by 
+  <code>configure</code>. It starts with a
+common boilerplate that is required since we're not using Automake here, but
+we want to be integrated with the Automake-based build.
+
+</p> <p>(TODO: move this to an extra file in the same directory (perhaps
+
+  <code>prelude.mk.in</code>), so it can be updated automatically)
+
+</p> <pre class="code-block">@SET_MAKE@
+VPATH = @srcdir@
+
+# For AM_V_*
+AM_DEFAULT_VERBOSITY = @AM_DEFAULT_VERBOSITY@
+
+builddir        := @builddir@
+abs_builddir    := @abs_builddir@
+top_builddir    := @top_builddir@
+abs_top_builddir:= @abs_top_builddir@
+srcdir          := @srcdir@
+abs_srcdir      := @abs_srcdir@
+top_srcdir      := @top_srcdir@
+abs_top_srcdir  := @abs_top_srcdir@</pre> <p>The boilerplate is followed by a list of Aldor source files without the 
+  <code>.as</code>
+suffix.
+
+</p> <pre class="code-block">library = doma domb</pre> <p>Lastly, the common build variables for the library are included. A relative
+path using explicit 
+  <code>../..</code> should not be used, as that would break vpath (out
+of tree) builds.
+
+</p> <pre class="code-block">include $(top_srcdir)/lib/sample/src/common.mk</pre> <h5>src/common.am
+</h5> <p>The purpose of this extraction is to minimise reduncancy by defining common
+variables only once. The only required variable in this file is 
+  <code>libraryname</code>,
+whose purpose was described in the earlier section "Library name".
+
+</p> <pre class="code-block">libraryname     := sample</pre> <p>Commonly, libraries will want to define their Aldor optimisation and debug
+flags, more generally speaking its compiler flags.
+</p> <pre class="code-block">AXLFLAGS        := -Q8 -Zdb</pre> <p>Finally, at the end of a library's 
+  <code>common.mk</code>, the main build machinery for
+Aldor sub-libraries is included.
+
+</p> <pre class="code-block">include $(top_srcdir)/lib/buildlib.mk</pre> <p>This file is always included, unless you have very specific needs, which
+require you to completely define your own. We recommend against this, and
+rather file a feature request describing your special needs. Although our
+design is purposefully inflexible and based on convention, we do want to be
+able to build any kind of Aldor library.
+</p> <h5>src/*/Makefile.deps
+</h5> <p>Next to each 
+  <code>Makefile.in</code> in a sub-library's directory, a dependency file is
+required. We are unfortunately unable to correctly generate these from the
+sources, for now, since it requires us to preprocess the Aldor sources with
+the same flags used during the build.
+
+</p> <p>For each source name 
+  <code>dom</code> listed in 
+  <code>library</code> above, there is an optional
+
+  <code>dom_deps</code>, containing its dependencies within the sub-library. If the
+sub-library itself depends on another sub-library from the same combined
+library, these should be listed in 
+  <code>library_deps</code>.
+
+</p> <p>(TODO: this is bad, it reserves the source name 
+  <code>library.as</code>)
+
+</p> <p>The following fragment might be for part2 of our sample library, which depends
+on part1, and in which 
+  <code>domd</code> depends on 
+  <code>domc</code>. Note that although files in
+part2 may depend on files in part1, these dependencies are not listed
+explicitly, but rather the complete part1 is imported.
+
+</p> <pre class="code-block"># Intra-sublib dependencies
+domd_deps       := domc
+
+# Sublib dependencies
+library_deps    := part1</pre> <h4>Testing
+</h4> <p>Libraries are tested using test programs whose return value signals the
+success or failure of a test. Each program with name 
+  <code>$P</code> is in its own
+subdirectory 
+  <code>$P</code> with an Aldor source file 
+  <code>$P/$P.as</code> and an output reference
+file 
+  <code>$P/$P.ref</code>. Each test directory also contains a 
+  <code>.gitignore</code> file of
+this format:
+
+</p> <pre class="code-block">/$P
+/$P.c
+/$P-aldormain.c</pre> <p>Makefile.am contains a list of libraries required for the tests, a list of
+test directories, a list of tests known to fail, and an include directive for
+the common test code.
+</p> <pre class="code-block">libraries = aldor sample
+
+AXLTESTS =              \
+        domatest1       \
+        domatest2       \
+        #
+
+# Known to fail:
+XFAIL_TESTS =           \
+        domatest2       \
+        #
+
+# Common code
+include ../../testprog.am</pre> <p>After the include, one may add other C sources required for the tests to run,
+as well as dependencies between tests, if one test uses the Aldor object of
+another.
+</p> <pre class="code-block">domatest2_domatest2_SOURCES += domatest2/support.c
+
+domatest2/domatest2.c: domatest1/domatest1.c</pre>
+		</div> 
+
+		<div id="footer"> 
+			<div id="copyright"><a href="/home/contact">Copyright &copy; 2007-2013 Pippijn van Steenhoven</a></div> 
+			<div id="updated">Last updated Fri Mar  7 03:14:50 CET 2014</div> 
+		</div> 
+	</body> 
+</html> 
